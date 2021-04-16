@@ -1,0 +1,11 @@
+name: user_info_repostiory
+description: A dart package for managing the user info.
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cloud_firestore: ^1.0.5
+  firebase_auth: ^1.1.0

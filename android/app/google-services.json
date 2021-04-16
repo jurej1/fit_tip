@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "64884017074",
+    "project_id": "fittip-4be21",
+    "storage_bucket": "fittip-4be21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64884017074:android:05155b4a551da0979fc6ab",
+        "android_client_info": {
+          "package_name": "com.jure_jures.fit_tip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64884017074-c5hkal8t9v0aedvemetgopba0giib4ff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_TlefFk5LTB6zmrD3JjmuB6TfgPzhnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64884017074-c5hkal8t9v0aedvemetgopba0giib4ff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
