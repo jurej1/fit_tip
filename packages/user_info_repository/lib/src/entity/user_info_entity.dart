@@ -60,7 +60,7 @@ class UserInfoEntity extends Equatable {
       id: '',
       location: loc.LocationEntity.empty,
       height: 0,
-      gender: Gender.unknown,
+      gender: Gender.ratherNotSay,
       measurmentSystem: MeasurmentSystem.metric,
       weight: 0,
       displayName: '');
