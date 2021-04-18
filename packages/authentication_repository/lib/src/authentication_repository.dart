@@ -9,8 +9,11 @@ class AuthenticationRepository {
   AuthenticationRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firebaseFirestore})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
-  Stream get authenticationUser {
-    return _firebaseAuth.authStateChanges();
+  Stream<String?> get authenticationUser {
+    return _firebaseAuth.authStateChanges().map((user) {
+      if (user == null) return null;
+      return user.uid;
+    });
   }
 
   User? get currentUser => _firebaseAuth.currentUser;
@@ -22,28 +25,9 @@ class AuthenticationRepository {
   Future<UserCredential> createUserWithEmailAndPassword({required String email, required String password}) async {
     try {
       final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-
       return userCredential;
     } catch (e) {
       throw e;
     }
-  }
-
-  Future<void> updateEmail({required String newEmail}) async {
-    final User? user = currentUser;
-
-    if (user != null) {
-      return user.updateEmail(newEmail);
-    }
-    return;
-  }
-
-  Future<void> updatePassword({required String newPassword}) async {
-    final User? user = currentUser;
-
-    if (user != null) {
-      return user.updatePassword(newPassword);
-    }
-    return;
   }
 }
