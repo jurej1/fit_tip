@@ -5,19 +5,12 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firebaseFirestore;
 
   AuthenticationRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firebaseFirestore})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance {}
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
-  Stream get authenticationStatus {
-    return _firebaseAuth.authStateChanges().map((user) {
-      if (user == null) {
-        return AuthenticationStatus.unauthenticated;
-      }
-      return AuthenticationStatus.authenticated;
-    });
+  Stream get authenticationUser {
+    return _firebaseAuth.authStateChanges();
   }
 
   User? get currentUser => _firebaseAuth.currentUser;
