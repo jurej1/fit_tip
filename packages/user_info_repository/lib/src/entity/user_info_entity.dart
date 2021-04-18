@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:user_info_repostiory/src/enums/enums.dart';
+import 'package:user_info_repository/src/enums/enums.dart';
 
 import 'location_entity.dart' as loc;
 

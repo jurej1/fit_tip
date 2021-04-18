@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:user_info_repostiory/src/entity/entity.dart';
-import 'package:user_info_repostiory/src/enums/enums.dart';
-import 'package:user_info_repostiory/src/models/models.dart' as model;
-import 'package:user_info_repostiory/src/models/models.dart';
+import 'package:user_info_repository/src/entity/entity.dart';
+import 'package:user_info_repository/src/enums/enums.dart';
+import '../models/models.dart' as model;
 
 class UserInfo extends Equatable {
   final DateTime dateJoined;
@@ -118,7 +117,7 @@ class UserInfo extends Equatable {
       gender: val.gender,
       height: val.height,
       id: val.id,
-      location: Location.formEntity(val.location),
+      location: model.Location.formEntity(val.location),
       measurmentSystem: val.measurmentSystem,
       weight: val.weight,
       birthdate: val.birthdate?.toDate(),

@@ -1,4 +1,4 @@
-name: user_info_repostiory
+name: user_info_repository
 description: A dart package for managing the user info.
 
 environment:

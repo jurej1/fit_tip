@@ -18,6 +18,8 @@ dependencies:
 
   authentication_repository:
     path: packages/authentication_repository
+  user_info_repository:
+    path: packages/user_info_repository
 
 dev_dependencies:
   flutter_test:
