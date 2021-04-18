@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:user_info_repostiory/src/enums/enums.dart';
 
@@ -57,13 +56,14 @@ class UserInfoEntity extends Equatable {
   }) : this.dateJoined = dateJoined ?? Timestamp.now();
 
   static final empty = UserInfoEntity(
-      id: '',
-      location: loc.LocationEntity.empty,
-      height: 0,
-      gender: Gender.ratherNotSay,
-      measurmentSystem: MeasurmentSystem.metric,
-      weight: 0,
-      displayName: '');
+    id: '',
+    location: loc.LocationEntity.empty,
+    height: 0,
+    gender: Gender.ratherNotSay,
+    measurmentSystem: MeasurmentSystem.metric,
+    weight: 0,
+    displayName: '',
+  );
 
   @override
   List<Object?> get props {

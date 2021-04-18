@@ -11,7 +11,7 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<User?> get user {
+  Stream get user {
     return _firebaseAuth.authStateChanges();
   }
 

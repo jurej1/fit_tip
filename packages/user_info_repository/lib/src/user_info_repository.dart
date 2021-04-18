@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'entity/entity.dart';
+
 class UserInfoRepository {
   final FirebaseFirestore _firebaseFirestore;
 
@@ -8,7 +10,6 @@ class UserInfoRepository {
   }) : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Stream userInfo(String userId) {
-    //TODO create a custom user info model
-    return _firebaseFirestore.doc(userId).snapshots();
+    return _firebaseFirestore.doc(userId).snapshots().map((snap) => UserInfoEntity.fromDocumentSnapshot(snap));
   }
 }
