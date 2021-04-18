@@ -2,38 +2,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:user_info_repository/src/entity/entity.dart';
 import 'package:user_info_repository/src/enums/enums.dart';
+
 import '../models/models.dart' as model;
 
 class UserInfo extends Equatable {
-  final DateTime dateJoined;
-  final String id;
-  final Gender gender;
+  final DateTime? dateJoined;
+  final String? id;
+  final Gender? gender;
   final String? firstName;
   final String? lastName;
-  final String displayName;
+  final String? displayName;
   final DateTime? birthdate;
   final String? email;
-  final double height;
-  final double weight;
-  final MeasurmentSystem measurmentSystem;
+  final double? height;
+  final double? weight;
+  final MeasurmentSystem? measurmentSystem;
   final String? introduction;
-  final model.Location location;
+  final model.Location? location;
   final String? lastInitial;
 
   const UserInfo({
-    required this.dateJoined,
-    required this.id,
-    required this.gender,
+    this.dateJoined,
+    this.id,
+    this.gender,
     this.firstName,
     this.lastName,
-    required this.displayName,
+    this.displayName,
     this.birthdate,
     this.email,
-    required this.height,
-    required this.weight,
-    required this.measurmentSystem,
+    this.height,
+    this.weight,
+    this.measurmentSystem,
     this.introduction,
-    required this.location,
+    this.location,
     this.lastInitial,
   });
 
@@ -97,11 +98,11 @@ class UserInfo extends Equatable {
       gender: gender,
       height: height,
       id: id,
-      location: location.toEntity(),
+      location: location?.toEntity(),
       measurmentSystem: measurmentSystem,
       weight: weight,
       birthdate: birthdate != null ? Timestamp.fromDate(birthdate!) : null,
-      dateJoined: Timestamp.fromDate(dateJoined),
+      dateJoined: dateJoined != null ? Timestamp.fromDate(dateJoined!) : null,
       email: email,
       firstName: firstName,
       introduction: introduction,
@@ -112,12 +113,12 @@ class UserInfo extends Equatable {
 
   factory UserInfo.fromEntity(UserInfoEntity val) {
     return UserInfo(
-      dateJoined: val.dateJoined.toDate(),
+      dateJoined: val.dateJoined?.toDate(),
       displayName: val.displayName,
       gender: val.gender,
       height: val.height,
       id: val.id,
-      location: model.Location.formEntity(val.location),
+      location: val.location != null ? model.Location.formEntity(val.location!) : null,
       measurmentSystem: val.measurmentSystem,
       weight: val.weight,
       birthdate: val.birthdate?.toDate(),

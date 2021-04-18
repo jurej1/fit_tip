@@ -23,37 +23,37 @@ class _DocKeys {
 }
 
 class UserInfoEntity extends Equatable {
-  final String id;
-  final Timestamp dateJoined;
-  final Gender gender;
+  final String? id;
+  final Timestamp? dateJoined;
+  final Gender? gender;
   final String? firstName;
   final String? lastName;
-  final String displayName;
+  final String? displayName;
   final Timestamp? birthdate;
   final String? email;
-  final double height;
-  final double weight;
-  final MeasurmentSystem measurmentSystem;
+  final double? height;
+  final double? weight;
+  final MeasurmentSystem? measurmentSystem;
   final String? introduction;
-  final loc.LocationEntity location;
+  final loc.LocationEntity? location;
   final String? lastInitial;
 
-  UserInfoEntity({
-    Timestamp? dateJoined,
-    required this.id,
-    required this.gender,
+  const UserInfoEntity({
+    this.id,
+    this.dateJoined,
+    this.gender,
     this.firstName,
     this.lastName,
-    required this.displayName,
+    this.displayName,
     this.birthdate,
     this.email,
-    required this.height,
-    required this.weight,
-    required this.measurmentSystem,
+    this.height,
+    this.weight,
+    this.measurmentSystem,
     this.introduction,
-    required this.location,
+    this.location,
     this.lastInitial,
-  }) : this.dateJoined = dateJoined ?? Timestamp.now();
+  });
 
   static final empty = UserInfoEntity(
     id: '',
@@ -126,13 +126,13 @@ class UserInfoEntity extends Equatable {
       _DocKeys.displayName: displayName,
       _DocKeys.email: email,
       _DocKeys.firstName: firstName,
-      _DocKeys.gender: describeEnum(gender),
+      _DocKeys.gender: gender != null ? describeEnum(gender!) : null,
       _DocKeys.height: height,
       _DocKeys.introduction: introduction,
       _DocKeys.lastInitial: lastInitial,
       _DocKeys.lastName: lastName,
-      _DocKeys.location: location.toDocumentSnapshot(),
-      _DocKeys.measurmentSystem: describeEnum(measurmentSystem),
+      _DocKeys.location: location != null ? location!.toDocumentSnapshot() : null,
+      _DocKeys.measurmentSystem: location != null ? describeEnum(measurmentSystem!) : null,
       _DocKeys.weight: weight,
     };
   }
