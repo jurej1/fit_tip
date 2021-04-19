@@ -5,9 +5,11 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firebaseFirestore;
 
   AuthenticationRepository({FirebaseAuth? firebaseAuth, FirebaseFirestore? firebaseFirestore})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Stream<String?> get authenticationUser {
     return _firebaseAuth.authStateChanges().map((user) {
@@ -30,4 +32,10 @@ class AuthenticationRepository {
       throw e;
     }
   }
+
+  // Stream<model.UserInfo>? userInfo(String? userId) {
+  //   if (userId == null) return null;
+
+  //   return _firebaseFirestore.doc(userId).snapshots().map((snap) => model.UserInfo.fromEntity(UserInfoEntity.fromDocumentSnapshot(snap)));
+  // }
 }

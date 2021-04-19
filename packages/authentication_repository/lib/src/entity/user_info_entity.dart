@@ -1,7 +1,6 @@
+import 'package:authentication_repository/src/enums/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:user_info_repository/src/enums/enums.dart';
 
 import 'location_entity.dart' as loc;
 
@@ -22,7 +21,7 @@ class _DocKeys {
   static get lastInitial => 'lastInitial';
 }
 
-class UserInfoEntity extends Equatable {
+class UserEntity {
   final String? id;
   final Timestamp? dateJoined;
   final Gender? gender;
@@ -38,7 +37,7 @@ class UserInfoEntity extends Equatable {
   final loc.LocationEntity? location;
   final String? lastInitial;
 
-  const UserInfoEntity({
+  const UserEntity({
     this.id,
     this.dateJoined,
     this.gender,
@@ -55,7 +54,7 @@ class UserInfoEntity extends Equatable {
     this.lastInitial,
   });
 
-  static final empty = UserInfoEntity(
+  static final empty = UserEntity(
     id: '',
     location: loc.LocationEntity.empty,
     height: 0,
@@ -65,27 +64,7 @@ class UserInfoEntity extends Equatable {
     displayName: '',
   );
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      dateJoined,
-      gender,
-      firstName,
-      lastName,
-      displayName,
-      birthdate,
-      email,
-      height,
-      weight,
-      measurmentSystem,
-      introduction,
-      location,
-      lastInitial,
-    ];
-  }
-
-  UserInfoEntity copyWith({
+  UserEntity copyWith({
     String? id,
     Timestamp? dateJoined,
     Gender? gender,
@@ -101,7 +80,7 @@ class UserInfoEntity extends Equatable {
     loc.LocationEntity? location,
     String? lastInitial,
   }) {
-    return UserInfoEntity(
+    return UserEntity(
       id: id ?? this.id,
       dateJoined: dateJoined ?? this.dateJoined,
       gender: gender ?? this.gender,
@@ -137,11 +116,11 @@ class UserInfoEntity extends Equatable {
     };
   }
 
-  factory UserInfoEntity.fromDocumentSnapshot(DocumentSnapshot snap) {
+  factory UserEntity.fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data();
-    if (data == null) return UserInfoEntity.empty;
+    if (data == null) return UserEntity.empty;
 
-    return UserInfoEntity(
+    return UserEntity(
       displayName: data[_DocKeys.displayName],
       id: snap.id,
       gender: stringToGender(data[_DocKeys.gender]),

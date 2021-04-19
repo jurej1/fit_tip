@@ -1,11 +1,10 @@
+import 'package:authentication_repository/src/entity/entity.dart';
+import 'package:authentication_repository/src/enums/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:user_info_repository/src/entity/entity.dart';
-import 'package:user_info_repository/src/enums/enums.dart';
 
 import '../models/models.dart' as model;
 
-class UserInfo extends Equatable {
+class User {
   final DateTime? dateJoined;
   final String? id;
   final Gender? gender;
@@ -21,7 +20,7 @@ class UserInfo extends Equatable {
   final model.Location? location;
   final String? lastInitial;
 
-  const UserInfo({
+  const User({
     this.dateJoined,
     this.id,
     this.gender,
@@ -38,27 +37,7 @@ class UserInfo extends Equatable {
     this.lastInitial,
   });
 
-  @override
-  List<Object?> get props {
-    return [
-      dateJoined,
-      id,
-      gender,
-      firstName,
-      lastName,
-      displayName,
-      birthdate,
-      email,
-      height,
-      weight,
-      measurmentSystem,
-      introduction,
-      location,
-      lastInitial,
-    ];
-  }
-
-  UserInfo copyWith({
+  User copyWith({
     DateTime? dateJoined,
     String? id,
     Gender? gender,
@@ -74,7 +53,7 @@ class UserInfo extends Equatable {
     model.Location? location,
     String? lastInitial,
   }) {
-    return UserInfo(
+    return User(
       dateJoined: dateJoined ?? this.dateJoined,
       id: id ?? this.id,
       gender: gender ?? this.gender,
@@ -92,8 +71,8 @@ class UserInfo extends Equatable {
     );
   }
 
-  UserInfoEntity toEntity() {
-    return UserInfoEntity(
+  UserEntity toEntity() {
+    return UserEntity(
       displayName: displayName,
       gender: gender,
       height: height,
@@ -111,8 +90,8 @@ class UserInfo extends Equatable {
     );
   }
 
-  factory UserInfo.fromEntity(UserInfoEntity val) {
-    return UserInfo(
+  factory User.fromEntity(UserEntity val) {
+    return User(
       dateJoined: val.dateJoined?.toDate(),
       displayName: val.displayName,
       gender: val.gender,
