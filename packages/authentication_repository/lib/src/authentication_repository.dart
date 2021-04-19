@@ -22,10 +22,10 @@ class AuthenticationRepository {
     );
   }
 
-  String? get currentUserId => _firebaseAuth.currentUser?.uid;
+  String? get _currentUserId => _firebaseAuth.currentUser?.uid;
 
   Stream<model.User>? get user {
-    final String? id = currentUserId;
+    final String? id = _currentUserId;
 
     if (id == null) return null;
 
