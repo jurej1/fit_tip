@@ -1,5 +1,7 @@
+import 'package:authentication_repository/src/entity/entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../src/models/models.dart' as model;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -11,14 +13,24 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<String?> get authenticationUser {
-    return _firebaseAuth.authStateChanges().map((user) {
-      if (user == null) return null;
-      return user.uid;
-    });
+  Stream<AuthenticationStatus> get authenticationStatus {
+    return _firebaseAuth.authStateChanges().map(
+      (user) {
+        if (user == null) return AuthenticationStatus.unauthenticated;
+        return AuthenticationStatus.unauthenticated;
+      },
+    );
   }
 
-  User? get currentUser => _firebaseAuth.currentUser;
+  String? get currentUserId => _firebaseAuth.currentUser?.uid;
+
+  Stream<model.User>? get user {
+    final String? id = currentUserId;
+
+    if (id == null) return null;
+
+    return _firebaseFirestore.doc(id).snapshots().map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
+  }
 
   Future<UserCredential> loginWithEmailAndPassword({required String email, required String password}) async {
     return _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
@@ -32,10 +44,4 @@ class AuthenticationRepository {
       throw e;
     }
   }
-
-  // Stream<model.UserInfo>? userInfo(String? userId) {
-  //   if (userId == null) return null;
-
-  //   return _firebaseFirestore.doc(userId).snapshots().map((snap) => model.UserInfo.fromEntity(UserInfoEntity.fromDocumentSnapshot(snap)));
-  // }
 }
