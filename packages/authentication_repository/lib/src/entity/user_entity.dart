@@ -1,5 +1,6 @@
 import 'package:authentication_repository/src/enums/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 import 'location_entity.dart' as loc;
@@ -21,7 +22,7 @@ class _DocKeys {
   static get lastInitial => 'lastInitial';
 }
 
-class UserEntity {
+class UserEntity extends Equatable {
   final String? id;
   final Timestamp? dateJoined;
   final Gender? gender;
@@ -136,5 +137,25 @@ class UserEntity {
       lastInitial: data[_DocKeys.lastInitial],
       lastName: data[_DocKeys.lastName],
     );
+  }
+
+  @override
+  List<Object?> get props {
+    return [
+      id,
+      dateJoined,
+      gender,
+      firstName,
+      lastName,
+      displayName,
+      birthdate,
+      email,
+      height,
+      weight,
+      measurmentSystem,
+      introduction,
+      location,
+      lastInitial,
+    ];
   }
 }

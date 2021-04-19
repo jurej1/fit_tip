@@ -1,10 +1,11 @@
 import 'package:authentication_repository/src/entity/entity.dart';
 import 'package:authentication_repository/src/enums/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 import '../models/models.dart' as model;
 
-class User {
+class User extends Equatable {
   final DateTime? dateJoined;
   final String? id;
   final Gender? gender;
@@ -107,5 +108,25 @@ class User {
       lastInitial: val.lastInitial,
       lastName: val.lastName,
     );
+  }
+
+  @override
+  List<Object?> get props {
+    return [
+      dateJoined,
+      id,
+      gender,
+      firstName,
+      lastName,
+      displayName,
+      birthdate,
+      email,
+      height,
+      weight,
+      measurmentSystem,
+      introduction,
+      location,
+      lastInitial,
+    ];
   }
 }

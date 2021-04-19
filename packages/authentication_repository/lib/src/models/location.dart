@@ -1,5 +1,5 @@
+import 'package:authentication_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:user_info_repository/src/entity/entity.dart';
 
 class Location extends Equatable {
   final String country;
