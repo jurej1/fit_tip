@@ -28,7 +28,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       yield state.copyWith(status: event.status);
 
       if (event.status == AuthenticationStatus.authenticated) {
-        userSubscription = _authenticationRepository.user!.listen((user) => add(_UserUpdated(user)));
+        userSubscription = _authenticationRepository.user?.listen((user) => add(_UserUpdated(user)));
       } else if (event.status == AuthenticationStatus.unauthenticated) {
         userSubscription?.cancel();
       }

@@ -13,7 +13,9 @@ class App extends StatelessWidget {
           create: (context) => AuthenticationBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
         ),
       ],
-      child: MaterialApp(),
+      child: MaterialApp(
+        title: 'FitTip',
+      ),
     );
   }
 }
