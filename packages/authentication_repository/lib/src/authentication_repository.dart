@@ -44,7 +44,7 @@ class AuthenticationRepository {
       final user = userCredential.user;
 
       if (user != null) {
-        _firebaseFirestore.doc(user.uid).set(
+        await _firebaseFirestore.doc(user.uid).set(
               model.User(
                 dateJoined: DateTime.now(),
                 email: user.email,
