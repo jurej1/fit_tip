@@ -29,7 +29,12 @@ class App extends StatelessWidget {
           title: 'FitTip',
           home: RegisterView(),
           routes: {
-            RegisterView.routeName: (BuildContext context) => RegisterView(),
+            RegisterView.routeName: (BuildContext context) {
+              return BlocProvider<RegisterFormBloc>(
+                create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+                child: RegisterView(),
+              );
+            },
             LoginView.routeName: (BuildContext context) => LoginView(),
           },
         ),
