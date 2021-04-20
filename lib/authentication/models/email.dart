@@ -10,8 +10,10 @@ class Email extends FormzInput<String, EmailValidationError> {
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
   );
   @override
-  EmailValidationError? validator(String value) {
-    if (_emailRegex.hasMatch(value)) {
+  EmailValidationError? validator(String? value) {
+    if (value == null) {
+      return EmailValidationError.invalid;
+    } else if (_emailRegex.hasMatch(value)) {
       return null;
     }
 
