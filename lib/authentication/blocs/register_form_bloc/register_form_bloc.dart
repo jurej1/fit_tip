@@ -23,11 +23,11 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     if (event is RegisterEmailChanged) {
       yield _mapEmailChangedToState(event);
     } else if (event is RegisterEmailUnfocused) {
-      yield _mapEmailUnfocusedToState(event);
+      yield _mapEmailUnfocusedToState();
     } else if (event is RegisterPasswordChanged) {
       yield _mapPasswordChangedToState(event);
     } else if (event is RegisterPasswordUnfocused) {
-      yield _mapPasswordUnfocusedToState(event);
+      yield _mapPasswordUnfocusedToState();
     } else if (event is RegisterFormSubmit) {
       yield* _mapFormSubmittedToState(event);
     }
@@ -42,8 +42,8 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     );
   }
 
-  RegisterFormState _mapEmailUnfocusedToState(RegisterEmailUnfocused event) {
-    final email = Email.dirty(event.value);
+  RegisterFormState _mapEmailUnfocusedToState() {
+    final email = Email.dirty(state.email.value);
 
     return state.copyWith(
       email: email,
@@ -60,8 +60,8 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     );
   }
 
-  RegisterFormState _mapPasswordUnfocusedToState(RegisterPasswordUnfocused event) {
-    final password = Password.dirty(event.value);
+  RegisterFormState _mapPasswordUnfocusedToState() {
+    final password = Password.dirty(state.password.value);
 
     return state.copyWith(
       password: password,

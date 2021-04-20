@@ -16,14 +16,7 @@ class RegisterEmailChanged extends RegisterFormEvent {
   List<Object> get props => [value];
 }
 
-class RegisterEmailUnfocused extends RegisterFormEvent {
-  final String value;
-
-  const RegisterEmailUnfocused(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
+class RegisterEmailUnfocused extends RegisterFormEvent {}
 
 class RegisterPasswordChanged extends RegisterFormEvent {
   final String value;
@@ -33,13 +26,6 @@ class RegisterPasswordChanged extends RegisterFormEvent {
   List<Object> get props => [value];
 }
 
-class RegisterPasswordUnfocused extends RegisterFormEvent {
-  final String value;
-
-  const RegisterPasswordUnfocused(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
+class RegisterPasswordUnfocused extends RegisterFormEvent {}
 
 class RegisterFormSubmit extends RegisterFormEvent {}
