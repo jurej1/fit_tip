@@ -14,15 +14,19 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-        alignment: Alignment.center,
-        padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 10, horizontal: 15)),
+    return SizedBox(
+      width: 250,
+      height: 45,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+          alignment: Alignment.center,
+          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 10, horizontal: 15)),
+        ),
+        child: isLoading ? const CircularProgressIndicator() : Text(title),
       ),
-      child: isLoading ? const CircularProgressIndicator() : Text(title),
     );
   }
 }

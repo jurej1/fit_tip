@@ -59,9 +59,11 @@ class _RegisterViewState extends State<RegisterView> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              SizedBox(height: size.height * 0.3),
               _EmailInputField(focusNode: emailFocusNode),
+              const SizedBox(height: 25),
               _PasswordInputField(focusNode: passwordFocusNode),
+              const SizedBox(height: 25),
               _SubmitButton(),
             ],
           ),
