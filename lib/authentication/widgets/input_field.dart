@@ -6,7 +6,7 @@ class InputField extends StatelessWidget {
   final String? errorText;
   final Icon? preffixIcon;
   final Icon? suffixIcon;
-  final String helperText;
+  final String hintText;
   final FocusNode? focusNode;
   final bool obscure;
   final TextInputAction? action;
@@ -17,7 +17,7 @@ class InputField extends StatelessWidget {
     this.errorText,
     this.preffixIcon,
     this.suffixIcon,
-    required this.helperText,
+    required this.hintText,
     this.focusNode,
     this.action,
     this.obscure = false,
@@ -30,7 +30,7 @@ class InputField extends StatelessWidget {
       autocorrect: false,
       focusNode: focusNode,
       decoration: InputDecoration(
-        helperText: helperText,
+        hintText: hintText,
         prefixIcon: preffixIcon,
         suffixIcon: suffixIcon,
       ),

@@ -47,15 +47,24 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _EmailInputField(focusNode: emailFocusNode),
-            _PasswordInputField(focusNode: passwordFocusNode),
-            _SubmitButton(),
-          ],
+      body: Container(
+        height: size.height,
+        width: size.width,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 50),
+              _EmailInputField(focusNode: emailFocusNode),
+              _PasswordInputField(focusNode: passwordFocusNode),
+              _SubmitButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -73,7 +82,7 @@ class _EmailInputField extends StatelessWidget {
       builder: (context, state) {
         return InputField(
           focusNode: focusNode,
-          helperText: 'Email',
+          hintText: 'Email',
           preffixIcon: const Icon(Icons.email),
           errorText: state.email.invalid ? 'Please enter a valid email' : null,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterEmailChanged(val)),
@@ -93,7 +102,7 @@ class _PasswordInputField extends StatelessWidget {
     return BlocBuilder<RegisterFormBloc, RegisterFormState>(
       builder: (context, state) {
         return InputField(
-          helperText: 'Password',
+          hintText: 'Password',
           obscure: true,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterPasswordChanged(val)),
           preffixIcon: Icon(Icons.vpn_key),
