@@ -9,6 +9,7 @@ class InputField extends StatelessWidget {
   final String helperText;
   final FocusNode? focusNode;
   final bool obscure;
+  final TextInputAction? action;
 
   const InputField({
     Key? key,
@@ -18,12 +19,14 @@ class InputField extends StatelessWidget {
     this.suffixIcon,
     required this.helperText,
     this.focusNode,
+    this.action,
     this.obscure = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: action,
       autocorrect: false,
       focusNode: focusNode,
       decoration: InputDecoration(
