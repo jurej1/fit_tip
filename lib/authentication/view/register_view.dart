@@ -49,6 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
           children: [
             _EmailInputField(focusNode: emailFocusNode),
@@ -95,7 +96,7 @@ class _PasswordInputField extends StatelessWidget {
           helperText: 'Password',
           obscure: true,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterPasswordChanged(val)),
-          suffixIcon: Icon(Icons.vpn_key),
+          preffixIcon: Icon(Icons.vpn_key),
           errorText: state.password.invalid ? 'Please enter a valid password' : null,
           focusNode: focusNode,
         );

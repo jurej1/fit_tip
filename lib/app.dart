@@ -27,7 +27,10 @@ class App extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'FitTip',
-          home: RegisterView(),
+          home: BlocProvider(
+            create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+            child: RegisterView(),
+          ),
           routes: {
             RegisterView.routeName: (BuildContext context) {
               return BlocProvider<RegisterFormBloc>(
