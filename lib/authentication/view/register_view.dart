@@ -60,7 +60,7 @@ class _RegisterViewState extends State<RegisterView> {
           height: size.height,
           width: size.width,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 SizedBox(height: size.height * 0.3),
