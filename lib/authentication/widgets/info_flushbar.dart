@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 void showInfoAuthFlushbar(
   BuildContext context, {
-  required final String title,
+  final String? title,
 }) {
+  if (title == null) return;
   Flushbar(
     shouldIconPulse: true,
     title: title,

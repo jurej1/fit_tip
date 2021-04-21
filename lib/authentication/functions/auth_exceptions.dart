@@ -1,4 +1,8 @@
-String authExceptionToString(String error) {
+String authExceptionToString(String? error) {
+  final String _default = 'Error occured. Please try again later';
+
+  if (error == null) return _default;
+
   if (error.contains('email-already-in-use')) {
     return 'This email is already in use.';
   } else if (error.contains('invalid-email')) {
@@ -15,5 +19,5 @@ String authExceptionToString(String error) {
     return 'Incorrect password';
   }
 
-  return 'Error occured. Please try again later';
+  return _default;
 }

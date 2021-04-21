@@ -49,21 +49,28 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Container(
-        height: size.height,
-        width: size.width,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              SizedBox(height: size.height * 0.3),
-              _EmailInputField(focusNode: emailFocusNode),
-              const SizedBox(height: 25),
-              _PasswordInputField(focusNode: passwordFocusNode),
-              const SizedBox(height: 25),
-              _SubmitButton(),
-            ],
+    return BlocListener<RegisterFormBloc, RegisterFormState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionFailure) {
+          showInfoAuthFlushbar(context, title: state.errorMsg);
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          height: size.height,
+          width: size.width,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                SizedBox(height: size.height * 0.3),
+                _EmailInputField(focusNode: emailFocusNode),
+                const SizedBox(height: 25),
+                _PasswordInputField(focusNode: passwordFocusNode),
+                const SizedBox(height: 25),
+                _SubmitButton(),
+              ],
+            ),
           ),
         ),
       ),
