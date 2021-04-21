@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/functions/auth_exceptions.dart';
 import 'package:fit_tip/authentication/models/models.dart';
 import 'package:formz/formz.dart';
 
@@ -89,7 +90,7 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
       } catch (e) {
         yield state.copyWith(
           status: FormzStatus.submissionFailure,
-          errorMsg: e.toString(),
+          errorMsg: authExceptionToString(e.toString()),
         );
       }
     }
