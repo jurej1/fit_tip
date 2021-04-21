@@ -56,8 +56,6 @@ class _RegisterViewState extends State<RegisterView> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: size.height * 0.3),
               _EmailInputField(focusNode: emailFocusNode),
@@ -83,6 +81,7 @@ class _EmailInputField extends StatelessWidget {
     return BlocBuilder<RegisterFormBloc, RegisterFormState>(
       builder: (context, state) {
         return InputField(
+          suffixIcon: state.email.error == null ? const Icon(Icons.check_rounded, color: Colors.green) : null,
           focusNode: focusNode,
           hintText: 'Email',
           preffixIcon: const Icon(Icons.email),
@@ -122,7 +121,7 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<RegisterFormBloc, RegisterFormState>(
       builder: (context, state) {
         return SubmitButton(
-          title: 'Submit',
+          title: 'Sign Up',
           onPressed: () => BlocProvider.of<RegisterFormBloc>(context).add(RegisterFormSubmit()),
           isLoading: state.status.isSubmissionInProgress,
         );
