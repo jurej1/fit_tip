@@ -7,9 +7,11 @@ import 'authentication/authentication.dart';
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
 
-  const App({Key? key, required AuthenticationRepository authenticationRepository})
+  App({Key? key, required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(key: key);
+
+  final _navigatorState = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +24,24 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
+            lazy: false,
             create: (context) => AuthenticationBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
           ),
         ],
         child: MaterialApp(
+          navigatorKey: _navigatorState,
           title: 'FitTip',
-          home: BlocProvider(
-            create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
-            child: RegisterView(),
-          ),
+          builder: (context, child) {
+            return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                // if (state.status == AuthenticationStatus.unauthenticated) {
+                //   _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                // }
+              },
+              child: child,
+            );
+          },
+          home: _SplashScreen(),
           routes: {
             RegisterView.routeName: (BuildContext context) {
               return BlocProvider<RegisterFormBloc>(
@@ -42,6 +53,15 @@ class App extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class _SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(),
     );
   }
 }
