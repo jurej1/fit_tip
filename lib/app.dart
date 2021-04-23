@@ -34,9 +34,9 @@ class App extends StatelessWidget {
           builder: (context, child) {
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) {
-                // if (state.status == AuthenticationStatus.unauthenticated) {
-                //   _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
-                // }
+                if (state.status == AuthenticationStatus.unauthenticated) {
+                  _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                }
               },
               child: child,
             );
@@ -49,7 +49,12 @@ class App extends StatelessWidget {
                 child: RegisterView(),
               );
             },
-            LoginView.routeName: (BuildContext context) => LoginView(),
+            LoginView.routeName: (BuildContext context) {
+              return BlocProvider<LoginFormBloc>(
+                create: (context) => LoginFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+                child: LoginView(),
+              );
+            },
           },
         ),
       ),
