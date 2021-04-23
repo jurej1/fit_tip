@@ -10,6 +10,7 @@ class InputField extends StatelessWidget {
   final FocusNode? focusNode;
   final bool obscure;
   final TextInputAction? action;
+  final TextInputType? keyboardType;
 
   const InputField({
     Key? key,
@@ -20,6 +21,7 @@ class InputField extends StatelessWidget {
     required this.hintText,
     this.focusNode,
     this.action,
+    this.keyboardType,
     this.obscure = false,
   }) : super(key: key);
 
@@ -28,6 +30,7 @@ class InputField extends StatelessWidget {
     return TextFormField(
       textInputAction: action,
       autocorrect: false,
+      keyboardType: keyboardType,
       focusNode: focusNode,
       decoration: InputDecoration(
         hintText: hintText,
