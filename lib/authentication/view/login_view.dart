@@ -61,6 +61,14 @@ class _LoginViewState extends State<LoginView> {
                 _PasswordInputField(focusNode: passwordFocusNode),
                 const SizedBox(height: 25),
                 _SubmitButton(),
+                const SizedBox(height: 25),
+                SwitchViewButton(
+                  title: 'Do not have an account? Register',
+                  onPressed: () {
+                    if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
+                    Navigator.of(context).pushReplacementNamed(RegisterView.routeName);
+                  },
+                ),
               ],
             ),
           ),

@@ -69,6 +69,14 @@ class _RegisterViewState extends State<RegisterView> {
                 _PasswordInputField(focusNode: passwordFocusNode),
                 const SizedBox(height: 25),
                 _SubmitButton(),
+                const SizedBox(height: 25),
+                SwitchViewButton(
+                  title: 'Have an account? Login',
+                  onPressed: () {
+                    if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
+                    Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+                  },
+                ),
               ],
             ),
           ),
