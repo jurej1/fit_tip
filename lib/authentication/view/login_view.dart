@@ -97,6 +97,7 @@ class _PasswordInputField extends StatelessWidget {
           focusNode: focusNode,
           action: TextInputAction.done,
           hintText: 'Password',
+          obscure: true,
           errorText: state.password.invalid ? 'Please enter a valid password' : null,
           onChanged: (val) => BlocProvider.of<LoginFormBloc>(context).add(LoginPasswordChanged(val)),
         );
