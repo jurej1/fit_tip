@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 enum Gender { male, female, ratherNotSay, unknown }
 
 Gender stringToGender(String? val) {
+  if (val == null) return Gender.unknown;
+
   if (val == describeEnum(Gender.female)) {
     return Gender.female;
   } else if (val == describeEnum(Gender.male)) {

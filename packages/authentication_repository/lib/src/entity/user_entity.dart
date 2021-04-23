@@ -101,19 +101,19 @@ class UserEntity extends Equatable {
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      birthdate != null ? _DocKeys.birthdate : birthdate: null,
-      dateJoined != null ? _DocKeys.dateJoined : dateJoined: null,
-      displayName != null ? _DocKeys.displayName : displayName: null,
-      email != null ? _DocKeys.email : email: null,
-      firstName != null ? _DocKeys.firstName : firstName: null,
-      gender != null ? _DocKeys.gender : describeEnum(gender!): null,
-      height != null ? _DocKeys.height : height: null,
-      introduction != null ? _DocKeys.introduction : introduction: null,
-      lastInitial != null ? _DocKeys.lastInitial : lastInitial: null,
-      lastName != null ? _DocKeys.lastName : lastName: null,
-      location != null ? _DocKeys.location : location!.toDocumentSnapshot(): null,
-      measurmentSystem != null ? _DocKeys.measurmentSystem : describeEnum(measurmentSystem!): null,
-      weight != null ? _DocKeys.weight : weight: null,
+      if (birthdate != null) _DocKeys.birthdate: birthdate,
+      if (dateJoined != null) _DocKeys.dateJoined: dateJoined,
+      if (displayName != null) _DocKeys.displayName: displayName,
+      if (email != null) _DocKeys.email: email,
+      if (firstName != null) _DocKeys.firstName: firstName,
+      if (gender != null) _DocKeys.gender: describeEnum(gender!),
+      if (height != null) _DocKeys.height: height,
+      if (introduction != null) _DocKeys.introduction: introduction,
+      if (lastInitial != null) _DocKeys.lastInitial: lastInitial,
+      if (lastName != null) _DocKeys.lastName: lastName,
+      if (location != null) _DocKeys.location: location!.toDocumentSnapshot(),
+      if (measurmentSystem != null) _DocKeys.measurmentSystem: describeEnum(measurmentSystem!),
+      if (weight != null) _DocKeys.weight: weight,
     };
   }
 
