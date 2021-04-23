@@ -33,6 +33,7 @@ class InputField extends StatelessWidget {
         hintText: hintText,
         prefixIcon: preffixIcon,
         suffixIcon: suffixIcon,
+        errorText: errorText,
       ),
       obscureText: obscure,
       onChanged: onChanged,
