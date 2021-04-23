@@ -80,6 +80,7 @@ class _EmailInputField extends StatelessWidget {
     return BlocBuilder<LoginFormBloc, LoginFormState>(
       builder: (context, state) {
         return InputField(
+          keyboardType: TextInputType.emailAddress,
           action: TextInputAction.next,
           focusNode: focusNode,
           onChanged: (val) => BlocProvider.of<LoginFormBloc>(context).add(LoginEmailChanged(val)),
@@ -101,6 +102,7 @@ class _PasswordInputField extends StatelessWidget {
     return BlocBuilder<LoginFormBloc, LoginFormState>(
       builder: (context, state) {
         return InputField(
+          keyboardType: TextInputType.visiblePassword,
           focusNode: focusNode,
           action: TextInputAction.done,
           hintText: 'Password',
