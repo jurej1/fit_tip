@@ -87,9 +87,9 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
 
         await _authenticationRepository.loginWithEmailAndPassword(email: state.email.value, password: state.password.value);
 
-        state.copyWith(status: FormzStatus.submissionSuccess);
+        yield state.copyWith(status: FormzStatus.submissionSuccess);
       } catch (e) {
-        state.copyWith(
+        yield state.copyWith(
           status: FormzStatus.submissionFailure,
           errorMsg: authExceptionToString(e.toString()),
         );
