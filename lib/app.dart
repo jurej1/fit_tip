@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:fit_tip/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,6 +37,8 @@ class App extends StatelessWidget {
               listener: (context, state) {
                 if (state.status == AuthenticationStatus.unauthenticated) {
                   _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                } else if (state.status == AuthenticationStatus.authenticated) {
+                  _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
                 }
               },
               child: child,
@@ -55,6 +58,7 @@ class App extends StatelessWidget {
                 child: LoginView(),
               );
             },
+            Home.routeName: (BuildContext context) => Home(),
           },
         ),
       ),

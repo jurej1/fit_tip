@@ -14,22 +14,16 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<AuthenticationStatus> get authenticationStatus {
+  Stream<String?> get authenticationId {
     return _firebaseAuth.authStateChanges().map(
       (user) {
-        if (user == null) return AuthenticationStatus.unauthenticated;
-        return AuthenticationStatus.unauthenticated;
+        if (user == null) return null;
+        return user.uid;
       },
     );
   }
 
-  String? get _currentUserId => _firebaseAuth.currentUser?.uid;
-
-  Stream<model.User>? get user {
-    final String? id = _currentUserId;
-
-    if (id == null) return null;
-
+  Stream<model.User> user(String id) {
     return _firebaseFirestore.doc(id).snapshots().map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
   }
 
