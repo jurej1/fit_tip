@@ -5,10 +5,9 @@ void showInfoAuthFlushbar(
   BuildContext context, {
   final String? title,
 }) {
-  if (title == null) return;
   Flushbar(
     shouldIconPulse: true,
-    title: title,
+    message: title,
     flushbarPosition: FlushbarPosition.BOTTOM,
     flushbarStyle: FlushbarStyle.FLOATING,
     borderRadius: BorderRadius.circular(10),

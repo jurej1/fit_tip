@@ -73,7 +73,7 @@ class LoginFormBloc extends Bloc<LoginFormEvent, LoginFormState> {
 
   Stream<LoginFormState> _mapSubmitToState() async* {
     final password = Password.dirty(state.password.value);
-    final email = Email.pure(state.email.value);
+    final email = Email.dirty(state.email.value);
 
     yield state.copyWith(
       password: password,

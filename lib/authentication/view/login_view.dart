@@ -44,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<LoginFormBloc, LoginFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          showInfoAuthFlushbar(context, title: state.errorMsg);
+          showInfoAuthFlushbar(context, title: 'hello');
         }
       },
       child: Scaffold(
