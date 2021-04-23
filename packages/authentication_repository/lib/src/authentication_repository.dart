@@ -14,17 +14,27 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<String?> get authenticationId {
+  Stream<AuthenticationStatus> get authenticationStatus {
     return _firebaseAuth.authStateChanges().map(
       (user) {
-        if (user == null) return null;
-        return user.uid;
+        if (user == null) return AuthenticationStatus.unauthenticated;
+        return AuthenticationStatus.authenticated;
       },
     );
   }
 
-  Stream<model.User> user(String id) {
-    return _firebaseFirestore.doc(id).snapshots().map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
+  String? get _currentUserId => _firebaseAuth.currentUser?.uid;
+
+  Stream<model.User>? get user {
+    final String? id = _currentUserId;
+
+    if (id == null) return null;
+
+    return _firebaseFirestore
+        .collection('users')
+        .doc(id)
+        .snapshots()
+        .map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
   }
 
   Future<UserCredential> loginWithEmailAndPassword({required String email, required String password}) async {
