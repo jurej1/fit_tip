@@ -101,19 +101,19 @@ class UserEntity extends Equatable {
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      _DocKeys.birthdate: birthdate,
-      _DocKeys.dateJoined: dateJoined,
-      _DocKeys.displayName: displayName,
-      _DocKeys.email: email,
-      _DocKeys.firstName: firstName,
-      _DocKeys.gender: gender != null ? describeEnum(gender!) : null,
-      _DocKeys.height: height,
-      _DocKeys.introduction: introduction,
-      _DocKeys.lastInitial: lastInitial,
-      _DocKeys.lastName: lastName,
-      _DocKeys.location: location != null ? location!.toDocumentSnapshot() : null,
-      _DocKeys.measurmentSystem: location != null ? describeEnum(measurmentSystem!) : null,
-      _DocKeys.weight: weight,
+      birthdate != null ? _DocKeys.birthdate : birthdate: null,
+      dateJoined != null ? _DocKeys.dateJoined : dateJoined: null,
+      displayName != null ? _DocKeys.displayName : displayName: null,
+      email != null ? _DocKeys.email : email: null,
+      firstName != null ? _DocKeys.firstName : firstName: null,
+      gender != null ? _DocKeys.gender : describeEnum(gender!): null,
+      height != null ? _DocKeys.height : height: null,
+      introduction != null ? _DocKeys.introduction : introduction: null,
+      lastInitial != null ? _DocKeys.lastInitial : lastInitial: null,
+      lastName != null ? _DocKeys.lastName : lastName: null,
+      location != null ? _DocKeys.location : location!.toDocumentSnapshot(): null,
+      measurmentSystem != null ? _DocKeys.measurmentSystem : describeEnum(measurmentSystem!): null,
+      weight != null ? _DocKeys.weight : weight: null,
     };
   }
 
