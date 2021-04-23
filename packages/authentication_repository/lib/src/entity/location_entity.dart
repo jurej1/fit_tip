@@ -43,10 +43,12 @@ class LocationEntity extends Equatable {
     };
   }
 
-  factory LocationEntity.fromDocumentSnapshot(DocumentSnapshot snap) {
+  static LocationEntity? fromDocumentSnapshot(DocumentSnapshot? snap) {
+    if (snap == null) return null;
+
     final data = snap.data();
 
-    if (data == null) return LocationEntity.empty;
+    if (data == null) return null;
 
     return LocationEntity(
       country: data.containsKey(_DocKeys.country) ? data[_DocKeys.country] : '',

@@ -126,7 +126,7 @@ class UserEntity extends Equatable {
       id: snap.id,
       gender: stringToGender(data[_DocKeys.gender] ?? ''),
       height: data[_DocKeys.height],
-      location: loc.LocationEntity.fromJson(data[_DocKeys.location]),
+      location: loc.LocationEntity.fromDocumentSnapshot(data[_DocKeys.location]),
       measurmentSystem: stringToMeasurmentSystem(data[_DocKeys.measurmentSystem]),
       weight: data[_DocKeys.weight],
       birthdate: data[_DocKeys.birthdate],
