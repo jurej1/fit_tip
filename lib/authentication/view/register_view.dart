@@ -129,8 +129,11 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return SubmitButton(
           title: 'Sign Up',
-          onPressed: () => BlocProvider.of<RegisterFormBloc>(context).add(RegisterFormSubmit()),
           isLoading: state.status.isSubmissionInProgress,
+          onPressed: () {
+            if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
+            BlocProvider.of<RegisterFormBloc>(context).add(RegisterFormSubmit());
+          },
         );
       },
     );
