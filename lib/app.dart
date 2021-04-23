@@ -34,6 +34,7 @@ class App extends StatelessWidget {
           title: 'FitTip',
           builder: (context, child) {
             return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listenWhen: (previous, current) => previous.status != current.status,
               listener: (context, state) {
                 if (state.status == AuthenticationStatus.unauthenticated) {
                   _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);

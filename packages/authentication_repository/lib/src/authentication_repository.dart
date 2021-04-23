@@ -37,6 +37,10 @@ class AuthenticationRepository {
         .map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
   }
 
+  Future<void> logOut() {
+    return _firebaseAuth.signOut();
+  }
+
   Future<UserCredential> loginWithEmailAndPassword({required String email, required String password}) async {
     return _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
   }
@@ -60,6 +64,7 @@ class AuthenticationRepository {
 
       return userCredential;
     } catch (e) {
+      print('Create error $e');
       throw e;
     }
   }
