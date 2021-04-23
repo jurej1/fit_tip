@@ -88,6 +88,16 @@ class _EmailInputField extends StatelessWidget {
     return BlocBuilder<LoginFormBloc, LoginFormState>(
       builder: (context, state) {
         return InputField(
+          preffixIcon: Icon(
+            Icons.email,
+            color: Theme.of(context).primaryColor,
+          ),
+          suffixIcon: state.email.error == null
+              ? Icon(
+                  Icons.check_rounded,
+                  color: Colors.green,
+                )
+              : null,
           keyboardType: TextInputType.emailAddress,
           action: TextInputAction.next,
           focusNode: focusNode,
@@ -110,6 +120,10 @@ class _PasswordInputField extends StatelessWidget {
     return BlocBuilder<LoginFormBloc, LoginFormState>(
       builder: (context, state) {
         return InputField(
+          preffixIcon: Icon(
+            Icons.vpn_key,
+            color: Theme.of(context).primaryColor,
+          ),
           keyboardType: TextInputType.visiblePassword,
           focusNode: focusNode,
           action: TextInputAction.done,

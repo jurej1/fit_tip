@@ -99,7 +99,7 @@ class _EmailInputField extends StatelessWidget {
           suffixIcon: state.email.error == null ? const Icon(Icons.check_rounded, color: Colors.green) : null,
           focusNode: focusNode,
           hintText: 'Email',
-          preffixIcon: const Icon(Icons.email),
+          preffixIcon: Icon(Icons.email, color: Theme.of(context).primaryColor),
           errorText: state.email.invalid ? 'Please enter a valid email' : null,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterEmailChanged(val)),
         );
@@ -121,7 +121,10 @@ class _PasswordInputField extends StatelessWidget {
           hintText: 'Password',
           obscure: true,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterPasswordChanged(val)),
-          preffixIcon: Icon(Icons.vpn_key),
+          preffixIcon: Icon(
+            Icons.vpn_key,
+            color: Theme.of(context).primaryColor,
+          ),
           errorText: state.password.invalid ? 'Please enter a valid password' : null,
           focusNode: focusNode,
         );
