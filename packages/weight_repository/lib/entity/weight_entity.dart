@@ -39,10 +39,8 @@ class WeightEntity extends Equatable {
     };
   }
 
-  static WeightEntity? fromDocumentSnapshot(DocumentSnapshot snap) {
-    final doc = snap.data();
-
-    if (doc == null) return null;
+  static WeightEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final doc = snap.data()!;
 
     return WeightEntity(
       id: snap.id,

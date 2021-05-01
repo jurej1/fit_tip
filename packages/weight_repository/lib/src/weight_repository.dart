@@ -26,7 +26,7 @@ class WeightRepository {
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
 
-  Future<dynamic> weightHistory() async {
+  Future<List<Weight>?> weightHistory() async {
     if (userId == null) return null;
 
     Query query = _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').orderBy('dateAdded', descending: true);
