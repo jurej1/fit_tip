@@ -28,29 +28,18 @@ class WeightRepository {
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
 
-  Future<Map<String, dynamic>?> weightHistory({DocumentSnapshot? startAfter}) async {
+  Future<dynamic> weightHistory() async {
     if (userId == null) return null;
 
-    Query query = _firebaseFirestore
-        .collection('users')
-        .doc(userId)
-        .collection('weight_tracking')
-        .orderBy('dateAdded', descending: true)
-        .limit(_limit);
-
-    if (startAfter != null) {
-      query = query.startAfterDocument(startAfter);
-    }
+    Query query = _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').orderBy('dateAdded', descending: true);
 
     final snap = await query.get();
 
-    return {
-      'value': snap.docs.map((e) {
-        final entity = WeightEntity.fromDocumentSnapshot(e);
-        return Weight.fromEntity(entity);
-      }).toList(),
-      'doc': snap.docs.last,
-    };
+    return snap.docs.map((e) {
+      final entity = WeightEntity.fromDocumentSnapshot(e);
+
+      return Weight.fromEntity(entity);
+    }).toList();
   }
 
   Future<DocumentReference?> addWeight(Weight weight) async {
