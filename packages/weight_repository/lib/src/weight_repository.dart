@@ -66,4 +66,12 @@ class WeightRepository {
     if (userId == null) return;
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').doc(id).delete();
   }
+
+  Future<void> updateWeight(Weight weight) async {
+    if (userId == null) return null;
+
+    return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').doc(weight.id).update(
+          weight.toEntity().toDocument(),
+        );
+  }
 }
