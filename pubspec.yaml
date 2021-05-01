@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  weight_repository:
+    path: packages/weight_repository
   another_flushbar: ^1.10.18
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
