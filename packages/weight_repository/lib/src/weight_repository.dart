@@ -10,7 +10,6 @@ class WeightRepository {
 
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
-
   final int _limit = 12;
 
   String? get userId => _firebaseAuth.currentUser?.uid;
@@ -52,5 +51,14 @@ class WeightRepository {
       }).toList(),
       'doc': snap.docs.last,
     };
+  }
+
+  Future<DocumentReference?> addWeight(Weight weight) async {
+    if (userId == null) return null;
+    return _firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('weight_tracking')
+        .add(weight.copyWith(dateAdded: DateTime.now()).toEntity().toDocument());
   }
 }

@@ -8,19 +8,26 @@ class _DocKeys {
 
 class WeightEntity extends Equatable {
   final num? current;
+  final String? id;
   final Timestamp? dateAdded;
 
-  const WeightEntity({this.current, this.dateAdded});
+  const WeightEntity({
+    this.current,
+    this.dateAdded,
+    this.id,
+  });
 
   @override
-  List<Object?> get props => [current, dateAdded];
+  List<Object?> get props => [current, dateAdded, id];
 
   WeightEntity copyWith({
     num? current,
+    String? id,
     Timestamp? dateAdded,
   }) {
     return WeightEntity(
       current: current ?? this.current,
+      id: id ?? this.id,
       dateAdded: dateAdded ?? this.dateAdded,
     );
   }
@@ -38,6 +45,7 @@ class WeightEntity extends Equatable {
     if (doc == null) return null;
 
     return WeightEntity(
+      id: snap.id,
       current: doc[_DocKeys.current],
       dateAdded: doc[_DocKeys.dateAdded],
     );
