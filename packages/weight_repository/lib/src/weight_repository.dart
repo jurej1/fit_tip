@@ -11,9 +11,11 @@ class WeightRepository {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
 
-  Future<Weight?> get currentWeight async {
-    final userId = _firebaseAuth.currentUser?.uid;
+  final int _limit = 12;
 
+  String? get userId => _firebaseAuth.currentUser?.uid;
+
+  Future<Weight?> get currentWeight async {
     if (userId == null) return null;
 
     final snap = await _firebaseFirestore
@@ -24,6 +26,31 @@ class WeightRepository {
         .limit(1)
         .get();
 
-    return Weight.fromEntity(WeightEntity.fromQuerySnapshot(snap));
+    return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
+  }
+
+  Future<Map<String, dynamic>?> weightHistory({DocumentSnapshot? startAfter}) async {
+    if (userId == null) return null;
+
+    Query query = _firebaseFirestore
+        .collection('users')
+        .doc(userId)
+        .collection('weight_tracking')
+        .orderBy('dateAdded', descending: true)
+        .limit(_limit);
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    final snap = await query.get();
+
+    return {
+      'value': snap.docs.map((e) {
+        final entity = WeightEntity.fromDocumentSnapshot(e);
+        return Weight.fromEntity(entity);
+      }).toList(),
+      'doc': snap.docs.last,
+    };
   }
 }

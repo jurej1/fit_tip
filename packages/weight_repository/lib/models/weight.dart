@@ -25,7 +25,8 @@ class Weight extends Equatable {
     return WeightEntity(current: weight);
   }
 
-  static Weight fromEntity(WeightEntity entity) {
+  static Weight? fromEntity(WeightEntity? entity) {
+    if (entity == null) return null;
     return Weight(weight: entity.current);
   }
 }
