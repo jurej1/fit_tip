@@ -3,33 +3,40 @@ import 'package:equatable/equatable.dart';
 
 class _DocKeys {
   static get current => 'current';
+  static get dateAdded => 'dateAdded';
 }
 
-class WeightActiveEntity extends Equatable {
+class WeightEntity extends Equatable {
   final num? current;
+  final Timestamp? dateAdded;
 
-  const WeightActiveEntity({this.current});
+  const WeightEntity({this.current, this.dateAdded});
 
   @override
-  List<Object?> get props => [current];
+  List<Object?> get props => [current, dateAdded];
 
-  WeightActiveEntity copyWith({
+  WeightEntity copyWith({
     num? current,
+    Timestamp? dateAdded,
   }) {
-    return WeightActiveEntity(
+    return WeightEntity(
       current: current ?? this.current,
+      dateAdded: dateAdded ?? this.dateAdded,
     );
   }
 
   Map<String, dynamic> toDocument() {
     return {
       if (current != null) _DocKeys.current: current,
+      if (dateAdded != null) _DocKeys.dateAdded: dateAdded,
     };
   }
 
-  WeightActiveEntity fromDocumentSnapshot(DocumentSnapshot snap) {
-    return WeightActiveEntity(
-      current: snap.data()?[_DocKeys.current],
+  static WeightEntity fromQuerySnapshot(QuerySnapshot snap) {
+    final doc = snap.docs.first;
+    return WeightEntity(
+      current: doc[_DocKeys.current],
+      dateAdded: doc[_DocKeys.dateAdded],
     );
   }
 }

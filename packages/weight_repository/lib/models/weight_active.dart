@@ -1,29 +1,31 @@
 import 'package:equatable/equatable.dart';
 import '../entity/entity.dart';
 
-class WeightActive extends Equatable {
+class Weight extends Equatable {
   final num? weight;
+  final DateTime? dateAdded;
 
-  const WeightActive({
+  const Weight({
     this.weight,
+    this.dateAdded,
   });
 
   @override
   List<Object?> get props => [weight];
 
-  WeightActive copyWith({
+  Weight copyWith({
     num? weight,
   }) {
-    return WeightActive(
+    return Weight(
       weight: weight ?? this.weight,
     );
   }
 
-  WeightActiveEntity toEntity() {
-    return WeightActiveEntity(current: weight);
+  WeightEntity toEntity() {
+    return WeightEntity(current: weight);
   }
 
-  WeightActive fromEntity(WeightActiveEntity entity) {
-    return WeightActive(weight: entity.current);
+  static Weight fromEntity(WeightEntity entity) {
+    return Weight(weight: entity.current);
   }
 }
