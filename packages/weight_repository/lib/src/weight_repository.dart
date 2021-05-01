@@ -61,4 +61,9 @@ class WeightRepository {
         .collection('weight_tracking')
         .add(weight.copyWith(dateAdded: DateTime.now()).toEntity().toDocument());
   }
+
+  Future<void> deleteWeight(String id) async {
+    if (userId == null) return;
+    return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').doc(id).delete();
+  }
 }
