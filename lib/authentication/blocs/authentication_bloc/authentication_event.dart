@@ -24,3 +24,5 @@ class _UserUpdated extends AuthenticationEvent {
   @override
   List<Object> get props => [user];
 }
+
+class AuthenticationLogoutRequested extends AuthenticationEvent {}

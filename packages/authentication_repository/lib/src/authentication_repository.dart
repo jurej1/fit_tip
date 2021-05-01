@@ -18,7 +18,7 @@ class AuthenticationRepository {
     return _firebaseAuth.authStateChanges().map(
       (user) {
         if (user == null) return AuthenticationStatus.unauthenticated;
-        return AuthenticationStatus.unauthenticated;
+        return AuthenticationStatus.authenticated;
       },
     );
   }
@@ -30,7 +30,15 @@ class AuthenticationRepository {
 
     if (id == null) return null;
 
-    return _firebaseFirestore.doc(id).snapshots().map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
+    return _firebaseFirestore
+        .collection('users')
+        .doc(id)
+        .snapshots()
+        .map((snap) => model.User.fromEntity(UserEntity.fromDocumentSnapshot(snap)));
+  }
+
+  Future<void> logOut() {
+    return _firebaseAuth.signOut();
   }
 
   Future<UserCredential> loginWithEmailAndPassword({required String email, required String password}) async {
@@ -44,7 +52,7 @@ class AuthenticationRepository {
       final user = userCredential.user;
 
       if (user != null) {
-        await _firebaseFirestore.doc(user.uid).set(
+        await _firebaseFirestore.collection('users').doc(user.uid).set(
               model.User(
                 dateJoined: DateTime.now(),
                 email: user.email,
@@ -56,6 +64,7 @@ class AuthenticationRepository {
 
       return userCredential;
     } catch (e) {
+      print('Create error $e');
       throw e;
     }
   }

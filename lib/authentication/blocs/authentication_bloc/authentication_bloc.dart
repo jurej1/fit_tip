@@ -12,35 +12,38 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     required AuthenticationRepository authenticationRepository,
   })   : _authenticationRepository = authenticationRepository,
         super(AuthenticationState()) {
-    statusSubscription = _authenticationRepository.authenticationStatus.listen((status) => add(_StatusUpdated(status)));
+    _statusSubscription = _authenticationRepository.authenticationStatus.listen((status) => add(_StatusUpdated(status)));
   }
 
   final AuthenticationRepository _authenticationRepository;
 
-  late final StreamSubscription statusSubscription;
-  late final StreamSubscription? userSubscription;
+  late final StreamSubscription _statusSubscription;
+  StreamSubscription? _userSubscription;
 
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
     if (event is _StatusUpdated) {
-      yield state.copyWith(status: event.status);
-
       if (event.status == AuthenticationStatus.authenticated) {
-        userSubscription = _authenticationRepository.user?.listen((user) => add(_UserUpdated(user)));
+        yield state.copyWith(status: event.status);
+
+        _userSubscription = _authenticationRepository.user?.listen((user) => add(_UserUpdated(user)));
       } else if (event.status == AuthenticationStatus.unauthenticated) {
-        userSubscription?.cancel();
+        yield state.copyWith(status: event.status, user: null);
+        _userSubscription?.cancel();
       }
     } else if (event is _UserUpdated) {
       yield state.copyWith(user: event.user);
+    } else if (event is AuthenticationLogoutRequested) {
+      _authenticationRepository.logOut();
     }
   }
 
   @override
   Future<void> close() {
-    statusSubscription.cancel();
-    userSubscription?.cancel();
+    _statusSubscription.cancel();
+    _userSubscription?.cancel();
     return super.close();
   }
 }

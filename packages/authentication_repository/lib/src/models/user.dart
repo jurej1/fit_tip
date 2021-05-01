@@ -15,11 +15,9 @@ class User extends Equatable {
   final DateTime? birthdate;
   final String? email;
   final double? height;
-  final double? weight;
   final MeasurmentSystem? measurmentSystem;
   final String? introduction;
   final model.Location? location;
-  final String? lastInitial;
 
   const User({
     this.dateJoined,
@@ -31,11 +29,9 @@ class User extends Equatable {
     this.birthdate,
     this.email,
     this.height,
-    this.weight,
     this.measurmentSystem,
     this.introduction,
     this.location,
-    this.lastInitial,
   });
 
   User copyWith({
@@ -48,11 +44,9 @@ class User extends Equatable {
     DateTime? birthdate,
     String? email,
     double? height,
-    double? weight,
     MeasurmentSystem? measurmentSystem,
     String? introduction,
     model.Location? location,
-    String? lastInitial,
   }) {
     return User(
       dateJoined: dateJoined ?? this.dateJoined,
@@ -64,11 +58,9 @@ class User extends Equatable {
       birthdate: birthdate ?? this.birthdate,
       email: email ?? this.email,
       height: height ?? this.height,
-      weight: weight ?? this.weight,
       measurmentSystem: measurmentSystem ?? this.measurmentSystem,
       introduction: introduction ?? this.introduction,
       location: location ?? this.location,
-      lastInitial: lastInitial ?? this.lastInitial,
     );
   }
 
@@ -80,13 +72,11 @@ class User extends Equatable {
       id: id,
       location: location?.toEntity(),
       measurmentSystem: measurmentSystem,
-      weight: weight,
       birthdate: birthdate != null ? Timestamp.fromDate(birthdate!) : null,
       dateJoined: dateJoined != null ? Timestamp.fromDate(dateJoined!) : null,
       email: email,
       firstName: firstName,
       introduction: introduction,
-      lastInitial: lastInitial,
       lastName: lastName,
     );
   }
@@ -100,12 +90,10 @@ class User extends Equatable {
       id: val.id,
       location: val.location != null ? model.Location.formEntity(val.location!) : null,
       measurmentSystem: val.measurmentSystem,
-      weight: val.weight,
       birthdate: val.birthdate?.toDate(),
       email: val.email,
       firstName: val.firstName,
       introduction: val.introduction,
-      lastInitial: val.lastInitial,
       lastName: val.lastName,
     );
   }
@@ -122,11 +110,9 @@ class User extends Equatable {
       birthdate,
       email,
       height,
-      weight,
       measurmentSystem,
       introduction,
       location,
-      lastInitial,
     ];
   }
 }

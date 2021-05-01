@@ -14,12 +14,10 @@ class _DocKeys {
   static get birthdate => 'birthdate';
   static get email => 'email';
   static get height => 'height';
-  static get weight => 'weight';
   static get measurmentSystem => 'measurmentSystem';
   static get introduction => 'introduction';
   static get location => 'location';
   static get id => 'id';
-  static get lastInitial => 'lastInitial';
 }
 
 class UserEntity extends Equatable {
@@ -32,11 +30,9 @@ class UserEntity extends Equatable {
   final Timestamp? birthdate;
   final String? email;
   final double? height;
-  final double? weight;
   final MeasurmentSystem? measurmentSystem;
   final String? introduction;
   final loc.LocationEntity? location;
-  final String? lastInitial;
 
   const UserEntity({
     this.id,
@@ -48,11 +44,9 @@ class UserEntity extends Equatable {
     this.birthdate,
     this.email,
     this.height,
-    this.weight,
     this.measurmentSystem,
     this.introduction,
     this.location,
-    this.lastInitial,
   });
 
   static final empty = UserEntity(
@@ -61,7 +55,6 @@ class UserEntity extends Equatable {
     height: 0,
     gender: Gender.ratherNotSay,
     measurmentSystem: MeasurmentSystem.metric,
-    weight: 0,
     displayName: '',
   );
 
@@ -75,11 +68,9 @@ class UserEntity extends Equatable {
     Timestamp? birthdate,
     String? email,
     double? height,
-    double? weight,
     MeasurmentSystem? measurmentSystem,
     String? introduction,
     loc.LocationEntity? location,
-    String? lastInitial,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -91,29 +82,25 @@ class UserEntity extends Equatable {
       birthdate: birthdate ?? this.birthdate,
       email: email ?? this.email,
       height: height ?? this.height,
-      weight: weight ?? this.weight,
       measurmentSystem: measurmentSystem ?? this.measurmentSystem,
       introduction: introduction ?? this.introduction,
       location: location ?? this.location,
-      lastInitial: lastInitial ?? this.lastInitial,
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      _DocKeys.birthdate: birthdate,
-      _DocKeys.dateJoined: dateJoined,
-      _DocKeys.displayName: displayName,
-      _DocKeys.email: email,
-      _DocKeys.firstName: firstName,
-      _DocKeys.gender: gender != null ? describeEnum(gender!) : null,
-      _DocKeys.height: height,
-      _DocKeys.introduction: introduction,
-      _DocKeys.lastInitial: lastInitial,
-      _DocKeys.lastName: lastName,
-      _DocKeys.location: location != null ? location!.toDocumentSnapshot() : null,
-      _DocKeys.measurmentSystem: location != null ? describeEnum(measurmentSystem!) : null,
-      _DocKeys.weight: weight,
+      if (birthdate != null) _DocKeys.birthdate: birthdate,
+      if (dateJoined != null) _DocKeys.dateJoined: dateJoined,
+      if (displayName != null) _DocKeys.displayName: displayName,
+      if (email != null) _DocKeys.email: email,
+      if (firstName != null) _DocKeys.firstName: firstName,
+      if (gender != null) _DocKeys.gender: describeEnum(gender!),
+      if (height != null) _DocKeys.height: height,
+      if (introduction != null) _DocKeys.introduction: introduction,
+      if (lastName != null) _DocKeys.lastName: lastName,
+      if (location != null) _DocKeys.location: location!.toDocumentSnapshot(),
+      if (measurmentSystem != null) _DocKeys.measurmentSystem: describeEnum(measurmentSystem!),
     };
   }
 
@@ -126,15 +113,13 @@ class UserEntity extends Equatable {
       id: snap.id,
       gender: stringToGender(data[_DocKeys.gender]),
       height: data[_DocKeys.height],
-      location: loc.LocationEntity.fromJson(data[_DocKeys.location]),
+      location: loc.LocationEntity.fromDocumentSnapshot(data[_DocKeys.location]),
       measurmentSystem: stringToMeasurmentSystem(data[_DocKeys.measurmentSystem]),
-      weight: data[_DocKeys.weight],
       birthdate: data[_DocKeys.birthdate],
       dateJoined: data[_DocKeys.dateJoined],
       email: data[_DocKeys.email],
       firstName: data[_DocKeys.firstName],
       introduction: data[_DocKeys.introduction],
-      lastInitial: data[_DocKeys.lastInitial],
       lastName: data[_DocKeys.lastName],
     );
   }
@@ -151,11 +136,9 @@ class UserEntity extends Equatable {
       birthdate,
       email,
       height,
-      weight,
       measurmentSystem,
       introduction,
       location,
-      lastInitial,
     ];
   }
 }
