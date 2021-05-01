@@ -10,8 +10,6 @@ class WeightRepository {
 
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
-  final int _limit = 12;
-
   String? get userId => _firebaseAuth.currentUser?.uid;
 
   Future<Weight?> get currentWeight async {
