@@ -39,10 +39,12 @@ class WeightHistoryView extends StatelessWidget {
                 width: size.width,
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 50,
+                    ),
                     Container(
-                      // this should be a graph
                       height: 250,
-                      width: size.width,
+                      child: WeightHistoryLineChart(weights: state.weights),
                     ),
                     WeightHistoryList(weights: state.weights),
                   ],
