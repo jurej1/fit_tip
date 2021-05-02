@@ -10,7 +10,8 @@ class WeightHistoryLineChart extends StatelessWidget {
     Key? key,
     required this.weights,
   }) : super(key: key) {
-    List<Weight> weightsCopy = List.from(weights);
+    final lowBoundMonth = DateTime.now().subtract(const Duration(days: 365));
+    List<Weight> weightsCopy = List.from(weights)..retainWhere((element) => element.date!.isAfter(lowBoundMonth));
 
     double maxY = 0;
     weightsCopy.forEach((element) {
@@ -25,12 +26,55 @@ class WeightHistoryLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
-        axisTitleData: FlAxisTitleData(
-          bottomTitle: AxisTitle(titleText: 'Date'),
-          leftTitle: AxisTitle(titleText: 'Weight'),
-        ),
         maxX: 12,
         maxY: _maxY,
+        titlesData: FlTitlesData(
+          bottomTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 16,
+            margin: 15,
+            getTextStyles: (val) => TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            getTitles: (value) {
+              switch (value.toInt()) {
+                case 2:
+                  return 'FEB';
+                case 7:
+                  return 'JUL';
+                case 12:
+                  return 'DEC';
+              }
+              return '';
+            },
+          ),
+          leftTitles: SideTitles(
+            showTitles: true,
+            getTextStyles: (value) => const TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+            getTitles: (value) {
+              if (value % 5 == 0) {
+                return (value.toInt().toString());
+              }
+              return '';
+            },
+            margin: 8,
+            reservedSize: 16,
+          ),
+        ),
+        borderData: FlBorderData(
+          show: true,
+          border: const Border(
+            bottom: BorderSide(),
+            left: BorderSide(),
+          ),
+        ),
+        gridData: FlGridData(show: false),
         lineBarsData: [
           LineChartBarData(
             spots: weights.map<FlSpot>(
