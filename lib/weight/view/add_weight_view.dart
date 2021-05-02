@@ -16,8 +16,10 @@ class AddWeightView extends StatelessWidget {
         ],
       ),
       body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         children: [
           _WeightInput(),
+          _DateInput(),
         ],
       ),
     );
@@ -28,6 +30,7 @@ class _WeightInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text('Weight'),
@@ -53,10 +56,15 @@ class _DateInput extends StatelessWidget {
     return BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
       builder: (context, state) {
         return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Date'),
             TextButton(
-              child: Text(DateFormat('dd.MMMMM.yyyy').format(state.dateAdded.value)),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
+              ),
+              child: Text(DateFormat('dd.MMMM.yyyy').format(state.dateAdded.value)),
               onPressed: () async {
                 final date = await showDatePicker(
                   context: context,
@@ -84,7 +92,7 @@ class _SubmitButton extends StatelessWidget {
           return CircularProgressIndicator();
         }
         return TextButton(
-          child: const Text('Submit'),
+          child: Text('Add', style: TextStyle(color: Colors.white)),
           onPressed: () => BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightFormSubit()),
         );
       },
