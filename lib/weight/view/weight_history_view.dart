@@ -22,44 +22,37 @@ class WeightHistoryView extends StatelessWidget {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          child: Column(
-            children: [
-              Container(
-                // this should be a graph
-                height: 250,
+      body: BlocBuilder<WeightHistoryBloc, WeightHistoryState>(
+        builder: (context, state) {
+          if (state is WeightHistoryLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is WeightHistoryFailure) {
+            return Center(
+              child: Text('Sorry there was an error while loading. Please try again.'),
+            );
+          } else if (state is WeightHistorySuccesfullyLoaded) {
+            return SingleChildScrollView(
+              child: Container(
+                height: size.height,
                 width: size.width,
+                child: Column(
+                  children: [
+                    Container(
+                      // this should be a graph
+                      height: 250,
+                      width: size.width,
+                    ),
+                    WeightHistoryList(weights: state.weights),
+                  ],
+                ),
               ),
-              Expanded(
-                child: _WeightHistoryListBuilder(),
-              ),
-            ],
-          ),
-        ),
+            );
+          }
+          return Container();
+        },
       ),
-    );
-  }
-}
-
-class _WeightHistoryListBuilder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<WeightHistoryBloc, WeightHistoryState>(
-      builder: (context, state) {
-        if (state is WeightHistoryLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is WeightHistorySuccesfullyLoaded) {
-          return WeightHistoryList(weights: state.weights);
-        }
-        return Center(
-          child: Text('Sorry there wwas an error'),
-        );
-      },
     );
   }
 }
