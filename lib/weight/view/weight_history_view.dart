@@ -8,6 +8,7 @@ class WeightHistoryView extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Container(
           height: size.height,
