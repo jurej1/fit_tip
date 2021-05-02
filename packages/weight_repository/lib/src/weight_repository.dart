@@ -40,7 +40,7 @@ class WeightRepository {
 
   Future<DocumentReference?> addWeight(Weight weight) async {
     if (userId == null) return null;
-    return _collectionRef(userId!).add(weight.copyWith(dateAdded: DateTime.now()).toEntity().toDocument());
+    return _collectionRef(userId!).add(weight.copyWith(date: DateTime.now()).toEntity().toDocument());
   }
 
   Future<void> deleteWeight(String id) async {

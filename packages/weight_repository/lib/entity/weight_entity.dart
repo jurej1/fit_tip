@@ -7,35 +7,35 @@ class DocKeysWeight {
 }
 
 class WeightEntity extends Equatable {
-  final num? current;
+  final num? weight;
   final String? id;
-  final Timestamp? dateAdded;
+  final Timestamp? date;
 
   const WeightEntity({
-    this.current,
-    this.dateAdded,
+    this.weight,
+    this.date,
     this.id,
   });
 
   @override
-  List<Object?> get props => [current, dateAdded, id];
+  List<Object?> get props => [weight, date, id];
 
   WeightEntity copyWith({
-    num? current,
+    num? weight,
     String? id,
-    Timestamp? dateAdded,
+    Timestamp? date,
   }) {
     return WeightEntity(
-      current: current ?? this.current,
+      weight: weight ?? this.weight,
       id: id ?? this.id,
-      dateAdded: dateAdded ?? this.dateAdded,
+      date: date ?? this.date,
     );
   }
 
   Map<String, dynamic> toDocument() {
     return {
-      if (current != null) DocKeysWeight.weight: current,
-      if (dateAdded != null) DocKeysWeight.date: dateAdded,
+      if (weight != null) DocKeysWeight.weight: weight,
+      if (date != null) DocKeysWeight.date: date,
     };
   }
 
@@ -44,8 +44,8 @@ class WeightEntity extends Equatable {
 
     return WeightEntity(
       id: snap.id,
-      current: doc[DocKeysWeight.weight],
-      dateAdded: doc[DocKeysWeight.date],
+      weight: doc[DocKeysWeight.weight],
+      date: doc[DocKeysWeight.date],
     );
   }
 }

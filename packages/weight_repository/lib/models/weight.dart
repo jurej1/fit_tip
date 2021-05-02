@@ -6,41 +6,41 @@ import '../entity/entity.dart';
 class Weight extends Equatable {
   final String? id;
   final num? weight;
-  final DateTime? dateAdded;
+  final DateTime? date;
 
   const Weight({
     this.weight,
     this.id,
-    this.dateAdded,
+    this.date,
   });
 
   @override
-  List<Object?> get props => [weight, dateAdded, id];
+  List<Object?> get props => [weight, date, id];
 
   Weight copyWith({
     String? id,
     num? weight,
-    DateTime? dateAdded,
+    DateTime? date,
   }) {
     return Weight(
       id: id ?? this.id,
       weight: weight ?? this.weight,
-      dateAdded: dateAdded ?? this.dateAdded,
+      date: date ?? this.date,
     );
   }
 
   WeightEntity toEntity() {
     return WeightEntity(
-      current: weight,
-      dateAdded: dateAdded != null ? Timestamp.fromDate(dateAdded!) : null,
+      weight: weight,
+      date: date != null ? Timestamp.fromDate(date!) : null,
       id: id,
     );
   }
 
   static Weight fromEntity(WeightEntity entity) {
     return Weight(
-      weight: entity.current,
-      dateAdded: entity.dateAdded?.toDate(),
+      weight: entity.weight,
+      date: entity.date?.toDate(),
       id: entity.id,
     );
   }

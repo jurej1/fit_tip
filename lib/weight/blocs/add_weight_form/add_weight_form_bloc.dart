@@ -68,13 +68,13 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
 
       try {
         Weight weight = Weight(
-          dateAdded: state.dateAdded.value,
+          date: state.dateAdded.value,
           weight: double.parse(state.weight.value),
         );
 
         final id = await _weightRepository.addWeight(
           Weight(
-            dateAdded: state.dateAdded.value,
+            date: state.dateAdded.value,
             weight: double.parse(state.weight.value),
           ),
         );
