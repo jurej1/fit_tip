@@ -33,6 +33,10 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   }
 
   Stream<WeightHistoryState> _mapWeighHistoryLoadToState() async* {
+    if (state is WeightHistorySuccesfullyLoaded) {
+      return;
+    }
+
     if (_authenticationBloc.state.status != AuthenticationStatus.authenticated) {
       yield WeightHistoryFailure();
       return;

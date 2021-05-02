@@ -43,10 +43,10 @@ class WeightHistoryView extends StatelessWidget {
 
             final weights = state.weights;
 
-            return SingleChildScrollView(
-              child: Container(
-                height: size.height,
-                width: size.width,
+            return Container(
+              height: size.height,
+              width: size.width,
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     SizedBox(
@@ -54,6 +54,7 @@ class WeightHistoryView extends StatelessWidget {
                     ),
                     Container(
                       height: 250,
+                      width: size.width * 0.9,
                       child: WeightHistoryLineChart(weights: weights),
                     ),
                     WeightHistoryList(weights: weights),

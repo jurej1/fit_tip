@@ -1,3 +1,4 @@
+import 'package:fit_tip/weight/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_repository/weight_repository.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -9,17 +10,26 @@ class WeightHistoryLineChart extends StatelessWidget {
     Key? key,
     required this.weights,
   }) : super(key: key) {
-    final List<Weight> sorted = weights..sort((a, b) => b.weight!.compareTo(a.weight!));
+    List<Weight> weightsCopy = List.from(weights);
 
-    _maxY = sorted[0].weight!.toDouble() + 5;
+    double maxY = 0;
+    weightsCopy.forEach((element) {
+      if (maxY < element.weight!) maxY = element.weight!.toDouble();
+    });
+
+    _maxY = maxY + 5;
   }
 
-  late double _maxY;
-
+  late final double _maxY;
   @override
   Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
+        axisTitleData: FlAxisTitleData(
+          bottomTitle: AxisTitle(titleText: 'Date'),
+          leftTitle: AxisTitle(titleText: 'Weight'),
+        ),
+        maxX: 12,
         maxY: _maxY,
         lineBarsData: [
           LineChartBarData(
