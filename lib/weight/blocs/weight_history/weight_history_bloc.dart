@@ -25,6 +25,10 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   ) async* {
     if (event is WeightHistoryLoad) {
       yield* _mapWeighHistoryLoadToState();
+    } else if (event is WeightHistoryAdded) {
+      yield* _mapWeightHistoryAddedToState(event);
+    } else if (event is WeightHistoryDeleted) {
+      yield* _mapWeightHistoryDeletedToState(event);
     }
   }
 
@@ -47,6 +51,35 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
       yield WeightHistorySuccesfullyLoaded(weights: weights);
     } catch (error) {
       yield WeightHistoryFailure();
+    }
+  }
+
+  Stream<WeightHistoryState> _mapWeightHistoryAddedToState(WeightHistoryAdded event) async* {
+    if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
+        state is WeightHistorySuccesfullyLoaded &&
+        event.weight != null) {
+      final currentState = state as WeightHistorySuccesfullyLoaded;
+
+      List<Weight> weights = currentState.weights;
+
+      weights = weights..add(event.weight!);
+
+      weights.sort((a, b) => a.date!.compareTo(b.date!));
+
+      yield WeightHistorySuccesfullyLoaded(weights: weights);
+    }
+  }
+
+  Stream<WeightHistoryState> _mapWeightHistoryDeletedToState(WeightHistoryDeleted event) async* {
+    if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
+        state is WeightHistorySuccesfullyLoaded &&
+        event.weight != null) {
+      final currentState = state as WeightHistorySuccesfullyLoaded;
+
+      List<Weight> weights = currentState.weights;
+      weights.removeWhere((element) => element.id == event.weight!.id);
+
+      yield WeightHistorySuccesfullyLoaded(weights: weights);
     }
   }
 }

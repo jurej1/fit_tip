@@ -33,7 +33,15 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider<AuthenticationBloc>(
             lazy: false,
-            create: (context) => AuthenticationBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+            create: (context) => AuthenticationBloc(
+              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+            ),
+          ),
+          BlocProvider<WeightHistoryBloc>(
+            create: (context) => WeightHistoryBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+            ),
           ),
         ],
         child: MaterialApp(
@@ -71,13 +79,9 @@ class App extends StatelessWidget {
             },
             Home.routeName: (BuildContext context) => Home(),
             WeightHistoryView.routeName: (BuildContext context) {
-              return BlocProvider<WeightHistoryBloc>(
-                create: (context) => WeightHistoryBloc(
-                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                  weightRepository: RepositoryProvider.of<WeightRepository>(context),
-                )..add(WeightHistoryLoad()),
-                child: WeightHistoryView(),
-              );
+              BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
+
+              return WeightHistoryView();
             },
             AddWeightView.routeName: (BuildContext context) {
               return BlocProvider<AddWeightFormBloc>(
