@@ -9,18 +9,25 @@ class AddWeightView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          _SubmitButton(),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-        children: [
-          _WeightInput(),
-          _DateInput(),
-        ],
+    return BlocListener<AddWeightFormBloc, AddWeightFormState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            _SubmitButton(),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          children: [
+            _WeightInput(),
+            _DateInput(),
+          ],
+        ),
       ),
     );
   }
