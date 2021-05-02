@@ -7,4 +7,4 @@ abstract class WeightHistoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WeightHistoryLoad extends WeightHistoryState {}
+class WeightHistoryLoad extends WeightHistoryEvent {}

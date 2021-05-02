@@ -75,7 +75,7 @@ class App extends StatelessWidget {
                 create: (context) => WeightHistoryBloc(
                   authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                   weightRepository: RepositoryProvider.of<WeightRepository>(context),
-                ),
+                )..add(WeightHistoryLoad()),
                 child: WeightHistoryView(),
               );
             },
