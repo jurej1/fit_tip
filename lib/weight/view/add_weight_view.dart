@@ -89,7 +89,11 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
       builder: (context, state) {
         if (state.status.isSubmissionInProgress) {
-          return CircularProgressIndicator();
+          return SizedBox(
+            height: 50,
+            width: 50,
+            child: CircularProgressIndicator(),
+          );
         }
         return TextButton(
           child: Text('Add', style: TextStyle(color: Colors.white)),
