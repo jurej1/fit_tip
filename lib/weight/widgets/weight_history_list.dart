@@ -15,6 +15,7 @@ class WeightHistoryList extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = weights[index];
         return ListTile(
+          leading: Text(item.weight!.toDouble().toString()),
           trailing: item.date != null ? Text(item.date.toString()) : null,
         );
       },
