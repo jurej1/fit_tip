@@ -3,8 +3,8 @@ import 'package:formz/formz.dart';
 enum WeightValidationError { invalid }
 
 class Weight extends FormzInput<String, WeightValidationError> {
-  Weight.dirty([String val = '']) : super.dirty(val);
-  Weight.pure([String val = '']) : super.pure(val);
+  const Weight.dirty([String val = '']) : super.dirty(val);
+  const Weight.pure([String val = '']) : super.pure(val);
 
   @override
   WeightValidationError? validator(String? value) {
