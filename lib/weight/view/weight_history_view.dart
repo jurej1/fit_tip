@@ -1,3 +1,4 @@
+import 'package:fit_tip/weight/view/add_weight_view.dart';
 import 'package:flutter/material.dart';
 
 class WeightHistoryView extends StatelessWidget {
@@ -8,7 +9,16 @@ class WeightHistoryView extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddWeightView.routeName);
+            },
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Container(
           height: size.height,
