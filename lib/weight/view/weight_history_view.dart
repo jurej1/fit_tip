@@ -41,6 +41,8 @@ class WeightHistoryView extends StatelessWidget {
               );
             }
 
+            final weights = state.weights;
+
             return SingleChildScrollView(
               child: Container(
                 height: size.height,
@@ -52,9 +54,9 @@ class WeightHistoryView extends StatelessWidget {
                     ),
                     Container(
                       height: 250,
-                      child: WeightHistoryLineChart(weights: state.weights),
+                      child: WeightHistoryLineChart(weights: weights),
                     ),
-                    WeightHistoryList(weights: state.weights),
+                    WeightHistoryList(weights: weights),
                   ],
                 ),
               ),
