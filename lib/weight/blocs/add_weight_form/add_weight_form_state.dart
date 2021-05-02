@@ -6,10 +6,12 @@ class AddWeightFormState extends Equatable {
     required this.dateAdded,
     this.status = FormzStatus.pure,
     this.errorMsg,
+    this.weightModel,
   });
 
   final model.Weight weight;
   final model.DateAdded dateAdded;
+  final Weight? weightModel;
 
   final FormzStatus status;
   final String? errorMsg;
@@ -22,17 +24,27 @@ class AddWeightFormState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [weight, dateAdded, status, errorMsg];
+  List<Object?> get props {
+    return [
+      weight,
+      dateAdded,
+      weightModel,
+      status,
+      errorMsg,
+    ];
+  }
 
   AddWeightFormState copyWith({
     model.Weight? weight,
     model.DateAdded? dateAdded,
+    Weight? weightModel,
     FormzStatus? status,
     String? errorMsg,
   }) {
     return AddWeightFormState(
       weight: weight ?? this.weight,
       dateAdded: dateAdded ?? this.dateAdded,
+      weightModel: weightModel ?? this.weightModel,
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
     );
