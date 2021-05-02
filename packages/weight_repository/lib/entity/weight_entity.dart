@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class _DocKeys {
-  static get current => 'current';
-  static get dateAdded => 'dateAdded';
+class DocKeysWeight {
+  static get weight => 'weight';
+  static get date => 'date';
 }
 
 class WeightEntity extends Equatable {
@@ -34,8 +34,8 @@ class WeightEntity extends Equatable {
 
   Map<String, dynamic> toDocument() {
     return {
-      if (current != null) _DocKeys.current: current,
-      if (dateAdded != null) _DocKeys.dateAdded: dateAdded,
+      if (current != null) DocKeysWeight.weight: current,
+      if (dateAdded != null) DocKeysWeight.date: dateAdded,
     };
   }
 
@@ -44,8 +44,8 @@ class WeightEntity extends Equatable {
 
     return WeightEntity(
       id: snap.id,
-      current: doc[_DocKeys.current],
-      dateAdded: doc[_DocKeys.dateAdded],
+      current: doc[DocKeysWeight.weight],
+      dateAdded: doc[DocKeysWeight.date],
     );
   }
 }
