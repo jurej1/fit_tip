@@ -27,7 +27,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
       yield* _mapWeighHistoryLoadToState();
     } else if (event is WeightHistoryAdded) {
       yield* _mapWeightHistoryAddedToState(event);
-    } else if (event is WeightHistoryDeleted) {
+    } else if (event is WeightHistoryDelete) {
       yield* _mapWeightHistoryDeletedToState(event);
     }
   }
@@ -60,9 +60,9 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
 
   Stream<WeightHistoryState> _mapWeightHistoryAddedToState(WeightHistoryAdded event) async* {
     if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is WeightHistorySuccesfullyLoaded &&
+        state is _WeightHistoryLoadSucces &&
         event.weight != null) {
-      final currentState = state as WeightHistorySuccesfullyLoaded;
+      final currentState = state as _WeightHistoryLoadSucces;
 
       List<Weight> weights = currentState.weights;
 
@@ -74,16 +74,18 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
     }
   }
 
-  Stream<WeightHistoryState> _mapWeightHistoryDeletedToState(WeightHistoryDeleted event) async* {
+  Stream<WeightHistoryState> _mapWeightHistoryDeletedToState(WeightHistoryDelete event) async* {
     if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is WeightHistorySuccesfullyLoaded &&
+        state is _WeightHistoryLoadSucces &&
         event.weight != null) {
-      final currentState = state as WeightHistorySuccesfullyLoaded;
+      final currentState = state as _WeightHistoryLoadSucces;
+
+      await _weightRepository.deleteWeight(event.weight!.id!);
 
       List<Weight> weights = currentState.weights;
       weights.removeWhere((element) => element.id == event.weight!.id);
 
-      yield WeightHistorySuccesfullyLoaded(weights: weights);
+      yield WeightHistoryWeightDeleted(weights: weights);
     }
   }
 }

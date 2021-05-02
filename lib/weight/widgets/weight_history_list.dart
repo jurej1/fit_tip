@@ -1,4 +1,6 @@
+import 'package:fit_tip/weight/weight.dart' show WeightHistoryBloc, WeightHistoryDelete;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +31,9 @@ class WeightTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
+      onDismissed: (direction) {
+        BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(weight));
+      },
       key: ValueKey(weight),
       background: Container(
         color: Colors.red,

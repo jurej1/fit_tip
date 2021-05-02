@@ -17,10 +17,10 @@ class WeightHistoryAdded extends WeightHistoryEvent {
   List<Object?> get props => [weight];
 }
 
-class WeightHistoryDeleted extends WeightHistoryEvent {
+class WeightHistoryDelete extends WeightHistoryEvent {
   final Weight? weight;
 
-  const WeightHistoryDeleted(this.weight);
+  const WeightHistoryDelete(this.weight);
   @override
   List<Object?> get props => [weight];
 }
