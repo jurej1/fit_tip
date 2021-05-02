@@ -33,6 +33,14 @@ class WeightHistoryView extends StatelessWidget {
               child: Text('Sorry there was an error while loading. Please try again.'),
             );
           } else if (state is WeightHistorySuccesfullyLoaded) {
+            if (state.weights.isEmpty) {
+              return Center(
+                child: Text(
+                  'no items',
+                ),
+              );
+            }
+
             return SingleChildScrollView(
               child: Container(
                 height: size.height,

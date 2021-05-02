@@ -9,19 +9,13 @@ class WeightHistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (weights.isEmpty) {
-      return Center(
-        child: Text('You have no weights loggs'),
-      );
-    }
-
     return ListView.builder(
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: weights.length,
       itemBuilder: (context, index) {
         final item = weights[index];
-
+        print('item' + item.date.toString());
         return ListTile(
           leading: Text(item.weight?.toStringAsFixed(1) ?? ''),
           trailing: item.date != null ? Text(DateFormat('dd MMM yyy').format(item.date!)) : null,
