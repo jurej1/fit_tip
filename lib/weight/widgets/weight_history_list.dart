@@ -15,11 +15,44 @@ class WeightHistoryList extends StatelessWidget {
       itemCount: weights.length,
       itemBuilder: (context, index) {
         final item = weights[index];
-        return ListTile(
-          leading: Text(item.weight!.toDouble().toString()),
-          trailing: item.date != null ? Text(DateFormat('d.MMM.yyyy').format(item.date!)) : null,
-        );
+        return WeightTile(weight: item);
       },
+    );
+  }
+}
+
+class WeightTile extends StatelessWidget {
+  final Weight weight;
+
+  const WeightTile({Key? key, required this.weight}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: ValueKey(weight),
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: _deleteIcon(),
+      ),
+      secondaryBackground: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: _deleteIcon(),
+      ),
+      child: ListTile(
+        leading: Text(weight.weight!.toDouble().toString()),
+        trailing: weight.date != null ? Text(DateFormat('d.MMM.yyyy').format(weight.date!)) : null,
+      ),
+    );
+  }
+
+  Widget _deleteIcon() {
+    return Icon(
+      Icons.delete,
+      color: Colors.white,
     );
   }
 }

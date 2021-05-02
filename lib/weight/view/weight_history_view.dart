@@ -47,10 +47,10 @@ class WeightHistoryView extends StatelessWidget {
               height: size.height,
               width: size.width,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
                       height: 250,
                       child: WeightHistoryLineChart(weights: weights),
                     ),
