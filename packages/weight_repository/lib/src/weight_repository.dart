@@ -19,7 +19,7 @@ class WeightRepository {
   Future<Weight?> get currentWeight async {
     if (userId == null) return null;
 
-    final snap = await _collectionRef(userId!).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
+    final snap = await _collectionRef(userId!).orderBy(DocKeysWeight.date).limit(1).get();
 
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
@@ -40,7 +40,8 @@ class WeightRepository {
 
   Future<DocumentReference?> addWeight(Weight weight) async {
     if (userId == null) return null;
-    return _collectionRef(userId!).add(weight.copyWith(date: DateTime.now()).toEntity().toDocument());
+
+    return _collectionRef(userId!).add(weight.toEntity().toDocument());
   }
 
   Future<void> deleteWeight(String id) async {

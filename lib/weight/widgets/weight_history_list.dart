@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weight_repository/weight_repository.dart';
+import 'package:intl/intl.dart';
 
 class WeightHistoryList extends StatelessWidget {
   final List<Weight> weights;
@@ -15,12 +16,14 @@ class WeightHistoryList extends StatelessWidget {
     }
 
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: weights.length,
       itemBuilder: (context, index) {
         final item = weights[index];
 
         return ListTile(
           leading: Text(item.weight?.toStringAsFixed(1) ?? ''),
+          trailing: Text(DateFormat('dd.MMM.yyy').format(item.date!)),
         );
       },
     );
