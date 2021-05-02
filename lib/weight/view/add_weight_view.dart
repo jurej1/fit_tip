@@ -1,4 +1,5 @@
 import 'package:fit_tip/weight/blocs/add_weight_form/add_weight_form_bloc.dart';
+import 'package:fit_tip/weight/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +13,7 @@ class AddWeightView extends StatelessWidget {
     return BlocListener<AddWeightFormBloc, AddWeightFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weightModel));
           Navigator.of(context).pop();
         }
       },
