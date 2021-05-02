@@ -15,7 +15,6 @@ class WeightHistoryList extends StatelessWidget {
       itemCount: weights.length,
       itemBuilder: (context, index) {
         final item = weights[index];
-        print('item' + item.date.toString());
         return ListTile(
           leading: Text(item.weight?.toStringAsFixed(1) ?? ''),
           trailing: item.date != null ? Text(DateFormat('dd MMM yyy').format(item.date!)) : null,

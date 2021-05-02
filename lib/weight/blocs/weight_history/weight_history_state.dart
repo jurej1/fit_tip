@@ -12,7 +12,7 @@ class WeightHistoryLoading extends WeightHistoryState {}
 class WeightHistorySuccesfullyLoaded extends WeightHistoryState {
   final List<Weight> weights;
 
-  const WeightHistorySuccesfullyLoaded({this.weights = const []});
+  const WeightHistorySuccesfullyLoaded({required this.weights});
 
   @override
   List<Object> get props => [weights];
