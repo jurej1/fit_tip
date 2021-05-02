@@ -39,6 +39,9 @@ class App extends StatelessWidget {
         child: MaterialApp(
           navigatorKey: _navigatorState,
           title: 'FitTip',
+          theme: ThemeData(
+            primaryColor: Colors.blue[900],
+          ),
           builder: (context, child) {
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listenWhen: (previous, current) => previous.status != current.status,
