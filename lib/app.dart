@@ -1,10 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
+import 'package:fit_tip/weight/view/weight_history_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
+import 'weight/weight.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
@@ -65,6 +67,15 @@ class App extends StatelessWidget {
               );
             },
             Home.routeName: (BuildContext context) => Home(),
+            WeightHistoryView.routeName: (BuildContext context) {
+              return BlocProvider<WeightHistoryBloc>(
+                create: (context) => WeightHistoryBloc(
+                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                  weightRepository: RepositoryProvider.of<WeightRepository>(context),
+                ),
+                child: WeightHistoryView(),
+              );
+            }
           },
         ),
       ),
