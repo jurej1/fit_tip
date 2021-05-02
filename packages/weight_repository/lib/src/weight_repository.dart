@@ -10,18 +10,16 @@ class WeightRepository {
 
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
+
   String? get userId => _firebaseAuth.currentUser?.uid;
+  CollectionReference _collectionRef(String userId) {
+    return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
+  }
 
   Future<Weight?> get currentWeight async {
     if (userId == null) return null;
 
-    final snap = await _firebaseFirestore
-        .collection('users')
-        .doc(userId)
-        .collection('weight_tracking')
-        .orderBy(DocKeysWeight.date, descending: true)
-        .limit(1)
-        .get();
+    final snap = await _collectionRef(userId!).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
 
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
@@ -29,8 +27,7 @@ class WeightRepository {
   Future<List<Weight>?> weightHistory() async {
     if (userId == null) return null;
 
-    Query query =
-        _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').orderBy(DocKeysWeight.date, descending: true);
+    Query query = _collectionRef(userId!).orderBy(DocKeysWeight.date, descending: true);
 
     final snap = await query.get();
 
@@ -43,23 +40,17 @@ class WeightRepository {
 
   Future<DocumentReference?> addWeight(Weight weight) async {
     if (userId == null) return null;
-    return _firebaseFirestore
-        .collection('users')
-        .doc(userId)
-        .collection('weight_tracking')
-        .add(weight.copyWith(dateAdded: DateTime.now()).toEntity().toDocument());
+    return _collectionRef(userId!).add(weight.copyWith(dateAdded: DateTime.now()).toEntity().toDocument());
   }
 
   Future<void> deleteWeight(String id) async {
     if (userId == null) return;
-    return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').doc(id).delete();
+    return _collectionRef(userId!).doc(id).delete();
   }
 
   Future<void> updateWeight(Weight weight) async {
     if (userId == null) return null;
 
-    return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking').doc(weight.id).update(
-          weight.toEntity().toDocument(),
-        );
+    return _collectionRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
   }
 }
