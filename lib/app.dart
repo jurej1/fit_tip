@@ -78,6 +78,15 @@ class App extends StatelessWidget {
                 ),
                 child: WeightHistoryView(),
               );
+            },
+            AddWeightView.routeName: (BuildContext context) {
+              return BlocProvider<AddWeightFormBloc>(
+                create: (context) => AddWeightFormBloc(
+                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                  weightRepository: RepositoryProvider.of<WeightRepository>(context),
+                ),
+                child: AddWeightView(),
+              );
             }
           },
         ),
