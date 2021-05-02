@@ -16,6 +16,7 @@ class WeightHistoryList extends StatelessWidget {
     }
 
     return ListView.builder(
+      physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: weights.length,
       itemBuilder: (context, index) {
@@ -23,7 +24,7 @@ class WeightHistoryList extends StatelessWidget {
 
         return ListTile(
           leading: Text(item.weight?.toStringAsFixed(1) ?? ''),
-          trailing: Text(DateFormat('dd.MMM.yyy').format(item.date!)),
+          trailing: item.date != null ? Text(DateFormat('dd MMM yyy').format(item.date!)) : null,
         );
       },
     );
