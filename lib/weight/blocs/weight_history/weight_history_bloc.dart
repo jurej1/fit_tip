@@ -68,7 +68,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
 
       weights = weights..add(event.weight!);
 
-      weights = weights..sort((a, b) => a.date!.compareTo(b.date!));
+      weights = weights..sort((a, b) => b.date!.compareTo(a.date!));
 
       yield WeightHistoryLoadSucces(weights: weights);
     }
