@@ -33,7 +33,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   }
 
   Stream<WeightHistoryState> _mapWeighHistoryLoadToState() async* {
-    if (state is WeightHistorySuccesfullyLoaded) {
+    if (state is WeightHistoryLoadSucces) {
       return;
     }
 
@@ -52,7 +52,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
         return;
       }
 
-      yield WeightHistorySuccesfullyLoaded(weights: weights);
+      yield WeightHistoryLoadSucces(weights: weights);
     } catch (error) {
       yield WeightHistoryFailure();
     }
@@ -60,9 +60,9 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
 
   Stream<WeightHistoryState> _mapWeightHistoryAddedToState(WeightHistoryAdded event) async* {
     if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is _WeightHistoryLoadSucces &&
+        state is WeightHistoryLoadSucces &&
         event.weight != null) {
-      final currentState = state as _WeightHistoryLoadSucces;
+      final currentState = state as WeightHistoryLoadSucces;
 
       List<Weight> weights = currentState.weights;
 
@@ -70,22 +70,22 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
 
       weights = weights..sort((a, b) => a.date!.compareTo(b.date!));
 
-      yield WeightHistorySuccesfullyLoaded(weights: weights);
+      yield WeightHistoryLoadSucces(weights: weights);
     }
   }
 
   Stream<WeightHistoryState> _mapWeightHistoryDeletedToState(WeightHistoryDelete event) async* {
     if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is _WeightHistoryLoadSucces &&
+        state is WeightHistoryLoadSucces &&
         event.weight != null) {
-      final currentState = state as _WeightHistoryLoadSucces;
+      final currentState = state as WeightHistoryLoadSucces;
 
       await _weightRepository.deleteWeight(event.weight!.id!);
 
       List<Weight> weights = currentState.weights;
       weights.removeWhere((element) => element.id == event.weight!.id);
 
-      yield WeightHistoryWeightDeleted(weights: weights);
+      yield WeightHistoryLoadSucces(weights: weights);
     }
   }
 }

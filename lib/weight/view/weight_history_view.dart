@@ -22,17 +22,7 @@ class WeightHistoryView extends StatelessWidget {
           )
         ],
       ),
-      body: BlocConsumer<WeightHistoryBloc, WeightHistoryState>(
-        listener: (context, state) {
-          if (state is WeightHistoryWeightDeleted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Weight log successfully deleted'),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        },
+      body: BlocBuilder<WeightHistoryBloc, WeightHistoryState>(
         builder: (context, state) {
           if (state is WeightHistoryLoading) {
             return Center(
@@ -42,11 +32,8 @@ class WeightHistoryView extends StatelessWidget {
             return Center(
               child: Text('Sorry there was an error while loading. Please try again.'),
             );
-          } else if (state is WeightHistorySuccesfullyLoaded || state is WeightHistoryWeightDeleted) {
-            var currentState =
-                state is WeightHistorySuccesfullyLoaded ? state as WeightHistorySuccesfullyLoaded : state as WeightHistoryWeightDeleted;
-
-            if (currentState.weights.isEmpty) {
+          } else if (state is WeightHistoryLoadSucces) {
+            if (state.weights.isEmpty) {
               return Center(
                 child: Text(
                   'no items',
@@ -54,7 +41,7 @@ class WeightHistoryView extends StatelessWidget {
               );
             }
 
-            final weights = currentState.weights;
+            final weights = state.weights;
 
             return Container(
               height: size.height,
