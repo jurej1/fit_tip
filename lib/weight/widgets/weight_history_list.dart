@@ -1,3 +1,4 @@
+import 'package:fit_tip/weight/blocs/blocs.dart';
 import 'package:fit_tip/weight/weight.dart' show WeightHistoryBloc, WeightHistoryDelete;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,12 @@ class WeightHistoryList extends StatelessWidget {
       itemCount: weights.length,
       itemBuilder: (context, index) {
         final item = weights[index];
-        return WeightTile(weight: item);
+        return BlocProvider(
+          create: (context) => WeightTileBloc(
+            weightRepository: RepositoryProvider.of<WeightRepository>(context),
+          ),
+          child: WeightTile(weight: item),
+        );
       },
     );
   }
@@ -30,26 +36,33 @@ class WeightTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      onDismissed: (direction) {
-        BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(weight));
+    return BlocListener<WeightTileBloc, WeightTileState>(
+      listener: (context, state) {
+        if (state is WeightTileSuccessfullyDeleted) {
+          BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(state.weight));
+        }
       },
-      key: ValueKey(weight),
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: _deleteIcon(),
-      ),
-      secondaryBackground: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: _deleteIcon(),
-      ),
-      child: ListTile(
-        leading: Text(weight.weight!.toDouble().toString()),
-        trailing: weight.date != null ? Text(DateFormat('d.MMM.yyyy').format(weight.date!)) : null,
+      child: Dismissible(
+        onDismissed: (direction) {
+          BlocProvider.of<WeightTileBloc>(context).add(WeightTileDelete(weight));
+        },
+        key: ValueKey(weight),
+        background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: _deleteIcon(),
+        ),
+        secondaryBackground: Container(
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: _deleteIcon(),
+        ),
+        child: ListTile(
+          leading: Text(weight.weight!.toDouble().toString()),
+          trailing: weight.date != null ? Text(DateFormat('d.MMM.yyyy').format(weight.date!)) : null,
+        ),
       ),
     );
   }

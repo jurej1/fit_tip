@@ -80,9 +80,8 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
         event.weight != null) {
       final currentState = state as WeightHistoryLoadSucces;
 
-      await _weightRepository.deleteWeight(event.weight!.id!);
-
       List<Weight> weights = currentState.weights;
+
       weights.removeWhere((element) => element.id == event.weight!.id);
 
       yield WeightHistoryLoadSucces(weights: weights);
