@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/services/measurment_system_converter.dart';
 import 'package:fit_tip/weight/models/models.dart' as model;
 import 'package:formz/formz.dart';
 import 'package:weight_repository/weight_repository.dart';
@@ -65,19 +66,18 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
 
     if (state.status.isValidated && _authenticationBloc.state.status == AuthenticationStatus.authenticated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
+      final user = _authenticationBloc.state.user;
 
       try {
+        double weightValue = double.parse(state.weight.value);
+        if (user!.measurmentSystem != MeasurmentSystem.metric) weightValue = MeasurmentSystemConverter.lbTokg(weightValue);
+
         Weight weight = Weight(
           date: state.dateAdded.value,
-          weight: double.parse(state.weight.value),
+          weight: weightValue,
         );
 
-        final id = await _weightRepository.addWeight(
-          Weight(
-            date: state.dateAdded.value,
-            weight: double.parse(state.weight.value),
-          ),
-        );
+        final id = await _weightRepository.addWeight(weight);
         weight = weight.copyWith(id: id?.id);
 
         yield state.copyWith(status: FormzStatus.submissionSuccess, weightModel: weight);
