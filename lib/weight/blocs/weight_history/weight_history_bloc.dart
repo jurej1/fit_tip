@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/services/services.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 part 'weight_history_event.dart';
@@ -19,6 +20,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
 
   final WeightRepository _weightRepository;
   final AuthenticationBloc _authenticationBloc;
+
   @override
   Stream<WeightHistoryState> mapEventToState(
     WeightHistoryEvent event,
@@ -45,11 +47,23 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
     try {
       yield WeightHistoryLoading();
 
-      final weights = await _weightRepository.weightHistory();
+      var weights = await _weightRepository.weightHistory();
 
       if (weights == null) {
         yield WeightHistoryFailure();
         return;
+      }
+
+      final user = _authenticationBloc.state.user;
+
+      if (user!.measurmentSystem != MeasurmentSystem.metric) {
+        weights = weights
+            .map(
+              (e) => e.copyWith(
+                weight: MeasurmentSystemConverter.kgToLb(e.weight?.toDouble() ?? 0.0),
+              ),
+            )
+            .toList();
       }
 
       yield WeightHistoryLoadSucces(weights: weights);
