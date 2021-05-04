@@ -95,12 +95,14 @@ class _DateInput extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final height = kToolbarHeight / 2;
+
     return BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
       builder: (context, state) {
         if (state.status.isSubmissionInProgress) {
           return SizedBox(
-            height: 50,
-            width: 50,
+            height: height,
+            width: height,
             child: CircularProgressIndicator(),
           );
         }
