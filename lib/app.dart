@@ -71,7 +71,7 @@ class App extends StatelessWidget {
                   listener: (context, state) {
                     BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
                   },
-                )
+                ),
               ],
               child: child!,
             );
