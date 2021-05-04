@@ -14,7 +14,9 @@ class MeasurmentSystemBloc extends Bloc<MeasurmentSystemEvent, MeasurmentSystem>
     MeasurmentSystemEvent event,
   ) async* {
     if (event is MeasurmentSystemUpdated) {
-      yield event.system;
+      if (event.system != null) {
+        yield event.system!;
+      }
     }
   }
 }

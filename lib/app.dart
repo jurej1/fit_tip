@@ -54,16 +54,25 @@ class App extends StatelessWidget {
             primaryColor: Colors.blue[900],
           ),
           builder: (context, child) {
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listenWhen: (previous, current) => previous.status != current.status,
-              listener: (context, state) {
-                if (state.status == AuthenticationStatus.unauthenticated) {
-                  _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
-                } else if (state.status == AuthenticationStatus.authenticated) {
-                  _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
-                }
-              },
-              child: child,
+            return MultiBlocListener(
+              listeners: [
+                BlocListener<AuthenticationBloc, AuthenticationState>(
+                  listenWhen: (previous, current) => previous.status != current.status,
+                  listener: (context, state) {
+                    if (state.status == AuthenticationStatus.unauthenticated) {
+                      _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                    } else if (state.status == AuthenticationStatus.authenticated) {
+                      _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
+                    }
+                  },
+                ),
+                BlocListener<AuthenticationBloc, AuthenticationState>(
+                  listener: (context, state) {
+                    BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
+                  },
+                )
+              ],
+              child: child!,
             );
           },
           home: _SplashScreen(),
