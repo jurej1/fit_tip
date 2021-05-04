@@ -16,11 +16,19 @@ class MeasurmentSystemConverter {
 
   static double milesToKm(double value) => value * _oneMileInKm;
 
-  static String measurmentSystemToWeightUnit(MeasurmentSystem system) {
-    if (system == MeasurmentSystem.imperial) {
-      return 'lb';
-    } else {
+  static String meaSystToWeightUnit(MeasurmentSystem system) {
+    if (system == MeasurmentSystem.metric) {
       return 'kg';
+    } else {
+      return 'lb';
+    }
+  }
+
+  static String meaSystToSpeedUnit(MeasurmentSystem system) {
+    if (system == MeasurmentSystem.imperial) {
+      return 'km';
+    } else {
+      return 'miles';
     }
   }
 }
