@@ -7,11 +7,13 @@ class AddWeightFormState extends Equatable {
     this.status = FormzStatus.pure,
     this.errorMsg,
     this.weightModel,
+    required this.timeAdded,
   });
 
   final model.Weight weight;
   final model.DateAdded dateAdded;
   final Weight? weightModel;
+  final model.TimeAdded timeAdded;
 
   final FormzStatus status;
   final String? errorMsg;
@@ -20,6 +22,7 @@ class AddWeightFormState extends Equatable {
     return AddWeightFormState(
       weight: model.Weight.pure(),
       dateAdded: model.DateAdded.pure(),
+      timeAdded: model.TimeAdded.pure(),
     );
   }
 
@@ -29,6 +32,7 @@ class AddWeightFormState extends Equatable {
       weight,
       dateAdded,
       weightModel,
+      timeAdded,
       status,
       errorMsg,
     ];
@@ -38,6 +42,7 @@ class AddWeightFormState extends Equatable {
     model.Weight? weight,
     model.DateAdded? dateAdded,
     Weight? weightModel,
+    model.TimeAdded? timeAdded,
     FormzStatus? status,
     String? errorMsg,
   }) {
@@ -45,6 +50,7 @@ class AddWeightFormState extends Equatable {
       weight: weight ?? this.weight,
       dateAdded: dateAdded ?? this.dateAdded,
       weightModel: weightModel ?? this.weightModel,
+      timeAdded: timeAdded ?? this.timeAdded,
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
     );

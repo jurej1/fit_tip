@@ -28,6 +28,7 @@ class AddWeightView extends StatelessWidget {
           children: [
             _WeightInput(),
             _DateInput(),
+            _TimeInput(),
           ],
         ),
       ),
@@ -83,6 +84,35 @@ class _DateInput extends StatelessWidget {
                 );
 
                 BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightDateChanged(date));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _TimeInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
+      builder: (context, state) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Time'),
+            TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
+              ),
+              child: Text(DateFormat('HH:mm').format(DateTime.now())),
+              onPressed: () async {
+                showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
               },
             ),
           ],
