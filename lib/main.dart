@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'app.dart';
-import 'fit_tip_bloc_observer.dart';
+import 'utilities/fit_tip_bloc_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

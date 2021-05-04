@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
+import 'utilities/app_routes.dart';
 import 'weight/weight.dart';
 
 class App extends StatelessWidget {
@@ -76,35 +77,7 @@ class App extends StatelessWidget {
             );
           },
           home: _SplashScreen(),
-          routes: {
-            RegisterView.routeName: (BuildContext context) {
-              return BlocProvider<RegisterFormBloc>(
-                create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
-                child: RegisterView(),
-              );
-            },
-            LoginView.routeName: (BuildContext context) {
-              return BlocProvider<LoginFormBloc>(
-                create: (context) => LoginFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
-                child: LoginView(),
-              );
-            },
-            Home.routeName: (BuildContext context) => Home(),
-            WeightHistoryView.routeName: (BuildContext context) {
-              BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
-
-              return WeightHistoryView();
-            },
-            AddWeightView.routeName: (BuildContext context) {
-              return BlocProvider<AddWeightFormBloc>(
-                create: (context) => AddWeightFormBloc(
-                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                  weightRepository: RepositoryProvider.of<WeightRepository>(context),
-                ),
-                child: AddWeightView(),
-              );
-            }
-          },
+          routes: appRoutes(),
         ),
       ),
     );
