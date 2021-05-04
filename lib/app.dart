@@ -37,6 +37,9 @@ class App extends StatelessWidget {
               authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
             ),
           ),
+          BlocProvider<MeasurmentSystemBloc>(
+            create: (context) => MeasurmentSystemBloc(),
+          ),
           BlocProvider<WeightHistoryBloc>(
             create: (context) => WeightHistoryBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
