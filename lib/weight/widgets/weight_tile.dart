@@ -32,7 +32,7 @@ class WeightTile extends StatelessWidget {
                 ' ' +
                 MeasurmentSystemConverter.meaSystToWeightUnit(BlocProvider.of<MeasurmentSystemBloc>(context).state),
           ),
-          trailing: weight.date != null ? Text(DateFormat('d.MMM.yyyy').format(weight.date!)) : null,
+          trailing: weight.date != null ? Text(DateFormat('h:mm - d.MMM.yyyy').format(weight.date!)) : null,
         ),
       ),
     );
