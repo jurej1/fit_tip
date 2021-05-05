@@ -1,3 +1,5 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/weight/blocs/add_weight_form/add_weight_form_bloc.dart';
 import 'package:fit_tip/weight/weight.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class _WeightInput extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Weight'),
+        Text('Weight in ${MeasurmentSystemConverter.meaSystToWeightUnit(BlocProvider.of<MeasurmentSystemBloc>(context).state)}'),
         BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
           builder: (context, state) {
             return SizedBox(
@@ -107,7 +109,7 @@ class _TimeInput extends StatelessWidget {
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.zero),
               ),
-              child: Text(DateFormat('HH:mm').format(DateTime.now())),
+              child: Text(state.timeAdded.value.format(context)),
               onPressed: () async {
                 showTimePicker(
                   context: context,
