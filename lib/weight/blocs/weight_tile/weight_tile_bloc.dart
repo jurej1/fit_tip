@@ -25,7 +25,7 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   }
 
   Stream<WeightTileState> _mapTileDeleteToMap(WeightTileDelete event) async* {
-    yield WeightTileLoading();
+    yield WeightTileDeleteLoading();
 
     try {
       await _weightRepository.deleteWeight(event.weight.id!);

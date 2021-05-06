@@ -57,7 +57,7 @@ class WeightHistoryLineChart extends StatelessWidget {
               fontSize: 12,
             ),
             getTitles: (value) {
-              if (value % 5 == 0) {
+              if ((value % 2.5) == 0) {
                 return (value.toInt().toString());
               }
               return '';
@@ -70,7 +70,9 @@ class WeightHistoryLineChart extends StatelessWidget {
           show: true,
           border: const Border(
             bottom: BorderSide(),
-            left: BorderSide(),
+            left:  BorderSide(
+              
+            ),
           ),
         ),
         gridData: FlGridData(show: false),

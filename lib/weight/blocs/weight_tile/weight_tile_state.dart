@@ -18,6 +18,6 @@ class WeightTileSuccessfullyDeleted extends WeightTileState {
   List<Object> get props => [weight];
 }
 
-class WeightTileLoading extends WeightTileState {}
+class WeightTileDeleteLoading extends WeightTileState {}
 
 class WeightTileDeleteFail extends WeightTileState {}
