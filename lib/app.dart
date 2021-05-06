@@ -1,6 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
-import 'package:fit_tip/weight/view/weight_history_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';
@@ -53,6 +52,10 @@ class App extends StatelessWidget {
           title: 'FitTip',
           theme: ThemeData(
             primaryColor: Colors.blue[900],
+            snackBarTheme: SnackBarThemeData(
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
           ),
           builder: (context, child) {
             return MultiBlocListener(
