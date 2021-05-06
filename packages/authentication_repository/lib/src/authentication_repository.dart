@@ -68,4 +68,13 @@ class AuthenticationRepository {
       throw e;
     }
   }
+
+  Future<void> updateMeasurmentSystem(MeasurmentSystem system) async {
+    if (_currentUserId == null) return;
+
+    return _firebaseFirestore
+        .collection('users')
+        .doc(_currentUserId!)
+        .update(model.User(measurmentSystem: system).toEntity().toDocumentSnapshot());
+  }
 }
