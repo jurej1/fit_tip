@@ -23,23 +23,12 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   Stream<WeightTileState> mapEventToState(
     WeightTileEvent event,
   ) async* {
-    if (event is WeightTileDeleteShortRequested) {
-      yield* _mapTileDeleteToMap();
-    } else if (event is WeightTileCancelDeletingRequested) {
-      yield WeightTileDeletingCanceled(_weight);
-    } else if (event is WeightTileSnackbarClosed) {
+    if (event is WeightTileDeleteRequested) {
       yield* _mapSnackbarClosedToState(event);
     }
   }
 
-  Stream<WeightTileState> _mapTileDeleteToMap() async* {
-    yield WeightTileDeleteShortDeleted(_weight);
-  }
-
-  Stream<WeightTileState> _mapSnackbarClosedToState(WeightTileSnackbarClosed event) async* {
-    if (event.closeReason == SnackBarClosedReason.action) {
-      return;
-    }
+  Stream<WeightTileState> _mapSnackbarClosedToState(WeightTileDeleteRequested event) async* {
     yield WeightTileDeleteLoading();
 
     try {
@@ -49,7 +38,7 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
       }
       await _weightRepository.deleteWeight(_weight.id!);
 
-      yield WeightTileDeleteTotal(_weight);
+      yield WeightTileDeletedSuccessfully(_weight);
     } catch (errpr) {
       yield WeightTileDeleteFail();
     }
