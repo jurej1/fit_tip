@@ -14,14 +14,32 @@ class WeightTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<WeightTileBloc, WeightTileState>(
-      listener: (context, state) {
-        if (state is WeightTileSuccessfullyDeleted) {
+      listener: (context, state) async {
+        if (state is WeightTileShortDeleted) {
           BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(state.weight));
+          final closeReason = await ScaffoldMessenger.of(context)
+              .showSnackBar(
+                SnackBar(
+                  content: Text('Deleting in progress'),
+                  action: SnackBarAction(
+                    label: 'Cancel',
+                    onPressed: () {
+                      BlocProvider.of<WeightTileBloc>(context).add(WeightTileCancelDeleting());
+                    },
+                  ),
+                ),
+              )
+              .closed;
+
+          // BlocProvider.of<WeightTileBloc>(context).add(WeightTileSnackbarClosed(closeReason));
+        } else if (state is WeightTileDeletingCanceled) {
+          print('Delete cancel');
+          BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weight));
         }
       },
       child: Dismissible(
         onDismissed: (direction) {
-          BlocProvider.of<WeightTileBloc>(context).add(WeightTileDelete(weight));
+          BlocProvider.of<WeightTileBloc>(context).add(WeightTileDeleteShort());
         },
         key: ValueKey(weight),
         background: _dismissibleBackground(),

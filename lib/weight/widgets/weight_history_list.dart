@@ -20,6 +20,7 @@ class WeightHistoryList extends StatelessWidget {
         return BlocProvider(
           create: (context) => WeightTileBloc(
             weightRepository: RepositoryProvider.of<WeightRepository>(context),
+            weight: item,
           ),
           child: WeightTile(weight: item),
         );

@@ -9,10 +9,19 @@ abstract class WeightTileState extends Equatable {
 
 class WeightTileInitial extends WeightTileState {}
 
-class WeightTileSuccessfullyDeleted extends WeightTileState {
+class WeightTileShortDeleted extends WeightTileState {
   final Weight weight;
 
-  const WeightTileSuccessfullyDeleted(this.weight);
+  const WeightTileShortDeleted(this.weight);
+
+  @override
+  List<Object> get props => [weight];
+}
+
+class WeightTileTotalDeleted extends WeightTileState {
+  final Weight weight;
+
+  const WeightTileTotalDeleted(this.weight);
 
   @override
   List<Object> get props => [weight];
@@ -21,3 +30,12 @@ class WeightTileSuccessfullyDeleted extends WeightTileState {
 class WeightTileDeleteLoading extends WeightTileState {}
 
 class WeightTileDeleteFail extends WeightTileState {}
+
+class WeightTileDeletingCanceled extends WeightTileState {
+  final Weight weight;
+
+  const WeightTileDeletingCanceled(this.weight);
+
+  @override
+  List<Object> get props => [weight];
+}
