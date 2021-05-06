@@ -15,7 +15,7 @@ class WeightTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<WeightTileBloc, WeightTileState>(
       listener: (context, state) async {
-        if (state is WeightTileShortDeleted) {
+        if (state is WeightTileDeleteShortRequested) {
           BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(state.weight));
           final closeReason = await ScaffoldMessenger.of(context)
               .showSnackBar(
@@ -31,7 +31,7 @@ class WeightTile extends StatelessWidget {
               )
               .closed;
 
-          // BlocProvider.of<WeightTileBloc>(context).add(WeightTileSnackbarClosed(closeReason));
+          BlocProvider.of<WeightTileBloc>(context).add(WeightTileSnackbarClosed(closeReason));
         } else if (state is WeightTileDeletingCanceled) {
           print('Delete cancel');
           BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weight));
