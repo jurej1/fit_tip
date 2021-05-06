@@ -7,7 +7,7 @@ abstract class WeightTileEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WeightTileDeleteShort extends WeightTileEvent {}
+class WeightTileDeleteShortRequested extends WeightTileEvent {}
 
 class WeightTileSnackbarClosed extends WeightTileEvent {
   final SnackBarClosedReason closeReason;
@@ -18,4 +18,4 @@ class WeightTileSnackbarClosed extends WeightTileEvent {
   List<Object> get props => [closeReason];
 }
 
-class WeightTileCancelDeleting extends WeightTileEvent {}
+class WeightTileCancelDeletingRequested extends WeightTileEvent {}

@@ -15,7 +15,7 @@ class WeightTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<WeightTileBloc, WeightTileState>(
       listener: (context, state) async {
-        if (state is WeightTileDeleteShortRequested) {
+        if (state is WeightTileDeleteShortDeleted) {
           BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryDelete(state.weight));
           final closeReason = await ScaffoldMessenger.of(context)
               .showSnackBar(
@@ -24,7 +24,7 @@ class WeightTile extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'Cancel',
                     onPressed: () {
-                      BlocProvider.of<WeightTileBloc>(context).add(WeightTileCancelDeleting());
+                      BlocProvider.of<WeightTileBloc>(context).add(WeightTileCancelDeletingRequested());
                     },
                   ),
                 ),
@@ -33,13 +33,12 @@ class WeightTile extends StatelessWidget {
 
           BlocProvider.of<WeightTileBloc>(context).add(WeightTileSnackbarClosed(closeReason));
         } else if (state is WeightTileDeletingCanceled) {
-          print('Delete cancel');
           BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weight));
         }
       },
       child: Dismissible(
         onDismissed: (direction) {
-          BlocProvider.of<WeightTileBloc>(context).add(WeightTileDeleteShort());
+          BlocProvider.of<WeightTileBloc>(context).add(WeightTileDeleteShortRequested());
         },
         key: ValueKey(weight),
         background: _dismissibleBackground(),
@@ -50,7 +49,7 @@ class WeightTile extends StatelessWidget {
                 ' ' +
                 MeasurmentSystemConverter.meaSystToWeightUnit(BlocProvider.of<MeasurmentSystemBloc>(context).state),
           ),
-          trailing: weight.date != null ? Text(DateFormat('h:mm - d.MMM.yyyy').format(weight.date!)) : null,
+          trailing: weight.date != null ? Text(DateFormat('HH:mm - d.MMM.yyyy').format(weight.date!)) : null,
         ),
       ),
     );

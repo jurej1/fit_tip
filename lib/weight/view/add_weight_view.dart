@@ -111,10 +111,12 @@ class _TimeInput extends StatelessWidget {
               ),
               child: Text(state.timeAdded.value.format(context)),
               onPressed: () async {
-                showTimePicker(
+                final timeOfDay = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
+
+                BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightTimeChanged(timeOfDay));
               },
             ),
           ],
