@@ -129,20 +129,13 @@ class _TimeInput extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final height = kToolbarHeight / 2;
-
     return BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
       builder: (context, state) {
-        if (state.status.isSubmissionInProgress) {
-          return SizedBox(
-            height: height,
-            width: height,
-            child: CircularProgressIndicator(),
-          );
-        }
+        final isLoading = state.status.isSubmissionInProgress;
+
         return TextButton(
-          child: Text('Add', style: TextStyle(color: Colors.white)),
-          onPressed: () => BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightFormSubit()),
+          child: isLoading ? CircularProgressIndicator() : Text('Add', style: TextStyle(color: Colors.white)),
+          onPressed: isLoading ? () {} : () => BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightFormSubit()),
         );
       },
     );
