@@ -90,4 +90,16 @@ class WeightGoalEntity extends Equatable {
       weeklyGoal: weight.weeklyGoal,
     );
   }
+
+  static WeightGoalEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data()!;
+    return WeightGoalEntity(
+      id: snap.id,
+      beginDate: data[_DocKeys.beginDate],
+      beginWeight: data[_DocKeys.beginWeight],
+      targetDate: data[_DocKeys.targetDate],
+      targetWeight: data[_DocKeys.targetWeight],
+      weeklyGoal: data[_DocKeys.weeklyGoal],
+    );
+  }
 }
