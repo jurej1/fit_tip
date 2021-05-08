@@ -16,6 +16,10 @@ class WeightRepository {
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
   }
 
+  CollectionReference _weightGoalRef(String userId) {
+    return _firebaseFirestore.collection('users').doc(userId).collection('goals');
+  }
+
   Future<Weight?> get currentWeight async {
     if (userId == null) return null;
 
