@@ -54,4 +54,17 @@ class WeightRepository {
 
     return _collectionRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
   }
+
+  double last7DaysChange(List<Weight> weights) {
+    final currentDate = DateTime.now();
+    final lowerBoundDate = currentDate.subtract(const Duration(days: 7));
+    final recentWeights = weights.where((element) => element.date?.isAfter(lowerBoundDate) ?? false).toList();
+
+    final firstWeight = recentWeights.first.weight ?? 0;
+    final lastWeight = recentWeights.last.weight ?? 0;
+
+    num change = firstWeight - lastWeight;
+
+    return change.toDouble();
+  }
 }
