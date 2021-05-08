@@ -4,8 +4,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/weight/models/models.dart' as model;
+import 'package:fit_tip/weight_tracking/weight.dart' as model;
 import 'package:flutter/material.dart';
+
 import 'package:formz/formz.dart';
 import 'package:weight_repository/weight_repository.dart';
 

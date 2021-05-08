@@ -1,4 +1,4 @@
-import 'package:fit_tip/weight/view/weight_history_view.dart';
+import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

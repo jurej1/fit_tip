@@ -1,6 +1,5 @@
-import 'package:fit_tip/weight/view/add_weight_view.dart';
-import 'package:fit_tip/weight/weight.dart';
-import 'package:fit_tip/weight/widgets/widgets.dart';
+import 'package:fit_tip/weight_tracking/weight.dart';
+import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
