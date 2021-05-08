@@ -1,3 +1,4 @@
+import 'package:fit_tip/weight_statistics/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class WeightHistoryView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.pie_chart),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(WeightStatisticsView.routeName);
+            },
           ),
           IconButton(
             icon: const Icon(Icons.add),
