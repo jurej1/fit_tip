@@ -12,14 +12,14 @@ class WeightRepository {
   final FirebaseAuth _firebaseAuth;
 
   String? get userId => _firebaseAuth.currentUser?.uid;
-  CollectionReference _collectionRef(String userId) {
+  CollectionReference _weightTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
   }
 
   Future<Weight?> get currentWeight async {
     if (userId == null) return null;
 
-    final snap = await _collectionRef(userId!).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
+    final snap = await _weightTrackingRef(userId!).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
 
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
@@ -27,7 +27,7 @@ class WeightRepository {
   Future<List<Weight>?> weightHistory() async {
     if (userId == null) return null;
 
-    Query query = _collectionRef(userId!).orderBy(DocKeysWeight.date, descending: true);
+    Query query = _weightTrackingRef(userId!).orderBy(DocKeysWeight.date, descending: true);
 
     final snap = await query.get();
 
@@ -41,18 +41,18 @@ class WeightRepository {
   Future<DocumentReference?> addWeight(Weight weight) async {
     if (userId == null) return null;
 
-    return _collectionRef(userId!).add(weight.toEntity().toDocument());
+    return _weightTrackingRef(userId!).add(weight.toEntity().toDocument());
   }
 
   Future<void> deleteWeight(String id) async {
     if (userId == null) return;
-    return _collectionRef(userId!).doc(id).delete();
+    return _weightTrackingRef(userId!).doc(id).delete();
   }
 
   Future<void> updateWeight(Weight weight) async {
     if (userId == null) return null;
 
-    return _collectionRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
+    return _weightTrackingRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
   }
 
   double last7DaysChange(List<Weight> weights) {
@@ -62,6 +62,28 @@ class WeightRepository {
 
     final firstWeight = recentWeights.first.weight ?? 0;
     final lastWeight = recentWeights.last.weight ?? 0;
+
+    num change = firstWeight - lastWeight;
+
+    return change.toDouble();
+  }
+
+  double last30DaysChange(List<Weight> weights) {
+    final currentDate = DateTime.now();
+    final lowerBoundDate = currentDate.subtract(const Duration(days: 30));
+    final recentWeights = weights.where((element) => element.date?.isAfter(lowerBoundDate) ?? false).toList();
+
+    final firstWeight = recentWeights.first.weight ?? 0;
+    final lastWeight = recentWeights.last.weight ?? 0;
+
+    num change = firstWeight - lastWeight;
+
+    return change.toDouble();
+  }
+
+  double totalWeightChange(List<Weight> weights) {
+    final firstWeight = weights.first.weight ?? 0;
+    final lastWeight = weights.last.weight ?? 0;
 
     num change = firstWeight - lastWeight;
 
