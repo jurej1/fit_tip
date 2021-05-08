@@ -90,7 +90,6 @@ class WeightRepository {
   }
 
   //Weight statistics
-
   double last7DaysChange(List<Weight> weights) {
     final currentDate = DateTime.now();
     final lowerBoundDate = currentDate.subtract(const Duration(days: 7));
@@ -124,5 +123,22 @@ class WeightRepository {
     num change = firstWeight - lastWeight;
 
     return change.toDouble();
+  }
+
+  double remaining(double currentWeight, double goalWeight) {
+    return currentWeight - goalWeight;
+  }
+
+  ///Returns the percantage of how many progress was done from 0 to 1
+  double progressPercantage({
+    required double current,
+    required double starting,
+    required double target,
+  }) {
+    double diff = target - starting;
+    if (diff.isNegative) diff = diff * (-1);
+    double amountDone = starting - current;
+    if (amountDone.isNegative) amountDone = amountDone * (-1);
+    return amountDone / diff;
   }
 }
