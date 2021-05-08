@@ -11,6 +11,8 @@ class WeightRepository {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
 
+  //Aditional functions
+
   String? get userId => _firebaseAuth.currentUser?.uid;
   CollectionReference _weightTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
@@ -18,6 +20,10 @@ class WeightRepository {
 
   CollectionReference _weightGoalRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('goals');
+  }
+
+  DocumentReference _weightGoalDocRef(String userId) {
+    return _weightGoalRef(userId).doc('weight');
   }
 
   Future<Weight?> get currentWeight async {
@@ -28,6 +34,7 @@ class WeightRepository {
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
 
+  //Weight tracking
   Future<List<Weight>?> weightHistory() async {
     if (userId == null) return null;
 
@@ -58,6 +65,31 @@ class WeightRepository {
 
     return _weightTrackingRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
   }
+
+  //Weight goals
+  Future<WeightGoal?> getWeighGoal() async {
+    if (userId == null) {
+      return null;
+    }
+    final data = await _weightGoalDocRef(userId!).get();
+
+    return WeightGoal.fromEntity(WeightGoalEntity.fromDocumentSnapshot(data));
+  }
+
+  Future<void> updateWeightGoal(WeightGoal goal) async {
+    if (userId == null) {
+      return null;
+    }
+
+    return _weightGoalDocRef(userId!).update(goal.toEntity().toDocumentSnapshot());
+  }
+
+  Future<void> deleteWeightGoal() async {
+    if (userId == null) return null;
+    return _weightGoalDocRef(userId!).delete();
+  }
+
+  //Weight statistics
 
   double last7DaysChange(List<Weight> weights) {
     final currentDate = DateTime.now();
