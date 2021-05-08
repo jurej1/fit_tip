@@ -15,6 +15,10 @@ class WeightHistoryView extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
+            icon: const Icon(Icons.pie_chart),
+            onPressed: () {},
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).pushNamed(AddWeightView.routeName);
