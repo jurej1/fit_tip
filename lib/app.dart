@@ -46,6 +46,12 @@ class App extends StatelessWidget {
               weightRepository: RepositoryProvider.of<WeightRepository>(context),
             ),
           ),
+          BlocProvider<WeightGoalBloc>(
+            create: (context) => WeightGoalBloc(
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          )
         ],
         child: MaterialApp(
           navigatorKey: _navigatorState,
