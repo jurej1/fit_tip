@@ -37,26 +37,27 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
     }
 
     try {
-      final WeightGoal? goal = await _weightRepository.getWeighGoal();
-
-      if (goal == null) {
-        yield WeightGoalFailure();
-      }
+      WeightGoal? goal = await _weightRepository.getWeighGoal();
 
       MeasurmentSystem system = _authenticationBloc.state.user!.measurmentSystem;
 
-      if (system == MeasurmentSystem.metric) {
-        yield WeightGoalLoadSuccess(goal: goal!);
+      if (goal == null) {
+        yield WeightGoalLoading();
       } else {
-        yield WeightGoalLoadSuccess(
-          goal: goal!.copyWith(
-            targetWeight: goal.targetWeight != null ? MeasurmentSystemConverter.kgToLb(goal.targetWeight!) : null,
-            beginWeight: goal.beginWeight != null ? MeasurmentSystemConverter.kgToLb(goal.beginWeight!) : null,
-            weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal),
-          ),
-        );
+        if (system == MeasurmentSystem.metric) {
+          yield WeightGoalLoadSuccess(goal: goal);
+        } else {
+          yield WeightGoalLoadSuccess(
+            goal: goal.copyWith(
+              targetWeight: goal.targetWeight != null ? MeasurmentSystemConverter.kgToLb(goal.targetWeight!) : null,
+              beginWeight: goal.beginWeight != null ? MeasurmentSystemConverter.kgToLb(goal.beginWeight!) : null,
+              weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal),
+            ),
+          );
+        }
       }
     } catch (error) {
+      print('error' + error.toString());
       yield WeightGoalFailure();
     }
   }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:weight_repository/entity/entity.dart';
 import 'package:weight_repository/models/models.dart';
 
 class _DocKeys {
@@ -92,14 +91,14 @@ class WeightGoalEntity extends Equatable {
   }
 
   static WeightGoalEntity fromDocumentSnapshot(DocumentSnapshot snap) {
-    final data = snap.data()!;
+    final data = snap.data();
     return WeightGoalEntity(
       id: snap.id,
-      beginDate: data[_DocKeys.beginDate],
-      beginWeight: data[_DocKeys.beginWeight],
-      targetDate: data[_DocKeys.targetDate],
-      targetWeight: data[_DocKeys.targetWeight],
-      weeklyGoal: data[_DocKeys.weeklyGoal],
+      beginDate: data?[_DocKeys.beginDate],
+      beginWeight: data?[_DocKeys.beginWeight],
+      targetDate: data?[_DocKeys.targetDate],
+      targetWeight: data?[_DocKeys.targetWeight],
+      weeklyGoal: data?[_DocKeys.weeklyGoal] ?? 0,
     );
   }
 }
