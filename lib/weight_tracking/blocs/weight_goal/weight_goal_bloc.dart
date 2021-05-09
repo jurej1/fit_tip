@@ -43,7 +43,21 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
         yield WeightGoalFailure();
       }
 
-      MeasurmentSystem measurmentSytem = _authenticationBloc.state.user!.measurmentSystem;
-    } catch (error) {}
+      MeasurmentSystem system = _authenticationBloc.state.user!.measurmentSystem;
+
+      if (system == MeasurmentSystem.metric) {
+        yield WeightGoalLoadSuccess(goal: goal!);
+      } else {
+        yield WeightGoalLoadSuccess(
+          goal: goal!.copyWith(
+            targetWeight: goal.targetWeight != null ? MeasurmentSystemConverter.kgToLb(goal.targetWeight!) : null,
+            beginWeight: goal.beginWeight != null ? MeasurmentSystemConverter.kgToLb(goal.beginWeight!) : null,
+            weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal),
+          ),
+        );
+      }
+    } catch (error) {
+      yield WeightGoalFailure();
+    }
   }
 }
