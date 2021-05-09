@@ -30,7 +30,7 @@ class UserEntity extends Equatable {
   final Timestamp? birthdate;
   final String? email;
   final double? height;
-  final MeasurmentSystem? measurmentSystem;
+  final MeasurmentSystem measurmentSystem;
   final String? introduction;
   final loc.LocationEntity? location;
 
@@ -44,7 +44,7 @@ class UserEntity extends Equatable {
     this.birthdate,
     this.email,
     this.height,
-    this.measurmentSystem,
+    this.measurmentSystem = MeasurmentSystem.metric,
     this.introduction,
     this.location,
   });
@@ -100,7 +100,7 @@ class UserEntity extends Equatable {
       if (introduction != null) _DocKeys.introduction: introduction,
       if (lastName != null) _DocKeys.lastName: lastName,
       if (location != null) _DocKeys.location: location!.toDocumentSnapshot(),
-      if (measurmentSystem != null) _DocKeys.measurmentSystem: describeEnum(measurmentSystem!),
+      _DocKeys.measurmentSystem: describeEnum(measurmentSystem),
     };
   }
 
