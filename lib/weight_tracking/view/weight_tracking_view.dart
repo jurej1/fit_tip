@@ -3,6 +3,7 @@ import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class WeightTrackingView extends StatelessWidget {
   static const routeName = 'weight_tracking_view';
@@ -28,47 +29,104 @@ class WeightTrackingView extends StatelessWidget {
           )
         ],
       ),
-      body: BlocBuilder<WeightHistoryBloc, WeightHistoryState>(
-        builder: (context, state) {
-          if (state is WeightHistoryLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is WeightHistoryFailure) {
-            return Center(
-              child: Text('Sorry there was an error while loading. Please try again.'),
-            );
-          } else if (state is WeightHistoryLoadSucces) {
-            if (state.weights.isEmpty) {
-              return Center(
-                child: Text(
-                  'no items',
-                ),
-              );
-            }
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _WeightGoalView(),
+              _WeightHistoryView(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-            final weights = state.weights;
+class _WeightGoalView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WeightGoalBloc, WeightGoalState>(
+      builder: (context, state) {
+        if (state is WeightGoalFailure) {
+          return Container();
+        } else if (state is WeightGoalLoading) {
+          return Container(
+            height: 250,
+            child: Center(
+              child: const CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is WeightGoalLoadSuccess) {
+          final goal = state.goal;
 
-            return Container(
-              height: size.height,
-              width: size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(25),
-                      height: 250,
-                      child: WeightHistoryLineChart(weights: weights),
-                    ),
-                    WeightHistoryList(weights: weights),
-                  ],
-                ),
+          return Column(
+            children: [
+              GoalRow(
+                text: 'Begin date',
+                value: goal.beginDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '-',
+              ),
+              GoalRow(
+                text: 'Begin weight',
+                value: goal.beginWeight?.toString() ?? '-',
+              ),
+              GoalRow(
+                text: 'Target date',
+                value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '',
+              ),
+              GoalRow(
+                text: 'Target weight',
+                value: goal.targetWeight?.toString() ?? '-',
+              ),
+            ],
+          );
+        }
+
+        return Container();
+      },
+    );
+  }
+}
+
+class _WeightHistoryView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WeightHistoryBloc, WeightHistoryState>(
+      builder: (context, state) {
+        if (state is WeightHistoryLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is WeightHistoryFailure) {
+          return Center(
+            child: Text('Sorry there was an error while loading. Please try again.'),
+          );
+        } else if (state is WeightHistoryLoadSucces) {
+          if (state.weights.isEmpty) {
+            return Center(
+              child: Text(
+                'no items',
               ),
             );
           }
-          return Container();
-        },
-      ),
+
+          final weights = state.weights;
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(25),
+                  height: 250,
+                  child: WeightHistoryLineChart(weights: weights),
+                ),
+                WeightHistoryList(weights: weights),
+              ],
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }
