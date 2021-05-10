@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeightTrackingView extends StatelessWidget {
-  static const routeName = 'weight_history_view';
+  static const routeName = 'weight_tracking_view';
 
   @override
   Widget build(BuildContext context) {
