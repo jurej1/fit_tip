@@ -62,6 +62,13 @@ class _WeightGoalView extends StatelessWidget {
 
           return Column(
             children: [
+              ListTile(
+                title: Text('Goals'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {},
+                ),
+              ),
               GoalRow(
                 text: 'Begin date',
                 value: goal.beginDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '-',
