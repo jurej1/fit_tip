@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.ac_unit),
               title: Text('Weight tracking'),
               onTap: () {
-                Navigator.of(context).pushNamed(WeightHistoryView.routeName);
+                Navigator.of(context).pushNamed(WeightTrackingView.routeName);
               },
             ),
           ],

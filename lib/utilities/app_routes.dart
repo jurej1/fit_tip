@@ -22,10 +22,10 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       );
     },
     Home.routeName: (BuildContext context) => Home(),
-    WeightHistoryView.routeName: (BuildContext context) {
+    WeightTrackingView.routeName: (BuildContext context) {
       BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
       BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
-      return WeightHistoryView();
+      return WeightTrackingView();
     },
     AddWeightView.routeName: (BuildContext context) {
       return BlocProvider<AddWeightFormBloc>(

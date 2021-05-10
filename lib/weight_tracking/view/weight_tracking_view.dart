@@ -4,7 +4,7 @@ import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WeightHistoryView extends StatelessWidget {
+class WeightTrackingView extends StatelessWidget {
   static const routeName = 'weight_history_view';
 
   @override
