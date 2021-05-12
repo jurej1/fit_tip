@@ -42,4 +42,13 @@ class EditWeightGoalTargetWeightChanged extends EditWeightGoalFormEvent {
   List<Object?> get props => [value];
 }
 
+class EditWeightGoalWeeklyGoalChanged extends EditWeightGoalFormEvent {
+  final WeeklyGoal? value;
+
+  const EditWeightGoalWeeklyGoalChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class EditWeightGoalFormSubmit extends EditWeightGoalFormEvent {}

@@ -1,5 +1,6 @@
 part of 'edit_weight_goal_form_bloc.dart';
 
+// ignore: must_be_immutable
 class EditWeightGoalFormState extends Equatable {
   const EditWeightGoalFormState({
     this.status = FormzStatus.pure,
@@ -7,6 +8,8 @@ class EditWeightGoalFormState extends Equatable {
     required this.startDate,
     required this.targetWeight,
     required this.startWeight,
+    required this.weeklyGoal,
+    this.weightGoal,
   });
 
   final FormzStatus status;
@@ -14,6 +17,8 @@ class EditWeightGoalFormState extends Equatable {
   final models.StartDate startDate;
   final models.Weight startWeight;
   final models.Weight targetWeight;
+  final WeeklyGoal weeklyGoal;
+  final WeightGoal? weightGoal;
 
   factory EditWeightGoalFormState.pure(WeightGoal goal) {
     return EditWeightGoalFormState(
@@ -21,18 +26,13 @@ class EditWeightGoalFormState extends Equatable {
       startDate: models.StartDate.pure(goal.beginDate),
       targetWeight: models.Weight.pure(goal.targetWeight.toString()),
       startWeight: models.Weight.pure(goal.beginWeight.toString()),
+      weeklyGoal: goal.weeklyGoal,
     );
   }
 
   @override
-  List<Object> get props {
-    return [
-      status,
-      targetDate,
-      startDate,
-      startWeight,
-      targetWeight,
-    ];
+  List<Object?> get props {
+    return [status, targetDate, startDate, startWeight, targetWeight, weeklyGoal, weightGoal];
   }
 
   EditWeightGoalFormState copyWith({
@@ -41,6 +41,8 @@ class EditWeightGoalFormState extends Equatable {
     models.StartDate? startDate,
     models.Weight? startWeight,
     models.Weight? targetWeight,
+    WeeklyGoal? weeklyGoal,
+    WeightGoal? weightGoal,
   }) {
     return EditWeightGoalFormState(
       status: status ?? this.status,
@@ -48,6 +50,8 @@ class EditWeightGoalFormState extends Equatable {
       startDate: startDate ?? this.startDate,
       startWeight: startWeight ?? this.startWeight,
       targetWeight: targetWeight ?? this.targetWeight,
+      weeklyGoal: weeklyGoal ?? this.weeklyGoal,
+      weightGoal: weightGoal ?? this.weightGoal,
     );
   }
 }

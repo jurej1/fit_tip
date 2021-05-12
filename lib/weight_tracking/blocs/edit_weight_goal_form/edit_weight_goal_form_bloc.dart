@@ -34,6 +34,8 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
       yield _mapTargetWeightChangedToState(event);
     } else if (event is EditWeightGoalFormSubmit) {
       yield* _mapFormSubmitToState(event);
+    } else if (event is EditWeightGoalWeeklyGoalChanged) {
+      yield _mapWeeklyGoalChangedToState(event);
     }
   }
 
@@ -73,6 +75,10 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
     );
   }
 
+  EditWeightGoalFormState _mapWeeklyGoalChangedToState(EditWeightGoalWeeklyGoalChanged event) {
+    return state.copyWith(weeklyGoal: event.value);
+  }
+
   Stream<EditWeightGoalFormState> _mapFormSubmitToState(EditWeightGoalFormSubmit event) async* {
     final startWeight = models.Weight.dirty(state.startWeight.value);
     final startDate = models.StartDate.dirty(state.startDate.value);
@@ -90,12 +96,21 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
-      WeightGoal weightGoal = WeightGoal(
-        beginDate: state.startDate.value,
-        beginWeight: double.parse(state.startWeight.value),
-        targetDate: state.targetDate.value,
-        targetWeight: double.parse(state.targetWeight.value),
-      );
+      try {
+        WeightGoal weightGoal = WeightGoal(
+          beginDate: state.startDate.value,
+          beginWeight: double.parse(state.startWeight.value),
+          targetDate: state.targetDate.value,
+          targetWeight: double.parse(state.targetWeight.value),
+          weeklyGoal: state.weeklyGoal,
+        );
+
+        await _weightRepository.updateWeightGoal(weightGoal);
+
+        yield state.copyWith(weightGoal: weightGoal, status: FormzStatus.submissionSuccess);
+      } on Exception catch (e) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
     }
   }
 }
