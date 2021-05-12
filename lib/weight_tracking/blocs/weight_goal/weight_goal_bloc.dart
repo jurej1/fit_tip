@@ -51,7 +51,7 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
             goal: goal.copyWith(
               targetWeight: goal.targetWeight != null ? MeasurmentSystemConverter.kgToLb(goal.targetWeight!) : null,
               beginWeight: goal.beginWeight != null ? MeasurmentSystemConverter.kgToLb(goal.beginWeight!) : null,
-              weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal),
+              // weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal), //todo
             ),
           );
         }

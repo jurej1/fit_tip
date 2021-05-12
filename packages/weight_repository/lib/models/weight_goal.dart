@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:weight_repository/entity/entity.dart';
+import 'package:weight_repository/enums/enums.dart';
 
 class WeightGoal extends Equatable {
   final String? id;
@@ -8,7 +9,7 @@ class WeightGoal extends Equatable {
   final DateTime? beginDate;
   final DateTime? targetDate;
   final double? beginWeight;
-  final double weeklyGoal;
+  final WeeklyGoal weeklyGoal;
 
   const WeightGoal({
     this.id,
@@ -16,7 +17,7 @@ class WeightGoal extends Equatable {
     this.beginDate,
     this.targetDate,
     this.beginWeight,
-    this.weeklyGoal = 0.0,
+    this.weeklyGoal = WeeklyGoal.maintain,
   });
 
   @override
@@ -37,7 +38,7 @@ class WeightGoal extends Equatable {
     DateTime? beginDate,
     DateTime? targetDate,
     double? beginWeight,
-    double? weeklyGoal,
+    WeeklyGoal? weeklyGoal,
   }) {
     return WeightGoal(
       id: id ?? this.id,

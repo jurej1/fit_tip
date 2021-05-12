@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:weight_repository/enums/enums.dart';
 import 'package:weight_repository/models/models.dart';
 
 class _DocKeys {
@@ -17,7 +19,7 @@ class WeightGoalEntity extends Equatable {
   final Timestamp? beginDate;
   final Timestamp? targetDate;
   final double? beginWeight;
-  final double weeklyGoal;
+  final WeeklyGoal weeklyGoal;
 
   const WeightGoalEntity({
     required this.id,
@@ -25,7 +27,7 @@ class WeightGoalEntity extends Equatable {
     this.beginDate,
     this.targetDate,
     this.beginWeight,
-    this.weeklyGoal = 0.0,
+    this.weeklyGoal = WeeklyGoal.maintain,
   });
 
   @override
@@ -46,7 +48,7 @@ class WeightGoalEntity extends Equatable {
     Timestamp? beginDate,
     Timestamp? targetDate,
     double? beginWeight,
-    double? weeklyGoal,
+    WeeklyGoal? weeklyGoal,
   }) {
     return WeightGoalEntity(
       id: id ?? this.id,
@@ -64,7 +66,7 @@ class WeightGoalEntity extends Equatable {
       if (beginDate != null) _DocKeys.beginDate: this.beginDate,
       if (targetDate != null) _DocKeys.targetDate: this.targetDate,
       if (beginWeight != null) _DocKeys.beginWeight: this.beginWeight,
-      _DocKeys.weeklyGoal: this.weeklyGoal,
+      _DocKeys.weeklyGoal: describeEnum(this.weeklyGoal),
     };
   }
 
@@ -98,7 +100,7 @@ class WeightGoalEntity extends Equatable {
       beginWeight: data?[_DocKeys.beginWeight],
       targetDate: data?[_DocKeys.targetDate],
       targetWeight: data?[_DocKeys.targetWeight],
-      weeklyGoal: data?[_DocKeys.weeklyGoal] ?? 0,
+      weeklyGoal: data?[_DocKeys.weeklyGoal] ?? WeeklyGoal.maintain,
     );
   }
 }
