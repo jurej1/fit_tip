@@ -25,18 +25,18 @@ class EditWeightGoalStartDateChanged extends EditWeightGoalFormEvent {
 }
 
 class EditWeightGoalStartWeigthChanged extends EditWeightGoalFormEvent {
-  final String? value;
+  final String value;
 
-  const EditWeightGoalStartWeigthChanged({this.value});
+  const EditWeightGoalStartWeigthChanged({required this.value});
 
   @override
   List<Object?> get props => [value];
 }
 
-class EditWeightGoalTargetWeightGoalChanged extends EditWeightGoalFormEvent {
-  final String? value;
+class EditWeightGoalTargetWeightChanged extends EditWeightGoalFormEvent {
+  final String value;
 
-  const EditWeightGoalTargetWeightGoalChanged({this.value});
+  const EditWeightGoalTargetWeightChanged({required this.value});
 
   @override
   List<Object?> get props => [value];
