@@ -3,8 +3,15 @@ import 'package:formz/formz.dart';
 enum StartDateValidationError { invalid }
 
 class StartDate extends FormzInput<DateTime, StartDateValidationError> {
-  StartDate.dirty([DateTime? value]) : super.dirty(value ?? DateTime.now());
-  StartDate.pure([DateTime? value]) : super.pure(value ?? DateTime.now());
+  StartDate.dirty([DateTime? value, DateTime? targetDate])
+      : _targetDate = targetDate,
+        super.dirty(value ?? DateTime.now());
+
+  StartDate.pure([DateTime? value, DateTime? targetDate])
+      : _targetDate = targetDate,
+        super.pure(value ?? DateTime.now());
+
+  final DateTime? _targetDate;
 
   @override
   StartDateValidationError? validator(DateTime? value) {
@@ -24,7 +31,15 @@ class StartDate extends FormzInput<DateTime, StartDateValidationError> {
       value.year,
     );
 
-    if (value.isAfter(now)) {
+    if (nowVal.isAfter(now)) {
+      return StartDateValidationError.invalid;
+    }
+
+    if (_targetDate == null) {
+      return null;
+    }
+
+    if (_targetDate!.isBefore(value)) {
       return StartDateValidationError.invalid;
     }
 
