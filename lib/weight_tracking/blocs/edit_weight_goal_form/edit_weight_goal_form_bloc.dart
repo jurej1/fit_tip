@@ -43,7 +43,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
   }
 
   EditWeightGoalFormState _mapTargetDateChangedToState(EditWeightGoalTargetDateChanged event) {
-    final date = models.TargetDate.dirty(event.value);
+    final date = models.TargetDate.dirty(event.value, state.startDate.value);
 
     return state.copyWith(
       targetDate: date,
@@ -52,7 +52,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
   }
 
   EditWeightGoalFormState _mapStartDateChanged(EditWeightGoalStartDateChanged event) {
-    final date = models.StartDate.dirty(event.value);
+    final date = models.StartDate.dirty(event.value, state.targetDate.value);
 
     return state.copyWith(
       startDate: date,
