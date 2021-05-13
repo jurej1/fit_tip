@@ -44,6 +44,14 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         ),
         child: WeightStatisticsView(),
       );
+    },
+    EditWeightGoalView.routeName: (BuildContext context) {
+      return BlocProvider<EditWeightGoalFormBloc>(
+        create: (context) => EditWeightGoalFormBloc(
+          weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+          weightRepository: RepositoryProvider.of<WeightRepository>(context),
+        ),
+      );
     }
   };
 }
