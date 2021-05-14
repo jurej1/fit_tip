@@ -1,6 +1,5 @@
 part of 'edit_weight_goal_form_bloc.dart';
 
-// ignore: must_be_immutable
 class EditWeightGoalFormState extends Equatable {
   const EditWeightGoalFormState({
     this.status = FormzStatus.pure,
@@ -24,15 +23,23 @@ class EditWeightGoalFormState extends Equatable {
     return EditWeightGoalFormState(
       targetDate: models.TargetDate.pure(goal.targetDate),
       startDate: models.StartDate.pure(goal.beginDate),
-      targetWeight: models.Weight.pure(goal.targetWeight.toString()),
-      startWeight: models.Weight.pure(goal.beginWeight.toString()),
+      targetWeight: models.Weight.pure(goal.targetWeight == null ? '' : goal.targetWeight.toString()),
+      startWeight: models.Weight.pure(goal.beginWeight == null ? '' : goal.beginWeight.toString()),
       weeklyGoal: goal.weeklyGoal,
     );
   }
 
   @override
   List<Object?> get props {
-    return [status, targetDate, startDate, startWeight, targetWeight, weeklyGoal, weightGoal];
+    return [
+      status,
+      targetDate,
+      startDate,
+      startWeight,
+      targetWeight,
+      weeklyGoal,
+      weightGoal,
+    ];
   }
 
   EditWeightGoalFormState copyWith({
