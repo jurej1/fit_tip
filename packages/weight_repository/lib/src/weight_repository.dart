@@ -81,7 +81,7 @@ class WeightRepository {
       return null;
     }
 
-    return _weightGoalDocRef(userId!).update(goal.toEntity().toDocumentSnapshot());
+    return _weightGoalDocRef(userId!).set(goal.toEntity().toDocumentSnapshot());
   }
 
   Future<void> deleteWeightGoal() async {
