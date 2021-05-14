@@ -9,7 +9,11 @@ class EditWeightGoalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          _SubmitButton(),
+        ],
+      ),
       body: ListView(
         physics: const ClampingScrollPhysics(),
         children: [
@@ -71,7 +75,7 @@ class _StartDateFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditWeightGoalFormBloc, EditWeightGoalFormState>(
-      builder: (context, state) {
+      builder: (_, state) {
         return ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text('Start date:'),
@@ -80,8 +84,8 @@ class _StartDateFormInput extends StatelessWidget {
             DateTime? dateTime = await showDatePicker(
               context: context,
               initialDate: state.startDate.value,
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().subtract(Duration(days: 60)),
+              firstDate: DateTime.now().subtract(Duration(days: 365)),
+              lastDate: DateTime.now(),
             );
 
             BlocProvider.of<EditWeightGoalFormBloc>(context).add(EditWeightGoalStartDateChanged(value: dateTime));
@@ -100,16 +104,33 @@ class _TargetDateFormInput extends StatelessWidget {
         return ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text('Target date:'),
-          trailing: Text(AppConfig.dateFormat(state.startDate.value)),
+          trailing: Text(AppConfig.dateFormat(state.targetDate.value)),
           onTap: () async {
             DateTime? dateTime = await showDatePicker(
               context: context,
-              initialDate: state.startDate.value,
+              initialDate: state.targetDate.value,
               firstDate: DateTime.now(),
-              lastDate: DateTime.now().subtract(Duration(days: 60)),
+              lastDate: DateTime.now().add(Duration(days: 365)),
             );
 
             BlocProvider.of<EditWeightGoalFormBloc>(context).add(EditWeightGoalTargetDateChanged(value: dateTime));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditWeightGoalFormBloc, EditWeightGoalFormState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return TextButton(
+          child: Text('Submit'),
+          onPressed: () {
+            BlocProvider.of<EditWeightGoalFormBloc>(context).add(EditWeightGoalFormSubmit());
           },
         );
       },
