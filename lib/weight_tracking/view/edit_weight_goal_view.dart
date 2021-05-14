@@ -3,6 +3,7 @@ import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:weight_repository/weight_repository.dart';
 
 class EditWeightGoalView extends StatelessWidget {
   static const routeName = 'edit_weight_goal_view';
@@ -29,6 +30,7 @@ class EditWeightGoalView extends StatelessWidget {
             _StartWeightFormInput(),
             _TargetDateFormInput(),
             _TargetWeightFormInput(),
+            _WeeklyGoalSelector(),
           ],
         ),
       ),
@@ -142,6 +144,34 @@ class _SubmitButton extends StatelessWidget {
           onPressed: () {
             BlocProvider.of<EditWeightGoalFormBloc>(context).add(EditWeightGoalFormSubmit());
           },
+        );
+      },
+    );
+  }
+}
+
+class _WeeklyGoalSelector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditWeightGoalFormBloc, EditWeightGoalFormState>(
+      builder: (context, state) {
+        return ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text('Weekly goal'),
+          trailing: DropdownButton<WeeklyGoal>(
+            value: state.weeklyGoal,
+            items: WeeklyGoal.values
+                .map(
+                  (goal) => DropdownMenuItem(
+                    child: Text(mapWeeklyGoalToString(goal)),
+                    value: goal,
+                  ),
+                )
+                .toList(),
+            onChanged: (goal) {
+              BlocProvider.of<EditWeightGoalFormBloc>(context).add(EditWeightGoalWeeklyGoalChanged(goal));
+            },
+          ),
         );
       },
     );

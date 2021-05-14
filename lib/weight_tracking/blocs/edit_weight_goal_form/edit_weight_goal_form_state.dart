@@ -7,7 +7,7 @@ class EditWeightGoalFormState extends Equatable {
     required this.startDate,
     required this.targetWeight,
     required this.startWeight,
-    required this.weeklyGoal,
+    this.weeklyGoal = WeeklyGoal.maintain,
     this.weightGoal,
   });
 
