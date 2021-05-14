@@ -30,6 +30,10 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   }
 
   Stream<WeightGoalState> _mapWeightGoalLoadToState() async* {
+    if (state is WeightGoalLoadSuccess) {
+      return;
+    }
+
     yield WeightGoalLoading();
 
     if (_authenticationBloc.state.status != AuthenticationStatus.authenticated) {
