@@ -30,7 +30,7 @@ class TargetDate extends FormzInput<DateTime, TargetDateValidationError> {
       value.day,
     );
 
-    if (valueDate.isBefore(nowDate)) {
+    if (valueDate.isAfter(nowDate)) {
       return TargetDateValidationError.invalid;
     }
 

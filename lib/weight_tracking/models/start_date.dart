@@ -23,13 +23,13 @@ class StartDate extends FormzInput<DateTime, StartDateValidationError> {
       return StartDateValidationError.invalid;
     }
 
-    final nowVal = DateTime(
+    final valueDate = DateTime(
       value.year,
       value.month,
       value.year,
     );
 
-    if (nowVal.isAfter(now)) {
+    if (valueDate.isBefore(now)) {
       return StartDateValidationError.invalid;
     }
 
