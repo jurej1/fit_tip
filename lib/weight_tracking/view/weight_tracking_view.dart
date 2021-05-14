@@ -52,7 +52,7 @@ class _WeightGoalView extends StatelessWidget {
           return Container();
         } else if (state is WeightGoalLoading) {
           return Container(
-            height: 250,
+            height: 230,
             child: Center(
               child: const CircularProgressIndicator(),
             ),
@@ -66,7 +66,9 @@ class _WeightGoalView extends StatelessWidget {
                 title: Text('Goals'),
                 trailing: IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(EditWeightGoalView.routeName);
+                  },
                 ),
               ),
               GoalRow(

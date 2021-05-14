@@ -51,6 +51,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
           weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
           weightRepository: RepositoryProvider.of<WeightRepository>(context),
         ),
+        child: EditWeightGoalView(),
       );
     }
   };
