@@ -25,6 +25,7 @@ class EditWeightGoalView extends StatelessWidget {
         ),
         body: ListView(
           physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             _StartDateFormInput(),
             _StartWeightFormInput(),
