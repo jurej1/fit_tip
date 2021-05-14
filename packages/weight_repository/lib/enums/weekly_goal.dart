@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum WeeklyGoal {
   lose1kg,
   lose0_75kg,
@@ -26,4 +28,24 @@ String mapWeeklyGoalToString(WeeklyGoal goal) {
   }
 
   return '';
+}
+
+WeeklyGoal mapDatabaseStringToWeeklyGoal(String? value) {
+  if (value == null) {
+    return WeeklyGoal.maintain;
+  } else if (value == describeEnum(WeeklyGoal.gain0_25kg)) {
+    return WeeklyGoal.gain0_25kg;
+  } else if (value == describeEnum(WeeklyGoal.gain0_5kg)) {
+    return WeeklyGoal.gain0_5kg;
+  } else if (value == describeEnum(WeeklyGoal.lose0_25kg)) {
+    return WeeklyGoal.lose0_25kg;
+  } else if (value == describeEnum(WeeklyGoal.lose0_5kg)) {
+    return WeeklyGoal.lose0_5kg;
+  } else if (value == describeEnum(WeeklyGoal.lose0_75kg)) {
+    return WeeklyGoal.lose0_75kg;
+  } else if (value == describeEnum(WeeklyGoal.lose1kg)) {
+    return WeeklyGoal.lose1kg;
+  }
+
+  return WeeklyGoal.maintain;
 }

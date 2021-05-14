@@ -100,7 +100,7 @@ class WeightGoalEntity extends Equatable {
       beginWeight: data?[_DocKeys.beginWeight],
       targetDate: data?[_DocKeys.targetDate],
       targetWeight: data?[_DocKeys.targetWeight],
-      weeklyGoal: data?[_DocKeys.weeklyGoal] ?? WeeklyGoal.maintain,
+      weeklyGoal: mapDatabaseStringToWeeklyGoal(data?[_DocKeys.weeklyGoal]),
     );
   }
 }
