@@ -84,8 +84,8 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
 
   Stream<EditWeightGoalFormState> _mapFormSubmitToState(EditWeightGoalFormSubmit event) async* {
     final startWeight = models.Weight.dirty(state.startWeight.value);
-    final startDate = models.StartDate.dirty(state.startDate.value);
-    final targetDate = models.TargetDate.dirty(state.targetDate.value);
+    final startDate = models.StartDate.dirty(state.startDate.value, state.targetDate.value);
+    final targetDate = models.TargetDate.dirty(state.targetDate.value, state.startDate.value);
     final targetWeight = models.Weight.dirty(state.targetWeight.value);
 
     yield state.copyWith(

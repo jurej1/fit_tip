@@ -26,6 +26,8 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   ) async* {
     if (event is WeightGoalLoadEvent) {
       yield* _mapWeightGoalLoadToState();
+    } else if (event is WeightGoalUpdated) {
+      yield* _mapWeightGoalUpdatedToState(event);
     }
   }
 
@@ -63,6 +65,14 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
     } catch (error) {
       print('error' + error.toString());
       yield WeightGoalFailure();
+    }
+  }
+
+  Stream<WeightGoalState> _mapWeightGoalUpdatedToState(WeightGoalUpdated event) async* {
+    if (state is WeightGoalLoadSuccess) {
+      if (event.weightGoal == null) return;
+
+      yield WeightGoalLoadSuccess(goal: event.weightGoal!);
     }
   }
 }

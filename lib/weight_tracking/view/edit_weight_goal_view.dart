@@ -12,6 +12,7 @@ class EditWeightGoalView extends StatelessWidget {
     return BlocListener<EditWeightGoalFormBloc, EditWeightGoalFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalUpdated(state.weightGoal));
           Navigator.of(context).pop();
         }
       },
@@ -133,7 +134,6 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditWeightGoalFormBloc, EditWeightGoalFormState>(
-      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return TextButton(
           child: Text('Submit'),
