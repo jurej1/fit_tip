@@ -111,7 +111,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
         await _weightRepository.updateWeightGoal(weightGoal);
 
         yield state.copyWith(weightGoal: weightGoal, status: FormzStatus.submissionSuccess);
-      } on Exception catch (e) {
+      } on Exception catch (_) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
