@@ -43,7 +43,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
   }
 
   EditWeightGoalFormState _mapTargetDateChangedToState(EditWeightGoalTargetDateChanged event) {
-    final date = models.TargetDate.dirty(event.value, state.startDate.value);
+    final date = models.TargetDate.dirty(event.value);
 
     return state.copyWith(
       targetDate: date,
@@ -52,7 +52,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
   }
 
   EditWeightGoalFormState _mapStartDateChanged(EditWeightGoalStartDateChanged event) {
-    final date = models.StartDate.dirty(event.value, state.targetDate.value);
+    final date = models.StartDate.dirty(event.value);
 
     return state.copyWith(
       startDate: date,
@@ -84,8 +84,8 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
 
   Stream<EditWeightGoalFormState> _mapFormSubmitToState(EditWeightGoalFormSubmit event) async* {
     final startWeight = models.Weight.dirty(state.startWeight.value);
-    final startDate = models.StartDate.dirty(state.startDate.value, state.targetDate.value);
-    final targetDate = models.TargetDate.dirty(state.targetDate.value, state.startDate.value);
+    final startDate = models.StartDate.dirty(state.startDate.value);
+    final targetDate = models.TargetDate.dirty(state.targetDate.value);
     final targetWeight = models.Weight.dirty(state.targetWeight.value);
 
     yield state.copyWith(

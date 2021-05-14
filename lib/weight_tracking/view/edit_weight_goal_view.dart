@@ -88,6 +88,7 @@ class _StartDateFormInput extends StatelessWidget {
         return ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text('Start date:'),
+          subtitle: state.startDate.invalid ? Text('Invalid input') : null,
           trailing: Text(AppConfig.dateFormat(state.startDate.value)),
           onTap: () async {
             DateTime? dateTime = await showDatePicker(
@@ -113,6 +114,7 @@ class _TargetDateFormInput extends StatelessWidget {
         return ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text('Target date:'),
+          subtitle: state.targetDate.invalid ? Text('Invalid input') : null,
           trailing: Text(AppConfig.dateFormat(state.targetDate.value)),
           onTap: () async {
             DateTime? dateTime = await showDatePicker(
