@@ -37,20 +37,35 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       );
     },
     WeightStatisticsView.routeName: (BuildContext context) {
-      return BlocProvider<WeightStatisticsBloc>(
-        create: (context) => WeightStatisticsBloc(
-          weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
-          weightRepository: RepositoryProvider.of<WeightRepository>(context),
-        ),
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<WeightStatisticsBloc>(
+            create: (context) => WeightStatisticsBloc(
+              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+            ),
+          ),
+          BlocProvider<WeightGoalStatisticsBloc>(
+            create: (context) => WeightGoalStatisticsBloc(
+              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+            ),
+          ),
+        ],
         child: WeightStatisticsView(),
       );
     },
     EditWeightGoalView.routeName: (BuildContext context) {
-      return BlocProvider<EditWeightGoalFormBloc>(
-        create: (context) => EditWeightGoalFormBloc(
-          weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-          weightRepository: RepositoryProvider.of<WeightRepository>(context),
-        ),
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<EditWeightGoalFormBloc>(
+            create: (context) => EditWeightGoalFormBloc(
+              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+            ),
+          ),
+        ],
         child: EditWeightGoalView(),
       );
     }

@@ -11,34 +11,46 @@ class WeightStatisticsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<WeightStatisticsBloc, WeightStatisticsState>(
-        builder: (context, state) {
-          if (state is WeightStatisticsLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is WeightStatisticsFail) {
-            return Center(
-              child: Text('Seems like there was an error. Please try again later.'),
-            );
-          } else if (state is WeightStatisticsLoadedSuccessfully) {
-            return Container(
-              height: size.height,
-              width: size.width,
-              child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Column(
-                  children: [
-                    WeightStatisticsList(state: state),
-                  ],
-                ),
-              ),
-            );
-          }
-          return Container();
-        },
+      body: Container(
+        height: size.height,
+        width: size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _Trends(),
+            ],
+          ),
+        ),
       ),
     );
+  }
+}
+
+class _Trends extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WeightStatisticsBloc, WeightStatisticsState>(
+      builder: (context, state) {
+        if (state is WeightStatisticsLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is WeightStatisticsFail) {
+          return Center(
+            child: Text('Seems like there was an error. Please try again later.'),
+          );
+        } else if (state is WeightStatisticsLoadedSuccessfully) {
+          return WeightStatisticsList(state: state);
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class _GoalStats extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
