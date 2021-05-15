@@ -81,7 +81,6 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
     );
 
     if (state.status.isValidated && _authenticationBloc.state.status == AuthenticationStatus.authenticated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
       final user = _authenticationBloc.state.user;
 
       try {
@@ -98,8 +97,12 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
           weight: weightValue,
         );
 
-        final doc = await _weightRepository.addWeight(weight);
-        weight = weight.copyWith(id: doc?.id);
+        if (state.mode == FormMode.add) {
+          final doc = await _weightRepository.addWeight(weight);
+          weight = weight.copyWith(id: doc?.id);
+        } else if (state.mode == FormMode.edit) {
+          await _weightRepository.updateWeight(weight.copyWith(id: state.weightModel!.id));
+        }
 
         yield state.copyWith(status: FormzStatus.submissionSuccess, weightModel: weight);
       } catch (error) {

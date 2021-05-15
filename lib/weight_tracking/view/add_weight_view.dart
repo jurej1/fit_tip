@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/enums/enums.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,8 @@ class AddWeightView extends StatelessWidget {
     return BlocListener<AddWeightFormBloc, AddWeightFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weightModel));
+          if (state.mode == FormMode.add) BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryAdded(state.weightModel));
+          if (state.mode == FormMode.edit) BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryUpdated(state.weightModel));
           Navigator.of(context).pop();
         }
       },
