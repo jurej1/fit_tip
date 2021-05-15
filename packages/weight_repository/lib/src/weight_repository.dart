@@ -123,7 +123,7 @@ class WeightRepository {
     return currentWeight - goalWeight;
   }
 
-  ///Returns the percantage of how many progress was done from 0 to 1
+  ///Returns the percantage of how many progress was done in the whole time period from 0 to 1
   double progressPercantage({
     required double current,
     required double starting,

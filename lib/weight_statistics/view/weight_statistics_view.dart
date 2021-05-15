@@ -7,6 +7,8 @@ class WeightStatisticsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<WeightStatisticsBloc, WeightStatisticsState>(
@@ -20,7 +22,19 @@ class WeightStatisticsView extends StatelessWidget {
               child: Text('Seems like there was an error. Please try again later.'),
             );
           } else if (state is WeightStatisticsLoadedSuccessfully) {
-            return WeightStatisticsList(state: state);
+            return Container(
+              height: size.height,
+              width: size.width,
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  children: [
+                    WeightStatisticsList(state: state),
+                  ],
+                ),
+              ),
+            );
           }
           return Container();
         },
