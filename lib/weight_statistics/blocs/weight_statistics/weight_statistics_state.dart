@@ -13,15 +13,11 @@ class WeightStatisticsLoadedSuccessfully extends WeightStatisticsState {
   final double? sevenDayChange;
   final double? thirdyDayChange;
   final double? totalChange;
-  final double? renaming; // TODO
-  final double? percantageDone; // TODO
 
   const WeightStatisticsLoadedSuccessfully({
     this.sevenDayChange,
     this.thirdyDayChange,
     this.totalChange,
-    this.renaming,
-    this.percantageDone,
   });
 
   WeightStatisticsLoadedSuccessfully copyWith({
@@ -35,13 +31,11 @@ class WeightStatisticsLoadedSuccessfully extends WeightStatisticsState {
       sevenDayChange: sevenDayChange ?? this.sevenDayChange,
       thirdyDayChange: thirdyDayChange ?? this.thirdyDayChange,
       totalChange: totalChange ?? this.totalChange,
-      renaming: renaming ?? this.renaming,
-      percantageDone: percantageDone ?? this.percantageDone,
     );
   }
 
   @override
-  List<Object?> get props => [sevenDayChange, thirdyDayChange, totalChange, renaming, percantageDone];
+  List<Object?> get props => [sevenDayChange, thirdyDayChange, totalChange];
 }
 
 class WeightStatisticsFail extends WeightStatisticsState {}

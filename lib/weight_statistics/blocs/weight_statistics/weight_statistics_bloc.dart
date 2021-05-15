@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:fit_tip/weight_tracking/weight.dart' show WeightHistoryBloc, WeightHistoryLoadSucces;
 import 'package:weight_repository/weight_repository.dart';
 
