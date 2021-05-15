@@ -50,6 +50,7 @@ class _WeightInput extends StatelessWidget {
             return SizedBox(
               width: 11 * 4,
               child: TextFormField(
+                initialValue: state.weight.value,
                 textAlign: TextAlign.center,
                 onChanged: (val) => BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightWeightChanged(val)),
               ),
@@ -79,7 +80,7 @@ class _DateInput extends StatelessWidget {
               onPressed: () async {
                 final date = await showDatePicker(
                   context: context,
-                  initialDate: DateTime.now(),
+                  initialDate: state.dateAdded.value,
                   firstDate: DateTime.now().subtract(const Duration(days: 365 * 5)),
                   lastDate: DateTime.now(),
                 );
@@ -112,7 +113,7 @@ class _TimeInput extends StatelessWidget {
               onPressed: () async {
                 final timeOfDay = await showTimePicker(
                   context: context,
-                  initialTime: TimeOfDay.now(),
+                  initialTime: state.timeAdded.value,
                 );
 
                 BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightTimeChanged(timeOfDay));

@@ -5,7 +5,7 @@ import 'package:fit_tip/weight_statistics/weight_statistics.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weight_repository/weight_repository.dart';
+import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
   return {
@@ -28,10 +28,12 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       return WeightTrackingView();
     },
     AddWeightView.routeName: (BuildContext context) {
+      final weight_rep.Weight? weight = ModalRoute.of(context)!.settings.arguments as weight_rep.Weight;
       return BlocProvider<AddWeightFormBloc>(
         create: (context) => AddWeightFormBloc(
           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          weightRepository: RepositoryProvider.of<WeightRepository>(context),
+          weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+          weight: weight,
         ),
         child: AddWeightView(),
       );
@@ -42,13 +44,13 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
           BlocProvider<WeightStatisticsBloc>(
             create: (context) => WeightStatisticsBloc(
               weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
-              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
             ),
           ),
           BlocProvider<WeightGoalStatisticsBloc>(
             create: (context) => WeightGoalStatisticsBloc(
               weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
               weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
             ),
           ),
@@ -62,7 +64,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
           BlocProvider<EditWeightGoalFormBloc>(
             create: (context) => EditWeightGoalFormBloc(
               weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/enums/enums.dart';
 import 'package:fit_tip/weight_tracking/weight.dart' as model;
 import 'package:flutter/material.dart';
 
@@ -17,9 +18,10 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
   AddWeightFormBloc({
     required WeightRepository weightRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _weightRepository = weightRepository,
+    Weight? weight,
+  })  : _weightRepository = weightRepository,
         _authenticationBloc = authenticationBloc,
-        super(AddWeightFormState.initial());
+        super(weight == null ? AddWeightFormState.initial() : AddWeightFormState.edit(weight));
 
   final WeightRepository _weightRepository;
   final AuthenticationBloc _authenticationBloc;
