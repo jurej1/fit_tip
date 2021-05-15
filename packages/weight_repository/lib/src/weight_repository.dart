@@ -90,30 +90,24 @@ class WeightRepository {
   }
 
   //Weight statistics
-  double last7DaysChange(List<Weight> weights) {
+
+  /// Calculates a weight change based on a certain duration
+  double weightChangeOnDuration(List<Weight> weights, Duration duration) {
+    if (weights.isEmpty) return 0;
+
     final currentDate = DateTime.now();
-    final lowerBoundDate = currentDate.subtract(const Duration(days: 7));
-    final recentWeights = weights.where((element) => element.date?.isAfter(lowerBoundDate) ?? false).toList();
+    final lowerBoundDate = currentDate.subtract(duration);
 
-    final firstWeight = recentWeights.first.weight ?? 0;
-    final lastWeight = recentWeights.last.weight ?? 0;
+    final filteredWeights = weights.where((element) => element.date?.isAfter(lowerBoundDate) ?? false).toList();
 
-    num change = firstWeight - lastWeight;
+    if (filteredWeights.isEmpty) return 0;
 
-    return change.toDouble();
-  }
+    final firstWeight = filteredWeights.first.weight ?? 0;
+    final lastWeight = filteredWeights.last.weight ?? 0;
 
-  double last30DaysChange(List<Weight> weights) {
-    final currentDate = DateTime.now();
-    final lowerBoundDate = currentDate.subtract(const Duration(days: 30));
-    final recentWeights = weights.where((element) => element.date?.isAfter(lowerBoundDate) ?? false).toList();
+    double change = (firstWeight - lastWeight).toDouble();
 
-    final firstWeight = recentWeights.first.weight ?? 0;
-    final lastWeight = recentWeights.last.weight ?? 0;
-
-    num change = firstWeight - lastWeight;
-
-    return change.toDouble();
+    return change;
   }
 
   double totalWeightChange(List<Weight> weights) {

@@ -3,8 +3,6 @@ import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:weight_repository/enums/enums.dart';
 
 class WeightTrackingView extends StatelessWidget {
   static const routeName = 'weight_tracking_view';

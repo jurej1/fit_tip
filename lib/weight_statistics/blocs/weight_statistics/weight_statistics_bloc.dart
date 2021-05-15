@@ -37,10 +37,14 @@ class WeightStatisticsBloc extends Bloc<WeightStatisticsEvent, WeightStatisticsS
     WeightStatisticsEvent event,
   ) async* {
     if (event is _WeightHistoryUpdated) {
+      final double sevendDayChange = _weightRepository.weightChangeOnDuration(event.weights, const Duration(days: 7));
+      final double thirdyDayChange = _weightRepository.weightChangeOnDuration(event.weights, const Duration(days: 30));
+      final double totalChange = _weightRepository.totalWeightChange(event.weights);
+
       yield WeightStatisticsLoadedSuccessfully(
-        sevenDayChange: _weightRepository.last7DaysChange(event.weights),
-        thirdyDayChange: _weightRepository.last30DaysChange(event.weights),
-        totalChange: _weightRepository.totalWeightChange(event.weights),
+        sevenDayChange: sevendDayChange,
+        thirdyDayChange: thirdyDayChange,
+        totalChange: totalChange,
       );
     }
   }
