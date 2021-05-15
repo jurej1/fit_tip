@@ -18,6 +18,7 @@ class WeightStatisticsView extends StatelessWidget {
           child: Column(
             children: [
               _Trends(),
+              _GoalStats(),
             ],
           ),
         ),
@@ -51,6 +52,25 @@ class _Trends extends StatelessWidget {
 class _GoalStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BlocBuilder<WeightGoalStatisticsBloc, WeightGoalStatisticsState>(
+      builder: (context, state) {
+        if (state is WeightGoalStatisticsLoadSuccess) {
+          return Column(
+            children: [
+              TrendCard(
+                text: 'Remaning',
+                number: state.remaining,
+              ),
+              TrendCard(
+                text: 'Percantage done',
+                number: state.percentageDone,
+              ),
+            ],
+          );
+        }
+
+        return Container();
+      },
+    );
   }
 }
