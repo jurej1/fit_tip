@@ -17,3 +17,11 @@ class _WeightGoalUpdated extends WeightGoalStatisticsEvent {
 }
 
 class _WeightGoalFailure extends WeightGoalStatisticsEvent {}
+
+class _WeightHistoryFailure extends WeightGoalStatisticsEvent {}
+
+class _WeightHistoryUpdated extends WeightGoalStatisticsEvent {
+  final List<Weight> weights;
+
+  _WeightHistoryUpdated(this.weights);
+}

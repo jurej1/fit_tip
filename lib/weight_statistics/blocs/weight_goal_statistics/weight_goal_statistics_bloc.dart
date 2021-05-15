@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/weight_tracking/weight.dart';
-import 'package:weight_repository/models/models.dart';
+import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 part 'weight_goal_statistics_event.dart';
@@ -26,7 +25,7 @@ class WeightGoalStatisticsBloc extends Bloc<WeightGoalStatisticsEvent, WeightGoa
       add(_WeightGoalFailure());
     }
 
-    _streamSubscription = _weightGoalBloc.stream.listen(
+    _weightGoalSubscripion = _weightGoalBloc.stream.listen(
       (goalState) {
         if (goalState is WeightGoalLoadSuccess) {
           add(_WeightGoalUpdated(goalState.goal));
@@ -35,9 +34,27 @@ class WeightGoalStatisticsBloc extends Bloc<WeightGoalStatisticsEvent, WeightGoa
         }
       },
     );
+
+    final historyState = _weightHistoryBloc.state;
+
+    if (historyState is WeightHistoryLoadSucces) {
+      add(_WeightHistoryUpdated(historyState.weights));
+    } else {
+      add(_WeightHistoryFailure());
+    }
+
+    _weightHistorySubscription = _weightHistoryBloc.stream.listen(
+      (historyState) {
+        if (historyState is WeightHistoryLoadSucces) {
+          add(_WeightHistoryUpdated(historyState.weights));
+        } else {
+          add(_WeightHistoryFailure());
+        }
+      },
+    );
   }
 
-  late final StreamSubscription _streamSubscription;
+  late final StreamSubscription _weightGoalSubscripion;
   late final StreamSubscription _weightHistorySubscription;
   final WeightHistoryBloc _weightHistoryBloc;
   final WeightGoalBloc _weightGoalBloc;
@@ -48,23 +65,59 @@ class WeightGoalStatisticsBloc extends Bloc<WeightGoalStatisticsEvent, WeightGoa
     WeightGoalStatisticsEvent event,
   ) async* {
     if (event is _WeightGoalUpdated) {
-      final percantageDone = _weightRepository.progressPercantage(
-        current: 00,
-        starting: event.goal.beginWeight ?? 0,
-        target: event.goal.targetWeight ?? 0,
-      );
-
-      yield WeightGoalStatisticsLoadSuccess(
-        percentageDone: percantageDone,
-      );
+      yield* _mapGoalUpdatedToState(event);
     } else if (event is _WeightGoalFailure) {
-      yield WeightGoalStatisticsFailure();
+      yield* _mapGoalFailureToState();
+    } else if (event is _WeightHistoryFailure) {
+      yield* _mapHistoryFailureToState();
+    } else if (event is _WeightHistoryUpdated) {
+      yield* _mapWeightHistoryUpdatedToState(event);
     }
+  }
+
+  Stream<WeightGoalStatisticsState> _mapGoalUpdatedToState(_WeightGoalUpdated event) async* {
+    if (_weightHistoryBloc.state is WeightHistoryLoadSucces) {
+      final historyState = _weightHistoryBloc.state as WeightHistoryLoadSucces;
+      yield _calculateStatistics(historyState.weights, event.goal);
+    }
+  }
+
+  Stream<WeightGoalStatisticsState> _mapWeightHistoryUpdatedToState(_WeightHistoryUpdated event) async* {
+    if (_weightGoalBloc.state is WeightGoalLoadSuccess) {
+      final goalState = _weightGoalBloc.state as WeightGoalLoadSuccess;
+      yield _calculateStatistics(event.weights, goalState.goal);
+    }
+  }
+
+  Stream<WeightGoalStatisticsState> _mapHistoryFailureToState() async* {
+    yield (WeightGoalStatisticsFailure());
+  }
+
+  Stream<WeightGoalStatisticsState> _mapGoalFailureToState() async* {
+    yield (WeightGoalStatisticsFailure());
+  }
+
+  WeightGoalStatisticsState _calculateStatistics(List<Weight> weights, WeightGoal goal) {
+    double currentWeight = weights.first.weight?.toDouble() ?? 0.0;
+
+    final percantageDone = _weightRepository.progressPercantage(
+      current: currentWeight,
+      starting: goal.beginWeight ?? 0,
+      target: goal.targetWeight ?? 0,
+    );
+
+    final double remaining = _weightRepository.remaining(currentWeight, goal.targetWeight?.toDouble() ?? 0);
+
+    return WeightGoalStatisticsLoadSuccess(
+      percentageDone: percantageDone,
+      remaining: remaining,
+    );
   }
 
   @override
   Future<void> close() {
-    _streamSubscription.cancel();
+    _weightGoalSubscripion.cancel();
+    _weightHistorySubscription.cancel();
     return super.close();
   }
 }
