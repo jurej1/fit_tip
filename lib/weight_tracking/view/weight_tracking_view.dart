@@ -4,6 +4,7 @@ import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:weight_repository/enums/enums.dart';
 
 class WeightTrackingView extends StatelessWidget {
   static const routeName = 'weight_tracking_view';
@@ -42,6 +43,8 @@ class WeightTrackingView extends StatelessWidget {
 }
 
 class _WeightGoalView extends StatelessWidget {
+  final double height = 8;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeightGoalBloc, WeightGoalState>(
@@ -58,34 +61,47 @@ class _WeightGoalView extends StatelessWidget {
         } else if (state is WeightGoalLoadSuccess) {
           final goal = state.goal;
 
-          return Column(
-            children: [
-              ListTile(
-                title: Text('Goals'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(EditWeightGoalView.routeName);
-                  },
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                ListTile(
+                  dense: true,
+                  title: Text('Goals'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(EditWeightGoalView.routeName);
+                    },
+                  ),
                 ),
-              ),
-              GoalRow(
-                text: 'Begin date',
-                value: goal.beginDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '-',
-              ),
-              GoalRow(
-                text: 'Begin weight',
-                value: goal.beginWeight?.toString() ?? '-',
-              ),
-              GoalRow(
-                text: 'Target date',
-                value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '',
-              ),
-              GoalRow(
-                text: 'Target weight',
-                value: goal.targetWeight?.toString() ?? '-',
-              ),
-            ],
+                SizedBox(height: height),
+                GoalRow(
+                  text: 'Begin date',
+                  value: goal.beginDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '-',
+                ),
+                SizedBox(height: height),
+                GoalRow(
+                  text: 'Begin weight',
+                  value: goal.beginWeight != null ? '${goal.beginWeight?.toString()}kg' : '-',
+                ),
+                SizedBox(height: height),
+                GoalRow(
+                  text: 'Target date',
+                  value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '',
+                ),
+                SizedBox(height: height),
+                GoalRow(
+                  text: 'Target weight',
+                  value: goal.targetWeight != null ? '${goal.targetWeight?.toString()}kg' : '-',
+                ),
+                SizedBox(height: height),
+                GoalRow(
+                  text: 'Weekly goal',
+                  value: mapWeeklyGoalToString(goal.weeklyGoal),
+                ),
+              ],
+            ),
           );
         }
 
