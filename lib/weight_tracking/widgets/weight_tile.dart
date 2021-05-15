@@ -29,9 +29,10 @@ class WeightTile extends StatelessWidget {
           BlocProvider.of<WeightTileBloc>(context).add(WeightTileDeleteRequested());
         },
         key: ValueKey(weight),
-        background: _dismissibleBackground(),
-        secondaryBackground: _dismissibleBackground(),
+        background: _dismissibleBackground(Alignment.centerLeft),
+        secondaryBackground: _dismissibleBackground(Alignment.centerRight),
         child: ListTile(
+          onLongPress: () {},
           leading: Text(
             weight.weight!.toDouble().toString() +
                 ' ' +
@@ -43,10 +44,10 @@ class WeightTile extends StatelessWidget {
     );
   }
 
-  Widget _dismissibleBackground() {
+  Widget _dismissibleBackground(Alignment alignment) {
     return Container(
       color: Colors.red,
-      alignment: Alignment.centerRight,
+      alignment: alignment,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: _deleteIcon(),
     );
