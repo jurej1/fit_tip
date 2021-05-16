@@ -86,7 +86,7 @@ class WaterRepository {
   }
 
   /// Returrns null if user unauthenticated
-  Future<List<WaterLog>?> fetWaterLogForCertainTimePeriod(DateTime lowerBound, DateTime upperBound) async {
+  Future<List<WaterLog>?> getWaterLogForCertainTimePeriod(DateTime lowerBound, DateTime upperBound) async {
     if (_isAuthenticated()) {
       final upperBoundDate = DateTime(upperBound.year, upperBound.month, upperBound.day, 23, 59, 59);
       final lowerBoundDate = DateTime(lowerBound.year, lowerBound.month, lowerBound.day, 0, 0, 0);
