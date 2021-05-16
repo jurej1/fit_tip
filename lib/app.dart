@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
@@ -11,12 +12,15 @@ import 'weight_tracking/weight.dart';
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
   final WeightRepository _weightRepository;
+  final WaterRepository _waterRepository;
 
   App({
     Key? key,
     required AuthenticationRepository authenticationRepository,
     required WeightRepository weightRepository,
+    required WaterRepository waterRepository,
   })   : _authenticationRepository = authenticationRepository,
+        _waterRepository = waterRepository,
         _weightRepository = weightRepository,
         super(key: key);
 
@@ -28,6 +32,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: _authenticationRepository),
         RepositoryProvider.value(value: _weightRepository),
+        RepositoryProvider.value(value: _waterRepository),
       ],
       child: MultiBlocProvider(
         providers: [
