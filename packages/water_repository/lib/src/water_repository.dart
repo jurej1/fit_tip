@@ -25,15 +25,84 @@ class WaterRepository {
     return null;
   }
 
+  /// Returrns null if user unauthenticated
   Future<List<WaterLog>?> getWaterLogHistory() async {
     if (_isAuthenticated()) {
-      QuerySnapshot snapshot = await _collRef()!.get();
+      QuerySnapshot snapshot = await _collRef()!.orderBy('date').get();
 
       return snapshot.docs.map((e) {
         final WaterLogEntity entity = WaterLogEntity.fromDocumentSnapshot(e);
 
         return WaterLog.fromEntity(entity);
       }).toList();
+    }
+
+    return null;
+  }
+
+  /// Returrns null if user unauthenticated
+  Future<DocumentReference?> addWaterLog(WaterLog log) async {
+    if (_isAuthenticated()) {
+      return _collRef()!.add(log.toEntity().toDocumentSnapshot());
+    }
+
+    return null;
+  }
+
+  /// It does nothing if the user is unauthenticated
+  Future<void> deleteWaterLog(WaterLog log) async {
+    if (_isAuthenticated()) {
+      return _collRef()!.doc(log.id).delete();
+    }
+  }
+
+  /// It does not update if the user is unauthenticated
+  Future<void> updateWaterLog(WaterLog log) async {
+    if (_isAuthenticated()) {
+      return _collRef()!.doc(log.id).update(log.toEntity().toDocumentSnapshot());
+    }
+  }
+
+  /// Returrns null if user unauthenticated
+  Future<List<WaterLog>?> getWaterLogForDay(DateTime date) async {
+    if (_isAuthenticated()) {
+      final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
+      final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
+
+      QuerySnapshot snapshot = await _collRef()!.where('date', isGreaterThanOrEqualTo: lowerBound, isLessThanOrEqualTo: upperBound).get();
+
+      if (snapshot.size == 0) {
+        return [];
+      } else {
+        return snapshot.docs.map((e) {
+          WaterLogEntity entity = WaterLogEntity.fromDocumentSnapshot(e);
+
+          return WaterLog.fromEntity(entity);
+        }).toList();
+      }
+    }
+
+    return null;
+  }
+
+  /// Returrns null if user unauthenticated
+  Future<List<WaterLog>?> fetWaterLogForCertainTimePeriod(DateTime lowerBound, DateTime upperBound) async {
+    if (_isAuthenticated()) {
+      final upperBoundDate = DateTime(upperBound.year, upperBound.month, upperBound.day, 23, 59, 59);
+      final lowerBoundDate = DateTime(lowerBound.year, lowerBound.month, lowerBound.day, 0, 0, 0);
+
+      QuerySnapshot snapshot =
+          await _collRef()!.where('date', isGreaterThanOrEqualTo: lowerBoundDate, isLessThanOrEqualTo: upperBoundDate).get();
+
+      if (snapshot.size == 0) {
+        return [];
+      } else {
+        return snapshot.docs.map((e) {
+          WaterLogEntity entity = WaterLogEntity.fromDocumentSnapshot(e);
+
+          return WaterLog.fromEntity(entity);
+        }).toList();
+      }
     }
 
     return null;
