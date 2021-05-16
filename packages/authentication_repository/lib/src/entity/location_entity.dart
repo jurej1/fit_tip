@@ -46,7 +46,7 @@ class LocationEntity extends Equatable {
   static LocationEntity? fromDocumentSnapshot(DocumentSnapshot? snap) {
     if (snap == null) return null;
 
-    final data = snap.data();
+    final data = snap.data() as Map?;
 
     if (data == null) return null;
 
