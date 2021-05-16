@@ -15,7 +15,7 @@ class User extends Equatable {
   final DateTime? birthdate;
   final String? email;
   final double? height;
-  final MeasurmentSystem? measurmentSystem;
+  final MeasurmentSystem measurmentSystem;
   final String? introduction;
   final model.Location? location;
 
@@ -29,7 +29,7 @@ class User extends Equatable {
     this.birthdate,
     this.email,
     this.height,
-    this.measurmentSystem,
+    this.measurmentSystem = MeasurmentSystem.metric,
     this.introduction,
     this.location,
   });

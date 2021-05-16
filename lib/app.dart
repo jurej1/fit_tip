@@ -6,7 +6,7 @@ import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
 import 'utilities/app_routes.dart';
-import 'weight/weight.dart';
+import 'weight_tracking/weight.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
@@ -46,6 +46,12 @@ class App extends StatelessWidget {
               weightRepository: RepositoryProvider.of<WeightRepository>(context),
             ),
           ),
+          BlocProvider<WeightGoalBloc>(
+            create: (context) => WeightGoalBloc(
+              weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          )
         ],
         child: MaterialApp(
           navigatorKey: _navigatorState,

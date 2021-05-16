@@ -1,4 +1,4 @@
-import 'package:fit_tip/weight/view/weight_history_view.dart';
+import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.ac_unit),
               title: Text('Weight tracking'),
               onTap: () {
-                Navigator.of(context).pushNamed(WeightHistoryView.routeName);
+                Navigator.of(context).pushNamed(WeightTrackingView.routeName);
               },
             ),
           ],
