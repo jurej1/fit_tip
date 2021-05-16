@@ -7,15 +7,17 @@ class WaterLogEntity extends Equatable {
   final WaterCupEntity cup;
   final TimeOfDay time;
   final DateTime date;
+  final String id;
 
   const WaterLogEntity({
     required this.cup,
     required this.time,
     required this.date,
+    required this.id,
   });
 
   @override
-  List<Object> get props => [cup, time, date];
+  List<Object> get props => [cup, time, date, id];
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
@@ -31,6 +33,7 @@ class WaterLogEntity extends Equatable {
     final dateTime = date.toDate();
 
     return WaterLogEntity(
+      id: snap.id,
       cup: data['cup'],
       time: TimeOfDay(
         hour: dateTime.hour,
@@ -41,6 +44,20 @@ class WaterLogEntity extends Equatable {
         dateTime.month,
         dateTime.day,
       ),
+    );
+  }
+
+  WaterLogEntity copyWith({
+    WaterCupEntity? cup,
+    TimeOfDay? time,
+    DateTime? date,
+    String? id,
+  }) {
+    return WaterLogEntity(
+      cup: cup ?? this.cup,
+      time: time ?? this.time,
+      date: date ?? this.date,
+      id: id ?? this.id,
     );
   }
 }

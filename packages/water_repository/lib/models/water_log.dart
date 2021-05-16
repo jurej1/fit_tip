@@ -5,25 +5,29 @@ import 'package:water_repository/entity/water_log_entity.dart';
 import 'models.dart';
 
 class WaterLog extends Equatable {
+  final String id;
   final WaterCup cup;
   final TimeOfDay time;
   final DateTime date;
 
   const WaterLog({
+    required this.id,
     required this.cup,
     required this.time,
     required this.date,
   });
 
   @override
-  List<Object> get props => [cup, time, date];
+  List<Object> get props => [id, cup, time, date];
 
   WaterLog copyWith({
+    String? id,
     WaterCup? cup,
     TimeOfDay? time,
     DateTime? date,
   }) {
     return WaterLog(
+      id: id ?? this.id,
       cup: cup ?? this.cup,
       time: time ?? this.time,
       date: date ?? this.date,
@@ -32,6 +36,7 @@ class WaterLog extends Equatable {
 
   WaterLogEntity toEntity() {
     return WaterLogEntity(
+      id: id,
       cup: cup.toEntity(),
       date: date,
       time: time,
@@ -43,6 +48,7 @@ class WaterLog extends Equatable {
       cup: WaterCup.fromEntity(entity.cup),
       date: entity.date,
       time: entity.time,
+      id: entity.id,
     );
   }
 }
