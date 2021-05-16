@@ -16,6 +16,12 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).pushNamed(WeightTrackingView.routeName);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.water_damage_outlined),
+              title: Text('Water tracking'),
+              onTap: () {
+              },
+            ),
           ],
         ),
       ),
