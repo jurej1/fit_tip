@@ -1,3 +1,4 @@
+import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
 
 class WaterLogView extends StatelessWidget {
@@ -10,7 +11,9 @@ class WaterLogView extends StatelessWidget {
         title: Text('Water tracking'),
       ),
       body: ListView(
-        children: [],
+        children: [
+          WaterLogDaySelector(),
+        ],
       ),
     );
   }
