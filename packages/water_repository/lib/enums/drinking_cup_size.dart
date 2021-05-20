@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 enum DrinkingCupSize {
   tee, // 100
   coffee, // 150
