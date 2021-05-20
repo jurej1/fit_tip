@@ -1,6 +1,8 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/home.dart';
+import 'package:fit_tip/water_tracking/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_statistics/weight_statistics.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +71,16 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
           ),
         ],
         child: EditWeightGoalView(),
+      );
+    },
+    WaterLogView.routeName: (BuildContext context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<WaterLogFocusedDayBloc>(
+            create: (context) => WaterLogFocusedDayBloc(),
+          ),
+        ],
+        child: WaterLogView(),
       );
     }
   };
