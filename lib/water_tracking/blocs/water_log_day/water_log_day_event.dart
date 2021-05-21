@@ -15,3 +15,21 @@ class WaterLogFocusedDayUpdated extends WaterLogDayEvent {
   @override
   List<Object> get props => [dateTime];
 }
+
+class WaterLogAddede extends WaterLogDayEvent {
+  final WaterLog waterLog;
+
+  const WaterLogAddede(this.waterLog);
+
+  @override
+  List<Object> get props => [waterLog];
+}
+
+class WaterLogRemoved extends WaterLogDayEvent {
+  final WaterLog waterLog;
+
+  const WaterLogRemoved(this.waterLog);
+
+  @override
+  List<Object> get props => [waterLog];
+}
