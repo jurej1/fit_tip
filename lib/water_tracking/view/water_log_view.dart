@@ -10,9 +10,10 @@ class WaterLogView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Water tracking'),
       ),
-      body: ListView(
+      body: Column(
         children: [
           WaterLogDaySelector(),
+          WaterLogBuilder(),
         ],
       ),
     );

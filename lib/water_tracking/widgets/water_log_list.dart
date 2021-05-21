@@ -13,6 +13,9 @@ class WaterLogList extends StatelessWidget {
     }
 
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
+      itemCount: waterLogs.length,
       itemBuilder: (context, index) {
         final item = waterLogs[index];
         return ListTile(
