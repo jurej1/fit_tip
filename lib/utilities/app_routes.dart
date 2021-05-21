@@ -7,6 +7,7 @@ import 'package:fit_tip/weight_statistics/weight_statistics.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
@@ -78,6 +79,12 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         providers: [
           BlocProvider<WaterLogFocusedDayBloc>(
             create: (context) => WaterLogFocusedDayBloc(),
+          ),
+          BlocProvider<WaterLogDayBloc>(
+            create: (context) => WaterLogDayBloc(
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
           ),
         ],
         child: WaterLogView(),
