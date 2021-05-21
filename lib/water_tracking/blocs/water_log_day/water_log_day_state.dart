@@ -1,20 +1,21 @@
 part of 'water_log_day_bloc.dart';
 
-abstract class WaterLogDayState extends Equatable {
+abstract class WaterLogDayState {
   const WaterLogDayState();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class WaterLogDayLoading extends WaterLogDayState {}
 
 class WaterLogDayLoadSuccess extends WaterLogDayState {
   final List<WaterLog> waterLogs;
+  late final double totalDrinked;
 
-  const WaterLogDayLoadSuccess({this.waterLogs = const []});
-  @override
-  List<Object> get props => [waterLogs];
+  WaterLogDayLoadSuccess({this.waterLogs = const []}) {
+    this.totalDrinked = waterLogs.fold(
+      0,
+      (previousValue, element) => previousValue + element.cup.amount,
+    );
+  }
 }
 
 class WaterLogDayFailure extends WaterLogDayState {
@@ -23,7 +24,4 @@ class WaterLogDayFailure extends WaterLogDayState {
   const WaterLogDayFailure({
     this.errorMsg,
   });
-
-  @override
-  List<Object?> get props => [errorMsg];
 }
