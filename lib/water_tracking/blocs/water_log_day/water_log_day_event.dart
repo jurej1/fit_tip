@@ -33,3 +33,12 @@ class WaterLogRemoved extends WaterLogDayEvent {
   @override
   List<Object> get props => [waterLog];
 }
+
+class WaterLogUpdated extends WaterLogDayEvent {
+  final WaterLog waterLog;
+
+  const WaterLogUpdated(this.waterLog);
+
+  @override
+  List<Object> get props => [waterLog];
+}
