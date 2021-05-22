@@ -17,6 +17,7 @@ class WaterLogBuilder extends StatelessWidget {
           return Expanded(
             child: Column(
               children: [
+                WaterLogConsumption(consumption: state.totalDrinked),
                 WaterLogList(waterLogs: state.waterLogs),
               ],
             ),
