@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:water_repository/entity/entity.dart';
 
 import '../entity/water_log_entity.dart';
 import '../models/models.dart';
@@ -119,14 +120,17 @@ class WaterRepository {
     return null;
   }
 
-  Future<String> getWaterTrackingDayInfo(DateTime date) async {
+  /// Returrns null if user unauthenticated
+  Future<WaterDailyInfo?> getWaterTrackingDayInfo(DateTime date) async {
     if (_isAuthenticated()) {
       final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
       final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
-      QuerySnapshot snapshot = await _infoRef()!.where('date', isGreaterThan: lowerBound, isLessThan: lowerBound).limit(1).get();
+      QuerySnapshot snapshot = await _infoRef()!.where('date', isGreaterThan: lowerBound, isLessThan: upperBound).limit(1).get();
+
+      return snapshot.docs.map((e) => WaterDailyInfo.fromEntity(WaterDailyInfoEntity.fromDocumentSnapshot(e))).toList().first;
     }
 
-    return 'test';
+    return null;
   }
 }
