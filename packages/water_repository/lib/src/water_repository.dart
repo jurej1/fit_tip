@@ -16,7 +16,7 @@ class WaterRepository {
 
   bool _isAuthenticated() => _firebaseAuth.currentUser != null;
 
-  CollectionReference? _collRef() {
+  CollectionReference? _trackingRef() {
     if (_firebaseAuth.currentUser != null) {
       final String userId = _firebaseAuth.currentUser!.uid;
 
@@ -25,10 +25,20 @@ class WaterRepository {
     return null;
   }
 
+  CollectionReference? _infoRef() {
+    if (_isAuthenticated()) {
+      final String userId = _firebaseAuth.currentUser!.uid;
+
+      return _firebaseFirestore.collection('users').doc(userId).collection('water_day_info');
+    }
+
+    return null;
+  }
+
   /// Returrns null if user unauthenticated
   Future<List<WaterLog>?> getWaterLogHistory() async {
     if (_isAuthenticated()) {
-      QuerySnapshot snapshot = await _collRef()!.orderBy('date').get();
+      QuerySnapshot snapshot = await _trackingRef()!.orderBy('date').get();
 
       return snapshot.docs.map((e) {
         final WaterLogEntity entity = WaterLogEntity.fromDocumentSnapshot(e);
@@ -43,7 +53,7 @@ class WaterRepository {
   /// Returrns null if user unauthenticated
   Future<DocumentReference?> addWaterLog(WaterLog log) async {
     if (_isAuthenticated()) {
-      return _collRef()!.add(log.toEntity().toDocumentSnapshot());
+      return _trackingRef()!.add(log.toEntity().toDocumentSnapshot());
     }
 
     return null;
@@ -52,14 +62,14 @@ class WaterRepository {
   /// It does nothing if the user is unauthenticated
   Future<void> deleteWaterLog(WaterLog log) async {
     if (_isAuthenticated()) {
-      return _collRef()!.doc(log.id).delete();
+      return _trackingRef()!.doc(log.id).delete();
     }
   }
 
   /// It does not update if the user is unauthenticated
   Future<void> updateWaterLog(WaterLog log) async {
     if (_isAuthenticated()) {
-      return _collRef()!.doc(log.id).update(log.toEntity().toDocumentSnapshot());
+      return _trackingRef()!.doc(log.id).update(log.toEntity().toDocumentSnapshot());
     }
   }
 
@@ -69,7 +79,8 @@ class WaterRepository {
       final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
       final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
 
-      QuerySnapshot snapshot = await _collRef()!.where('date', isGreaterThanOrEqualTo: lowerBound, isLessThanOrEqualTo: upperBound).get();
+      QuerySnapshot snapshot =
+          await _trackingRef()!.where('date', isGreaterThanOrEqualTo: lowerBound, isLessThanOrEqualTo: upperBound).get();
 
       if (snapshot.size == 0) {
         return [];
@@ -92,7 +103,7 @@ class WaterRepository {
       final lowerBoundDate = DateTime(lowerBound.year, lowerBound.month, lowerBound.day, 0, 0, 0);
 
       QuerySnapshot snapshot =
-          await _collRef()!.where('date', isGreaterThanOrEqualTo: lowerBoundDate, isLessThanOrEqualTo: upperBoundDate).get();
+          await _trackingRef()!.where('date', isGreaterThanOrEqualTo: lowerBoundDate, isLessThanOrEqualTo: upperBoundDate).get();
 
       if (snapshot.size == 0) {
         return [];
@@ -106,5 +117,16 @@ class WaterRepository {
     }
 
     return null;
+  }
+
+  Future<String> getWaterTrackingDayInfo(DateTime date) async {
+    if (_isAuthenticated()) {
+      final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
+      final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
+
+      QuerySnapshot snapshot = await _infoRef()!.where('date', isGreaterThan: lowerBound, isLessThan: lowerBound).limit(1).get();
+    }
+
+    return 'test';
   }
 }
