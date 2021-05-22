@@ -9,6 +9,7 @@ class ProgressPainter extends CustomPainter {
   final double outerWidth;
   final Color outerColor;
   final Color innerColor;
+  final double percantage;
 
   ProgressPainter({
     this.primaryValue,
@@ -17,6 +18,7 @@ class ProgressPainter extends CustomPainter {
     this.radius = 100,
     this.outerColor = Colors.red,
     this.innerColor = Colors.blue,
+    required this.percantage,
   });
 
   @override
