@@ -7,16 +7,16 @@ import '../enums/enums.dart';
 class WaterCupEntity extends Equatable {
   final DrinkingCupSize size;
   final double amount;
-  final String imagePath;
+  final String? imagePath;
 
   const WaterCupEntity({
     required this.size,
     required this.amount,
-    required this.imagePath,
+    this.imagePath,
   });
 
   @override
-  List<Object> get props => [size, amount, imagePath];
+  List<Object?> get props => [size, amount, imagePath];
 
   WaterCupEntity copyWith({
     DrinkingCupSize? size,
