@@ -1,8 +1,1 @@
-enum DrinkingCupSize {
-  tee, // 100
-  coffee, // 150
-  small, //300
-  medium, // 400
-  large, //500
-  extraLarge, //600
-}
+enum DrinkingCupSize { tee, coffee, small, medium, large, extraLarge, wine }
