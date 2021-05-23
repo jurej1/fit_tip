@@ -16,6 +16,10 @@ class WaterLogView extends StatelessWidget {
           WaterLogBuilder(),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
