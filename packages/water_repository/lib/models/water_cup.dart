@@ -6,16 +6,16 @@ import '../enums/enums.dart';
 class WaterCup extends Equatable {
   final DrinkingCupSize size;
   final double amount;
-  final String imagePath;
+  final String? imagePath;
 
   const WaterCup({
     required this.size,
     required this.amount,
-    required this.imagePath,
+    this.imagePath,
   });
 
   @override
-  List<Object> get props => [size, amount, imagePath];
+  List<Object?> get props => [size, amount, imagePath];
 
   WaterCup copyWith({
     DrinkingCupSize? size,
@@ -44,4 +44,50 @@ class WaterCup extends Equatable {
       size: entity.size,
     );
   }
+}
+
+class WaterCups {
+  static const tee = WaterCup(
+    amount: 150,
+    size: DrinkingCupSize.tee,
+  );
+
+  static const small = WaterCup(
+    amount: 250,
+    size: DrinkingCupSize.small,
+  );
+
+  static const large = WaterCup(
+    amount: 750,
+    size: DrinkingCupSize.large,
+  );
+  static const pintUK = WaterCup(
+    amount: 570,
+    size: DrinkingCupSize.pintUK,
+  );
+
+  static const pintUS = WaterCup(
+    amount: 470,
+    size: DrinkingCupSize.pintUS,
+  );
+
+  static const wine = WaterCup(
+    amount: 240,
+    size: DrinkingCupSize.wine,
+  );
+
+  static const extraLarge = WaterCup(
+    amount: 1000,
+    size: DrinkingCupSize.extraLarge,
+  );
+
+  static const medium = WaterCup(
+    amount: 500,
+    size: DrinkingCupSize.medium,
+  );
+
+  static const coffe = WaterCup(
+    amount: 200,
+    size: DrinkingCupSize.coffee,
+  );
 }
