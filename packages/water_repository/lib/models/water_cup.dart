@@ -47,6 +47,18 @@ class WaterCup extends Equatable {
 }
 
 class WaterCups {
+  static const values = [
+    tee,
+    small,
+    large,
+    pintUK,
+    pintUS,
+    wine,
+    extraLarge,
+    medium,
+    coffe,
+  ];
+
   static const tee = WaterCup(
     amount: 150,
     size: DrinkingCupSize.tee,
