@@ -21,7 +21,7 @@ class WaterLogList extends StatelessWidget {
         final item = waterLogs[index];
         return ListTile(
           title: Text(
-            DateFormat('h:mm').format(item.date),
+            item.time.format(context),
           ),
           trailing: Text(
             item.cup.amount.toInt().toString(),
