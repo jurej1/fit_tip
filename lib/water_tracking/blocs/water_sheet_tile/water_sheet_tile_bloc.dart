@@ -32,7 +32,7 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
         return;
       }
 
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      yield state.copyWith(status: WaterSheetTileStatus.loading);
 
       try {
         final DateTime now = DateTime.now();
@@ -49,9 +49,9 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
 
         waterLog = waterLog.copyWith(id: ref.id);
 
-        yield state.copyWith(waterLog: waterLog, status: FormzStatus.submissionSuccess);
+        yield state.copyWith(waterLog: waterLog, status: WaterSheetTileStatus.success);
       } catch (error) {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+        yield state.copyWith(status: WaterSheetTileStatus.error);
       }
     }
   }
