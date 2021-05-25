@@ -17,7 +17,21 @@ class WaterLogView extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            shape: RoundedRectangleBorder(
+              borderRadius: const BorderRadius.only(
+                topLeft: const Radius.circular(10),
+                topRight: const Radius.circular(10),
+              ),
+            ),
+            context: context,
+            isScrollControlled: true,
+            builder: (_) {
+              return AddWaterLogSheet();
+            },
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
