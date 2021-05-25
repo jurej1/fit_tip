@@ -17,7 +17,7 @@ class WaterLogList extends StatelessWidget {
         crossAxisCount: 4,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        childAspectRatio: 2 / 3,
+        childAspectRatio: 2.5 / 3,
       ),
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
@@ -32,9 +32,11 @@ class WaterLogList extends StatelessWidget {
               item.time.format(context),
               textAlign: TextAlign.center,
             ),
-            child: Center(),
+            child: Center(
+              child: Icon(Icons.water_damage),
+            ),
             footer: Text(
-              item.cup.amount.toInt().toString(),
+              item.cup.amount.toStringAsFixed(0) + 'ml',
               textAlign: TextAlign.center,
             ),
           ),
