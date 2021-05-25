@@ -36,8 +36,6 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   }
 
   Stream<WaterLogDayState> _mapWaterLogFocusedDayUpdatedToState(WaterLogFocusedDayUpdated event) async* {
-    yield WaterLogDayLoadSuccess(waterLogs: []);
-    return;
     if (!_authenticationBloc.state.isAuthenticated) {
       yield WaterLogDayFailure();
       return;
