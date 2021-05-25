@@ -1,4 +1,5 @@
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +21,12 @@ class WaterLogGridTile extends StatelessWidget {
             onTap: () {
               showDialog(
                 context: context,
-                builder: (_) {},
+                builder: (_) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<WaterGridTileBloc>(context),
+                    child: WaterLogGridTileDialog(),
+                  );
+                },
               );
             },
             child: GridTile(
