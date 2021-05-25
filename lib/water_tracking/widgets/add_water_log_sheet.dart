@@ -24,10 +24,12 @@ class AddWaterLogSheet extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return const SizedBox(width: 15);
+              },
               shrinkWrap: true,
               itemCount: _cups.length,
-              itemExtent: 150,
               physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               scrollDirection: Axis.horizontal,
@@ -60,35 +62,43 @@ class AddWaterLogSheet extends StatelessWidget {
 class WaterCupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.blue,
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 1.5,
-      child: BlocConsumer<WaterSheetTileBloc, WaterSheetTileState>(
-        listener: (contex, state) {
-          if (state.status == WaterSheetTileStatus.error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Sorry but there was an error please try again later'),
-              ),
-            );
-          } else if (state.status == WaterSheetTileStatus.success) {
-            Navigator.of(context).pop();
-            BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogAddede(state.waterLog!));
-          }
-        },
-        builder: (context, state) {
-          if (state.status == WaterSheetTileStatus.loading) {
-            return const Center(
-              child: const CircularProgressIndicator(),
-            );
-          }
+    return SizedBox(
+      width: 150,
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 1.5,
+        color: Colors.blue,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () {
+            BlocProvider.of<WaterSheetTileBloc>(context).add(WaterSheetTileAddWater());
+          },
+          child: BlocConsumer<WaterSheetTileBloc, WaterSheetTileState>(
+            listener: (contex, state) {
+              if (state.status == WaterSheetTileStatus.error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Sorry but there was an error please try again later'),
+                  ),
+                );
+              } else if (state.status == WaterSheetTileStatus.success) {
+                Navigator.of(context).pop();
+                BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogAddede(state.waterLog!));
+              }
+            },
+            builder: (context, state) {
+              if (state.status == WaterSheetTileStatus.loading) {
+                return const Center(
+                  child: const CircularProgressIndicator(),
+                );
+              }
 
-          return Container();
-        },
+              return Container();
+            },
+          ),
+        ),
       ),
     );
   }
