@@ -6,3 +6,4 @@ export 'progress_painter.dart';
 export 'add_water_log_sheet.dart';
 export 'water_cup_card.dart';
 export 'water_log_grid_tile.dart';
+export 'water_log_grid_tile_dialog.dart';
