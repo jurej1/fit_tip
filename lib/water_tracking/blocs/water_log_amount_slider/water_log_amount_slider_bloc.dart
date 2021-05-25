@@ -12,8 +12,8 @@ class WaterLogAmountSliderBloc extends Bloc<WaterLogAmountSliderEvent, WaterLogA
     required WaterLog log,
   }) : super(
           WaterLogAmountSliderState(
-            currentAmount: log.cup.amount.toInt(),
-            maxAmount: WaterCups.values.firstWhere((e) => e.size == log.cup.size).amount.toInt(),
+            currentAmount: log.cup.amount,
+            maxAmount: WaterCups.values.firstWhere((e) => e.size == log.cup.size).amount,
             minAmount: 0,
           ),
         );
@@ -21,5 +21,9 @@ class WaterLogAmountSliderBloc extends Bloc<WaterLogAmountSliderEvent, WaterLogA
   @override
   Stream<WaterLogAmountSliderState> mapEventToState(
     WaterLogAmountSliderEvent event,
-  ) async* {}
+  ) async* {
+    if (event is WaterLogSLiderUpdated) {
+      yield state.copyWith(currentAmount: event.value);
+    }
+  }
 }

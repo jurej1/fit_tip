@@ -49,9 +49,11 @@ class WaterLogGridTileDialog extends StatelessWidget {
               },
             ),
             const SizedBox(height: 40),
-            _BlocProvider(
-              create: (context) => SubjectBloc(),
-              child: Slider(),
+            BlocProvider<WaterLogAmountSliderBloc>(
+              create: (context) => WaterLogAmountSliderBloc(
+                log: BlocProvider.of<WaterGridTileBloc>(context).state.waterLog,
+              ),
+              child: _Slider(),
             ),
           ],
         ),
@@ -63,9 +65,17 @@ class WaterLogGridTileDialog extends StatelessWidget {
 class _Slider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Slider(
-      onChanged: (val) {},
-      value: 20,
+    return BlocBuilder<WaterLogAmountSliderBloc, WaterLogAmountSliderState>(
+      builder: (context, state) {
+        return Slider(
+          onChanged: (val) {
+            BlocProvider.of<WaterLogAmountSliderBloc>(context).add(WaterLogSLiderUpdated(value: val));
+          },
+          value: state.currentAmount.toDouble(),
+          max: state.maxAmount.toDouble(),
+          min: state.minAmount.toDouble(),
+        );
+      },
     );
   }
 }

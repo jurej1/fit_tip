@@ -7,17 +7,17 @@ class WaterLogAmountSliderState extends Equatable {
     required this.maxAmount,
   });
 
-  final int currentAmount;
-  final int minAmount;
-  final int maxAmount;
+  final double currentAmount;
+  final double minAmount;
+  final double maxAmount;
 
   @override
   List<Object> get props => [currentAmount, minAmount, maxAmount];
 
   WaterLogAmountSliderState copyWith({
-    int? currentAmount,
-    int? minAmount,
-    int? maxAmount,
+    double? currentAmount,
+    double? minAmount,
+    double? maxAmount,
   }) {
     return WaterLogAmountSliderState(
       currentAmount: currentAmount ?? this.currentAmount,
