@@ -1,16 +1,18 @@
 part of 'water_sheet_tile_bloc.dart';
 
+enum WaterSheetTileStatus { loading, initial, success, error }
+
 class WaterSheetTileState extends Equatable {
   const WaterSheetTileState({
     required this.cup,
-    this.status = FormzStatus.pure,
+    this.status = WaterSheetTileStatus.initial,
     this.errorMsg,
     this.waterLog,
   });
 
   final WaterCup cup;
   final WaterLog? waterLog;
-  final FormzStatus status;
+  final WaterSheetTileStatus status;
   final String? errorMsg;
 
   @override
@@ -19,7 +21,7 @@ class WaterSheetTileState extends Equatable {
   WaterSheetTileState copyWith({
     WaterCup? cup,
     WaterLog? waterLog,
-    FormzStatus? status,
+    WaterSheetTileStatus? status,
     String? errorMsg,
   }) {
     return WaterSheetTileState(
