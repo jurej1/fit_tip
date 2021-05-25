@@ -25,3 +25,27 @@ DrinkingCupSize mapDatabaseStringToDrinkingCupSize(String val) {
 
   return DrinkingCupSize.medium;
 }
+
+String mapDrinkingCupSizeToString(DrinkingCupSize size) {
+  if (size == DrinkingCupSize.coffee) {
+    return 'Coffee';
+  } else if (size == DrinkingCupSize.extraLarge) {
+    return 'Extra Large';
+  } else if (size == DrinkingCupSize.large) {
+    return 'Large';
+  } else if (size == DrinkingCupSize.medium) {
+    return 'Medium';
+  } else if (size == DrinkingCupSize.pintUK) {
+    return 'Pink UK';
+  } else if (size == DrinkingCupSize.pintUS) {
+    return 'Pink UK';
+  } else if (size == DrinkingCupSize.small) {
+    return 'Small';
+  } else if (size == DrinkingCupSize.tee) {
+    return 'Tee';
+  } else if (size == DrinkingCupSize.wine) {
+    return 'Wine';
+  }
+
+  return '';
+}
