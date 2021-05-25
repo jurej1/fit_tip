@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:water_repository/models/models.dart';
+import 'package:intl/intl.dart';
 
 class WaterLogList extends StatelessWidget {
   final List<WaterLog> waterLogs;
@@ -19,8 +20,12 @@ class WaterLogList extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = waterLogs[index];
         return ListTile(
-          title: Text(item.date.toString()),
-          trailing: Text(item.cup.amount.toInt().toString()),
+          title: Text(
+            DateFormat('h:mm').format(item.date),
+          ),
+          trailing: Text(
+            item.cup.amount.toInt().toString(),
+          ),
         );
       },
     );
