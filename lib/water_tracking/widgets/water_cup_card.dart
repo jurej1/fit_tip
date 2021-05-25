@@ -13,6 +13,7 @@ class WaterCupCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         elevation: 1.5,
+        shadowColor: Colors.black26,
         color: Colors.blue,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
