@@ -8,3 +8,9 @@ abstract class WaterGridTileEvent extends Equatable {
 }
 
 class WaterGridTileDeleteRequested extends WaterGridTileEvent {}
+
+class WaterGridTileBlocsliderUpdated extends WaterGridTileEvent {
+  final double val;
+
+  const WaterGridTileBlocsliderUpdated(this.val);
+}

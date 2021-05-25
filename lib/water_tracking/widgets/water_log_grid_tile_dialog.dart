@@ -65,15 +65,17 @@ class WaterLogGridTileDialog extends StatelessWidget {
 class _Slider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WaterLogAmountSliderBloc, WaterLogAmountSliderState>(
+    return BlocConsumer<WaterLogAmountSliderBloc, WaterLogAmountSliderState>(
+      listener: (context, state) {},
       builder: (context, state) {
         return Slider(
           onChanged: (val) {
             BlocProvider.of<WaterLogAmountSliderBloc>(context).add(WaterLogSLiderUpdated(value: val));
           },
-          value: state.currentAmount.toDouble(),
-          max: state.maxAmount.toDouble(),
-          min: state.minAmount.toDouble(),
+          value: state.currentAmount,
+          max: state.maxAmount,
+          min: state.minAmount,
+          divisions: 5,
         );
       },
     );
