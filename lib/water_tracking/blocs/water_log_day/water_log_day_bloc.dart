@@ -48,6 +48,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
 
       yield WaterLogDayLoadSuccess(waterLogs: waterLogs);
     } catch (error) {
+      print('Error' + error.toString());
       yield WaterLogDayFailure(errorMsg: error.toString());
     }
   }

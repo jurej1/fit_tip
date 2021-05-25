@@ -34,7 +34,7 @@ class WaterLogEntity extends Equatable {
 
     return WaterLogEntity(
       id: snap.id,
-      cup: data['cup'],
+      cup: WaterCupEntity.fromMap(data['cup']),
       time: TimeOfDay(
         hour: dateTime.hour,
         minute: dateTime.minute,

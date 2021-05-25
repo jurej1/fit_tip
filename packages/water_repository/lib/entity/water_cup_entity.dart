@@ -40,7 +40,7 @@ class WaterCupEntity extends Equatable {
   static WaterCupEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map;
     return WaterCupEntity(
-      size: data['size'],
+      size: mapDatabaseStringToDrinkingCupSize(data['size']),
       amount: data['amount'],
       imagePath: data['imagePath'],
     );
@@ -50,6 +50,7 @@ class WaterCupEntity extends Equatable {
     return {
       'size': describeEnum(size),
       'amount': amount,
+      'imagePath': imagePath,
     };
   }
 
