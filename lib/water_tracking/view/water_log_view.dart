@@ -1,5 +1,6 @@
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WaterLogView extends StatelessWidget {
   static const routeName = 'water_log_view';
@@ -28,7 +29,10 @@ class WaterLogView extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             builder: (_) {
-              return AddWaterLogSheet();
+              return BlocProvider.value(
+                value: BlocProvider.of<WaterLogDayBloc>(context),
+                child: AddWaterLogSheet(),
+              );
             },
           );
         },
