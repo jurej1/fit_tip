@@ -7,31 +7,9 @@
         {
             "name": "fit_tip",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "lib/main.dart",
         },
-        {
-            "name": "authentication_repository",
-            "cwd": "packages\\authentication_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "bmi_repository",
-            "cwd": "packages\\bmi_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "water_repository",
-            "cwd": "packages\\water_repository",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "weight_repository",
-            "cwd": "packages\\weight_repository",
-            "request": "launch",
-            "type": "dart"
-        }
+        
     ]
 }
