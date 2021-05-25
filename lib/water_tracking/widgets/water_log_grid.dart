@@ -1,5 +1,10 @@
+import 'package:fit_tip/authentication/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/widgets/water_log_grid_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_repository/models/models.dart';
+import 'package:water_repository/water_repository.dart';
 
 class WaterLogGrid extends StatelessWidget {
   final List<WaterLog> waterLogs;
@@ -24,22 +29,14 @@ class WaterLogGrid extends StatelessWidget {
       itemCount: waterLogs.length,
       itemBuilder: (context, index) {
         final item = waterLogs[index];
-        return Card(
-          elevation: 1.5,
-          color: Colors.blue[300],
-          child: GridTile(
-            header: Text(
-              item.time.format(context),
-              textAlign: TextAlign.center,
-            ),
-            child: Center(
-              child: Icon(Icons.water_damage),
-            ),
-            footer: Text(
-              item.cup.amount.toStringAsFixed(0) + 'ml',
-              textAlign: TextAlign.center,
-            ),
+
+        return BlocProvider<WaterGridTileBloc>(
+          create: (context) => WaterGridTileBloc(
+            waterLog: item,
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            waterRepository: RepositoryProvider.of<WaterRepository>(context),
           ),
+          child: WaterLogGridTile(),
         );
       },
     );
