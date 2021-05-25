@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:water_repository/models/models.dart';
-import 'package:intl/intl.dart';
 
 class WaterLogList extends StatelessWidget {
   final List<WaterLog> waterLogs;
