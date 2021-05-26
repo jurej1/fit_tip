@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 class WaterLogDaySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WaterLogFocusedDayBloc, WaterLogFocusedDayState>(
+    return BlocConsumer<WaterLogFocusedDayBloc, WaterLogFocusedDayState>(
+      listener: (context, state) {
+        BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogFocusedDayUpdated(state.selectedDate));
+      },
       builder: (context, state) {
         return Container(
           child: Row(
