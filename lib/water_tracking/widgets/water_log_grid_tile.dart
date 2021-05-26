@@ -22,8 +22,17 @@ class WaterLogGridTile extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (_) {
-                  return BlocProvider.value(
-                    value: BlocProvider.of<WaterGridTileBloc>(context),
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: BlocProvider.of<WaterGridTileBloc>(context),
+                      ),
+                      BlocProvider<WaterLogAmountSliderBloc>(
+                        create: (context) => WaterLogAmountSliderBloc(
+                          log: BlocProvider.of<WaterGridTileBloc>(context).state.waterLog,
+                        ),
+                      ),
+                    ],
                     child: WaterLogGridTileDialog(),
                   );
                 },
