@@ -80,8 +80,10 @@ class WaterRepository {
       final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
       final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
 
-      QuerySnapshot snapshot =
-          await _trackingRef()!.where('date', isGreaterThanOrEqualTo: lowerBound, isLessThanOrEqualTo: upperBound).get();
+      QuerySnapshot snapshot = await _trackingRef()!
+          .where('date', isGreaterThanOrEqualTo: lowerBound, isLessThanOrEqualTo: upperBound)
+          .orderBy('date', descending: true)
+          .get();
 
       if (snapshot.size == 0) {
         return [];
@@ -103,8 +105,10 @@ class WaterRepository {
       final upperBoundDate = DateTime(upperBound.year, upperBound.month, upperBound.day, 23, 59, 59);
       final lowerBoundDate = DateTime(lowerBound.year, lowerBound.month, lowerBound.day, 0, 0, 0);
 
-      QuerySnapshot snapshot =
-          await _trackingRef()!.where('date', isGreaterThanOrEqualTo: lowerBoundDate, isLessThanOrEqualTo: upperBoundDate).get();
+      QuerySnapshot snapshot = await _trackingRef()!
+          .where('date', isGreaterThanOrEqualTo: lowerBoundDate, isLessThanOrEqualTo: upperBoundDate)
+          .orderBy('date', descending: true)
+          .get();
 
       if (snapshot.size == 0) {
         return [];
