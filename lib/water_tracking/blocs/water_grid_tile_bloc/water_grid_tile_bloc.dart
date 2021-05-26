@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:flutter/material.dart';
 import 'package:water_repository/models/models.dart';
 import 'package:water_repository/water_repository.dart';
 
@@ -33,6 +34,8 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
       yield WaterGridTileInitial(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
     } else if (event is WaterGridTileDialogClosed) {
       if (_authenticationBloc.state.isAuthenticated) await _waterRepository.updateWaterLog(state.waterLog);
+    } else if (event is WaterGridTileTimeUpdated) {
+      yield WaterGridTileInitial(state.waterLog.copyWith(time: event.time));
     }
   }
 

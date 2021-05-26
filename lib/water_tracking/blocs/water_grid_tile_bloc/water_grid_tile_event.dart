@@ -4,7 +4,7 @@ abstract class WaterGridTileEvent extends Equatable {
   const WaterGridTileEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class WaterGridTileDeleteRequested extends WaterGridTileEvent {}
@@ -16,3 +16,12 @@ class WaterGridTileBlocSliderUpdated extends WaterGridTileEvent {
 }
 
 class WaterGridTileDialogClosed extends WaterGridTileEvent {}
+
+class WaterGridTileTimeUpdated extends WaterGridTileEvent {
+  final TimeOfDay? time;
+
+  const WaterGridTileTimeUpdated(this.time);
+
+  @override
+  List<Object?> get props => [time];
+}

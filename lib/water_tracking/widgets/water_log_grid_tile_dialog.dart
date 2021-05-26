@@ -64,12 +64,24 @@ class _Header extends StatelessWidget {
                 buildWhen: (previous, current) => previous.waterLog.time != current.waterLog.time,
                 builder: (context, state) {
                   final log = state.waterLog;
-                  return Text(
-                    log.time.format(context),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
+                  return Chip(
+                    backgroundColor: Colors.green[300],
+                    deleteIconColor: Colors.white,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    onDeleted: () async {
+                      TimeOfDay? selectedDay = await showTimePicker(
+                        context: context,
+                        initialTime: log.time,
+                      );
+                    },
+                    deleteIcon: const Icon(Icons.arrow_forward_ios_rounded),
+                    label: Text(
+                      log.time.format(context),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   );
                 },
