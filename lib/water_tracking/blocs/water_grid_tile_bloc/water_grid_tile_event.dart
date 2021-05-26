@@ -14,3 +14,5 @@ class WaterGridTileBlocSliderUpdated extends WaterGridTileEvent {
 
   const WaterGridTileBlocSliderUpdated(this.val);
 }
+
+class WaterGridTileDialogClosed extends WaterGridTileEvent {}

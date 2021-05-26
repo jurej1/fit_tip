@@ -36,7 +36,9 @@ class WaterLogGridTile extends StatelessWidget {
                     child: WaterLogGridTileDialog(),
                   );
                 },
-              );
+              ).then((_) {
+                BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileDialogClosed());
+              });
             },
             child: GridTile(
               header: Text(
