@@ -91,7 +91,7 @@ class _Header extends StatelessWidget {
               final log = state.waterLog;
 
               return Text(
-                '${log.cup.amount}ml',
+                '${log.cup.amount.toStringAsFixed(0)} ml',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
               );
             },
