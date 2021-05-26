@@ -14,41 +14,8 @@ class WaterLogGridTileDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
-              builder: (context, state) {
-                final log = state.waterLog;
-
-                return Container(
-                  width: double.infinity,
-                  color: Colors.green,
-                  height: 50,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        log.time.format(context),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      IconButton(
-                        splashRadius: Material.defaultSplashRadius / 2,
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileDeleteRequested());
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 40),
+            _Header(),
+            const SizedBox(height: 20),
             _Slider(),
           ],
         ),
@@ -71,6 +38,46 @@ class _Slider extends StatelessWidget {
           max: state.maxAmount,
           min: state.minAmount,
           divisions: 5,
+        );
+      },
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
+      builder: (context, state) {
+        final log = state.waterLog;
+
+        return Container(
+          width: double.infinity,
+          color: Colors.green,
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                log.time.format(context),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              IconButton(
+                splashRadius: Material.defaultSplashRadius / 2,
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileDeleteRequested());
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
         );
       },
     );
