@@ -69,10 +69,13 @@ class _Header extends StatelessWidget {
                     deleteIconColor: Colors.white,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     onDeleted: () async {
-                      TimeOfDay? selectedDay = await showTimePicker(
+                      //TODO Prevent chosing the time in the future
+                      TimeOfDay? selectedTime = await showTimePicker(
                         context: context,
                         initialTime: log.time,
                       );
+
+                      BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileTimeUpdated(selectedTime));
                     },
                     deleteIcon: const Icon(Icons.arrow_forward_ios_rounded),
                     label: Text(
