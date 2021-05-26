@@ -61,7 +61,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
 
       logsCopy.add(event.waterLog);
 
-      logsCopy.sort((a, b) => b.date.compareTo(a.date));
+      logsCopy.sort();
 
       yield WaterLogDayLoadSuccess(waterLogs: logsCopy);
     }
