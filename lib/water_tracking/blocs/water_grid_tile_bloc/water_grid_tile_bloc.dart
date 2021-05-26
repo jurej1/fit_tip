@@ -27,6 +27,10 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
   ) async* {
     if (event is WaterGridTileDeleteRequested) {
       yield* _mapDeleteRequestedToState();
+    } else if (event is WaterGridTileBlocSliderUpdated) {
+      final waterCup = state.waterLog.cup;
+
+      yield WaterGridTileInitial(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
     }
   }
 
