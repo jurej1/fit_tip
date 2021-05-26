@@ -90,7 +90,10 @@ class _Header extends StatelessWidget {
             builder: (context, state) {
               final log = state.waterLog;
 
-              return Text('${log.cup.amount}ml');
+              return Text(
+                '${log.cup.amount}ml',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+              );
             },
           )
         ],
