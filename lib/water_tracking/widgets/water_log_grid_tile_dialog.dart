@@ -49,69 +49,76 @@ class _Slider extends StatelessWidget {
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Colors.green,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
-                buildWhen: (previous, current) => previous.waterLog.time != current.waterLog.time,
-                builder: (context, state) {
-                  final log = state.waterLog;
-                  return Chip(
-                    backgroundColor: Colors.green[300],
-                    deleteIconColor: Colors.white,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    onDeleted: () async {
-                      //TODO Prevent chosing the time in the future
-                      TimeOfDay? selectedTime = await showTimePicker(
-                        context: context,
-                        initialTime: log.time,
-                      );
+    return BlocListener<WaterGridTileBloc, WaterGridTileState>(
+      listener: (context, state) {
+        if (state is WaterGridTileDeletingSuccess) {
+          BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogRemoved(state.waterLog));
+          Navigator.of(context).pop();
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        color: Colors.green,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
+                  buildWhen: (previous, current) => previous.waterLog.time != current.waterLog.time,
+                  builder: (context, state) {
+                    final log = state.waterLog;
+                    return Chip(
+                      backgroundColor: Colors.green[300],
+                      deleteIconColor: Colors.white,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      onDeleted: () async {
+                        //TODO Prevent chosing the time in the future
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: log.time,
+                        );
 
-                      BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileTimeUpdated(selectedTime));
-                    },
-                    deleteIcon: const Icon(Icons.arrow_forward_ios_rounded),
-                    label: Text(
-                      log.time.format(context),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileTimeUpdated(selectedTime));
+                      },
+                      deleteIcon: const Icon(Icons.arrow_forward_ios_rounded),
+                      label: Text(
+                        log.time.format(context),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                splashRadius: Material.defaultSplashRadius / 2,
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileDeleteRequested());
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
-            buildWhen: (p, c) => p.waterLog.cup.amount != c.waterLog.cup.amount,
-            builder: (context, state) {
-              final log = state.waterLog;
+                    );
+                  },
+                ),
+                IconButton(
+                  splashRadius: Material.defaultSplashRadius / 2,
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    BlocProvider.of<WaterGridTileBloc>(context).add(WaterGridTileDeleteRequested());
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
+              buildWhen: (p, c) => p.waterLog.cup.amount != c.waterLog.cup.amount,
+              builder: (context, state) {
+                final log = state.waterLog;
 
-              return Text(
-                '${log.cup.amount.toStringAsFixed(0)} ml',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-              );
-            },
-          )
-        ],
+                return Text(
+                  '${log.cup.amount.toStringAsFixed(0)} ml',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }

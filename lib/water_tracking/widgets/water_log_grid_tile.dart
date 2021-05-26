@@ -32,6 +32,9 @@ class WaterLogGridTile extends StatelessWidget {
                           log: BlocProvider.of<WaterGridTileBloc>(context).state.waterLog,
                         ),
                       ),
+                      BlocProvider.value(
+                        value: BlocProvider.of<WaterLogDayBloc>(context),
+                      ),
                     ],
                     child: WaterLogGridTileDialog(),
                   );
