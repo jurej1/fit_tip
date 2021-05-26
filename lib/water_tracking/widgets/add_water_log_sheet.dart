@@ -44,6 +44,7 @@ class AddWaterLogSheet extends StatelessWidget {
                         cup: item,
                         authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                         waterRepository: RepositoryProvider.of<WaterRepository>(context),
+                        waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
                       ),
                     ),
                   ],

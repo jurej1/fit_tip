@@ -29,8 +29,16 @@ class WaterLogView extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             builder: (_) {
-              return BlocProvider.value(
-                value: BlocProvider.of<WaterLogDayBloc>(context),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: BlocProvider.of<WaterLogDayBloc>(context),
+                    child: AddWaterLogSheet(),
+                  ),
+                  BlocProvider.value(
+                    value: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+                  ),
+                ],
                 child: AddWaterLogSheet(),
               );
             },

@@ -59,9 +59,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
 
       List<WaterLog> logsCopy = List.from(currentState.waterLogs);
 
-      logsCopy.add(event.waterLog);
-
-      logsCopy.sort();
+      logsCopy.insert(0, event.waterLog);
 
       yield WaterLogDayLoadSuccess(waterLogs: logsCopy);
     }
