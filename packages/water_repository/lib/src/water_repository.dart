@@ -36,6 +36,16 @@ class WaterRepository {
     return null;
   }
 
+  CollectionReference? _goalRef() {
+    if (_isAuthenticated()) {
+      final String userId = _firebaseAuth.currentUser!.uid;
+
+      return _firebaseFirestore.collection('users').doc(userId).collection('water_goals');
+    }
+
+    return null;
+  }
+
   /// Returrns null if user unauthenticated
   Future<List<WaterLog>?> getWaterLogHistory() async {
     if (_isAuthenticated()) {
@@ -136,5 +146,23 @@ class WaterRepository {
     }
 
     return null;
+  }
+
+  /// Returrns null if user unauthenticated
+  Future<WaterGoalDaily?> getCurrentWaterGoal(WaterGoalDaily? goal) async {
+    if (_isAuthenticated()) {
+      DateTime date = goal?.date ?? DateTime.now();
+      String id = '${date.day}-${date.month}-${date.month}';
+
+      DocumentSnapshot snap = await _goalRef()!.doc(id).get();
+
+      if (!snap.exists) {
+        date = date.subtract(Duration(days: 1));
+        id = '${date.day}-${date.month}-${date.month}';
+        snap = await _goalRef()!.doc(id).get();
+      }
+      WaterGoalDailyEntity entity = WaterGoalDailyEntity.fromDocumentSnapshot(snap);
+      return WaterGoalDaily.fromEntity(entity).copyWith(date: DateTime.now());
+    }
   }
 }
