@@ -31,6 +31,10 @@ class WaterGoalDaily extends Equatable {
     );
   }
 
+  static generateId(DateTime date) {
+    return WaterGoalDailyEntity.generateId(date);
+  }
+
   WaterGoalDaily copyWith({
     double? amount,
     String? id,
