@@ -17,6 +17,7 @@ class WaterLogBuilder extends StatelessWidget {
           return Expanded(
             child: Column(
               children: [
+                const SizedBox(height: 20),
                 WaterLogConsumption(consumption: state.totalDrinked),
                 WaterLogGrid(waterLogs: state.waterLogs),
               ],
