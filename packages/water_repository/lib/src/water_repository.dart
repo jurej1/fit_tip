@@ -152,13 +152,13 @@ class WaterRepository {
   Future<WaterGoalDaily?> getCurrentWaterGoal(WaterGoalDaily? goal) async {
     if (_isAuthenticated()) {
       DateTime date = goal?.date ?? DateTime.now();
-      String id = '${date.day}-${date.month}-${date.month}';
+      String id = WaterGoalDailyEntity.generateId(date);
 
       DocumentSnapshot snap = await _goalRef()!.doc(id).get();
 
       if (!snap.exists) {
         date = date.subtract(Duration(days: 1));
-        id = '${date.day}-${date.month}-${date.month}';
+        id = WaterGoalDailyEntity.generateId(date);
         snap = await _goalRef()!.doc(id).get();
       }
       WaterGoalDailyEntity entity = WaterGoalDailyEntity.fromDocumentSnapshot(snap);
@@ -169,9 +169,27 @@ class WaterRepository {
   /// Does nothing if user unauthenticated
   Future<void> addWaterGoal(WaterGoalDaily goal) async {
     if (_isAuthenticated()) {
-      DateTime date = goal.date;
-      String id = '${date.day}-${date.month}-${date.month}';
-      await _goalRef()!.doc(id).set(goal.toEntity().toDocumentSnapshot());
+      String id = WaterGoalDailyEntity.generateId(goal.date);
+      return _goalRef()!.doc(id).set(goal.toEntity().toDocumentSnapshot());
+    }
+  }
+
+  /// Does nothing if user unauthenticated
+  Future<void> deleteWaterGoal(WaterGoalDaily goal) async {
+    if (_isAuthenticated()) {
+      String id = WaterGoalDailyEntity.generateId(goal.date);
+      return _goalRef()!.doc(id).delete();
+    }
+  }
+
+  /// Does nothing if user unauthenticated
+  Future<void> updateWaterGoal(WaterGoalDaily goal) async {
+    if (_isAuthenticated()) {
+      String id = WaterGoalDailyEntity.generateId(goal.date);
+      return _goalRef()!.doc(id).set(
+            goal.toEntity().toDocumentSnapshot(),
+            SetOptions(merge: true),
+          );
     }
   }
 }
