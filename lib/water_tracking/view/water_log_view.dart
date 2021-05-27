@@ -10,6 +10,7 @@ class WaterLogView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Water tracking'),
+        actions: [],
       ),
       body: Column(
         children: [
