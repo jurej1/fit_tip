@@ -89,6 +89,19 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         ],
         child: WaterLogView(),
       );
+    },
+    AddWaterDailyGoalView.routeName: (BuildContext context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<AddWaterDailyGoalBloc>(
+            create: (context) => AddWaterDailyGoalBloc(
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          ),
+        ],
+        child: AddWaterDailyGoalView(),
+      );
     }
   };
 }
