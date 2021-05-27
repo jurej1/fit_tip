@@ -165,4 +165,13 @@ class WaterRepository {
       return WaterGoalDaily.fromEntity(entity).copyWith(date: DateTime.now());
     }
   }
+
+  /// Does nothing if user unauthenticated
+  Future<void> addWaterGoal(WaterGoalDaily goal) async {
+    if (_isAuthenticated()) {
+      DateTime date = goal.date;
+      String id = '${date.day}-${date.month}-${date.month}';
+      await _goalRef()!.doc(id).set(goal.toEntity().toDocumentSnapshot());
+    }
+  }
 }
