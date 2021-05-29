@@ -40,7 +40,7 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
     yield WaterDailyGoalLoading();
 
     try {
-      WaterDailyGoal goal = await _waterRepository.getWaterGoal(_user!.id!, event.date);
+      WaterDailyGoal goal = await _waterRepository.getWaterDailyGoal(_user!.id!, date: event.date);
 
       yield WaterDailyGoalLoadSuccess(goal);
     } catch (error) {

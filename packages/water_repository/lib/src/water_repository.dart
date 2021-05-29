@@ -102,15 +102,31 @@ class WaterRepository {
     return snapshot.docs.map((e) => WaterDailyInfo.fromEntity(WaterDailyInfoEntity.fromDocumentSnapshot(e))).toList().first;
   }
 
-  /// Returrns null if user unauthenticated
-  Future<WaterDailyGoal> getWaterGoal(String userId, DateTime? date) async {
-    DateTime _date = date ?? DateTime.now();
-    String id = WaterGoalDailyEntity.generateId(_date);
+  Future<WaterDailyGoal> getWaterDailyGoal(String userId, {required DateTime date}) async {
+    String documentId = WaterGoalDailyEntity.generateId(date);
 
-    DocumentSnapshot snap = await _goalRef(userId).doc(id).get();
+    DocumentSnapshot snap = await _goalRef(userId).doc(documentId).get();
 
-    WaterGoalDailyEntity entity = WaterGoalDailyEntity.fromDocumentSnapshot(snap);
-    return WaterDailyGoal.fromEntity(entity).copyWith(date: DateTime.now());
+    if (snap.exists) {
+      return WaterDailyGoal.fromEntity(WaterGoalDailyEntity.fromDocumentSnapshot(snap));
+    } else {
+      QuerySnapshot querySnap = await _goalRef(userId).orderBy('date', descending: true).limit(1).get();
+
+      if (querySnap.size == 0) {
+        WaterDailyGoal goal = WaterDailyGoal(amount: 2300, id: documentId, date: date);
+        addWaterGoal(userId, goal);
+
+        return goal;
+      } else {
+        WaterDailyGoal goal = WaterDailyGoal.fromEntity(WaterGoalDailyEntity.fromDocumentSnapshot(querySnap.docs.first));
+
+        goal = goal.copyWith(date: date, id: documentId);
+
+        addWaterGoal(userId, goal);
+
+        return goal;
+      }
+    }
   }
 
   /// Does nothing if user unauthenticated
