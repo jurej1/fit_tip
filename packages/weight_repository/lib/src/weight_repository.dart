@@ -9,7 +9,6 @@ class WeightRepository {
   final FirebaseFirestore _firebaseFirestore;
 
   //Aditional functions
-
   CollectionReference _weightTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
   }

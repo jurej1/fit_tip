@@ -50,7 +50,6 @@ class WaterRepository {
     return _trackingRef(userId).doc(log.id).update(log.toEntity().toDocumentSnapshot());
   }
 
-  /// Returrns null if user unauthenticated
   Future<List<WaterLog>> getWaterLogForDay(String userId, DateTime date) async {
     final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
     final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
@@ -71,7 +70,6 @@ class WaterRepository {
     }
   }
 
-  /// Returrns null if user unauthenticated
   Future<List<WaterLog>> getWaterLogForCertainTimePeriod(String userId, DateTime lowerBound, DateTime upperBound) async {
     final upperBoundDate = DateTime(upperBound.year, upperBound.month, upperBound.day, 23, 59, 59);
     final lowerBoundDate = DateTime(lowerBound.year, lowerBound.month, lowerBound.day, 0, 0, 0);
@@ -92,7 +90,6 @@ class WaterRepository {
     }
   }
 
-  /// Returrns null if user unauthenticated
   Future<WaterDailyInfo> getWaterTrackingDayInfo(String userId, DateTime date) async {
     final lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
     final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
@@ -129,19 +126,16 @@ class WaterRepository {
     }
   }
 
-  /// Does nothing if user unauthenticated
   Future<void> addWaterGoal(String userId, WaterDailyGoal goal) async {
     String documentId = WaterGoalDailyEntity.generateId(goal.date);
     return _goalRef(userId).doc(documentId).set(goal.toEntity().toDocumentSnapshot());
   }
 
-  /// Does nothing if user unauthenticated
   Future<void> deleteWaterGoal(String userId, WaterDailyGoal goal) async {
     String documentId = WaterGoalDailyEntity.generateId(goal.date);
     return _goalRef(userId).doc(documentId).delete();
   }
 
-  /// Does nothing if user unauthenticated
   Future<void> updateWaterGoal(String userId, WaterDailyGoal goal) async {
     String id = WaterGoalDailyEntity.generateId(goal.date);
     return _goalRef(userId).doc(id).set(
