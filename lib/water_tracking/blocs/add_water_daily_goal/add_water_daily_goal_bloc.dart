@@ -54,9 +54,9 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
       try {
         final DateTime date = DateTime.now();
         await _waterRepository.addWaterGoal(
-          WaterGoalDaily(
+          WaterDailyGoal(
             amount: double.parse(state.amount.value),
-            id: WaterGoalDaily.generateId(date),
+            id: WaterDailyGoal.generateId(date),
             date: date,
           ),
         );

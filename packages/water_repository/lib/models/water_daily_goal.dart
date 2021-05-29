@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:water_repository/entity/entity.dart';
 
-class WaterGoalDaily extends Equatable {
+class WaterDailyGoal extends Equatable {
   final double amount;
   final String id;
   final DateTime date;
 
-  const WaterGoalDaily({
+  const WaterDailyGoal({
     required this.amount,
     required this.id,
     required this.date,
@@ -15,8 +15,8 @@ class WaterGoalDaily extends Equatable {
   @override
   List<Object> get props => [amount];
 
-  static WaterGoalDaily fromEntity(WaterGoalDailyEntity entity) {
-    return WaterGoalDaily(
+  static WaterDailyGoal fromEntity(WaterGoalDailyEntity entity) {
+    return WaterDailyGoal(
       date: entity.date,
       id: entity.id,
       amount: entity.amount,
@@ -35,12 +35,12 @@ class WaterGoalDaily extends Equatable {
     return WaterGoalDailyEntity.generateId(date);
   }
 
-  WaterGoalDaily copyWith({
+  WaterDailyGoal copyWith({
     double? amount,
     String? id,
     DateTime? date,
   }) {
-    return WaterGoalDaily(
+    return WaterDailyGoal(
       amount: amount ?? this.amount,
       id: id ?? this.id,
       date: date ?? this.date,
