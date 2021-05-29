@@ -26,6 +26,9 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
   final WeightRepository _weightRepository;
   final AuthenticationBloc _authenticationBloc;
 
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get user => _authenticationBloc.state.user;
+
   @override
   Stream<AddWeightFormState> mapEventToState(
     AddWeightFormEvent event,
@@ -80,7 +83,7 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
       status: Formz.validate([date, weight, time]),
     );
 
-    if (state.status.isValidated && _authenticationBloc.state.status == AuthenticationStatus.authenticated) {
+    if (state.status.isValidated && isAuth) {
       final user = _authenticationBloc.state.user;
 
       try {
@@ -98,10 +101,10 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
         );
 
         if (state.mode == FormMode.add) {
-          final doc = await _weightRepository.addWeight(weight);
-          weight = weight.copyWith(id: doc?.id);
+          final doc = await _weightRepository.addWeight(user.id!, weight);
+          weight = weight.copyWith(id: doc.id);
         } else if (state.mode == FormMode.edit) {
-          await _weightRepository.updateWeight(weight.copyWith(id: state.weightModel!.id));
+          await _weightRepository.updateWeight(user.id!, weight.copyWith(id: state.weightModel!.id));
         }
 
         yield state.copyWith(status: FormzStatus.submissionSuccess, weightModel: weight);

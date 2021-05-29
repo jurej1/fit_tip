@@ -66,6 +66,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         providers: [
           BlocProvider<EditWeightGoalFormBloc>(
             create: (context) => EditWeightGoalFormBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
               weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
             ),

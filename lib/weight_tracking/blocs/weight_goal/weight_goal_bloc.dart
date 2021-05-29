@@ -20,6 +20,9 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   final WeightRepository _weightRepository;
   final AuthenticationBloc _authenticationBloc;
 
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get user => _authenticationBloc.state.user;
+
   @override
   Stream<WeightGoalState> mapEventToState(
     WeightGoalEvent event,
@@ -32,18 +35,19 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   }
 
   Stream<WeightGoalState> _mapWeightGoalLoadToState() async* {
+    if (!isAuth) {
+      yield WeightGoalFailure();
+      return;
+    }
+
     if (state is WeightGoalLoadSuccess) {
       return;
     }
 
     yield WeightGoalLoading();
 
-    if (_authenticationBloc.state.status != AuthenticationStatus.authenticated) {
-      return;
-    }
-
     try {
-      WeightGoal? goal = await _weightRepository.getWeighGoal();
+      WeightGoal? goal = await _weightRepository.getWeighGoal(user!.id!);
 
       MeasurmentSystem system = _authenticationBloc.state.user!.measurmentSystem;
 

@@ -1,23 +1,26 @@
 part of 'weight_tile_bloc.dart';
 
 abstract class WeightTileState extends Equatable {
-  const WeightTileState();
+  const WeightTileState(this.weight);
+
+  final Weight weight;
 
   @override
   List<Object> get props => [];
 }
 
-class WeightTileInitial extends WeightTileState {}
-
-class WeightTileDeletedSuccessfully extends WeightTileState {
-  final Weight weight;
-
-  const WeightTileDeletedSuccessfully(this.weight);
-
-  @override
-  List<Object> get props => [weight];
+class WeightTileInitial extends WeightTileState {
+  WeightTileInitial(Weight weight) : super(weight);
 }
 
-class WeightTileDeleteLoading extends WeightTileState {}
+class WeightTileDeletedSuccessfully extends WeightTileState {
+  WeightTileDeletedSuccessfully(Weight weight) : super(weight);
+}
 
-class WeightTileDeleteFail extends WeightTileState {}
+class WeightTileDeleteLoading extends WeightTileState {
+  WeightTileDeleteLoading(Weight weight) : super(weight);
+}
+
+class WeightTileDeleteFail extends WeightTileState {
+  WeightTileDeleteFail(Weight weight) : super(weight);
+}
