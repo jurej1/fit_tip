@@ -50,6 +50,7 @@ class _AmountInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.amount.value,
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             helperText: 'Amount',
           ),
