@@ -16,7 +16,7 @@ class WaterLogConsumption extends StatelessWidget {
       child: CustomPaint(
         painter: ProgressPainter(
           primaryValue: consumption,
-          percantage: 50,
+          maxValue: 100,
         ),
       ),
     );
