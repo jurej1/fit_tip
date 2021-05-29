@@ -9,10 +9,10 @@ abstract class WaterDailyGoalState extends Equatable {
 
 class WaterDailyGoalLoading extends WaterDailyGoalState {}
 
-class WaterDailyGoalSuccess extends WaterDailyGoalState {
+class WaterDailyGoalLoadSuccess extends WaterDailyGoalState {
   final WaterDailyGoal goal;
 
-  const WaterDailyGoalSuccess(this.goal);
+  const WaterDailyGoalLoadSuccess(this.goal);
 
   @override
   List<Object> get props => [goal];

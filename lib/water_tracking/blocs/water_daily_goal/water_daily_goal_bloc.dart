@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:authentication_repository/authentication_repository.dart' as rep;
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -19,6 +19,9 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
   final AuthenticationBloc _authenticationBloc;
   final WaterRepository _waterRepository;
 
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get _user => _authenticationBloc.state.user;
+
   @override
   Stream<WaterDailyGoalState> mapEventToState(
     WaterDailyGoalEvent event,
@@ -29,7 +32,7 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
   }
 
   Stream<WaterDailyGoalState> _mapDateUpdatedToState(WaterDailyGoalDateUpdated event) async* {
-    if (!_authenticationBloc.state.isAuthenticated) {
+    if (!_isAuth) {
       yield WaterDailyGoalFailure('');
       return;
     }
@@ -37,9 +40,11 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
     yield WaterDailyGoalLoading();
 
     try {
-      final rep.User user = _authenticationBloc.state.user!;
+      WaterDailyGoal goal = await _waterRepository.getWaterGoal(_user!.id!, event.date);
 
-      WaterDailyGoal goal = (await _waterRepository.getWaterGoal(user.id!, event.date));
-    } catch (error) {}
+      yield WaterDailyGoalLoadSuccess(goal);
+    } catch (error) {
+      yield WaterDailyGoalFailure('');
+    }
   }
 }
