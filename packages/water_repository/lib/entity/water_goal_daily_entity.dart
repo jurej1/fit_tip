@@ -45,6 +45,6 @@ class WaterGoalDailyEntity extends Equatable {
   }
 
   static String generateId(DateTime date) {
-    return '${date.day}-${date.month}-${date.month}';
+    return '${date.day}-${date.month}-${date.year}';
   }
 }
