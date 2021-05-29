@@ -93,6 +93,12 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
             )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
           ),
+          BlocProvider<WaterLogConsumptionBloc>(
+            create: (context) => WaterLogConsumptionBloc(
+              waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
+              waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
+            ),
+          ),
         ],
         child: WaterLogView(),
       );
