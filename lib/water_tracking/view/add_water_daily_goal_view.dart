@@ -8,27 +8,34 @@ class AddWaterDailyGoalView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          BlocBuilder<AddWaterDailyGoalBloc, AddWaterDailyGoalState>(
-            builder: (context, state) {
-              return IconButton(
-                icon: state.status.isSubmissionInProgress
-                    ? const SizedBox(height: 30, width: 30, child: const CircularProgressIndicator())
-                    : const Icon(Icons.check),
-                onPressed: () => BlocProvider.of<AddWaterDailyGoalBloc>(context).add(AddWaterDailyGoalFormSubmit()),
-              );
-            },
-          )
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        physics: const ClampingScrollPhysics(),
-        children: [
-          _AmountInput(),
-        ],
+    return BlocListener<AddWaterDailyGoalBloc, AddWaterDailyGoalState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            BlocBuilder<AddWaterDailyGoalBloc, AddWaterDailyGoalState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: state.status.isSubmissionInProgress
+                      ? const SizedBox(height: 30, width: 30, child: const CircularProgressIndicator())
+                      : const Icon(Icons.check),
+                  onPressed: () => BlocProvider.of<AddWaterDailyGoalBloc>(context).add(AddWaterDailyGoalFormSubmit()),
+                );
+              },
+            )
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          physics: const ClampingScrollPhysics(),
+          children: [
+            _AmountInput(),
+          ],
+        ),
       ),
     );
   }
