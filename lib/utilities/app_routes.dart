@@ -107,6 +107,9 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           ),
+          BlocProvider.value(
+            value: BlocProvider.of<WaterDailyGoalBloc>(context),
+          ),
         ],
         child: AddWaterDailyGoalView(),
       );
