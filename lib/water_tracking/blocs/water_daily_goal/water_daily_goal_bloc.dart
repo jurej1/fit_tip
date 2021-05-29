@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -22,5 +22,24 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
   @override
   Stream<WaterDailyGoalState> mapEventToState(
     WaterDailyGoalEvent event,
-  ) async* {}
+  ) async* {
+    if (event is WaterDailyGoalDateUpdated) {
+      yield* _mapDateUpdatedToState(event);
+    }
+  }
+
+  Stream<WaterDailyGoalState> _mapDateUpdatedToState(WaterDailyGoalDateUpdated event) async* {
+    if (!_authenticationBloc.state.isAuthenticated) {
+      yield WaterDailyGoalFailure('');
+      return;
+    }
+
+    yield WaterDailyGoalLoading();
+
+    try {
+      final rep.User user = _authenticationBloc.state.user!;
+
+      WaterDailyGoal goal = (await _waterRepository.getWaterGoal(user.id!, event.date));
+    } catch (error) {}
+  }
 }
