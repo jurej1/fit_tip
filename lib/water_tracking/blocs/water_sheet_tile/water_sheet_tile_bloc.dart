@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -26,12 +27,15 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
   final AuthenticationBloc _authenticationBloc;
   final WaterLogFocusedDayBloc _waterLogFocusedDayBloc;
 
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  rep.User? get user => _authenticationBloc.state.user;
+
   @override
   Stream<WaterSheetTileState> mapEventToState(
     WaterSheetTileEvent event,
   ) async* {
     if (event is WaterSheetTileAddWater) {
-      if (!_authenticationBloc.state.isAuthenticated) {
+      if (!isAuth) {
         return;
       }
 
@@ -48,7 +52,7 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
           date: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
         );
 
-        DocumentReference? ref = await _waterRepository.addWaterLog(waterLog);
+        DocumentReference? ref = await _waterRepository.addWaterLog(user!.id!, waterLog);
 
         if (ref == null) return;
 

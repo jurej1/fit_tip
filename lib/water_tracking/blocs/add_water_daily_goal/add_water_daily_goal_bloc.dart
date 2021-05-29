@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/models/models.dart';
 import 'package:formz/formz.dart';
 import 'package:water_repository/water_repository.dart';
@@ -14,12 +16,18 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
   AddWaterDailyGoalBloc({
     required WaterRepository waterRepository,
     required AuthenticationBloc authenticationBloc,
+    required WaterLogFocusedDayBloc waterLogFocusedDayBloc,
   })   : _waterRepository = waterRepository,
         _authenticationBloc = authenticationBloc,
+        _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
         super(AddWaterDailyGoalState());
 
+  final WaterLogFocusedDayBloc _waterLogFocusedDayBloc;
   final WaterRepository _waterRepository;
   final AuthenticationBloc _authenticationBloc;
+
+  rep.User? get user => _authenticationBloc.state.user;
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
 
   @override
   Stream<AddWaterDailyGoalState> mapEventToState(
@@ -49,11 +57,12 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
       status: Formz.validate([amount]),
     );
 
-    if (state.status.isValidated && _authenticationBloc.state.isAuthenticated) {
+    if (state.status.isValidated && isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
-        final DateTime date = DateTime.now();
+        final DateTime date = _waterLogFocusedDayBloc.state.selectedDate;
         await _waterRepository.addWaterGoal(
+          user!.id!,
           WaterDailyGoal(
             amount: double.parse(state.amount.value),
             id: WaterDailyGoal.generateId(date),

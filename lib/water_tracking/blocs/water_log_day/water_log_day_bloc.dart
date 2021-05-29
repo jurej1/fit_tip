@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
@@ -19,6 +20,9 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
 
   final WaterRepository _waterRepository;
   final AuthenticationBloc _authenticationBloc;
+
+  rep.User? get user => _authenticationBloc.state.user;
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
 
   @override
   Stream<WaterLogDayState> mapEventToState(
@@ -44,7 +48,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
     yield WaterLogDayLoading();
 
     try {
-      List<WaterLog> waterLogs = (await _waterRepository.getWaterLogForDay(event.dateTime))!;
+      List<WaterLog> waterLogs = (await _waterRepository.getWaterLogForDay(user!.id!, event.dateTime));
 
       yield WaterLogDayLoadSuccess(waterLogs: waterLogs);
     } catch (error) {

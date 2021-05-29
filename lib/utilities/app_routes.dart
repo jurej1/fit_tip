@@ -95,6 +95,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         providers: [
           BlocProvider<AddWaterDailyGoalBloc>(
             create: (context) => AddWaterDailyGoalBloc(
+              waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
