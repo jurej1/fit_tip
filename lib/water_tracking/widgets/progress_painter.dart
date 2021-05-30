@@ -14,12 +14,13 @@ class ProgressPainter extends CustomPainter {
   ProgressPainter({
     required this.primaryValue,
     this.radius = 100,
-    this.completeWidth = 10,
-    this.outerWidth = 20,
-    this.outerColor = Colors.red,
-    this.innerColor = Colors.blue,
+    this.completeWidth = 20,
+    this.outerWidth = 30,
+    Color? outerColor,
+    Color? innerColor,
     required this.maxValue,
-  });
+  })   : this.outerColor = outerColor ?? Colors.blue.shade200,
+        this.innerColor = innerColor ?? Colors.blue;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -42,7 +43,8 @@ class ProgressPainter extends CustomPainter {
     double startAngle = pi / 2 + pi / 4;
     double maxAngle = ((2 * pi - pi / 2));
 
-    double maxValueConsumed = maxAngle * (primaryValue / maxValue);
+    double setPrimaryValue = primaryValue > maxValue ? maxValue : primaryValue;
+    double maxValueConsumed = maxAngle * (setPrimaryValue / maxValue);
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
