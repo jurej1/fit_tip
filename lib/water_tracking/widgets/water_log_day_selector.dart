@@ -8,6 +8,7 @@ class WaterLogDaySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WaterLogFocusedDayBloc, WaterLogFocusedDayState>(
       listener: (context, state) {
+        BlocProvider.of<WaterDailyGoalBloc>(context).add(WaterDailyGoalDateUpdated(state.selectedDate));
         BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogFocusedDayUpdated(state.selectedDate));
       },
       builder: (context, state) {
