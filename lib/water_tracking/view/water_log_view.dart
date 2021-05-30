@@ -14,7 +14,9 @@ class WaterLogView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddWaterDailyGoalView.routeName);
+              Navigator.of(context).pushNamed(
+                AddWaterDailyGoalView.routeName,
+              );
             },
           ),
         ],

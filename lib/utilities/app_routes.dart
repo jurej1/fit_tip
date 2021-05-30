@@ -11,6 +11,9 @@ import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
+  final WaterLogFocusedDayBloc waterLogFocusedDayBloc = WaterLogFocusedDayBloc();
+  late final WaterDailyGoalBloc waterDailyGoalBloc;
+
   return {
     RegisterView.routeName: (BuildContext context) {
       return BlocProvider<RegisterFormBloc>(
@@ -79,7 +82,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       return MultiBlocProvider(
         providers: [
           BlocProvider<WaterLogFocusedDayBloc>(
-            create: (context) => WaterLogFocusedDayBloc(),
+            create: (context) => waterLogFocusedDayBloc,
           ),
           BlocProvider<WaterLogDayBloc>(
             create: (context) => WaterLogDayBloc(
@@ -87,12 +90,13 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
           ),
-          BlocProvider<WaterDailyGoalBloc>(
-            create: (context) => WaterDailyGoalBloc(
+          BlocProvider<WaterDailyGoalBloc>(create: (context) {
+            waterDailyGoalBloc = WaterDailyGoalBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
-            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
-          ),
+            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
+            return waterDailyGoalBloc;
+          }),
           BlocProvider<WaterLogConsumptionBloc>(
             create: (context) => WaterLogConsumptionBloc(
               waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
@@ -108,13 +112,13 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         providers: [
           BlocProvider<AddWaterDailyGoalBloc>(
             create: (context) => AddWaterDailyGoalBloc(
-              waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+              waterLogFocusedDayBloc: waterLogFocusedDayBloc,
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           ),
           BlocProvider.value(
-            value: BlocProvider.of<WaterDailyGoalBloc>(context),
+            value: waterDailyGoalBloc,
           ),
         ],
         child: AddWaterDailyGoalView(),
