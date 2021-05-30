@@ -43,6 +43,15 @@ class WaterLogConsumption extends StatelessWidget {
             ),
           );
         }
+        if (state is WaterLogConsumptionLoading) {
+          return Container(
+            height: sizeA,
+            width: sizeA,
+            child: Center(
+              child: const CircularProgressIndicator(),
+            ),
+          );
+        }
         return Container();
       },
     );
