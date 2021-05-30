@@ -28,6 +28,8 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
   ) async* {
     if (event is WaterDailyGoalDateUpdated) {
       yield* _mapDateUpdatedToState(event);
+    } else if (event is WaterDailyGoalAmountUpdated) {
+      yield* _mapAmountUpdatedToState(event);
     }
   }
 
@@ -47,6 +49,14 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
       print('error' + error.toString());
 
       yield WaterDailyGoalFailure('');
+    }
+  }
+
+  Stream<WaterDailyGoalState> _mapAmountUpdatedToState(WaterDailyGoalAmountUpdated event) async* {
+    if (state is WaterDailyGoalLoadSuccess) {
+      final goal = (state as WaterDailyGoalLoadSuccess).goal;
+
+      yield WaterDailyGoalLoadSuccess(goal.copyWith(amount: event.amount));
     }
   }
 }
