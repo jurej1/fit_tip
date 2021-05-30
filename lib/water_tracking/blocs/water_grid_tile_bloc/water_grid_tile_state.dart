@@ -15,6 +15,10 @@ class WaterGridTileInitial extends WaterGridTileState {
   WaterGridTileInitial(WaterLog waterLog) : super(waterLog);
 }
 
+class WaterGridTileUpdated extends WaterGridTileState {
+  WaterGridTileUpdated(WaterLog waterLog) : super(waterLog);
+}
+
 class WaterGridTileLoading extends WaterGridTileState {
   WaterGridTileLoading(WaterLog waterLog) : super(waterLog);
 }
