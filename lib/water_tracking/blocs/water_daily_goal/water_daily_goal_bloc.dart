@@ -44,6 +44,8 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
 
       yield WaterDailyGoalLoadSuccess(goal);
     } catch (error) {
+      print('error' + error.toString());
+
       yield WaterDailyGoalFailure('');
     }
   }

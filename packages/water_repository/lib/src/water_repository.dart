@@ -105,6 +105,7 @@ class WaterRepository {
     DocumentSnapshot snap = await _goalRef(userId).doc(documentId).get();
 
     if (snap.exists) {
+      print('error 1');
       return WaterDailyGoal.fromEntity(WaterGoalDailyEntity.fromDocumentSnapshot(snap));
     } else {
       QuerySnapshot querySnap = await _goalRef(userId).orderBy('date', descending: true).limit(1).get();
@@ -112,6 +113,7 @@ class WaterRepository {
       if (querySnap.size == 0) {
         WaterDailyGoal goal = WaterDailyGoal(amount: 2300, id: documentId, date: date);
         addWaterGoal(userId, goal);
+        print('error 2');
 
         return goal;
       } else {
@@ -120,6 +122,7 @@ class WaterRepository {
         goal = goal.copyWith(date: date, id: documentId);
 
         addWaterGoal(userId, goal);
+        print('error 3');
 
         return goal;
       }

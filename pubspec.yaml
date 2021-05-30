@@ -18,6 +18,7 @@ dependencies:
   weight_repository:
     path: packages/weight_repository
   another_flushbar: ^1.10.18
+  cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
   firebase_core: ^1.0.3
