@@ -23,13 +23,13 @@ class ProgressPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint line = Paint()
+    Paint background = Paint()
       ..color = outerColor
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerWidth;
 
-    Paint complete = Paint()
+    Paint foreground = Paint()
       ..color = innerColor
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
@@ -40,22 +40,24 @@ class ProgressPainter extends CustomPainter {
     double radius = min(size.width / 2, size.height / 2);
 
     double startAngle = pi / 2 + pi / 4;
-    double maxAngle = ((2 * pi - pi / 2)) * (primaryValue / maxValue);
+    double maxAngle = ((2 * pi - pi / 2));
+
+    double maxValueConsumed = maxAngle * (primaryValue / maxValue);
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,
       maxAngle,
       false,
-      line,
+      background,
     );
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,
-      maxAngle,
+      maxValueConsumed,
       false,
-      complete,
+      foreground,
     );
   }
 

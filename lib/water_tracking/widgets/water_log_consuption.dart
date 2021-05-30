@@ -10,6 +10,7 @@ class WaterLogConsumption extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WaterLogConsumptionBloc, WaterLogConsumptionState>(
       builder: (context, state) {
+        print('WaterLogConsumptionBloc ' + state.toString());
         if (state is WaterLogConsumptionLoadSucccess) {
           return Container(
             height: sizeA,
