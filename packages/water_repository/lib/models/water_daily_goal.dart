@@ -13,7 +13,7 @@ class WaterDailyGoal extends Equatable {
   });
 
   @override
-  List<Object> get props => [amount];
+  List<Object> get props => [amount, id, date];
 
   static WaterDailyGoal fromEntity(WaterGoalDailyEntity entity) {
     return WaterDailyGoal(
