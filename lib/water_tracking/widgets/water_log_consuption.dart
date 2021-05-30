@@ -10,7 +10,6 @@ class WaterLogConsumption extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WaterLogConsumptionBloc, WaterLogConsumptionState>(
       builder: (context, state) {
-        print('WaterLogConsumptionBloc ' + state.toString());
         if (state is WaterLogConsumptionLoadSucccess) {
           return Container(
             height: sizeA,
@@ -19,6 +18,27 @@ class WaterLogConsumption extends StatelessWidget {
               painter: ProgressPainter(
                 primaryValue: state.amount,
                 maxValue: state.max,
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${state.amount.toStringAsFixed(0)}ml',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Daily Goal: ${state.max.toStringAsFixed(0)}ml',
+                      style: TextStyle(
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
