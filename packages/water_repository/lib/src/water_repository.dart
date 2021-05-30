@@ -118,7 +118,7 @@ class WaterRepository {
         // TU je error
         WaterDailyGoal goal = WaterDailyGoal.fromEntity(WaterGoalDailyEntity.fromDocumentSnapshot(querySnap.docs.first));
 
-        goal = goal.copyWith(date: date, id: documentId, amount: 3000);
+        goal = goal.copyWith(date: date, id: documentId);
 
         addWaterGoal(userId, goal);
 
