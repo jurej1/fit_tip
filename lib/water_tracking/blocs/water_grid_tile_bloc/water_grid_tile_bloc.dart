@@ -38,7 +38,7 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
       yield WaterGridTileDirty(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
     } else if (event is WaterGridTileDialogClosed) {
       if (isAuth && !(state is WaterGridTileDeletingSuccess) && (state is WaterGridTileDirty)) {
-        await _waterRepository.updateWaterLog(user!.id!, state.waterLog);
+        _waterRepository.updateWaterLog(user!.id!, state.waterLog);
       }
     } else if (event is WaterGridTileTimeUpdated) {
       yield WaterGridTileInitial(state.waterLog.copyWith(time: event.time));
