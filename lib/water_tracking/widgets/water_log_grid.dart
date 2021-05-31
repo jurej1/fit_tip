@@ -18,6 +18,7 @@ class WaterLogGrid extends StatelessWidget {
     }
 
     return GridView.builder(
+      padding: EdgeInsets.all(10),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
         mainAxisSpacing: 10,

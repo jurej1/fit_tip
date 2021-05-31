@@ -19,7 +19,7 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
   void initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 450),
     );
     super.initState();
   }
