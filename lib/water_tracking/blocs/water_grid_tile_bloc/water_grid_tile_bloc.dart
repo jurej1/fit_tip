@@ -35,9 +35,9 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
     } else if (event is WaterGridTileBlocSliderUpdated) {
       final waterCup = state.waterLog.cup;
 
-      yield WaterGridTileInitial(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
+      yield WaterGridTileDirty(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
     } else if (event is WaterGridTileDialogClosed) {
-      if (isAuth && !(state is WaterGridTileDeletingSuccess) && (state is WaterGridTileUpdated)) {
+      if (isAuth && !(state is WaterGridTileDeletingSuccess) && (state is WaterGridTileDirty)) {
         await _waterRepository.updateWaterLog(user!.id!, state.waterLog);
       }
     } else if (event is WaterGridTileTimeUpdated) {
@@ -54,7 +54,7 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
       await _waterRepository.deleteWaterLog(user!.id!, state.waterLog);
       yield WaterGridTileDeletingSuccess(state.waterLog);
     } catch (error) {
-      yield WaterGridTileDeletingFailure(state.waterLog);
+      yield WaterGridTileFailure(state.waterLog);
     }
   }
 }

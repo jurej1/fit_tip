@@ -15,8 +15,8 @@ class WaterGridTileInitial extends WaterGridTileState {
   WaterGridTileInitial(WaterLog waterLog) : super(waterLog);
 }
 
-class WaterGridTileUpdated extends WaterGridTileState {
-  WaterGridTileUpdated(WaterLog waterLog) : super(waterLog);
+class WaterGridTileDirty extends WaterGridTileState {
+  WaterGridTileDirty(WaterLog waterLog) : super(waterLog);
 }
 
 class WaterGridTileLoading extends WaterGridTileState {
@@ -27,6 +27,10 @@ class WaterGridTileDeletingSuccess extends WaterGridTileState {
   WaterGridTileDeletingSuccess(WaterLog waterLog) : super(waterLog);
 }
 
-class WaterGridTileDeletingFailure extends WaterGridTileState {
-  WaterGridTileDeletingFailure(WaterLog waterLog) : super(waterLog);
+class WaterGridTileFailure extends WaterGridTileState {
+  WaterGridTileFailure(WaterLog waterLog) : super(waterLog);
+}
+
+class WaterGridTileSuccessfullyUpdated extends WaterGridTileState {
+  WaterGridTileSuccessfullyUpdated(WaterLog waterLog) : super(waterLog);
 }

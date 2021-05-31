@@ -8,7 +8,7 @@ class WaterLogGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WaterGridTileBloc, WaterGridTileState>(
       listener: (context, state) {
-        if (state is WaterGridTileUpdated) {
+        if (state is WaterGridTileDirty) {
           BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogUpdated(state.waterLog));
         }
       },
