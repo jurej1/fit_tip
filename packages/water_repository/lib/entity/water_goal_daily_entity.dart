@@ -26,7 +26,7 @@ class WaterGoalDailyEntity extends Equatable {
     final data = snap.data() as Map;
 
     return WaterGoalDailyEntity(
-      amount: data['amount'],
+      amount: (data['amount'] as num).toDouble(),
       date: (data['date'] as Timestamp).toDate(),
       id: snap.id,
     );

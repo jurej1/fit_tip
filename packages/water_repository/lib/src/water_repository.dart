@@ -104,12 +104,14 @@ class WaterRepository {
 
     DocumentSnapshot snap = await _goalRef(userId).doc(documentId).get();
 
-    if (snap.exists) {
+    if (snap.exists && snap.data() != null) {
       return WaterDailyGoal.fromEntity(WaterGoalDailyEntity.fromDocumentSnapshot(snap));
     } else {
-      QuerySnapshot querySnap = await _goalRef(userId).where('date', isGreaterThan: date).orderBy('date').limit(1).get();
+      DateTime dayEnd = DateTime(date.year, date.month, date.day, 0, 0, 0);
 
-      if (querySnap.size == 0) {
+      QuerySnapshot querySnap = await _goalRef(userId).orderBy('date', descending: true).where('date', isLessThan: dayEnd).limit(1).get();
+
+      if (querySnap.docs.isEmpty) {
         WaterDailyGoal goal = WaterDailyGoal(amount: 2300, id: documentId, date: date);
         addWaterGoal(userId, goal);
 
