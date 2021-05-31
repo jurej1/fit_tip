@@ -3,22 +3,51 @@ import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WaterLogConsumption extends StatelessWidget {
+class WaterLogConsumption extends StatefulWidget {
+  @override
+  _WaterLogConsumptionState createState() => _WaterLogConsumptionState();
+}
+
+class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTickerProviderStateMixin {
   final double sizeA = 250;
+
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.reset();
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WaterLogConsumptionBloc, WaterLogConsumptionState>(
+    return BlocConsumer<WaterLogConsumptionBloc, WaterLogConsumptionState>(
+      listener: (context, state) {
+        if (state is WaterLogConsumptionLoadSucccess) _animationController.animateTo(state.amount);
+      },
       builder: (context, state) {
         if (state is WaterLogConsumptionLoadSucccess) {
           return Container(
             height: sizeA,
             width: sizeA,
-            child: CustomPaint(
-              painter: ProgressPainter(
-                primaryValue: state.amount,
-                maxValue: state.max,
-              ),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return CustomPaint(
+                    painter: ProgressPainter(
+                      primaryValue: _animationController.value * state.amount,
+                      maxValue: state.max,
+                    ),
+                    child: child);
+              },
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

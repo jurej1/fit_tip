@@ -1,10 +1,7 @@
 part of 'water_log_consumption_bloc.dart';
 
-abstract class WaterLogConsumptionState extends Equatable {
+abstract class WaterLogConsumptionState {
   const WaterLogConsumptionState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class WaterLogConsumptionLoading extends WaterLogConsumptionState {}
@@ -17,9 +14,6 @@ class WaterLogConsumptionLoadSucccess extends WaterLogConsumptionState {
     required this.amount,
     required this.max,
   });
-
-  @override
-  List<Object> get props => [amount, max];
 }
 
 class WaterLogConsumptionFailure extends WaterLogConsumptionState {}
