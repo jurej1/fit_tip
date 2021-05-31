@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 part 'weight_tile_event.dart';
@@ -11,12 +12,13 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   WeightTileBloc({
     required WeightRepository weightRepository,
     required Weight weight,
+    required AuthenticationBloc authenticationBloc,
   })   : _weightRepository = weightRepository,
-        _weight = weight,
-        super(WeightTileInitial());
+        _authenticationBloc = authenticationBloc,
+        super(WeightTileInitial(weight));
 
   final WeightRepository _weightRepository;
-  final Weight _weight;
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<WeightTileState> mapEventToState(
@@ -28,18 +30,18 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   }
 
   Stream<WeightTileState> _mapSnackbarClosedToState(WeightTileDeleteRequested event) async* {
-    yield WeightTileDeleteLoading();
+    yield WeightTileDeleteLoading(state.weight);
 
     try {
-      if (_weight.id == null) {
-        yield WeightTileDeleteFail();
+      if (state.weight.id == null) {
+        yield WeightTileDeleteFail(state.weight);
         return;
       }
-      await _weightRepository.deleteWeight(_weight.id!);
+      await _weightRepository.deleteWeight(_authenticationBloc.state.user!.id!, state.weight.id!);
 
-      yield WeightTileDeletedSuccessfully(_weight);
+      yield WeightTileDeletedSuccessfully(state.weight);
     } catch (errpr) {
-      yield WeightTileDeleteFail();
+      yield WeightTileDeleteFail(state.weight);
     }
   }
 }

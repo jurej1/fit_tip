@@ -40,7 +40,7 @@ class WeightEntity extends Equatable {
   }
 
   static WeightEntity fromDocumentSnapshot(DocumentSnapshot snap) {
-    final doc = snap.data()!;
+    final Map<String, dynamic> doc = snap.data() as Map<String, dynamic>;
 
     return WeightEntity(
       id: snap.id,

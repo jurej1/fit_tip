@@ -5,15 +5,10 @@ import '../models/models.dart';
 
 class WeightRepository {
   WeightRepository({FirebaseFirestore? firebaseFirestore, FirebaseAuth? firebaseAuth})
-      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
-
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
   final FirebaseFirestore _firebaseFirestore;
-  final FirebaseAuth _firebaseAuth;
 
   //Aditional functions
-
-  String? get userId => _firebaseAuth.currentUser?.uid;
   CollectionReference _weightTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('weight_tracking');
   }
@@ -26,19 +21,15 @@ class WeightRepository {
     return _weightGoalRef(userId).doc('weight');
   }
 
-  Future<Weight?> get currentWeight async {
-    if (userId == null) return null;
-
-    final snap = await _weightTrackingRef(userId!).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
+  Future<Weight> currentWeight(String userId) async {
+    final snap = await _weightTrackingRef(userId).orderBy(DocKeysWeight.date, descending: true).limit(1).get();
 
     return Weight.fromEntity(WeightEntity.fromDocumentSnapshot(snap.docs.first));
   }
 
   //Weight tracking
-  Future<List<Weight>?> weightHistory() async {
-    if (userId == null) return null;
-
-    Query query = _weightTrackingRef(userId!).orderBy(DocKeysWeight.date, descending: true);
+  Future<List<Weight>> weightHistory(String userId) async {
+    Query query = _weightTrackingRef(userId).orderBy(DocKeysWeight.date, descending: true);
 
     final snap = await query.get();
 
@@ -49,44 +40,31 @@ class WeightRepository {
     }).toList();
   }
 
-  Future<DocumentReference?> addWeight(Weight weight) async {
-    if (userId == null) return null;
-
-    return _weightTrackingRef(userId!).add(weight.toEntity().toDocument());
+  Future<DocumentReference> addWeight(String userId, Weight weight) async {
+    return _weightTrackingRef(userId).add(weight.toEntity().toDocument());
   }
 
-  Future<void> deleteWeight(String id) async {
-    if (userId == null) return;
-    return _weightTrackingRef(userId!).doc(id).delete();
+  Future<void> deleteWeight(String userId, String id) async {
+    return _weightTrackingRef(userId).doc(id).delete();
   }
 
-  Future<void> updateWeight(Weight weight) async {
-    if (userId == null) return null;
-
-    return _weightTrackingRef(userId!).doc(weight.id).update(weight.toEntity().toDocument());
+  Future<void> updateWeight(String userId, Weight weight) async {
+    return _weightTrackingRef(userId).doc(weight.id).update(weight.toEntity().toDocument());
   }
 
   //Weight goals
-  Future<WeightGoal?> getWeighGoal() async {
-    if (userId == null) {
-      return null;
-    }
-    final data = await _weightGoalDocRef(userId!).get();
+  Future<WeightGoal?> getWeighGoal(String userId) async {
+    final data = await _weightGoalDocRef(userId).get();
 
     return WeightGoal.fromEntity(WeightGoalEntity.fromDocumentSnapshot(data));
   }
 
-  Future<void> updateWeightGoal(WeightGoal goal) async {
-    if (userId == null) {
-      return null;
-    }
-
-    return _weightGoalDocRef(userId!).set(goal.toEntity().toDocumentSnapshot());
+  Future<void> updateWeightGoal(String userId, WeightGoal goal) async {
+    return _weightGoalDocRef(userId).set(goal.toEntity().toDocumentSnapshot());
   }
 
-  Future<void> deleteWeightGoal() async {
-    if (userId == null) return null;
-    return _weightGoalDocRef(userId!).delete();
+  Future<void> deleteWeightGoal(String userId) async {
+    return _weightGoalDocRef(userId).delete();
   }
 
   //Weight statistics

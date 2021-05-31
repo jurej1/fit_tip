@@ -105,7 +105,7 @@ class UserEntity extends Equatable {
   }
 
   factory UserEntity.fromDocumentSnapshot(DocumentSnapshot snap) {
-    final data = snap.data();
+    final data = snap.data() as Map?;
     if (data == null) return UserEntity.empty;
 
     return UserEntity(

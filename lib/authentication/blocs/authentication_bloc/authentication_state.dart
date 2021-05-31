@@ -9,6 +9,10 @@ class AuthenticationState extends Equatable {
     this.user,
   });
 
+  bool get isAuthenticated {
+    return status == AuthenticationStatus.authenticated && user != null;
+  }
+
   @override
   List<Object?> get props => [status, user];
 

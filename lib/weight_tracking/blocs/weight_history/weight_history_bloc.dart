@@ -20,6 +20,9 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   final WeightRepository _weightRepository;
   final AuthenticationBloc _authenticationBloc;
 
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get _user => _authenticationBloc.state.user;
+
   @override
   mapEventToState(
     WeightHistoryEvent event,
@@ -40,19 +43,14 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
       return;
     }
 
-    if (_authenticationBloc.state.status != AuthenticationStatus.authenticated) {
+    if (!_isAuth) {
       yield WeightHistoryFailure();
       return;
     }
     try {
       yield WeightHistoryLoading();
 
-      var weights = await _weightRepository.weightHistory();
-
-      if (weights == null) {
-        yield WeightHistoryFailure();
-        return;
-      }
+      var weights = await _weightRepository.weightHistory(_user!.id!);
 
       final user = _authenticationBloc.state.user;
 

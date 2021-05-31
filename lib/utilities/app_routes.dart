@@ -1,10 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/home.dart';
+import 'package:fit_tip/water_tracking/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_statistics/weight_statistics.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
@@ -63,12 +66,62 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         providers: [
           BlocProvider<EditWeightGoalFormBloc>(
             create: (context) => EditWeightGoalFormBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
               weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
             ),
           ),
         ],
         child: EditWeightGoalView(),
+      );
+    },
+    WaterLogView.routeName: (BuildContext context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<WaterLogFocusedDayBloc>(
+            create: (context) => WaterLogFocusedDayBloc(),
+          ),
+          BlocProvider<WaterLogDayBloc>(
+            create: (context) => WaterLogDayBloc(
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
+          ),
+          BlocProvider<WaterDailyGoalBloc>(create: (context) {
+            return WaterDailyGoalBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
+          }),
+          BlocProvider<WaterLogConsumptionBloc>(
+            create: (context) => WaterLogConsumptionBloc(
+              waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
+              waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
+            ),
+          ),
+        ],
+        child: WaterLogView(),
+      );
+    },
+    AddWaterDailyGoalView.routeName: (BuildContext context) {
+      final Map<int, dynamic> map = ModalRoute.of(context)!.settings.arguments as Map<int, dynamic>;
+
+      final WaterDailyGoalBloc waterDailyGoalBloc = map[0];
+      final WaterLogFocusedDayBloc waterLogFocusedDayBloc = map[1];
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<AddWaterDailyGoalBloc>(
+            create: (context) => AddWaterDailyGoalBloc(
+              waterLogFocusedDayBloc: waterLogFocusedDayBloc,
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          ),
+          BlocProvider.value(
+            value: waterDailyGoalBloc,
+          ),
+        ],
+        child: AddWaterDailyGoalView(),
       );
     }
   };

@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,7 @@ class WeightHistoryList extends StatelessWidget {
         final item = weights[index];
         return BlocProvider(
           create: (context) => WeightTileBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             weightRepository: RepositoryProvider.of<WeightRepository>(context),
             weight: item,
           ),

@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:fit_tip/weight_tracking/models/models.dart' as models;
 import 'package:formz/formz.dart';
@@ -14,7 +16,9 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
   EditWeightGoalFormBloc({
     required WeightGoalBloc weightGoalBloc,
     required WeightRepository weightRepository,
+    required AuthenticationBloc authenticationBloc,
   })   : _weightRepository = weightRepository,
+        _authenticationBloc = authenticationBloc,
         super(
           weightGoalBloc.state is WeightGoalLoadSuccess
               ? EditWeightGoalFormState.pure((weightGoalBloc.state as WeightGoalLoadSuccess).goal)
@@ -22,6 +26,10 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
         );
 
   final WeightRepository _weightRepository;
+  final AuthenticationBloc _authenticationBloc;
+
+  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get user => _authenticationBloc.state.user;
 
   @override
   Stream<EditWeightGoalFormState> mapEventToState(
@@ -96,7 +104,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
       status: Formz.validate([startWeight, startDate, targetDate, targetWeight]),
     );
 
-    if (state.status.isValidated) {
+    if (state.status.isValidated && isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
@@ -108,7 +116,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
           weeklyGoal: state.weeklyGoal,
         );
 
-        await _weightRepository.updateWeightGoal(weightGoal);
+        await _weightRepository.updateWeightGoal(user!.id!, weightGoal);
 
         yield state.copyWith(weightGoal: weightGoal, status: FormzStatus.submissionSuccess);
       } on Exception catch (_) {
