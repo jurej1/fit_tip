@@ -14,8 +14,8 @@ class ProgressPainter extends CustomPainter {
   ProgressPainter({
     required this.primaryValue,
     this.radius = 100,
-    this.completeWidth = 20,
-    this.outerWidth = 30,
+    this.completeWidth = 35,
+    this.outerWidth = 40,
     Color? outerColor,
     Color? innerColor,
     required this.maxValue,

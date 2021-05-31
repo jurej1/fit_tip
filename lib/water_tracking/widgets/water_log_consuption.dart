@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -15,26 +17,25 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _animationController.forward();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
     super.initState();
   }
 
   @override
   void dispose() {
-    _animationController.reset();
     _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WaterLogConsumptionBloc, WaterLogConsumptionState>(
-      listener: (context, state) {
-        if (state is WaterLogConsumptionLoadSucccess) _animationController.animateTo(state.amount);
-      },
+    return BlocBuilder<WaterLogConsumptionBloc, WaterLogConsumptionState>(
       builder: (context, state) {
         if (state is WaterLogConsumptionLoadSucccess) {
+          _animationController.forward();
           return Container(
             height: sizeA,
             width: sizeA,
