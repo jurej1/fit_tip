@@ -2,6 +2,7 @@ import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:water_repository/enums/drinking_cup_size.dart';
 
 class WaterLogGridTile extends StatelessWidget {
   @override
@@ -53,9 +54,7 @@ class WaterLogGridTile extends StatelessWidget {
                 item.time.format(context),
                 textAlign: TextAlign.center,
               ),
-              child: Center(
-                child: Icon(Icons.airplanemode_active_outlined),
-              ),
+              child: Center(child: Text(mapDrinkingCupSizeToString(item.cup.size))),
               footer: Text(
                 item.cup.amount.toStringAsFixed(0) + 'ml',
                 textAlign: TextAlign.center,
