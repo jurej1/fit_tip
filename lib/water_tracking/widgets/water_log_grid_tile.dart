@@ -54,7 +54,7 @@ class WaterLogGridTile extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               child: Center(
-                child: Icon(Icons.water_damage),
+                child: Icon(Icons.airplanemode_active_outlined),
               ),
               footer: Text(
                 item.cup.amount.toStringAsFixed(0) + 'ml',
