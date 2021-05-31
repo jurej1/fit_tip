@@ -12,7 +12,6 @@ import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
   final WaterLogFocusedDayBloc waterLogFocusedDayBloc = WaterLogFocusedDayBloc();
-  late final WaterDailyGoalBloc waterDailyGoalBloc;
 
   return {
     RegisterView.routeName: (BuildContext context) {
@@ -91,11 +90,10 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
             )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
           ),
           BlocProvider<WaterDailyGoalBloc>(create: (context) {
-            waterDailyGoalBloc = WaterDailyGoalBloc(
+            return WaterDailyGoalBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
             )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
-            return waterDailyGoalBloc;
           }),
           BlocProvider<WaterLogConsumptionBloc>(
             create: (context) => WaterLogConsumptionBloc(
@@ -117,9 +115,9 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           ),
-          BlocProvider.value(
-            value: waterDailyGoalBloc,
-          ),
+          // BlocProvider.value(
+          //   value: waterDailyGoalBloc,
+          // ),
         ],
         child: AddWaterDailyGoalView(),
       );

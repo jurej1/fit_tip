@@ -6,7 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class WaterLogGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WaterGridTileBloc, WaterGridTileState>(
+    return BlocConsumer<WaterGridTileBloc, WaterGridTileState>(
+      listener: (context, state) {
+        if (state is WaterGridTileUpdated) {
+          BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogUpdated(state.waterLog));
+        }
+      },
       builder: (context, state) {
         final item = state.waterLog;
 
