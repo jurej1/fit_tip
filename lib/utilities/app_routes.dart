@@ -106,6 +106,8 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       );
     },
     AddWaterDailyGoalView.routeName: (BuildContext context) {
+      final WaterDailyGoalBloc waterDailyGoalBloc = ModalRoute.of(context)!.settings.arguments as WaterDailyGoalBloc;
+
       return MultiBlocProvider(
         providers: [
           BlocProvider<AddWaterDailyGoalBloc>(
@@ -115,9 +117,9 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           ),
-          // BlocProvider.value(
-          //   value: waterDailyGoalBloc,
-          // ),
+          BlocProvider.value(
+            value: waterDailyGoalBloc,
+          ),
         ],
         child: AddWaterDailyGoalView(),
       );
