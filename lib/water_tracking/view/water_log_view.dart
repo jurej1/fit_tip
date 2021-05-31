@@ -16,7 +16,10 @@ class WaterLogView extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pushNamed(
                 AddWaterDailyGoalView.routeName,
-                arguments: BlocProvider.of<WaterDailyGoalBloc>(context),
+                arguments: {
+                  0: BlocProvider.of<WaterDailyGoalBloc>(context),
+                  1: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+                },
               );
             },
           ),
