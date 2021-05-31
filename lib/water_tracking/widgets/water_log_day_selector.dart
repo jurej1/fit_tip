@@ -22,8 +22,20 @@ class WaterLogDaySelector extends StatelessWidget {
                   BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogPreviousDayPressed());
                 },
               ),
-              Text(
-                DateFormat('d.MMMM.yyyy').format(state.selectedDate),
+              TextButton(
+                onPressed: () async {
+                  DateTime? value = await showDatePicker(
+                    context: context,
+                    initialDate: state.selectedDate,
+                    firstDate: state.selectedDate.subtract(const Duration(days: 365)),
+                    lastDate: DateTime.now(),
+                  );
+
+                  BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogDatePicked(value));
+                },
+                child: Text(
+                  DateFormat('d.MMMM.yyyy').format(state.selectedDate),
+                ),
               ),
               IconButton(
                 icon: const Icon(Icons.arrow_forward_ios_rounded),

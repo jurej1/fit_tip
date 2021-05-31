@@ -22,6 +22,14 @@ class WaterLogFocusedDayBloc extends Bloc<WaterLogFocusedDayEvent, WaterLogFocus
       final selectedDate = state.selectedDate;
 
       yield state.copyWith(selectedDate: selectedDate.subtract(const Duration(days: 1)));
+    } else if (event is WaterLogDatePicked) {
+      if (event.val != null) {
+        DateTime selectedDate = event.val!;
+
+        if (selectedDate.isBefore(DateTime.now())) {
+          yield state.copyWith(selectedDate: selectedDate);
+        }
+      }
     }
   }
 }
