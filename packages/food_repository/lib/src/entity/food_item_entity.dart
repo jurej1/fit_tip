@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:food_repository/src/entity/entity.dart';
 
-class Food extends Equatable {
+class FoodItemEntity extends Equatable {
   final String id;
   final String name;
   final DocumentReference sourceRef;
@@ -10,7 +9,7 @@ class Food extends Equatable {
   final double calories;
   final DateTime dateAdded;
 
-  Food({
+  const FoodItemEntity({
     required this.id,
     required this.name,
     required this.sourceRef,
@@ -31,7 +30,30 @@ class Food extends Equatable {
     ];
   }
 
-  Food copyWith({
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      'name': name,
+      'sourceRef': sourceRef,
+      'amount': amount,
+      'calories': calories,
+      'dateAdded': Timestamp.fromDate(dateAdded),
+    };
+  }
+
+  static FoodItemEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+
+    return FoodItemEntity(
+      amount: data['amount'],
+      calories: data['calories'],
+      dateAdded: (data['dateAdded'] as Timestamp).toDate(),
+      id: snap.id,
+      name: data['name'],
+      sourceRef: data['sourceRef'],
+    );
+  }
+
+  FoodItemEntity copyWith({
     String? id,
     String? name,
     DocumentReference? sourceRef,
@@ -39,35 +61,13 @@ class Food extends Equatable {
     double? calories,
     DateTime? dateAdded,
   }) {
-    return Food(
+    return FoodItemEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       sourceRef: sourceRef ?? this.sourceRef,
       amount: amount ?? this.amount,
       calories: calories ?? this.calories,
       dateAdded: dateAdded ?? this.dateAdded,
-    );
-  }
-
-  FoodEntity toEntity() {
-    return FoodEntity(
-      amount: this.amount,
-      calories: this.calories,
-      dateAdded: this.dateAdded,
-      id: this.id,
-      name: this.name,
-      sourceRef: this.sourceRef,
-    );
-  }
-
-  static Food fromEntity(FoodEntity entity) {
-    return Food(
-      amount: entity.amount,
-      calories: entity.calories,
-      dateAdded: entity.dateAdded,
-      id: entity.id,
-      name: entity.name,
-      sourceRef: entity.sourceRef,
     );
   }
 }

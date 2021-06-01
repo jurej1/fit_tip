@@ -1,1 +1,1 @@
-export 'food_entity.dart';
+export 'food_item_entity.dart';
