@@ -7,11 +7,13 @@ class Meal extends Equatable {
   final List<FoodItem> foods;
   final double totalCalories;
   final MealType type;
+  final DateTime date;
 
   Meal({
-    required this.foods,
     double? totalCalories,
+    required this.foods,
     required this.type,
+    required this.date,
   }) : this.totalCalories = totalCalories ?? foods.fold(0.0, (p, e) => p + e.calories);
 
   @override
@@ -21,11 +23,13 @@ class Meal extends Equatable {
     List<FoodItem>? foods,
     double? totalCalories,
     MealType? type,
+    DateTime? date,
   }) {
     return Meal(
       foods: foods ?? this.foods,
       totalCalories: totalCalories ?? this.totalCalories,
       type: type ?? this.type,
+      date: date ?? this.date,
     );
   }
 }
