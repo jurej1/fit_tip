@@ -17,6 +17,8 @@ dependencies:
     path: packages/water_repository
   weight_repository:
     path: packages/weight_repository
+  food_repository:
+    path: packages/food_repository
   another_flushbar: ^1.10.18
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
