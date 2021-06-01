@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_repository/src/entity/entity.dart';
+import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItem extends Equatable {
   final String id;
@@ -9,6 +10,7 @@ class FoodItem extends Equatable {
   final double amount;
   final double calories;
   final DateTime dateAdded;
+  final MealType mealType;
 
   FoodItem({
     required this.id,
@@ -17,6 +19,7 @@ class FoodItem extends Equatable {
     required this.amount,
     required this.calories,
     required this.dateAdded,
+    required this.mealType,
   });
 
   @override
@@ -28,6 +31,7 @@ class FoodItem extends Equatable {
       amount,
       calories,
       dateAdded,
+      mealType,
     ];
   }
 
@@ -38,6 +42,7 @@ class FoodItem extends Equatable {
     double? amount,
     double? calories,
     DateTime? dateAdded,
+    MealType? mealType,
   }) {
     return FoodItem(
       id: id ?? this.id,
@@ -46,6 +51,7 @@ class FoodItem extends Equatable {
       amount: amount ?? this.amount,
       calories: calories ?? this.calories,
       dateAdded: dateAdded ?? this.dateAdded,
+      mealType: mealType ?? this.mealType,
     );
   }
 
@@ -57,6 +63,7 @@ class FoodItem extends Equatable {
       id: this.id,
       name: this.name,
       sourceRef: this.sourceRef,
+      mealType: this.mealType,
     );
   }
 
@@ -68,6 +75,7 @@ class FoodItem extends Equatable {
       id: entity.id,
       name: entity.name,
       sourceRef: entity.sourceRef,
+      mealType: entity.mealType,
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItemEntity extends Equatable {
   final String id;
@@ -8,8 +10,10 @@ class FoodItemEntity extends Equatable {
   final double amount;
   final double calories;
   final DateTime dateAdded;
+  final MealType mealType;
 
   const FoodItemEntity({
+    required this.mealType,
     required this.id,
     required this.name,
     required this.sourceRef,
@@ -27,6 +31,7 @@ class FoodItemEntity extends Equatable {
       amount,
       calories,
       dateAdded,
+      mealType,
     ];
   }
 
@@ -37,6 +42,7 @@ class FoodItemEntity extends Equatable {
       'amount': amount,
       'calories': calories,
       'dateAdded': Timestamp.fromDate(dateAdded),
+      'mealType': describeEnum(mealType),
     };
   }
 
@@ -50,6 +56,7 @@ class FoodItemEntity extends Equatable {
       id: snap.id,
       name: data['name'],
       sourceRef: data['sourceRef'],
+      mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
     );
   }
 
@@ -60,6 +67,7 @@ class FoodItemEntity extends Equatable {
     double? amount,
     double? calories,
     DateTime? dateAdded,
+    MealType? mealType,
   }) {
     return FoodItemEntity(
       id: id ?? this.id,
@@ -68,6 +76,7 @@ class FoodItemEntity extends Equatable {
       amount: amount ?? this.amount,
       calories: calories ?? this.calories,
       dateAdded: dateAdded ?? this.dateAdded,
+      mealType: mealType ?? this.mealType,
     );
   }
 }
