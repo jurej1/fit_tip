@@ -11,10 +11,11 @@ class Meal extends Equatable {
 
   Meal({
     double? totalCalories,
-    required this.foods,
+    List<FoodItem> foods = const [],
     required this.type,
     required this.date,
-  }) : this.totalCalories = totalCalories ?? foods.fold(0.0, (p, e) => p + e.calories);
+  })   : this.foods = foods..sort((a, b) => b.dateAdded.compareTo(a.dateAdded)),
+        this.totalCalories = totalCalories ?? foods.fold(0.0, (p, e) => p + e.calories);
 
   @override
   List<Object> get props => [foods, totalCalories, type];
