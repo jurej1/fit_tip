@@ -9,10 +9,10 @@ abstract class FoodDailyLogsState extends Equatable {
 
 class FoodDailyLogsLoading extends FoodDailyLogsState {}
 
-class FoodDailyLogLoadSuccess extends FoodDailyLogsState {
+class FoodDailyLogsLoadSuccess extends FoodDailyLogsState {
   final MealDay? mealDay;
 
-  const FoodDailyLogLoadSuccess({
+  const FoodDailyLogsLoadSuccess({
     this.mealDay,
   });
 
@@ -20,10 +20,10 @@ class FoodDailyLogLoadSuccess extends FoodDailyLogsState {
   List<Object?> get props => [mealDay];
 }
 
-class FoodDailyLogFailure extends FoodDailyLogsState {
+class FoodDailyLogsFailure extends FoodDailyLogsState {
   final String? errorMsg;
 
-  const FoodDailyLogFailure({this.errorMsg});
+  const FoodDailyLogsFailure({this.errorMsg});
 
   @override
   List<Object?> get props => [errorMsg];

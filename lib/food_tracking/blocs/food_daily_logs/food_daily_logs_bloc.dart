@@ -28,6 +28,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
     FoodDailyLogsEvent event,
   ) async* {
     if (event is FoodDailyLogsFocusedDateUpdated) {
+      yield* _mapDateUpdatedToState(event);
     } else if (event is FoodDailyLogsLogAdded) {
       yield* _mapLogAddedToState(event);
     } else if (event is FoodDailyLogsLogRemoved) {
@@ -38,8 +39,8 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   }
 
   Stream<FoodDailyLogsState> _mapLogAddedToState(FoodDailyLogsLogAdded event) async* {
-    if (_isAuth && state is FoodDailyLogLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogLoadSuccess).mealDay;
+    if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
+      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
       if (mealDay != null) {
         final MealType type = event.foodItem!.mealType;
         final item = event.foodItem!;
@@ -51,14 +52,14 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
           snacks: type == MealType.snack ? _addFoodItemToMeal(item, mealDay.snacks) : null,
         );
 
-        yield FoodDailyLogLoadSuccess(mealDay: mealDay);
+        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
       }
     }
   }
 
   Stream<FoodDailyLogsState> _mapLogDeletedToState(FoodDailyLogsLogRemoved event) async* {
-    if (_isAuth && state is FoodDailyLogLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogLoadSuccess).mealDay;
+    if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
+      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
 
       if (mealDay != null) {
         final item = event.foodItem!;
@@ -71,14 +72,14 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
           snacks: type == MealType.snack ? _removeFoodItemFromMeal(item, mealDay.snacks) : null,
         );
 
-        yield FoodDailyLogLoadSuccess(mealDay: mealDay);
+        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
       }
     }
   }
 
   Stream<FoodDailyLogsState> _mapLogUpdatedToState(FoodDailyLogsLogUpdated event) async* {
-    if (_isAuth && state is FoodDailyLogLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogLoadSuccess).mealDay;
+    if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
+      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
 
       if (mealDay != null) {
         final item = event.foodItem!;
@@ -91,7 +92,26 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
           snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
         );
 
-        yield FoodDailyLogLoadSuccess(mealDay: mealDay);
+        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
+      }
+    }
+  }
+
+  Stream<FoodDailyLogsState> _mapDateUpdatedToState(FoodDailyLogsFocusedDateUpdated event) async* {
+    if (_isAuth && event.date != null) {
+      yield FoodDailyLogsLoading();
+
+      try {
+        MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_user!.id!, event.date!);
+
+        if (mealDay != null) {
+          yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
+          return;
+        }
+
+        yield FoodDailyLogsFailure();
+      } on Exception catch (e) {
+        yield FoodDailyLogsFailure(errorMsg: e.toString());
       }
     }
   }
