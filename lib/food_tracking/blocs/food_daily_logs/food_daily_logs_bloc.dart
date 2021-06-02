@@ -90,6 +90,8 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
           lunch: type == MealType.lunch ? _updateFoodItemInMeal(item, mealDay.lunch) : null,
           snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
         );
+
+        yield FoodDailyLogLoadSuccess(mealDay: mealDay);
       }
     }
   }
