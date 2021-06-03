@@ -1,5 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/home.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
@@ -7,6 +9,7 @@ import 'package:fit_tip/weight_statistics/weight_statistics.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
@@ -122,6 +125,28 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
           ),
         ],
         child: AddWaterDailyGoalView(),
+      );
+    },
+    FoodDailyLogsView.routeName: (BuildContext context) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<FoodLogFocusedDateBloc>(
+            create: (context) => FoodLogFocusedDateBloc(),
+          ),
+          BlocProvider<CalorieDailyGoalBloc>(
+            create: (context) => CalorieDailyGoalBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              foodRepository: RepositoryProvider.of<FoodRepository>(context),
+            )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+          ),
+          BlocProvider<FoodDailyLogsBloc>(
+            create: (context) => FoodDailyLogsBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              foodRepository: RepositoryProvider.of<FoodRepository>(context),
+            )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+          )
+        ],
+        child: FoodDailyLogsView(),
       );
     }
   };
