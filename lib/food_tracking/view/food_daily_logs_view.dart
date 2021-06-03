@@ -11,6 +11,9 @@ class FoodDailyLogsView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Daily logs'),
       ),
+      body: Column(
+        children: [],
+      ),
     );
   }
 }
