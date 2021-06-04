@@ -19,6 +19,7 @@ class FoodDailyLogsView extends StatelessWidget {
         child: Column(
           children: [
             FoodLogDaySelector(),
+            FoodLogBuilder(),
           ],
         ),
       ),

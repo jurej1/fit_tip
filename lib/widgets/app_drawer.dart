@@ -1,3 +1,4 @@
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,13 @@ class AppDrawer extends StatelessWidget {
               title: Text('Water tracking'),
               onTap: () {
                 Navigator.of(context).pushNamed(WaterLogView.routeName);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.food_bank),
+              title: Text('Food tracking'),
+              onTap: () {
+                Navigator.of(context).pushNamed(FoodDailyLogsView.routeName);
               },
             ),
           ],

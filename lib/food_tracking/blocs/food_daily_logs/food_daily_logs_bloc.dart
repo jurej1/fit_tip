@@ -111,6 +111,8 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
 
         yield FoodDailyLogsFailure();
       } on Exception catch (e) {
+        print('error' + e.toString());
+
         yield FoodDailyLogsFailure(errorMsg: e.toString());
       }
     }
