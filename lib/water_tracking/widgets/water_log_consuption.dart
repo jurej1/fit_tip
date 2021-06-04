@@ -38,7 +38,6 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
           _animationController.forward();
           return Container(
             height: sizeA,
-            width: sizeA,
             child: AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
@@ -76,7 +75,6 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
         if (state is WaterLogConsumptionLoading) {
           return Container(
             height: sizeA,
-            width: sizeA,
             child: Center(
               child: const CircularProgressIndicator(),
             ),
