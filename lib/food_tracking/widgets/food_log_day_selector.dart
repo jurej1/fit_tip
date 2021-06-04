@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-class FoodDaySelector extends StatelessWidget {
-  const FoodDaySelector({Key? key}) : super(key: key);
+class FoodLogDaySelector extends StatelessWidget {
+  const FoodLogDaySelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
