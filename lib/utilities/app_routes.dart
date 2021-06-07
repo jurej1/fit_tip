@@ -148,6 +148,12 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
         ],
         child: FoodDailyLogsView(),
       );
+    },
+    AddFoodLogView.routeName: (BuildContext context) {
+      return MultiBlocProvider(
+        providers: [],
+        child: AddFoodLogView(),
+      );
     }
   };
 }
