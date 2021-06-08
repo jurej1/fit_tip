@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/food_tracking/blocs/add_food_item/add_food_item_bloc.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/home.dart';
@@ -151,7 +152,15 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     },
     AddFoodLogView.routeName: (BuildContext context) {
       return MultiBlocProvider(
-        providers: [],
+        providers: [
+          BlocProvider(
+            create: (context) => AddFoodItemBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              foodRepository: RepositoryProvider.of<FoodRepository>(context),
+            ),
+            child: Container(),
+          )
+        ],
         child: AddFoodLogView(),
       );
     }
