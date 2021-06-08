@@ -37,10 +37,12 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       yield _mapTimeChangedToState(event);
     } else if (event is AddFoodItemNameChanged) {
       yield _mapNameChangedToState(event);
-    } else if (event is AddFoodItemCalorieAmountChanged) {
+    } else if (event is AddFoodItemCalorieChanged) {
       yield _mapCalorieAmountToState(event);
     } else if (event is AddFoodItemMealTypeChanged) {
       yield state.copyWith(type: event.value);
+    } else if (event is AddFoodItemCalorieChanged) {
+      yield _mapCalorieChangedToState(event);
     } else if (event is AddFoodItemSubmitForm) {
       yield* _mapSubmitFormToState();
     }
@@ -93,7 +95,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     );
   }
 
-  AddFoodItemState _mapCalorieAmountToState(AddFoodItemCalorieAmountChanged event) {
+  AddFoodItemState _mapCalorieAmountToState(AddFoodItemCalorieChanged event) {
     final amount = AmountConsumed.dirty(event.value ?? '');
 
     return state.copyWith(
@@ -104,6 +106,21 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.foodName,
         state.calorieConsumed,
         amount,
+      ]),
+    );
+  }
+
+  AddFoodItemState _mapCalorieChangedToState(AddFoodItemCalorieChanged event) {
+    final cal = CalorieConsumed.dirty(event.value ?? '');
+
+    return state.copyWith(
+      calorieConsumed: cal,
+      status: Formz.validate([
+        cal,
+        state.dateConsumed,
+        state.timeConsumed,
+        state.foodName,
+        state.amountConsumed,
       ]),
     );
   }

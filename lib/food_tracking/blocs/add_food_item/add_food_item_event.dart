@@ -34,10 +34,19 @@ class AddFoodItemNameChanged extends AddFoodItemEvent {
   List<Object?> get props => [name];
 }
 
-class AddFoodItemCalorieAmountChanged extends AddFoodItemEvent {
+class AddFoodItemAmountChanged extends AddFoodItemEvent {
   final String? value;
 
-  const AddFoodItemCalorieAmountChanged({this.value});
+  const AddFoodItemAmountChanged({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class AddFoodItemCalorieChanged extends AddFoodItemEvent {
+  final String? value;
+
+  const AddFoodItemCalorieChanged({this.value});
 
   @override
   List<Object?> get props => [value];

@@ -24,7 +24,10 @@ class FoodDailyLogsView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(AddFoodLogView.routeName);
+        },
       ),
     );
   }
