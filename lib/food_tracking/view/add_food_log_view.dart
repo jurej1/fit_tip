@@ -1,4 +1,5 @@
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -27,10 +28,14 @@ class AddFoodLogView extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             children: [
               //Food name input
-
-              // DAte consumed
+              FoodNameInput(),
+              // DAte consumed+
+              DateConsumedInput(),
               //time consumed
-              //Calor
+              TimeConsumedInput(),
+              //Calorie
+              // amount changed
+              // Type
             ],
           );
         },
