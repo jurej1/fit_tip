@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItemEntity extends Equatable {
-  final String id;
+  final String? id;
   final String name;
-  final DocumentReference sourceRef;
+  final DocumentReference? sourceRef;
   final double amount;
   final double calories;
   final DateTime dateAdded;
@@ -14,16 +14,16 @@ class FoodItemEntity extends Equatable {
 
   const FoodItemEntity({
     required this.mealType,
-    required this.id,
+    this.id,
     required this.name,
-    required this.sourceRef,
+    this.sourceRef,
     required this.amount,
     required this.calories,
     required this.dateAdded,
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,

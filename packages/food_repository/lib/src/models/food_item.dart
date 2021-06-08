@@ -4,18 +4,18 @@ import 'package:food_repository/src/entity/entity.dart';
 import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItem extends Equatable {
-  final String id;
+  final String? id;
   final String name;
-  final DocumentReference sourceRef;
+  final DocumentReference? sourceRef;
   final double amount;
   final double calories;
   final DateTime dateAdded;
   final MealType mealType;
 
   FoodItem({
-    required this.id,
+    this.id,
     required this.name,
-    required this.sourceRef,
+    this.sourceRef,
     required this.amount,
     required this.calories,
     required this.dateAdded,
@@ -23,7 +23,7 @@ class FoodItem extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,
