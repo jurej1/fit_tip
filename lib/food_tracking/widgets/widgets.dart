@@ -6,3 +6,6 @@ export 'food_logs_list.dart';
 export 'food_name_input.dart';
 export 'date_consumed_input.dart';
 export 'time_consumed_input.dart';
+export 'calorie_consumed_input.dart';
+export 'meal_type_input.dart';
+export 'amount_consumed_input.dart';
