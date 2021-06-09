@@ -32,10 +32,19 @@ class FoodItemTile extends StatelessWidget {
           return Text('${item.calories}cal - ${item.amount}g');
         },
       ),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () {
-          BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
+      trailing: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+        builder: (context, state) {
+          return IconButton(
+            icon: state is FoodItemTileLoading
+                ? FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: const CircularProgressIndicator(),
+                  )
+                : const Icon(Icons.delete),
+            onPressed: () {
+              BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
+            },
+          );
         },
       ),
     );
