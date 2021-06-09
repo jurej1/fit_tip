@@ -28,7 +28,7 @@ class Meal extends Equatable {
   }) {
     return Meal(
       foods: foods ?? this.foods,
-      totalCalories: totalCalories ?? this.totalCalories,
+      totalCalories: totalCalories ?? null,
       type: type ?? this.type,
       date: date ?? this.date,
     );

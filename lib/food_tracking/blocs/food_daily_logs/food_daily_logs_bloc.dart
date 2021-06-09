@@ -152,7 +152,9 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
         return e;
       }).toList();
 
-      return meal.copyWith(foods: foods);
+      return meal.copyWith(
+        foods: foods,
+      );
     }
   }
 }
