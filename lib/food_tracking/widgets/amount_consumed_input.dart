@@ -10,6 +10,7 @@ class AmountConsumedInput extends StatelessWidget {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
         return TextFormField(
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: 'Amount',
             errorText: state.amountConsumed.invalid ? 'Invalid' : null,
