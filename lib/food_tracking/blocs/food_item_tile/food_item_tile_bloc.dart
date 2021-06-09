@@ -41,7 +41,7 @@ class FoodItemTileBloc extends Bloc<FoodItemTileEvent, FoodItemTileState> {
         await _foodRepository.deleteFoodItem(_user!.id!, state.item);
 
         yield FoodItemTileDeletedSuccessfully(state.item);
-      } on Exception catch (e) {
+      } on Exception catch (_) {
         yield FoodItemTileDeleteFail(state.item);
       }
     }
