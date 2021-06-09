@@ -12,6 +12,7 @@ class TimeConsumedInput extends StatelessWidget {
         return ListTile(
           title: Text('Time:'),
           trailing: Text(state.timeConsumed.value.format(context)),
+          subtitle: state.timeConsumed.invalid ? Text('Invalid') : null,
           onTap: () async {
             TimeOfDay? time = await showTimePicker(context: context, initialTime: state.timeConsumed.value);
 

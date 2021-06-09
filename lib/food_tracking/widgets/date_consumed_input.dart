@@ -12,6 +12,7 @@ class DateConsumedInput extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           title: Text('Date'),
+          subtitle: state.dateConsumed.invalid ? Text('Invalid') : null,
           trailing: Text(DateFormat('dd.MMMM.yyyy').format(state.dateConsumed.value)),
           onTap: () async {
             DateTime? date = await showDatePicker(

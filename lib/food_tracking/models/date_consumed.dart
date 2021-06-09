@@ -14,7 +14,7 @@ class DateConsumed extends FormzInput<DateTime, DateConsumedError> {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
 
-      if (value.isAfter(today)) {
+      if (value.isAfter(today.add(const Duration(days: 1)))) {
         return DateConsumedError.invalid;
       }
       return null;

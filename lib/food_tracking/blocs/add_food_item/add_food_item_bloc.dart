@@ -37,7 +37,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       yield _mapTimeChangedToState(event);
     } else if (event is AddFoodItemNameChanged) {
       yield _mapNameChangedToState(event);
-    } else if (event is AddFoodItemCalorieChanged) {
+    } else if (event is AddFoodItemAmountChanged) {
       yield _mapCalorieAmountToState(event);
     } else if (event is AddFoodItemMealTypeChanged) {
       yield state.copyWith(type: event.value);
@@ -95,7 +95,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     );
   }
 
-  AddFoodItemState _mapCalorieAmountToState(AddFoodItemCalorieChanged event) {
+  AddFoodItemState _mapCalorieAmountToState(AddFoodItemAmountChanged event) {
     final amount = AmountConsumed.dirty(event.value ?? '');
 
     return state.copyWith(
