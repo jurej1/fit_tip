@@ -18,14 +18,13 @@ class MealExpansionTile extends StatelessWidget {
       title: Text(title),
       trailing: Text('${meal != null ? meal!.totalCalories.toStringAsFixed(0) : '0'} cal'),
       children: [
-        if (meal != null) ...{
+        if (meal != null)
           SizedBox(
-            height: 300,
+            height: meal?.foods.length != null ? (meal!.foods.length < 5 ? (meal!.foods.length * 60) : (4 * 60)) : 0,
             child: FoodLogsList(
               foods: meal!.foods,
             ),
           ),
-        }
       ],
     );
   }

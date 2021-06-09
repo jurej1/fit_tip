@@ -8,6 +8,7 @@ class FoodItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
       title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
         buildWhen: (p, c) => p.item.name != c.item.name,
         builder: (context, state) {
