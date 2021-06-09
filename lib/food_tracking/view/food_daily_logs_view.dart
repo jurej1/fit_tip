@@ -1,5 +1,6 @@
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FoodDailyLogsView extends StatelessWidget {
   const FoodDailyLogsView({Key? key}) : super(key: key);
@@ -26,7 +27,12 @@ class FoodDailyLogsView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).pushNamed(AddFoodLogView.routeName);
+          Navigator.of(context).pushNamed(
+            AddFoodLogView.routeName,
+            arguments: {
+              0: BlocProvider.of<FoodDailyLogsBloc>(context),
+            },
+          );
         },
       ),
     );

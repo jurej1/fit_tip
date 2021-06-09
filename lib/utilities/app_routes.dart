@@ -151,6 +151,10 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
       );
     },
     AddFoodLogView.routeName: (BuildContext context) {
+      final Map<int, Bloc> map = ModalRoute.of(context)!.settings.arguments as Map<int, Bloc>;
+
+      final FoodDailyLogsBloc foodDailyLogsBloc = map[0] as FoodDailyLogsBloc;
+
       return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -158,8 +162,10 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               foodRepository: RepositoryProvider.of<FoodRepository>(context),
             ),
-            child: Container(),
-          )
+          ),
+          BlocProvider<FoodDailyLogsBloc>.value(
+            value: foodDailyLogsBloc,
+          ),
         ],
         child: AddFoodLogView(),
       );
