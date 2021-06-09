@@ -9,3 +9,4 @@ export 'time_consumed_input.dart';
 export 'calorie_consumed_input.dart';
 export 'meal_type_input.dart';
 export 'amount_consumed_input.dart';
+export 'food_item_tile.dart';
