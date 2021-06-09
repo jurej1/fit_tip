@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';

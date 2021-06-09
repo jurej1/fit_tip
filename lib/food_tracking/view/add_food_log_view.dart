@@ -16,6 +16,7 @@ class AddFoodLogView extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogAdded(foodItem: state.foodItem));
+          Navigator.of(context).pop();
         } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -29,6 +30,14 @@ class AddFoodLogView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Add food log'),
+          actions: [
+            TextButton(
+              child: Text('submit'),
+              onPressed: () {
+                BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemSubmitForm());
+              },
+            ),
+          ],
         ),
         body: BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
           builder: (context, state) {

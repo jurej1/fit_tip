@@ -24,7 +24,13 @@ class FoodLogBuilder extends StatelessWidget {
               physics: const ClampingScrollPhysics(),
               child: Column(
                 children: [
-                  FoodDailyProgress(),
+                  BlocProvider(
+                    create: (context) => FoodDayProgressBloc(
+                      calorieDailyGoalBloc: BlocProvider.of<CalorieDailyGoalBloc>(context),
+                      foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
+                    ),
+                    child: FoodDailyProgress(),
+                  ),
                   ListView(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(10),
