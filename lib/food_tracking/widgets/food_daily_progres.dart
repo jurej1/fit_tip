@@ -12,7 +12,7 @@ class FoodDailyProgress extends StatelessWidget {
 
     return BlocBuilder<FoodDayProgressBloc, FoodDayProgressState>(
       builder: (context, state) {
-        if (state is FoodDayProgressLoadSuccess) {
+        if (state is FoodDayProgressLoading) {
           return SizedBox(
             height: 200,
             width: size.width,
