@@ -28,17 +28,12 @@ class AddFoodLogView extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.all(10),
             children: [
-              //Food name input
               FoodNameInput(),
-              // DAte consumed+
               DateConsumedInput(),
-              //time consumed
               TimeConsumedInput(),
-              //Calorie
               CalorieConsumedInput(),
-              // amount changed
               AmountConsumedInput(),
-              // Type
+              MealTypeInput(),
             ],
           );
         },
