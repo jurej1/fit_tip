@@ -9,6 +9,7 @@ class AddFoodItemState extends Equatable {
     this.calorieConsumed = const CalorieConsumed.pure(),
     this.amountConsumed = const AmountConsumed.pure(),
     this.type = MealType.lunch,
+    this.foodItem,
   });
 
   final FormzStatus status;
@@ -18,6 +19,7 @@ class AddFoodItemState extends Equatable {
   final CalorieConsumed calorieConsumed;
   final AmountConsumed amountConsumed;
   final MealType type;
+  final FoodItem? foodItem;
 
   factory AddFoodItemState.pure() {
     return AddFoodItemState(
@@ -27,7 +29,7 @@ class AddFoodItemState extends Equatable {
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       status,
       dateConsumed,
@@ -36,6 +38,7 @@ class AddFoodItemState extends Equatable {
       calorieConsumed,
       amountConsumed,
       type,
+      foodItem,
     ];
   }
 
@@ -47,6 +50,7 @@ class AddFoodItemState extends Equatable {
     CalorieConsumed? calorieConsumed,
     AmountConsumed? amountConsumed,
     MealType? type,
+    FoodItem? foodItem,
   }) {
     return AddFoodItemState(
       status: status ?? this.status,
@@ -56,6 +60,7 @@ class AddFoodItemState extends Equatable {
       calorieConsumed: calorieConsumed ?? this.calorieConsumed,
       amountConsumed: amountConsumed ?? this.amountConsumed,
       type: type ?? this.type,
+      foodItem: foodItem ?? this.foodItem,
     );
   }
 }

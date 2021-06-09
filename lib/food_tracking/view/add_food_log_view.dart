@@ -12,31 +12,38 @@ class AddFoodLogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add food log'),
-      ),
-      body: BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
-        builder: (context, state) {
-          if (state.status.isSubmissionInProgress) {
-            return const Center(
-              child: const CircularProgressIndicator(),
-            );
-          }
+    return BlocListener<AddFoodItemBloc, AddFoodItemState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogAdded(foodItem: state.foodItem));
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Add food log'),
+        ),
+        body: BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
+          builder: (context, state) {
+            if (state.status.isSubmissionInProgress) {
+              return const Center(
+                child: const CircularProgressIndicator(),
+              );
+            }
 
-          return ListView(
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.all(10),
-            children: [
-              FoodNameInput(),
-              DateConsumedInput(),
-              TimeConsumedInput(),
-              CalorieConsumedInput(),
-              AmountConsumedInput(),
-              MealTypeInput(),
-            ],
-          );
-        },
+            return ListView(
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              children: [
+                FoodNameInput(),
+                DateConsumedInput(),
+                TimeConsumedInput(),
+                CalorieConsumedInput(),
+                AmountConsumedInput(),
+                MealTypeInput(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

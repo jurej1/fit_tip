@@ -166,7 +166,10 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
 
         item = item.copyWith(id: docRef.id);
 
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
+        yield state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          foodItem: item,
+        );
       } on Exception catch (e) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
