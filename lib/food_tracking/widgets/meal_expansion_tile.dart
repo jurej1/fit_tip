@@ -3,20 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:food_repository/food_repository.dart';
 
 class MealExpansionTile extends StatelessWidget {
-  const MealExpansionTile({
+  MealExpansionTile({
     Key? key,
     this.meal,
     required this.title,
-  }) : super(key: key);
+  })   : this.amountOFitems = meal?.foods.length ?? 0,
+        super(key: key);
 
   final Meal? meal;
   final String title;
+  final int amountOFitems;
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Text(title),
       trailing: Text('${meal != null ? meal!.totalCalories.toStringAsFixed(0) : '0'} cal'),
+      subtitle: Text(
+        amountOFitems == 1 ? '1 item' : '$amountOFitems items',
+        style: TextStyle(
+          color: Colors.grey.shade400,
+        ),
+      ),
       children: [
         if (meal != null)
           SizedBox(
