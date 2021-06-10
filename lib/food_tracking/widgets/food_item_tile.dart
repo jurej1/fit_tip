@@ -7,45 +7,52 @@ class FoodItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-        buildWhen: (p, c) => p.item.name != c.item.name,
-        builder: (context, state) {
-          return Text(state.item.name);
-        },
-      ),
-      subtitle: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-        buildWhen: (p, c) {
-          if (p.item.calories != c.item.calories) {
-            return true;
-          }
+    return BlocListener<FoodItemTileBloc, FoodItemTileState>(
+      listener: (context, state) {
+        if (state is FoodItemTileDeletedSuccessfully) {
+          BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogRemoved(foodItem: state.item));
+        }
+      },
+      child: ListTile(
+        dense: true,
+        title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+          buildWhen: (p, c) => p.item.name != c.item.name,
+          builder: (context, state) {
+            return Text(state.item.name);
+          },
+        ),
+        subtitle: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+          buildWhen: (p, c) {
+            if (p.item.calories != c.item.calories) {
+              return true;
+            }
 
-          if (p.item.amount != c.item.amount) {
-            return true;
-          }
+            if (p.item.amount != c.item.amount) {
+              return true;
+            }
 
-          return false;
-        },
-        builder: (context, state) {
-          final item = state.item;
-          return Text('${item.calories}cal - ${item.amount}g');
-        },
-      ),
-      trailing: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-        builder: (context, state) {
-          return IconButton(
-            icon: state is FoodItemTileLoading
-                ? FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: const CircularProgressIndicator(),
-                  )
-                : const Icon(Icons.delete),
-            onPressed: () {
-              BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
-            },
-          );
-        },
+            return false;
+          },
+          builder: (context, state) {
+            final item = state.item;
+            return Text('${item.calories}cal - ${item.amount}g');
+          },
+        ),
+        trailing: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+          builder: (context, state) {
+            return IconButton(
+              icon: state is FoodItemTileLoading
+                  ? FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: const CircularProgressIndicator(),
+                    )
+                  : const Icon(Icons.delete),
+              onPressed: () {
+                BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
+              },
+            );
+          },
+        ),
       ),
     );
   }
