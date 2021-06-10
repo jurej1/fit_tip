@@ -18,7 +18,7 @@ enum FoodGroup {
   fastFood,
   preparedMeals,
   snacks,
-  RestaurantFood,
+  restaurantFood,
   americanIndian,
   babyFoods,
 }
