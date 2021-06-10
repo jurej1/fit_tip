@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:food_repository/src/entity/entity.dart';
 import 'package:food_repository/src/enums/enums.dart';
 
@@ -11,6 +12,7 @@ class FoodItem extends Equatable {
   final double calories;
   final DateTime dateAdded;
   final MealType mealType;
+  final List<FoodDataMacro>? macronutrients;
 
   FoodItem({
     this.id,
@@ -20,6 +22,7 @@ class FoodItem extends Equatable {
     required this.calories,
     required this.dateAdded,
     required this.mealType,
+    this.macronutrients,
   });
 
   @override
@@ -32,6 +35,7 @@ class FoodItem extends Equatable {
       calories,
       dateAdded,
       mealType,
+      macronutrients,
     ];
   }
 
@@ -43,6 +47,7 @@ class FoodItem extends Equatable {
     double? calories,
     DateTime? dateAdded,
     MealType? mealType,
+    List<FoodDataMacro>? macronutrients,
   }) {
     return FoodItem(
       id: id ?? this.id,
@@ -52,6 +57,7 @@ class FoodItem extends Equatable {
       calories: calories ?? this.calories,
       dateAdded: dateAdded ?? this.dateAdded,
       mealType: mealType ?? this.mealType,
+      macronutrients: macronutrients ?? this.macronutrients,
     );
   }
 
@@ -64,6 +70,7 @@ class FoodItem extends Equatable {
       name: this.name,
       sourceRef: this.sourceRef,
       mealType: this.mealType,
+      macronutrients: macronutrients?.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -76,6 +83,7 @@ class FoodItem extends Equatable {
       name: entity.name,
       sourceRef: entity.sourceRef,
       mealType: entity.mealType,
+      macronutrients: entity.macronutrients?.map((e) => FoodDataMacro.fromEntity(e)).toList(),
     );
   }
 }

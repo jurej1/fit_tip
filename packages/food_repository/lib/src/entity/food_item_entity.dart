@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:food_repository/src/entity/entity.dart';
 import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItemEntity extends Equatable {
@@ -11,15 +12,17 @@ class FoodItemEntity extends Equatable {
   final double calories;
   final DateTime dateAdded;
   final MealType mealType;
+  final List<FoodDataMacroEntity>? macronutrients;
 
   const FoodItemEntity({
-    required this.mealType,
     this.id,
     required this.name,
     this.sourceRef,
     required this.amount,
     required this.calories,
     required this.dateAdded,
+    required this.mealType,
+    this.macronutrients,
   });
 
   @override
@@ -32,6 +35,7 @@ class FoodItemEntity extends Equatable {
       calories,
       dateAdded,
       mealType,
+      macronutrients,
     ];
   }
 
@@ -43,6 +47,7 @@ class FoodItemEntity extends Equatable {
       'calories': calories,
       'dateAdded': Timestamp.fromDate(dateAdded),
       'mealType': describeEnum(mealType),
+      if (macronutrients != null) 'macronutrients': macronutrients!.map((e) => e.toDocumentSnapshot(e)).toList()
     };
   }
 
@@ -57,6 +62,10 @@ class FoodItemEntity extends Equatable {
       name: data['name'],
       sourceRef: data['sourceRef'],
       mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
+      macronutrients: data.containsKey('macronutrients')
+          ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
+              as List<FoodDataMacroEntity>
+          : null,
     );
   }
 
@@ -68,6 +77,7 @@ class FoodItemEntity extends Equatable {
     double? calories,
     DateTime? dateAdded,
     MealType? mealType,
+    List<FoodDataMacroEntity>? macronutrients,
   }) {
     return FoodItemEntity(
       id: id ?? this.id,
@@ -77,6 +87,7 @@ class FoodItemEntity extends Equatable {
       calories: calories ?? this.calories,
       dateAdded: dateAdded ?? this.dateAdded,
       mealType: mealType ?? this.mealType,
+      macronutrients: macronutrients ?? this.macronutrients,
     );
   }
 }
