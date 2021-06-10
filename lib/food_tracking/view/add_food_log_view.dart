@@ -29,10 +29,10 @@ class AddFoodLogView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add food log'),
+          title: const Text('Add food log'),
           actions: [
             TextButton(
-              child: Text('submit'),
+              child: Text('Submit'),
               onPressed: () {
                 BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemSubmitForm());
               },
