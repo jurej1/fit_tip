@@ -22,6 +22,7 @@ class FoodLogBuilder extends StatelessWidget {
           return Expanded(
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 children: [
                   const SizedBox(height: 20),
@@ -32,9 +33,9 @@ class FoodLogBuilder extends StatelessWidget {
                     ),
                     child: FoodDailyProgress(),
                   ),
+                  const SizedBox(height: 20),
                   ListView(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.all(10),
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       MealExpansionTile(
