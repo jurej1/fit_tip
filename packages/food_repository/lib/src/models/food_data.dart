@@ -33,6 +33,20 @@ class FoodDataMacro extends FoodData {
       amount: amount ?? this.amount,
     );
   }
+
+  FoodDataMacroEntity toEntity() {
+    return FoodDataMacroEntity(
+      macronutrient: macronutrient,
+      amount: this.amount,
+    );
+  }
+
+  static FoodDataMacro fromEntity(FoodDataMacroEntity entity) {
+    return FoodDataMacro(
+      macronutrient: entity.macronutrient,
+      amount: entity.amount,
+    );
+  }
 }
 
 class FoodDataMineral extends FoodData {
@@ -53,6 +67,20 @@ class FoodDataMineral extends FoodData {
     return FoodDataMineral(
       mineral: mineral ?? this.mineral,
       amount: amount ?? this.amount,
+    );
+  }
+
+  FoodDataMineralEntity toEntity() {
+    return FoodDataMineralEntity(
+      mineral: mineral,
+      amount: amount,
+    );
+  }
+
+  static FoodDataMineral fromEntity(FoodDataMineralEntity entity) {
+    return FoodDataMineral(
+      mineral: entity.mineral,
+      amount: entity.amount,
     );
   }
 }
@@ -76,6 +104,20 @@ class FoodDataVitamin extends FoodData {
       vitamin: vitamin ?? this.vitamin,
     );
   }
+
+  FoodDataVitaminEntity toEntity() {
+    return FoodDataVitaminEntity(
+      vitamin: vitamin,
+      amount: amount,
+    );
+  }
+
+  static FoodDataVitamin fromEntity(FoodDataVitaminEntity entity) {
+    return FoodDataVitamin(
+      vitamin: entity.vitamin,
+      amount: entity.amount,
+    );
+  }
 }
 
 class FoodDataMadeOf extends FoodData {
@@ -97,5 +139,13 @@ class FoodDataMadeOf extends FoodData {
       madeOf: madeOf ?? this.madeOf,
       amount: amount ?? this.amount,
     );
+  }
+
+  FoodDataMadeOfEntity toEntity() {
+    return FoodDataMadeOfEntity(madeOf: madeOf, amount: this.amount);
+  }
+
+  static FoodDataMadeOf fromEntity(FoodDataMadeOfEntity entity) {
+    return FoodDataMadeOf(madeOf: entity.madeOf, amount: entity.amount);
   }
 }

@@ -9,10 +9,10 @@ class Food extends Equatable {
   final String id;
   final String name;
   final double calories;
-  final List<FoodData> macronutrients;
-  final List<FoodData> minerals;
-  final List<FoodData> vitamins;
-  final List<FoodData> madeOf;
+  final List<FoodDataMacro> macronutrients;
+  final List<FoodDataMineral> minerals;
+  final List<FoodDataVitamin> vitamins;
+  final List<FoodDataMadeOf> madeOf;
   final FoodGroup group;
   final DocumentReference ref;
 
@@ -47,10 +47,10 @@ class Food extends Equatable {
     String? id,
     String? name,
     double? calories,
-    List<FoodData>? macronutrients,
-    List<FoodData>? minerals,
-    List<FoodData>? vitamins,
-    List<FoodData>? madeOf,
+    List<FoodDataMacro>? macronutrients,
+    List<FoodDataMineral>? minerals,
+    List<FoodDataVitamin>? vitamins,
+    List<FoodDataMadeOf>? madeOf,
     FoodGroup? group,
     DocumentReference? ref,
   }) {
@@ -86,12 +86,12 @@ class Food extends Equatable {
       calories: entity.calories,
       group: entity.group,
       id: entity.id,
-      macronutrients: entity.macronutrients.map((e) => FoodData.fromEntity(e)).toList(),
-      madeOf: entity.madeOf.map((e) => FoodData.fromEntity(e)).toList(),
-      minerals: entity.minerals.map((e) => FoodData.fromEntity(e)).toList(),
+      macronutrients: entity.macronutrients.map((e) => FoodDataMacro.fromEntity(e)).toList(),
+      madeOf: entity.madeOf.map((e) => FoodDataMadeOf.fromEntity(e)).toList(),
+      minerals: entity.minerals.map((e) => FoodDataMineral.fromEntity(e)).toList(),
       name: entity.name,
       ref: entity.ref,
-      vitamins: entity.vitamins.map((e) => FoodData.fromEntity(e)).toList(),
+      vitamins: entity.vitamins.map((e) => FoodDataVitamin.fromEntity(e)).toList(),
     );
   }
 }
