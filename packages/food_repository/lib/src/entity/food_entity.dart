@@ -8,10 +8,10 @@ class FoodEntity extends Equatable {
   final String id;
   final String name;
   final double calories;
-  final List<FoodDataEntity> macronutrients;
-  final List<FoodDataEntity> minerals;
-  final List<FoodDataEntity> vitamins;
-  final List<FoodDataEntity> madeOf;
+  final List<FoodDataMacroEntity> macronutrients;
+  final List<FoodDataMineralEntity> minerals;
+  final List<FoodDataVitaminEntity> vitamins;
+  final List<FoodDataMadeOfEntity> madeOf;
   final FoodGroup group;
   final DocumentReference ref;
 
@@ -46,10 +46,10 @@ class FoodEntity extends Equatable {
     String? id,
     String? name,
     double? calories,
-    List<FoodDataEntity>? macronutrients,
-    List<FoodDataEntity>? minerals,
-    List<FoodDataEntity>? vitamins,
-    List<FoodDataEntity>? madeOf,
+    List<FoodDataMacroEntity>? macronutrients,
+    List<FoodDataMineralEntity>? minerals,
+    List<FoodDataVitaminEntity>? vitamins,
+    List<FoodDataMadeOfEntity>? madeOf,
     FoodGroup? group,
     DocumentReference? ref,
   }) {
@@ -71,9 +71,9 @@ class FoodEntity extends Equatable {
       'name': name,
       'calories': calories,
       'macronutrients': macronutrients,
-      'minerals': minerals.map((e) => e.toDocumentSnapshot()).toList(),
-      'vitamins': vitamins.map((e) => e.toDocumentSnapshot()).toList(),
-      'madeOf': madeOf.map((e) => e.toDocumentSnapshot()).toList(),
+      'minerals': minerals.map((e) => e.toDocumentSnapshot(e)).toList(),
+      'vitamins': vitamins.map((e) => e.toDocumentSnapshot(e)).toList(),
+      'madeOf': madeOf.map((e) => e.toDocumentSnapshot(e)).toList(),
       'group': describeEnum(group),
     };
   }
@@ -86,11 +86,14 @@ class FoodEntity extends Equatable {
       group: FoodGroup.values.firstWhere((element) => describeEnum(element) == data['group']),
       id: snap.id,
       ref: snap.reference,
-      macronutrients: (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList(),
-      madeOf: (data['madeOf'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList(),
-      minerals: (data['minerals'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList(),
+      macronutrients: (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
+          as List<FoodDataMacroEntity>,
+      madeOf: (data['madeOf'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataMadeOfEntity>,
+      minerals:
+          (data['minerals'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataMineralEntity>,
       name: data['name'],
-      vitamins: (data['vitamines'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList(),
+      vitamins:
+          (data['vitamines'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataVitaminEntity>,
     );
   }
 }

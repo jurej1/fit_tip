@@ -1,39 +1,101 @@
 import 'package:equatable/equatable.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:food_repository/src/entity/entity.dart';
 
-class FoodData extends Equatable {
-  final double? amount;
-  final String name;
+abstract class FoodData extends Equatable {
+  final double amount;
 
   const FoodData({
-    this.amount,
-    required this.name,
-  });
+    double? amount,
+  }) : this.amount = amount ?? 0.0;
 
   @override
-  List<Object?> get props => [amount, name];
+  List<Object?> get props => [amount];
+}
 
-  FoodData copyWith({
+class FoodDataMacro extends FoodData {
+  final Macronutrient macronutrient;
+
+  const FoodDataMacro({
+    required this.macronutrient,
     double? amount,
-    String? name,
+  }) : super(amount: amount);
+
+  @override
+  List<Object?> get props => [macronutrient, amount];
+
+  FoodDataMacro copyWith({
+    Macronutrient? macronutrient,
+    double? amount,
   }) {
-    return FoodData(
+    return FoodDataMacro(
+      macronutrient: macronutrient ?? this.macronutrient,
       amount: amount ?? this.amount,
-      name: name ?? this.name,
     );
   }
+}
 
-  FoodDataEntity toEntity() {
-    return FoodDataEntity(
-      name: name,
-      amount: amount,
+class FoodDataMineral extends FoodData {
+  final Mineral mineral;
+
+  const FoodDataMineral({
+    double? amount,
+    required this.mineral,
+  }) : super(amount: amount);
+
+  @override
+  List<Object?> get props => [mineral, amount];
+
+  FoodDataMineral copyWith({
+    Mineral? mineral,
+    double? amount,
+  }) {
+    return FoodDataMineral(
+      mineral: mineral ?? this.mineral,
+      amount: amount ?? this.amount,
     );
   }
+}
 
-  static FoodData fromEntity(FoodDataEntity entity) {
-    return FoodData(
-      name: entity.name,
-      amount: entity.amount,
+class FoodDataVitamin extends FoodData {
+  final Vitamin vitamin;
+  const FoodDataVitamin({
+    double? amount,
+    required this.vitamin,
+  }) : super(amount: amount);
+
+  @override
+  List<Object?> get props => [vitamin, amount];
+
+  FoodDataVitamin copyWith({
+    Vitamin? vitamin,
+    double? amount,
+  }) {
+    return FoodDataVitamin(
+      amount: amount ?? this.amount,
+      vitamin: vitamin ?? this.vitamin,
+    );
+  }
+}
+
+class FoodDataMadeOf extends FoodData {
+  final MadeOf madeOf;
+
+  const FoodDataMadeOf({
+    required this.madeOf,
+    double? amount,
+  }) : super(amount: amount);
+
+  @override
+  List<Object?> get props => [madeOf, amount];
+
+  FoodDataMadeOf copyWith({
+    MadeOf? madeOf,
+    double? amount,
+  }) {
+    return FoodDataMadeOf(
+      madeOf: madeOf ?? this.madeOf,
+      amount: amount ?? this.amount,
     );
   }
 }
