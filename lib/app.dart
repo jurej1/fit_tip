@@ -82,7 +82,7 @@ class App extends StatelessWidget {
                     if (state.status == AuthenticationStatus.unauthenticated) {
                       _navigatorState.currentState!.pushReplacement(LoginView.route(context));
                     } else if (state.status == AuthenticationStatus.authenticated) {
-                      _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
+                      _navigatorState.currentState!.pushReplacement(Home.route(context));
                     }
                   },
                 ),

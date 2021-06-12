@@ -6,9 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:formz/formz.dart';
+import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 class AddWeightView extends StatelessWidget {
-  static const routeName = 'add_weight_view';
+  static MaterialPageRoute route(BuildContext context, [weight_rep.Weight? weight]) {
+    return MaterialPageRoute(builder: (_) {
+      return BlocProvider<AddWeightFormBloc>(
+        create: (context) => AddWeightFormBloc(
+          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+          weight: weight,
+        ),
+        child: AddWeightView(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

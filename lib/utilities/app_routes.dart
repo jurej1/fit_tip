@@ -1,9 +1,7 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/blocs/add_food_item/add_food_item_bloc.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
-import 'package:fit_tip/home.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_statistics/weight_statistics.dart';
@@ -28,23 +26,23 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     //     child: LoginView(),
     //   );
     // },
-    Home.routeName: (BuildContext context) => Home(),
-    WeightTrackingView.routeName: (BuildContext context) {
-      BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
-      BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
-      return WeightTrackingView();
-    },
-    AddWeightView.routeName: (BuildContext context) {
-      final weight_rep.Weight? weight = ModalRoute.of(context)!.settings.arguments as weight_rep.Weight;
-      return BlocProvider<AddWeightFormBloc>(
-        create: (context) => AddWeightFormBloc(
-          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-          weight: weight,
-        ),
-        child: AddWeightView(),
-      );
-    },
+    // Home.routeName: (BuildContext context) => Home(),
+    // WeightTrackingView.routeName: (BuildContext context) {
+    //   BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
+    //   BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
+    //   return WeightTrackingView();
+    // },
+    // AddWeightView.routeName: (BuildContext context) {
+    //   final weight_rep.Weight? weight = ModalRoute.of(context)!.settings.arguments as weight_rep.Weight;
+    //   return BlocProvider<AddWeightFormBloc>(
+    //     create: (context) => AddWeightFormBloc(
+    //       authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //       weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+    //       weight: weight,
+    //     ),
+    //     child: AddWeightView(),
+    //   );
+    // },
     WeightStatisticsView.routeName: (BuildContext context) {
       return MultiBlocProvider(
         providers: [
