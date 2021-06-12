@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FoodDailyProgress extends StatelessWidget {
   const FoodDailyProgress({Key? key}) : super(key: key);
 
+  final double sizeA = 250;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -14,7 +16,7 @@ class FoodDailyProgress extends StatelessWidget {
       builder: (context, state) {
         if (state is FoodDayProgressLoading) {
           return SizedBox(
-            height: 200,
+            height: sizeA,
             width: size.width,
             child: Center(
               child: const CircularProgressIndicator(),
@@ -24,7 +26,7 @@ class FoodDailyProgress extends StatelessWidget {
           return Container();
         } else if (state is FoodDayProgressLoadSuccess) {
           return SizedBox(
-            height: 200,
+            height: sizeA,
             width: size.width,
             child: CustomPaint(
               painter: ProgressPainter(
