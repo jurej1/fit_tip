@@ -16,18 +16,18 @@ import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
   return {
-    RegisterView.routeName: (BuildContext context) {
-      return BlocProvider<RegisterFormBloc>(
-        create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
-        child: RegisterView(),
-      );
-    },
-    LoginView.routeName: (BuildContext context) {
-      return BlocProvider<LoginFormBloc>(
-        create: (context) => LoginFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
-        child: LoginView(),
-      );
-    },
+    // RegisterView.routeName: (BuildContext context) {
+    // return BlocProvider<RegisterFormBloc>(
+    //   create: (context) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+    //   child: RegisterView(),
+    // );
+    // },
+    // LoginView.routeName: (BuildContext context) {
+    //   return BlocProvider<LoginFormBloc>(
+    //     create: (context) => LoginFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+    //     child: LoginView(),
+    //   );
+    // },
     Home.routeName: (BuildContext context) => Home(),
     WeightTrackingView.routeName: (BuildContext context) {
       BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());

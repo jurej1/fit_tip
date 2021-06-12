@@ -80,7 +80,7 @@ class App extends StatelessWidget {
                   listenWhen: (previous, current) => previous.status != current.status,
                   listener: (context, state) {
                     if (state.status == AuthenticationStatus.unauthenticated) {
-                      _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                      _navigatorState.currentState!.pushReplacement(LoginView.route(context));
                     } else if (state.status == AuthenticationStatus.authenticated) {
                       _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
                     }
