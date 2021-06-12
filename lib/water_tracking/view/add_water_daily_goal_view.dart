@@ -1,11 +1,33 @@
+import 'package:fit_tip/authentication/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/blocs/add_water_daily_goal/add_water_daily_goal_bloc.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:water_repository/water_repository.dart';
 
 class AddWaterDailyGoalView extends StatelessWidget {
-  static const routeName = 'add_water_daily_goal_view';
+  // static const routeName = 'add_water_daily_goal_view';
+
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(builder: (_) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<AddWaterDailyGoalBloc>(
+            create: (context) => AddWaterDailyGoalBloc(
+              waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          ),
+          BlocProvider.value(
+            value: BlocProvider.of<WaterDailyGoalBloc>(context),
+          ),
+        ],
+        child: AddWaterDailyGoalView(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

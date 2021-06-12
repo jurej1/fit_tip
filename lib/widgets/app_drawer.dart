@@ -22,14 +22,14 @@ class AppDrawer extends StatelessWidget {
               leading: const Icon(Icons.water_damage_outlined),
               title: Text('Water tracking'),
               onTap: () {
-                Navigator.of(context).pushNamed(WaterLogView.routeName);
+                Navigator.of(context).push(WaterLogView.route(context));
               },
             ),
             ListTile(
               leading: Icon(Icons.food_bank),
               title: Text('Food tracking'),
               onTap: () {
-                Navigator.of(context).pushNamed(FoodDailyLogsView.routeName);
+                Navigator.of(context).push(FoodDailyLogsView.route(context));
               },
             ),
           ],

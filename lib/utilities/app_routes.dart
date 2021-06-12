@@ -43,130 +43,130 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     //     child: AddWeightView(),
     //   );
     // },
-    WeightStatisticsView.routeName: (BuildContext context) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<WeightStatisticsBloc>(
-            create: (context) => WeightStatisticsBloc(
-              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
-              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-            ),
-          ),
-          BlocProvider<WeightGoalStatisticsBloc>(
-            create: (context) => WeightGoalStatisticsBloc(
-              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
-            ),
-          ),
-        ],
-        child: WeightStatisticsView(),
-      );
-    },
-    EditWeightGoalView.routeName: (BuildContext context) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<EditWeightGoalFormBloc>(
-            create: (context) => EditWeightGoalFormBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-            ),
-          ),
-        ],
-        child: EditWeightGoalView(),
-      );
-    },
-    WaterLogView.routeName: (BuildContext context) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<WaterLogFocusedDayBloc>(
-            create: (context) => WaterLogFocusedDayBloc(),
-          ),
-          BlocProvider<WaterLogDayBloc>(
-            create: (context) => WaterLogDayBloc(
-              waterRepository: RepositoryProvider.of<WaterRepository>(context),
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
-          ),
-          BlocProvider<WaterDailyGoalBloc>(create: (context) {
-            return WaterDailyGoalBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              waterRepository: RepositoryProvider.of<WaterRepository>(context),
-            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
-          }),
-          BlocProvider<WaterLogConsumptionBloc>(
-            create: (context) => WaterLogConsumptionBloc(
-              waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
-              waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
-            ),
-          ),
-        ],
-        child: WaterLogView(),
-      );
-    },
-    AddWaterDailyGoalView.routeName: (BuildContext context) {
-      final Map<int, dynamic> map = ModalRoute.of(context)!.settings.arguments as Map<int, dynamic>;
+    // WeightStatisticsView.routeName: (BuildContext context) {
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider<WeightStatisticsBloc>(
+    //         create: (context) => WeightStatisticsBloc(
+    //           weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+    //           weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+    //         ),
+    //       ),
+    //       BlocProvider<WeightGoalStatisticsBloc>(
+    //         create: (context) => WeightGoalStatisticsBloc(
+    //           weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+    //           weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+    //           weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+    //         ),
+    //       ),
+    //     ],
+    //     child: WeightStatisticsView(),
+    //   );
+    // },
+    // EditWeightGoalView.routeName: (BuildContext context) {
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider<EditWeightGoalFormBloc>(
+    //         create: (context) => EditWeightGoalFormBloc(
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //           weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+    //           weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+    //         ),
+    //       ),
+    //     ],
+    //     child: EditWeightGoalView(),
+    //   );
+    // },
+    // WaterLogView.routeName: (BuildContext context) {
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider<WaterLogFocusedDayBloc>(
+    //         create: (context) => WaterLogFocusedDayBloc(),
+    //       ),
+    //       BlocProvider<WaterLogDayBloc>(
+    //         create: (context) => WaterLogDayBloc(
+    //           waterRepository: RepositoryProvider.of<WaterRepository>(context),
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //         )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
+    //       ),
+    //       BlocProvider<WaterDailyGoalBloc>(create: (context) {
+    //         return WaterDailyGoalBloc(
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //           waterRepository: RepositoryProvider.of<WaterRepository>(context),
+    //         )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
+    //       }),
+    //       BlocProvider<WaterLogConsumptionBloc>(
+    //         create: (context) => WaterLogConsumptionBloc(
+    //           waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
+    //           waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
+    //         ),
+    //       ),
+    //     ],
+    //     child: WaterLogView(),
+    //   );
+    // },
+    // AddWaterDailyGoalView.routeName: (BuildContext context) {
+    //   final Map<int, dynamic> map = ModalRoute.of(context)!.settings.arguments as Map<int, dynamic>;
 
-      final WaterDailyGoalBloc waterDailyGoalBloc = map[0];
-      final WaterLogFocusedDayBloc waterLogFocusedDayBloc = map[1];
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<AddWaterDailyGoalBloc>(
-            create: (context) => AddWaterDailyGoalBloc(
-              waterLogFocusedDayBloc: waterLogFocusedDayBloc,
-              waterRepository: RepositoryProvider.of<WaterRepository>(context),
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            ),
-          ),
-          BlocProvider.value(
-            value: waterDailyGoalBloc,
-          ),
-        ],
-        child: AddWaterDailyGoalView(),
-      );
-    },
-    FoodDailyLogsView.routeName: (BuildContext context) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<FoodLogFocusedDateBloc>(
-            create: (context) => FoodLogFocusedDateBloc(),
-          ),
-          BlocProvider<CalorieDailyGoalBloc>(
-            create: (context) => CalorieDailyGoalBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              foodRepository: RepositoryProvider.of<FoodRepository>(context),
-            )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
-          ),
-          BlocProvider<FoodDailyLogsBloc>(
-            create: (context) => FoodDailyLogsBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              foodRepository: RepositoryProvider.of<FoodRepository>(context),
-            )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
-          )
-        ],
-        child: FoodDailyLogsView(),
-      );
-    },
-    AddFoodLogView.routeName: (BuildContext context) {
-      final Map<int, Bloc> map = ModalRoute.of(context)!.settings.arguments as Map<int, Bloc>;
+    //   final WaterDailyGoalBloc waterDailyGoalBloc = map[0];
+    //   final WaterLogFocusedDayBloc waterLogFocusedDayBloc = map[1];
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider<AddWaterDailyGoalBloc>(
+    //         create: (context) => AddWaterDailyGoalBloc(
+    //           waterLogFocusedDayBloc: waterLogFocusedDayBloc,
+    //           waterRepository: RepositoryProvider.of<WaterRepository>(context),
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //         ),
+    //       ),
+    //       BlocProvider.value(
+    //         value: waterDailyGoalBloc,
+    //       ),
+    //     ],
+    //     child: AddWaterDailyGoalView(),
+    //   );
+    // },
+    // FoodDailyLogsView.routeName: (BuildContext context) {
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider<FoodLogFocusedDateBloc>(
+    //         create: (context) => FoodLogFocusedDateBloc(),
+    //       ),
+    //       BlocProvider<CalorieDailyGoalBloc>(
+    //         create: (context) => CalorieDailyGoalBloc(
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //           foodRepository: RepositoryProvider.of<FoodRepository>(context),
+    //         )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+    //       ),
+    //       BlocProvider<FoodDailyLogsBloc>(
+    //         create: (context) => FoodDailyLogsBloc(
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //           foodRepository: RepositoryProvider.of<FoodRepository>(context),
+    //         )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+    //       )
+    //     ],
+    //     child: FoodDailyLogsView(),
+    //   );
+    // },
+    // AddFoodLogView.routeName: (BuildContext context) {
+    //   final Map<int, Bloc> map = ModalRoute.of(context)!.settings.arguments as Map<int, Bloc>;
 
-      final FoodDailyLogsBloc foodDailyLogsBloc = map[0] as FoodDailyLogsBloc;
+    //   final FoodDailyLogsBloc foodDailyLogsBloc = map[0] as FoodDailyLogsBloc;
 
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => AddFoodItemBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              foodRepository: RepositoryProvider.of<FoodRepository>(context),
-            ),
-          ),
-          BlocProvider<FoodDailyLogsBloc>.value(
-            value: foodDailyLogsBloc,
-          ),
-        ],
-        child: AddFoodLogView(),
-      );
-    }
+    //   return MultiBlocProvider(
+    //     providers: [
+    //       BlocProvider(
+    //         create: (context) => AddFoodItemBloc(
+    //           authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+    //           foodRepository: RepositoryProvider.of<FoodRepository>(context),
+    //         ),
+    //       ),
+    //       BlocProvider<FoodDailyLogsBloc>.value(
+    //         value: foodDailyLogsBloc,
+    //       ),
+    //     ],
+    //     child: AddFoodLogView(),
+    //   );
+    // }
   };
 }

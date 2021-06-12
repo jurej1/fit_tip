@@ -22,7 +22,7 @@ class WeightGoalsList extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                Navigator.of(context).pushNamed(EditWeightGoalView.routeName);
+                Navigator.of(context).push(EditWeightGoalView.route(context));
               },
             ),
           ),

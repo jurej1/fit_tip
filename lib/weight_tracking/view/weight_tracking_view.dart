@@ -25,7 +25,7 @@ class WeightTrackingView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.pie_chart),
             onPressed: () {
-              Navigator.of(context).pushNamed(WeightStatisticsView.routeName);
+              Navigator.of(context).push(WeightStatisticsView.route(context));
             },
           ),
           IconButton(

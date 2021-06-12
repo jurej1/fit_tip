@@ -1,14 +1,33 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:formz/formz.dart';
 
 class AddFoodLogView extends StatelessWidget {
   const AddFoodLogView({Key? key}) : super(key: key);
 
-  static const routeName = 'add_food_log_view';
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(builder: (_) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AddFoodItemBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              foodRepository: RepositoryProvider.of<FoodRepository>(context),
+            ),
+          ),
+          BlocProvider<FoodDailyLogsBloc>.value(
+            value: BlocProvider.of<FoodDailyLogsBloc>(context),
+          ),
+        ],
+        child: AddFoodLogView(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
