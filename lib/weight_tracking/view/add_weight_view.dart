@@ -4,7 +4,7 @@ import 'package:fit_tip/enums/enums.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:formz/formz.dart';
 import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
@@ -61,11 +61,14 @@ class _WeightInput extends StatelessWidget {
         Text('Weight in ${MeasurmentSystemConverter.meaSystToWeightUnit(BlocProvider.of<MeasurmentSystemBloc>(context).state)}'),
         BlocBuilder<AddWeightFormBloc, AddWeightFormState>(
           builder: (context, state) {
-            return SizedBox(
-              width: 11 * 4,
+            return Expanded(
               child: TextFormField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                ),
+                keyboardType: TextInputType.number,
                 initialValue: state.weight.value,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.right,
                 onChanged: (val) => BlocProvider.of<AddWeightFormBloc>(context).add(AddWeightWeightChanged(val)),
               ),
             );
@@ -90,7 +93,7 @@ class _DateInput extends StatelessWidget {
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.zero),
               ),
-              child: Text(DateFormat('dd.MMMM.yyyy').format(state.dateAdded.value)),
+              child: Text(intl.DateFormat('dd.MMMM.yyyy').format(state.dateAdded.value)),
               onPressed: () async {
                 final date = await showDatePicker(
                   context: context,
