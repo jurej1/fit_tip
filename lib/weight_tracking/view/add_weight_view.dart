@@ -65,6 +65,7 @@ class _WeightInput extends StatelessWidget {
               child: TextFormField(
                 decoration: InputDecoration(
                   border: InputBorder.none,
+                  errorText: state.weight.invalid ? 'Invalid' : null,
                 ),
                 keyboardType: TextInputType.number,
                 initialValue: state.weight.value,
