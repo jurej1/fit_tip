@@ -88,4 +88,6 @@ class AddFoodItemProteinChanged extends AddFoodItemEvent {
   List<Object?> get props => [value];
 }
 
+class AddFoodItemShowDetailPressed extends AddFoodItemEvent {}
+
 class AddFoodItemSubmitForm extends AddFoodItemEvent {}

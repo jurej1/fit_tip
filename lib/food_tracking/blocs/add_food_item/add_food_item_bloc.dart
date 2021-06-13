@@ -51,6 +51,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       yield _mapProteinChangedToState(event);
     } else if (event is AddFoodItemFatsChanged) {
       yield _mapFatChangedToState(event);
+    } else if (event is AddFoodItemShowDetailPressed) {
+      yield state.copyWith(showDetail: !state.showDetail);
     }
   }
 
