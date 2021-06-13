@@ -7,7 +7,6 @@ import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
-import 'utilities/app_routes.dart';
 import 'weight_tracking/weight.dart';
 
 class App extends StatelessWidget {
@@ -96,7 +95,6 @@ class App extends StatelessWidget {
             );
           },
           home: _SplashScreen(),
-          routes: appRoutes(),
         ),
       ),
     );
