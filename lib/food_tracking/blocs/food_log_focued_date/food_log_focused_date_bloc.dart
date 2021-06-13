@@ -24,6 +24,12 @@ class FoodLogFocusedDateBloc extends Bloc<FoodLogFocusedDateEvent, FoodLogFocuse
       yield state.copyWith(
         selectedDate: selected.subtract(const Duration(days: 1)),
       );
+    } else if (event is FoodLogFocusedDatePicked) {
+      if (event.date != null) {
+        bool isAfterNow = event.date!.isAfter(DateTime.now());
+
+        if (!isAfterNow) yield state.copyWith(selectedDate: event.date!);
+      }
     }
   }
 }

@@ -23,8 +23,18 @@ class FoodLogDaySelector extends StatelessWidget {
                 BlocProvider.of<FoodLogFocusedDateBloc>(context).add(FoodLogFocusedDatePreviousDayPressed());
               },
             ),
-            Text(
-              DateFormat('d.MMMM.yyyy').format(state.selectedDate),
+            TextButton(
+              child: Text(DateFormat('d.MMMM.yyyy').format(state.selectedDate)),
+              onPressed: () async {
+                DateTime? date = await showDatePicker(
+                  context: context,
+                  initialDate: state.selectedDate,
+                  firstDate: state.selectedDate.subtract(const Duration(days: 365)),
+                  lastDate: DateTime.now(),
+                );
+
+                BlocProvider.of<FoodLogFocusedDateBloc>(context).add(FoodLogFocusedDatePicked(date: date));
+              },
             ),
             IconButton(
               icon: Icon(Icons.arrow_forward_ios_rounded),

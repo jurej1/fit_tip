@@ -57,6 +57,7 @@ class FoodLogBuilder extends StatelessWidget {
                         meal: state.mealDay?.snacks,
                         title: 'Snacks',
                       ),
+                      const SizedBox(height: 75),
                     ],
                   ),
                 ],
