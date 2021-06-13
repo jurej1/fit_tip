@@ -45,6 +45,12 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       yield _mapCalorieChangedToState(event);
     } else if (event is AddFoodItemSubmitForm) {
       yield* _mapSubmitFormToState();
+    } else if (event is AddFoodItemCarbsChanged) {
+      yield _mapCarbsChangedToState(event);
+    } else if (event is AddFoodItemProteinChanged) {
+      yield _mapProteinChangedToState(event);
+    } else if (event is AddFoodItemFatsChanged) {
+      yield _mapFatChangedToState(event);
     }
   }
 
@@ -60,6 +66,9 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.foodName,
           state.calorieConsumed,
           state.amountConsumed,
+          state.carbs,
+          state.proteins,
+          state.fats,
         ],
       ),
     );
@@ -76,6 +85,9 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.foodName,
         state.calorieConsumed,
         state.amountConsumed,
+        state.carbs,
+        state.proteins,
+        state.fats,
       ]),
     );
   }
@@ -91,6 +103,9 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.timeConsumed,
         state.calorieConsumed,
         state.amountConsumed,
+        state.carbs,
+        state.proteins,
+        state.fats,
       ]),
     );
   }
@@ -106,6 +121,9 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.foodName,
         state.calorieConsumed,
         amount,
+        state.carbs,
+        state.proteins,
+        state.fats,
       ]),
     );
   }
@@ -121,6 +139,27 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.timeConsumed,
         state.foodName,
         state.amountConsumed,
+        state.carbs,
+        state.proteins,
+        state.fats,
+      ]),
+    );
+  }
+
+  AddFoodItemState _mapCarbsChangedToState(AddFoodItemCarbsChanged event) {
+    final AmountConsumed carbs = AmountConsumed.dirty(event.value ?? '');
+
+    return state.copyWith(
+      carbs: carbs,
+      status: Formz.validate([
+        carbs,
+        state.amountConsumed,
+        state.calorieConsumed,
+        state.dateConsumed,
+        state.fats,
+        state.foodName,
+        state.proteins,
+        state.timeConsumed,
       ]),
     );
   }
@@ -131,6 +170,9 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     final foodName = FoodName.dirty(state.foodName.value);
     final calorie = CalorieConsumed.dirty(state.calorieConsumed.value);
     final amount = AmountConsumed.dirty(state.amountConsumed.value);
+    final fat = AmountConsumed.dirty(state.fats.value);
+    final protein = AmountConsumed.dirty(state.proteins.value);
+    final carb = AmountConsumed.dirty(state.carbs.value);
 
     yield state.copyWith(
       amountConsumed: amount,
@@ -138,13 +180,18 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       dateConsumed: date,
       foodName: foodName,
       timeConsumed: time,
-      status: Formz.validate([
-        date,
-        time,
-        foodName,
-        calorie,
-        amount,
-      ]),
+      status: Formz.validate(
+        [
+          date,
+          time,
+          foodName,
+          calorie,
+          amount,
+          fat,
+          carb,
+          protein,
+        ],
+      ),
     );
 
     if (state.status.isValidated && _isAuth) {
@@ -160,6 +207,20 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           dateAdded: DateTime(date.year, date.month, date.day, time.hour, time.minute),
           calories: double.parse(state.calorieConsumed.value),
           amount: double.parse(state.amountConsumed.value),
+          macronutrients: [
+            FoodDataMacro(
+              macronutrient: Macronutrient.fat,
+              amount: double.parse(state.fats.value),
+            ),
+            FoodDataMacro(
+              macronutrient: Macronutrient.carbs,
+              amount: double.parse(state.carbs.value),
+            ),
+            FoodDataMacro(
+              macronutrient: Macronutrient.protein,
+              amount: double.parse(state.proteins.value),
+            )
+          ],
         );
 
         DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);
@@ -174,5 +235,45 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
+  }
+
+  AddFoodItemState _mapProteinChangedToState(AddFoodItemProteinChanged event) {
+    final protein = AmountConsumed.dirty(event.value ?? '');
+
+    return state.copyWith(
+      proteins: protein,
+      status: Formz.validate(
+        [
+          protein,
+          state.amountConsumed,
+          state.calorieConsumed,
+          state.dateConsumed,
+          state.fats,
+          state.foodName,
+          state.carbs,
+          state.timeConsumed,
+        ],
+      ),
+    );
+  }
+
+  AddFoodItemState _mapFatChangedToState(AddFoodItemFatsChanged event) {
+    final fat = AmountConsumed.dirty(event.value ?? '');
+
+    return state.copyWith(
+      fats: fat,
+      status: Formz.validate(
+        [
+          fat,
+          state.amountConsumed,
+          state.calorieConsumed,
+          state.dateConsumed,
+          state.proteins,
+          state.foodName,
+          state.carbs,
+          state.timeConsumed,
+        ],
+      ),
+    );
   }
 }

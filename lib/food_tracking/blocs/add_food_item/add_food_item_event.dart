@@ -61,4 +61,31 @@ class AddFoodItemMealTypeChanged extends AddFoodItemEvent {
   List<Object?> get props => [value];
 }
 
+class AddFoodItemFatsChanged extends AddFoodItemEvent {
+  final String? value;
+
+  const AddFoodItemFatsChanged({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class AddFoodItemCarbsChanged extends AddFoodItemEvent {
+  final String? value;
+
+  const AddFoodItemCarbsChanged({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class AddFoodItemProteinChanged extends AddFoodItemEvent {
+  final String? value;
+
+  const AddFoodItemProteinChanged({this.value});
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class AddFoodItemSubmitForm extends AddFoodItemEvent {}
