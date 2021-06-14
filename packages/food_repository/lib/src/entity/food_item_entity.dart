@@ -13,6 +13,7 @@ class FoodItemEntity extends Equatable {
   final DateTime dateAdded;
   final MealType mealType;
   final List<FoodDataMacroEntity>? macronutrients;
+  final List<FoodDataVitaminEntity>? vitamins;
 
   const FoodItemEntity({
     this.id,
@@ -23,6 +24,7 @@ class FoodItemEntity extends Equatable {
     required this.dateAdded,
     required this.mealType,
     this.macronutrients,
+    this.vitamins,
   });
 
   @override
@@ -36,6 +38,7 @@ class FoodItemEntity extends Equatable {
       dateAdded,
       mealType,
       macronutrients,
+      vitamins,
     ];
   }
 
@@ -47,7 +50,8 @@ class FoodItemEntity extends Equatable {
       'calories': calories,
       'dateAdded': Timestamp.fromDate(dateAdded),
       'mealType': describeEnum(mealType),
-      if (macronutrients != null) 'macronutrients': macronutrients!.map((e) => e.toDocumentSnapshot(e)).toList()
+      if (macronutrients != null) 'macronutrients': macronutrients!.map((e) => e.toDocumentSnapshot(e)).toList(),
+      if (vitamins != null) 'vitamins': vitamins!.map((e) => e.toDocumentSnapshot(e)).toList()
     };
   }
 
@@ -55,18 +59,20 @@ class FoodItemEntity extends Equatable {
     final data = snap.data() as Map<String, dynamic>;
 
     return FoodItemEntity(
-      amount: data['amount'],
-      calories: data['calories'],
-      dateAdded: (data['dateAdded'] as Timestamp).toDate(),
-      id: snap.id,
-      name: data['name'],
-      sourceRef: data['sourceRef'],
-      mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
-      macronutrients: data.containsKey('macronutrients')
-          ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
-              as List<FoodDataMacroEntity>
-          : null,
-    );
+        amount: data['amount'],
+        calories: data['calories'],
+        dateAdded: (data['dateAdded'] as Timestamp).toDate(),
+        id: snap.id,
+        name: data['name'],
+        sourceRef: data['sourceRef'],
+        mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
+        macronutrients: data.containsKey('macronutrients')
+            ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
+                as List<FoodDataMacroEntity>
+            : null,
+        vitamins: data.containsKey('vitamins')
+            ? (data['vitamins'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataVitaminEntity>
+            : null);
   }
 
   FoodItemEntity copyWith({
@@ -78,6 +84,7 @@ class FoodItemEntity extends Equatable {
     DateTime? dateAdded,
     MealType? mealType,
     List<FoodDataMacroEntity>? macronutrients,
+    List<FoodDataVitaminEntity>? vitamins,
   }) {
     return FoodItemEntity(
       id: id ?? this.id,
@@ -88,6 +95,7 @@ class FoodItemEntity extends Equatable {
       dateAdded: dateAdded ?? this.dateAdded,
       mealType: mealType ?? this.mealType,
       macronutrients: macronutrients ?? this.macronutrients,
+      vitamins: vitamins ?? this.vitamins,
     );
   }
 }

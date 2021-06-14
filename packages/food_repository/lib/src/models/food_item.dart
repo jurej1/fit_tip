@@ -13,8 +13,9 @@ class FoodItem extends Equatable {
   final DateTime dateAdded;
   final MealType mealType;
   final List<FoodDataMacro>? macronutrients;
+  final List<FoodDataVitamin>? vitamins;
 
-  FoodItem({
+  const FoodItem({
     this.id,
     required this.name,
     this.sourceRef,
@@ -23,6 +24,7 @@ class FoodItem extends Equatable {
     required this.dateAdded,
     required this.mealType,
     this.macronutrients,
+    this.vitamins,
   });
 
   @override
@@ -36,6 +38,7 @@ class FoodItem extends Equatable {
       dateAdded,
       mealType,
       macronutrients,
+      vitamins,
     ];
   }
 
@@ -48,6 +51,7 @@ class FoodItem extends Equatable {
     DateTime? dateAdded,
     MealType? mealType,
     List<FoodDataMacro>? macronutrients,
+    List<FoodDataVitamin>? vitamin,
   }) {
     return FoodItem(
       id: id ?? this.id,
@@ -58,6 +62,7 @@ class FoodItem extends Equatable {
       dateAdded: dateAdded ?? this.dateAdded,
       mealType: mealType ?? this.mealType,
       macronutrients: macronutrients ?? this.macronutrients,
+      vitamins: vitamin ?? this.vitamins,
     );
   }
 
@@ -71,6 +76,7 @@ class FoodItem extends Equatable {
       sourceRef: this.sourceRef,
       mealType: this.mealType,
       macronutrients: macronutrients?.map((e) => e.toEntity()).toList(),
+      vitamins: vitamins?.map((e) => e.toEntity()).toList(),
     );
   }
 
@@ -84,6 +90,7 @@ class FoodItem extends Equatable {
       sourceRef: entity.sourceRef,
       mealType: entity.mealType,
       macronutrients: entity.macronutrients?.map((e) => FoodDataMacro.fromEntity(e)).toList(),
+      vitamins: entity.vitamins?.map((e) => FoodDataVitamin.fromEntity(e)).toList(),
     );
   }
 }
