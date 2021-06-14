@@ -11,6 +11,8 @@ class AmountDetailConsumed extends FormzInput<String, AmountDetailConsumedValida
     if (value == null) {
       return null;
     } else {
+      if (value.isEmpty) return null;
+
       double? parse = double.tryParse(value);
 
       if (parse == null) {

@@ -20,42 +20,6 @@ abstract class FoodDataEntity extends Equatable {
       'name': describeEnum(name),
     };
   }
-
-  static FoodDataEntity fromDocumentSnapshot(DocumentSnapshot snap) {
-    final data = snap.data() as Map<String, dynamic>;
-    final name = data['name'] as String;
-    final amount = data['amount'];
-
-    bool isMacro = Macronutrient.values.any((element) => name == describeEnum(element));
-
-    if (isMacro) {
-      return FoodDataMacroEntity(
-        macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == name),
-        amount: amount,
-      );
-    }
-
-    bool isMineral = Mineral.values.any((element) => name == describeEnum(element));
-    if (isMineral) {
-      return FoodDataMineralEntity(
-        mineral: Mineral.values.firstWhere((e) => describeEnum(e) == name),
-        amount: amount,
-      );
-    }
-
-    bool isVitamin = Vitamin.values.any((element) => name == describeEnum(element));
-    if (isVitamin) {
-      return FoodDataVitaminEntity(
-        vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == name),
-        amount: amount,
-      );
-    }
-
-    return FoodDataMadeOfEntity(
-      madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == name),
-      amount: amount,
-    );
-  }
 }
 
 class FoodDataMacroEntity extends FoodDataEntity {
@@ -69,11 +33,19 @@ class FoodDataMacroEntity extends FoodDataEntity {
   @override
   List<Object?> get props => [macronutrient, amount];
 
-  FoodDataMacro copyWith({
-    Macronutrient? macronutrient,
-    double? amount,
-  }) {
-    return FoodDataMacro(
+  static FoodDataMacroEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+    final name = data['name'] as String;
+    final amount = data['amount'];
+
+    return FoodDataMacroEntity(
+      macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == name),
+      amount: amount,
+    );
+  }
+
+  FoodDataMacroEntity copyWith({Macronutrient? macronutrient, double? amount}) {
+    return FoodDataMacroEntity(
       macronutrient: macronutrient ?? this.macronutrient,
       amount: amount ?? this.amount,
     );
@@ -91,13 +63,24 @@ class FoodDataMineralEntity extends FoodDataEntity {
   @override
   List<Object?> get props => [mineral, amount];
 
-  FoodDataMineral copyWith({
+  FoodDataMineralEntity copyWith({
     Mineral? mineral,
     double? amount,
   }) {
-    return FoodDataMineral(
+    return FoodDataMineralEntity(
       mineral: mineral ?? this.mineral,
       amount: amount ?? this.amount,
+    );
+  }
+
+  static FoodDataMineralEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+    final name = data['name'] as String;
+    final amount = data['amount'];
+
+    return FoodDataMineralEntity(
+      mineral: Mineral.values.firstWhere((e) => describeEnum(e) == name),
+      amount: amount,
     );
   }
 }
@@ -112,12 +95,21 @@ class FoodDataVitaminEntity extends FoodDataEntity {
   @override
   List<Object?> get props => [vitamin, amount];
 
-  FoodDataVitamin copyWith({
+  static FoodDataVitaminEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+    final name = data['name'] as String;
+    final amount = data['amount'];
+
+    return FoodDataVitaminEntity(
+      vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == name),
+      amount: amount,
+    );
+  }
+
+  FoodDataVitaminEntity copyWith({
     Vitamin? vitamin,
-    double? amount,
   }) {
-    return FoodDataVitamin(
-      amount: amount ?? this.amount,
+    return FoodDataVitaminEntity(
       vitamin: vitamin ?? this.vitamin,
     );
   }
@@ -134,13 +126,24 @@ class FoodDataMadeOfEntity extends FoodDataEntity {
   @override
   List<Object?> get props => [madeOf, amount];
 
-  FoodDataMadeOf copyWith({
+  FoodDataMadeOfEntity copyWith({
     MadeOf? madeOf,
     double? amount,
   }) {
-    return FoodDataMadeOf(
+    return FoodDataMadeOfEntity(
       madeOf: madeOf ?? this.madeOf,
       amount: amount ?? this.amount,
+    );
+  }
+
+  static FoodDataMadeOfEntity fromDocumentSnapshot(DocumentSnapshot snap) {
+    final data = snap.data() as Map<String, dynamic>;
+    final name = data['name'] as String;
+    final amount = data['amount'];
+
+    return FoodDataMadeOfEntity(
+      madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == name),
+      amount: amount,
     );
   }
 }

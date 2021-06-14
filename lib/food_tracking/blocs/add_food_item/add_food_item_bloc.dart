@@ -203,26 +203,36 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         final date = state.dateConsumed.value;
         final time = state.timeConsumed.value;
 
+        final bool hasFats = state.fats.value.isNotEmpty;
+        final bool hasCarbs = state.carbs.value.isNotEmpty;
+        final bool hasProtein = state.proteins.value.isNotEmpty;
+        final bool hasMacros = hasFats || hasCarbs || hasProtein;
+
         FoodItem item = FoodItem(
           mealType: state.type,
           name: state.foodName.value,
           dateAdded: DateTime(date.year, date.month, date.day, time.hour, time.minute),
           calories: double.parse(state.calorieConsumed.value),
           amount: double.parse(state.amountConsumed.value),
-          macronutrients: [
-            FoodDataMacro(
-              macronutrient: Macronutrient.fat,
-              amount: double.parse(state.fats.value),
-            ),
-            FoodDataMacro(
-              macronutrient: Macronutrient.carbs,
-              amount: double.parse(state.carbs.value),
-            ),
-            FoodDataMacro(
-              macronutrient: Macronutrient.protein,
-              amount: double.parse(state.proteins.value),
-            )
-          ],
+          macronutrients: hasMacros
+              ? [
+                  if (hasFats)
+                    FoodDataMacro(
+                      macronutrient: Macronutrient.fat,
+                      amount: double.parse(state.fats.value),
+                    ),
+                  if (hasCarbs)
+                    FoodDataMacro(
+                      macronutrient: Macronutrient.carbs,
+                      amount: double.parse(state.carbs.value),
+                    ),
+                  if (hasProtein)
+                    FoodDataMacro(
+                      macronutrient: Macronutrient.protein,
+                      amount: double.parse(state.proteins.value),
+                    )
+                ]
+              : null,
         );
 
         DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);

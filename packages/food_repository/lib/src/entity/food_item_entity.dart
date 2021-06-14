@@ -59,20 +59,20 @@ class FoodItemEntity extends Equatable {
     final data = snap.data() as Map<String, dynamic>;
 
     return FoodItemEntity(
-        amount: data['amount'],
-        calories: data['calories'],
-        dateAdded: (data['dateAdded'] as Timestamp).toDate(),
-        id: snap.id,
-        name: data['name'],
-        sourceRef: data['sourceRef'],
-        mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
-        macronutrients: data.containsKey('macronutrients')
-            ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
-                as List<FoodDataMacroEntity>
-            : null,
-        vitamins: data.containsKey('vitamins')
-            ? (data['vitamins'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataVitaminEntity>
-            : null);
+      amount: data['amount'],
+      calories: data['calories'],
+      dateAdded: (data['dateAdded'] as Timestamp).toDate(),
+      id: snap.id,
+      name: data['name'],
+      sourceRef: data['sourceRef'],
+      mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
+      macronutrients: data.containsKey('macronutrients')
+          ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataMacroEntity.fromDocumentSnapshot(e)).toList()
+          : null,
+      vitamins: data.containsKey('vitamins')
+          ? (data['vitamins'] as List<dynamic>).map((e) => FoodDataVitaminEntity.fromDocumentSnapshot(e)).toList()
+          : null,
+    );
   }
 
   FoodItemEntity copyWith({
