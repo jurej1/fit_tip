@@ -78,6 +78,7 @@ class AddFoodLogView extends StatelessWidget {
                 CalorieConsumedInput(),
                 AmountConsumedInput(),
                 MealTypeInput(),
+                DetailInputList(),
               ],
             );
           },
@@ -95,6 +96,7 @@ class DetailInputList extends StatelessWidget {
     return Column(
       children: [
         ShowExpandedInputListTile(),
+        FoodItemDetailForm(),
       ],
     );
   }
