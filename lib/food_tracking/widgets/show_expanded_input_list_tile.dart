@@ -23,6 +23,7 @@ class _ShowExpandedInputListTileState extends State<ShowExpandedInputListTile> w
       vsync: this,
       lowerBound: 0,
       upperBound: pi,
+      duration: const Duration(seconds: 1),
     );
   }
 
@@ -35,14 +36,16 @@ class _ShowExpandedInputListTileState extends State<ShowExpandedInputListTile> w
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddFoodItemBloc, AddFoodItemState>(
-      listenWhen: (p, c) => p.showDetail != c.showDetail,
+      // listenWhen: (p, c) => p.showDetail != c.showDetail,
       listener: (context, state) {
-        final status = _controller.status;
-        if (status == AnimationStatus.completed) {
-          _controller.reverse();
-        } else {
-          _controller.forward();
-        }
+        // final status = _controller.status;
+        // if (status == AnimationStatus.completed) {
+        //   _controller.reverse();
+        // } else {
+        //   _controller.forward();
+        // }
+
+        _controller.forward();
       },
       builder: (context, state) {
         return ListTile(
