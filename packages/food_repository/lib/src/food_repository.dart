@@ -58,7 +58,7 @@ class FoodRepository {
 
   Future<MealDay?> getMealDayForSpecificDay(String userId, DateTime date) async {
     final DateTime lowerBound = DateTime(date.year, date.month, date.day, 0, 0, 0);
-    final DateTime upperBound = DateTime(date.year, date.month, date.year, 23, 59, 59);
+    final DateTime upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
     try {
       QuerySnapshot snapshot = await _mealTrackingRef(userId)
