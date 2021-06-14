@@ -16,7 +16,7 @@ class Food extends Equatable {
   final FoodGroup group;
   final DocumentReference ref;
 
-  Food({
+  const Food({
     required this.id,
     required this.name,
     required this.calories,
