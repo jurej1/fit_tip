@@ -149,7 +149,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   }
 
   AddFoodItemState _mapCarbsChangedToState(AddFoodItemCarbsChanged event) {
-    final AmountConsumed carbs = AmountConsumed.dirty(event.value ?? '');
+    final AmountDetailConsumed carbs = AmountDetailConsumed.dirty(event.value ?? '');
 
     return state.copyWith(
       carbs: carbs,
@@ -240,7 +240,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   }
 
   AddFoodItemState _mapProteinChangedToState(AddFoodItemProteinChanged event) {
-    final protein = AmountConsumed.dirty(event.value ?? '');
+    final protein = AmountDetailConsumed.dirty(event.value ?? '');
 
     return state.copyWith(
       proteins: protein,
@@ -260,7 +260,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   }
 
   AddFoodItemState _mapFatChangedToState(AddFoodItemFatsChanged event) {
-    final fat = AmountConsumed.dirty(event.value ?? '');
+    final fat = AmountDetailConsumed.dirty(event.value ?? '');
 
     return state.copyWith(
       fats: fat,
