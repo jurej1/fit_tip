@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
@@ -81,6 +83,24 @@ class AddFoodLogView extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class DetailInputList extends StatefulWidget {
+  const DetailInputList({Key? key}) : super(key: key);
+
+  @override
+  _DetailInputListState createState() => _DetailInputListState();
+}
+
+class _DetailInputListState extends State<DetailInputList> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ShowExpandedInputListTile(),
+      ],
     );
   }
 }
