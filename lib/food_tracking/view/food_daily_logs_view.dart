@@ -7,8 +7,6 @@ import 'package:food_repository/food_repository.dart';
 class FoodDailyLogsView extends StatelessWidget {
   const FoodDailyLogsView({Key? key}) : super(key: key);
 
-  // static const routeName = 'food_daily_logs_view';
-
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(builder: (_) {
       return MultiBlocProvider(

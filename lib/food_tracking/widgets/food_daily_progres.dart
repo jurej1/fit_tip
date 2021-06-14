@@ -3,10 +3,32 @@ import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FoodDailyProgress extends StatelessWidget {
+class FoodDailyProgress extends StatefulWidget {
   const FoodDailyProgress({Key? key}) : super(key: key);
 
+  @override
+  _FoodDailyProgressState createState() => _FoodDailyProgressState();
+}
+
+class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTickerProviderStateMixin {
   final double sizeA = 250;
+
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +47,22 @@ class FoodDailyProgress extends StatelessWidget {
         } else if (state is FoodDayProgressFailure) {
           return Container();
         } else if (state is FoodDayProgressLoadSuccess) {
+          _animationController.forward();
+
           return SizedBox(
             height: sizeA,
             width: size.width,
-            child: CustomPaint(
-              painter: ProgressPainter(
-                maxValue: state.calorieGoal,
-                primaryValue: state.calorieConsume,
-              ),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: ProgressPainter(
+                    maxValue: state.calorieGoal,
+                    primaryValue: _animationController.value * state.calorieConsume,
+                  ),
+                  child: child,
+                );
+              },
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

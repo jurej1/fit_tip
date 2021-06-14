@@ -40,11 +40,12 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
               animation: _animationController,
               builder: (context, child) {
                 return CustomPaint(
-                    painter: ProgressPainter(
-                      primaryValue: _animationController.value * state.amount,
-                      maxValue: state.max,
-                    ),
-                    child: child);
+                  painter: ProgressPainter(
+                    primaryValue: _animationController.value * state.amount,
+                    maxValue: state.max,
+                  ),
+                  child: child,
+                );
               },
               child: Center(
                 child: Column(
