@@ -87,14 +87,9 @@ class AddFoodLogView extends StatelessWidget {
   }
 }
 
-class DetailInputList extends StatefulWidget {
+class DetailInputList extends StatelessWidget {
   const DetailInputList({Key? key}) : super(key: key);
 
-  @override
-  _DetailInputListState createState() => _DetailInputListState();
-}
-
-class _DetailInputListState extends State<DetailInputList> {
   @override
   Widget build(BuildContext context) {
     return Column(
