@@ -86,14 +86,11 @@ class FoodEntity extends Equatable {
       group: FoodGroup.values.firstWhere((element) => describeEnum(element) == data['group']),
       id: snap.id,
       ref: snap.reference,
-      macronutrients: (data['macronutrients'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList()
-          as List<FoodDataMacroEntity>,
-      madeOf: (data['madeOf'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataMadeOfEntity>,
-      minerals:
-          (data['minerals'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataMineralEntity>,
+      macronutrients: (data['macronutrients'] as List<dynamic>).map((e) => FoodDataMacroEntity.fromDocumentSnapshot(e)).toList(),
+      madeOf: (data['madeOf'] as List<dynamic>).map((e) => FoodDataMadeOfEntity.fromDocumentSnapshot(e)).toList(),
+      minerals: (data['minerals'] as List<dynamic>).map((e) => FoodDataMineralEntity.fromDocumentSnapshot(e)).toList(),
       name: data['name'],
-      vitamins:
-          (data['vitamines'] as List<dynamic>).map((e) => FoodDataEntity.fromDocumentSnapshot(e)).toList() as List<FoodDataVitaminEntity>,
+      vitamins: (data['vitamines'] as List<dynamic>).map((e) => FoodDataVitaminEntity.fromDocumentSnapshot(e)).toList(),
     );
   }
 }

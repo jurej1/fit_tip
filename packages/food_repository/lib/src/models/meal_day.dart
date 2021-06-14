@@ -22,7 +22,7 @@ class MealDay extends Equatable {
                   (breakfast != null ? breakfast.foods : []),
             ).fold(
               0.0,
-              (p, e) => p + e.amount,
+              (p, e) => p + e.calories,
             );
 
   @override
