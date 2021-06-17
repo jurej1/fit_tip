@@ -41,19 +41,20 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   Stream<FoodDailyLogsState> _mapLogAddedToState(FoodDailyLogsLogAdded event) async* {
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
       MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
-      if (mealDay != null) {
-        final MealType type = event.foodItem!.mealType;
-        final item = event.foodItem!;
 
-        mealDay = mealDay.copyWith(
-          breakfast: type == MealType.breakfast ? _addFoodItemToMeal(item, mealDay.breakfast) : null,
-          dinner: type == MealType.dinner ? _addFoodItemToMeal(item, mealDay.dinner) : null,
-          lunch: type == MealType.lunch ? _addFoodItemToMeal(item, mealDay.lunch) : null,
-          snacks: type == MealType.snack ? _addFoodItemToMeal(item, mealDay.snacks) : null,
-        );
+      if (mealDay == null) mealDay = MealDay();
 
-        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
-      }
+      final MealType type = event.foodItem!.mealType;
+      final item = event.foodItem!;
+
+      mealDay = mealDay.copyWith(
+        breakfast: type == MealType.breakfast ? _addFoodItemToMeal(item, mealDay.breakfast) : null,
+        dinner: type == MealType.dinner ? _addFoodItemToMeal(item, mealDay.dinner) : null,
+        lunch: type == MealType.lunch ? _addFoodItemToMeal(item, mealDay.lunch) : null,
+        snacks: type == MealType.snack ? _addFoodItemToMeal(item, mealDay.snacks) : null,
+      );
+
+      yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
     }
   }
 
