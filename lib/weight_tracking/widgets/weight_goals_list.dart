@@ -39,7 +39,7 @@ class WeightGoalsList extends StatelessWidget {
           SizedBox(height: height),
           GoalRow(
             text: 'Target date',
-            value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '',
+            value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.targetDate!) : '',
           ),
           SizedBox(height: height),
           GoalRow(
