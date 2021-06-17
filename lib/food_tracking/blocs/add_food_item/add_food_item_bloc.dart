@@ -53,6 +53,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       yield _mapFatChangedToState(event);
     } else if (event is AddFoodItemShowDetailPressed) {
       yield state.copyWith(showDetail: !state.showDetail);
+    } else if (event is AddFooditemVitaminAdded) {
+      yield* _mapVitaminAddedToState(event);
     }
   }
 
@@ -287,5 +289,13 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         ],
       ),
     );
+  }
+
+  Stream<AddFoodItemState> _mapVitaminAddedToState(AddFooditemVitaminAdded event) async* {
+    if (event.vitamin != null) {
+      final list = state.vitamins;
+
+      yield state.copyWith(vitamins: list..add(event.vitamin!));
+    }
   }
 }

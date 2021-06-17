@@ -14,6 +14,7 @@ class AddFoodItemState extends Equatable {
     this.proteins = const AmountDetailConsumed.pure(),
     this.carbs = const AmountDetailConsumed.pure(),
     this.showDetail = false,
+    this.vitamins = const [],
   });
 
   final FormzStatus status;
@@ -28,6 +29,7 @@ class AddFoodItemState extends Equatable {
   final AmountDetailConsumed proteins;
   final AmountDetailConsumed carbs;
   final bool showDetail;
+  final List<FoodDataVitamin> vitamins;
 
   factory AddFoodItemState.pure() {
     return AddFoodItemState(
@@ -51,6 +53,7 @@ class AddFoodItemState extends Equatable {
       proteins,
       carbs,
       showDetail,
+      vitamins,
     ];
   }
 
@@ -67,6 +70,7 @@ class AddFoodItemState extends Equatable {
     AmountDetailConsumed? proteins,
     AmountDetailConsumed? carbs,
     bool? showDetail,
+    List<FoodDataVitamin>? vitamins,
   }) {
     return AddFoodItemState(
       status: status ?? this.status,
@@ -81,6 +85,7 @@ class AddFoodItemState extends Equatable {
       proteins: proteins ?? this.proteins,
       carbs: carbs ?? this.carbs,
       showDetail: showDetail ?? this.showDetail,
+      vitamins: vitamins ?? this.vitamins,
     );
   }
 }

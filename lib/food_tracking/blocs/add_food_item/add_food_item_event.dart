@@ -88,6 +88,17 @@ class AddFoodItemProteinChanged extends AddFoodItemEvent {
   List<Object?> get props => [value];
 }
 
+class AddFooditemVitaminAdded extends AddFoodItemEvent {
+  final FoodDataVitamin? vitamin;
+
+  AddFooditemVitaminAdded({
+    this.vitamin,
+  });
+
+  @override
+  List<Object?> get props => [vitamin];
+}
+
 class AddFoodItemShowDetailPressed extends AddFoodItemEvent {}
 
 class AddFoodItemSubmitForm extends AddFoodItemEvent {}
