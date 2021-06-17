@@ -210,6 +210,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         final bool hasProtein = state.proteins.value.isNotEmpty;
         final bool hasMacros = hasFats || hasCarbs || hasProtein;
 
+        final bool hasVitamins = state.vitamins.isNotEmpty;
+
         FoodItem item = FoodItem(
           mealType: state.type,
           name: state.foodName.value,
@@ -235,6 +237,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
                     )
                 ]
               : null,
+          vitamins: hasVitamins ? state.vitamins : null,
         );
 
         DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);
