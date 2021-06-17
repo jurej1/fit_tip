@@ -13,3 +13,4 @@ export 'food_item_tile.dart';
 export 'show_expanded_input_list_tile.dart';
 export 'food_item_detail_form.dart';
 export 'food_item_detail_input_field.dart';
+export 'food_item_vitamins_input.dart';

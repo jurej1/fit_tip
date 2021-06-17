@@ -13,12 +13,7 @@ class AddVitaminFormBloc extends Bloc<AddVitaminFormEvent, AddVitaminFormState> 
   AddVitaminFormBloc({
     double? amount,
     Vitamin? vitamin,
-  }) : super(
-          AddVitaminFormState.pure(
-            amount: amount,
-            vitamin: vitamin,
-          ),
-        );
+  }) : super(AddVitaminFormState.pure(amount: amount, vitamin: vitamin));
 
   @override
   Stream<AddVitaminFormState> mapEventToState(
