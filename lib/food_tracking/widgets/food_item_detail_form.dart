@@ -17,7 +17,7 @@ class FoodItemDetailForm extends StatelessWidget {
             _FatsInputField(),
             _CarbsInputField(),
             _ProteinInputField(),
-            FoodItemVitaminsInput(),
+            FoodItemVitaminsInputTile(),
           ],
         );
       },
