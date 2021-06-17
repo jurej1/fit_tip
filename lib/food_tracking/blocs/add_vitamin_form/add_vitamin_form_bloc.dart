@@ -18,5 +18,52 @@ class AddVitaminFormBloc extends Bloc<AddVitaminFormEvent, AddVitaminFormState> 
   @override
   Stream<AddVitaminFormState> mapEventToState(
     AddVitaminFormEvent event,
-  ) async* {}
+  ) async* {
+    if (event is AddVitaminFormVitaminChanged) {
+      yield* _mapVitaminChangedToState(event);
+    } else if (event is AddVitaminFormAmountChanged) {
+      yield* _mapAmountChangedToState(event);
+    } else if (event is AddVitaminFormAmountFormSubmit) {
+      yield* _mapSubmitToState();
+    }
+  }
+
+  Stream<AddVitaminFormState> _mapVitaminChangedToState(AddVitaminFormVitaminChanged event) async* {
+    if (event.vitamin != null) {
+      final vitamin = VitaminInput.dirty(event.vitamin!);
+
+      yield state.copyWith(
+        vitamin: vitamin,
+        status: Formz.validate([vitamin, state.amount]),
+      );
+    }
+  }
+
+  Stream<AddVitaminFormState> _mapAmountChangedToState(AddVitaminFormAmountChanged event) async* {
+    if (event.amount != null) {
+      final amount = AmountDetailConsumed.dirty(event.amount!);
+
+      yield state.copyWith(
+        amount: amount,
+        status: Formz.validate([amount, state.vitamin]),
+      );
+    }
+  }
+
+  Stream<AddVitaminFormState> _mapSubmitToState() async* {
+    final amount = AmountDetailConsumed.dirty(state.amount.value);
+    final vitamin = VitaminInput.dirty(state.vitamin.value);
+
+    yield state.copyWith(
+      amount: amount,
+      vitamin: vitamin,
+      status: Formz.validate([amount, vitamin]),
+    );
+
+    if (state.status.isValidated) {
+      yield state.copyWith(status: FormzStatus.submissionSuccess);
+    } else {
+      yield state.copyWith(status: FormzStatus.submissionFailure);
+    }
+  }
 }

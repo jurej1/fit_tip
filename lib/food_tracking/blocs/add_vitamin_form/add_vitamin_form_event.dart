@@ -17,7 +17,7 @@ class AddVitaminFormVitaminChanged extends AddVitaminFormEvent {
 }
 
 class AddVitaminFormAmountChanged extends AddVitaminFormEvent {
-  final double? amount;
+  final String? amount;
 
   AddVitaminFormAmountChanged({this.amount});
 
