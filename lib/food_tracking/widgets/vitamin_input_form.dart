@@ -15,9 +15,7 @@ class VitaminInputForm extends StatelessWidget {
     return BlocListener<AddVitaminFormBloc, AddVitaminFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          BlocProvider.of<AddFoodItemBloc>(context).add(
-            AddFooditemVitaminAdded(vitamin: state.vitaminModel),
-          );
+          BlocProvider.of<AddFoodItemBloc>(context).add(AddFooditemVitaminAdded(vitamin: state.vitaminModel));
           Navigator.of(context).pop();
         }
       },
@@ -59,6 +57,19 @@ class VitaminInputForm extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+            BlocBuilder<AddVitaminFormBloc, AddVitaminFormState>(
+              builder: (context, state) {
+                return TextFormField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefix: Text('Amount: '),
+                    suffix: Text(' g'),
+                  ),
+                  textAlign: TextAlign.right,
+                  onChanged: (val) => BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountChanged(amount: val)),
+                );
+              },
             ),
             ElevatedButton(
               child: Text('Add'),
