@@ -61,7 +61,15 @@ class AddVitaminFormBloc extends Bloc<AddVitaminFormEvent, AddVitaminFormState> 
     );
 
     if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionSuccess);
+      FoodDataVitamin model = FoodDataVitamin(
+        vitamin: state.vitamin.value,
+        amount: double.parse(state.amount.value),
+      );
+
+      yield state.copyWith(
+        status: FormzStatus.submissionSuccess,
+        vitaminModel: model,
+      );
     } else {
       yield state.copyWith(status: FormzStatus.submissionFailure);
     }

@@ -5,11 +5,13 @@ class AddVitaminFormState extends Equatable {
     this.status = FormzStatus.pure,
     required this.vitamin,
     required this.amount,
+    this.vitaminModel,
   });
 
   final FormzStatus status;
   final VitaminInput vitamin;
   final AmountDetailConsumed amount;
+  final FoodDataVitamin? vitaminModel;
 
   factory AddVitaminFormState.pure({
     double? amount,
@@ -22,17 +24,19 @@ class AddVitaminFormState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, vitamin, amount];
+  List<Object?> get props => [status, vitamin, amount, vitaminModel];
 
   AddVitaminFormState copyWith({
     FormzStatus? status,
     VitaminInput? vitamin,
     AmountDetailConsumed? amount,
+    FoodDataVitamin? vitaminModel,
   }) {
     return AddVitaminFormState(
       status: status ?? this.status,
       vitamin: vitamin ?? this.vitamin,
       amount: amount ?? this.amount,
+      vitaminModel: vitaminModel ?? this.vitaminModel,
     );
   }
 }

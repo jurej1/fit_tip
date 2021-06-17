@@ -8,7 +8,6 @@ class FoodItemVitaminsInputTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return ListTile(
       title: Text('Vitamins'),
       trailing: IconButton(
@@ -22,6 +21,9 @@ class FoodItemVitaminsInputTile extends StatelessWidget {
                   BlocProvider(
                     create: (context) => AddVitaminFormBloc(),
                   ),
+                  BlocProvider.value(
+                    value: BlocProvider.of<AddFoodItemBloc>(context),
+                  )
                 ],
                 child: VitaminInputForm(),
               );
