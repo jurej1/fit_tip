@@ -296,9 +296,10 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
 
   Stream<AddFoodItemState> _mapVitaminAddedToState(AddFooditemVitaminAdded event) async* {
     if (event.vitamin != null) {
-      final list = state.vitamins;
+      List<FoodDataVitamin> list = List.from(state.vitamins);
+      list.add(event.vitamin!);
 
-      yield state.copyWith(vitamins: list..add(event.vitamin!));
+      yield state.copyWith(vitamins: list);
     }
   }
 }

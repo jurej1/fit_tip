@@ -20,64 +20,69 @@ class VitaminInputForm extends StatelessWidget {
         }
       },
       child: Container(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: 5,
-              width: size.width * 0.4,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Vitamin: '),
-                BlocBuilder<AddVitaminFormBloc, AddVitaminFormState>(
-                  builder: (context, state) {
-                    return DropdownButton<Vitamin>(
-                      value: state.vitamin.value,
-                      onChanged: (value) {
-                        BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormVitaminChanged(vitamin: value));
-                      },
-                      items: Vitamin.values
-                          .map(
-                            (e) => DropdownMenuItem(
-                              child: Text(
-                                describeEnum(e),
-                              ),
-                              value: e,
-                            ),
-                          )
-                          .toList(),
-                    );
-                  },
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
-            BlocBuilder<AddVitaminFormBloc, AddVitaminFormState>(
-              builder: (context, state) {
-                return TextFormField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefix: Text('Amount: '),
-                    suffix: Text(' g'),
+                height: 10,
+                width: size.width * 0.4,
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Vitamin: '),
+                  BlocBuilder<AddVitaminFormBloc, AddVitaminFormState>(
+                    builder: (context, state) {
+                      return DropdownButton<Vitamin>(
+                        value: state.vitamin.value,
+                        onChanged: (value) {
+                          BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormVitaminChanged(vitamin: value));
+                        },
+                        items: Vitamin.values
+                            .map(
+                              (e) => DropdownMenuItem(
+                                child: Text(
+                                  describeEnum(e),
+                                ),
+                                value: e,
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
                   ),
-                  textAlign: TextAlign.right,
-                  onChanged: (val) => BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountChanged(amount: val)),
-                );
-              },
-            ),
-            ElevatedButton(
-              child: Text('Add'),
-              onPressed: () {
-                BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountFormSubmit());
-              },
-            ),
-          ],
+                ],
+              ),
+              BlocBuilder<AddVitaminFormBloc, AddVitaminFormState>(
+                builder: (context, state) {
+                  return TextFormField(
+                    initialValue: '0',
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefix: Text('Amount: '),
+                      suffix: Text(' g'),
+                    ),
+                    textAlign: TextAlign.right,
+                    onChanged: (val) => BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountChanged(amount: val)),
+                  );
+                },
+              ),
+              ElevatedButton(
+                child: Text('Add'),
+                onPressed: () {
+                  BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountFormSubmit());
+                },
+              ),
+              const SizedBox(height: 50),
+            ],
+          ),
         ),
       ),
     );

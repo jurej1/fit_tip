@@ -1,7 +1,7 @@
 part of 'add_food_item_bloc.dart';
 
 class AddFoodItemState extends Equatable {
-  const AddFoodItemState({
+  AddFoodItemState({
     this.status = FormzStatus.pure,
     required this.dateConsumed,
     required this.timeConsumed,

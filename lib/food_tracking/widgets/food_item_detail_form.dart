@@ -18,6 +18,7 @@ class FoodItemDetailForm extends StatelessWidget {
             _CarbsInputField(),
             _ProteinInputField(),
             FoodItemVitaminsInputTile(),
+            _VitaminsList(),
           ],
         );
       },
@@ -77,6 +78,28 @@ class _ProteinInputField extends StatelessWidget {
           onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(
             AddFoodItemProteinChanged(value: val),
           ),
+        );
+      },
+    );
+  }
+}
+
+class _VitaminsList extends StatelessWidget {
+  const _VitaminsList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
+      builder: (context, state) {
+        if (state.vitamins.isEmpty) return Container();
+
+        return ListView.builder(
+          itemCount: state.vitamins.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+            );
+          },
         );
       },
     );
