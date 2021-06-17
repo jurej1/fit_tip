@@ -15,11 +15,14 @@ part 'add_food_item_state.dart';
 
 class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   AddFoodItemBloc({
+    FoodLogFocusedDateBloc? focusedDate,
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })   : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
-        super(AddFoodItemState.pure());
+        super(
+          AddFoodItemState.pure(date: focusedDate?.state.selectedDate),
+        );
 
   final FoodRepository _foodRepository;
   final AuthenticationBloc _authenticationBloc;

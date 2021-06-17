@@ -31,9 +31,9 @@ class AddFoodItemState extends Equatable {
   final bool showDetail;
   final List<FoodDataVitamin> vitamins;
 
-  factory AddFoodItemState.pure() {
+  factory AddFoodItemState.pure({DateTime? date}) {
     return AddFoodItemState(
-      dateConsumed: DateConsumed.pure(),
+      dateConsumed: date == null ? DateConsumed.pure() : DateConsumed.pure(date),
       timeConsumed: TimeConsumed.pure(),
     );
   }
