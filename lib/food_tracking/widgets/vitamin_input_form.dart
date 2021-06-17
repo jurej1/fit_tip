@@ -66,8 +66,8 @@ class VitaminInputForm extends StatelessWidget {
                     initialValue: '0',
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      prefix: Text('Amount: '),
-                      suffix: Text(' g'),
+                      prefixIcon: Text('Amount: '),
+                      suffixIcon: Text(' g'),
                     ),
                     textAlign: TextAlign.right,
                     onChanged: (val) => BlocProvider.of<AddVitaminFormBloc>(context).add(AddVitaminFormAmountChanged(amount: val)),
