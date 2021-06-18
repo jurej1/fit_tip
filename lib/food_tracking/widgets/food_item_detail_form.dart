@@ -94,6 +94,7 @@ class _VitaminsList extends StatelessWidget {
         if (state.vitamins.isEmpty) return Container();
 
         return ListView.builder(
+          shrinkWrap: true,
           itemCount: state.vitamins.length,
           itemBuilder: (context, index) {
             return ListTile(
