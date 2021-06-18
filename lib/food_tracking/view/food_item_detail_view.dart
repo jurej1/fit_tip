@@ -15,6 +15,7 @@ class FoodItemDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Detail view'),
         actions: [
           //DELETING FUNCTION
 

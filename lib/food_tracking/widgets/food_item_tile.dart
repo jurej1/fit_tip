@@ -1,4 +1,5 @@
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +15,9 @@ class FoodItemTile extends StatelessWidget {
         }
       },
       child: ListTile(
+        onTap: () {
+          Navigator.of(context).push(FoodItemDetailView.route(context));
+        },
         dense: true,
         title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
           buildWhen: (p, c) => p.item.name != c.item.name,
