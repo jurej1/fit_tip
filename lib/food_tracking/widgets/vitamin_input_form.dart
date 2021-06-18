@@ -68,6 +68,7 @@ class VitaminInputForm extends StatelessWidget {
                       Text('Amount: '),
                       Expanded(
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
