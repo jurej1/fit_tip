@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -94,11 +95,17 @@ class _VitaminsList extends StatelessWidget {
         if (state.vitamins.isEmpty) return Container();
 
         return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: state.vitamins.length,
           itemBuilder: (context, index) {
+            final item = state.vitamins[index];
+
             return ListTile(
               contentPadding: EdgeInsets.zero,
+              title: Text(
+                describeEnum(item.vitamin),
+              ),
             );
           },
         );
