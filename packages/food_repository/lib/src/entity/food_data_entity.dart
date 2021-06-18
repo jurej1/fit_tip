@@ -14,12 +14,12 @@ abstract class FoodDataEntity extends Equatable {
   @override
   List<Object?> get props => [amount];
 
-  Map<String, dynamic> toDocumentSnapshot(Object name) {
-    return {
-      'amount': amount,
-      'name': describeEnum(name),
-    };
-  }
+  // Map<String, dynamic> toDocumentSnapshot(Object name) {
+  //   return {
+  //     'amount': amount,
+  //     'name': describeEnum(name),
+  //   };
+  // }
 }
 
 class FoodDataMacroEntity extends FoodDataEntity {
@@ -42,6 +42,13 @@ class FoodDataMacroEntity extends FoodDataEntity {
       macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == name),
       amount: amount,
     );
+  }
+
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      'amount': amount,
+      'name': describeEnum(macronutrient),
+    };
   }
 
   FoodDataMacroEntity copyWith({Macronutrient? macronutrient, double? amount}) {
@@ -73,6 +80,13 @@ class FoodDataMineralEntity extends FoodDataEntity {
     );
   }
 
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      'amount': amount,
+      'name': describeEnum(mineral),
+    };
+  }
+
   static FoodDataMineralEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
     final name = data['name'] as String;
@@ -94,6 +108,13 @@ class FoodDataVitaminEntity extends FoodDataEntity {
 
   @override
   List<Object?> get props => [vitamin, amount];
+
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      'amount': amount,
+      'name': describeEnum(vitamin),
+    };
+  }
 
   static FoodDataVitaminEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
@@ -134,6 +155,13 @@ class FoodDataMadeOfEntity extends FoodDataEntity {
       madeOf: madeOf ?? this.madeOf,
       amount: amount ?? this.amount,
     );
+  }
+
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      'amount': amount,
+      'name': describeEnum(madeOf),
+    };
   }
 
   static FoodDataMadeOfEntity fromDocumentSnapshot(DocumentSnapshot snap) {

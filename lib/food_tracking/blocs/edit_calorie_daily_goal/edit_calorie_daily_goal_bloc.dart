@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:formz/formz.dart';
 
@@ -68,7 +67,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       try {
         await _foodRepository.addCalorieDailyGoal(_user!.id!, goal);
         yield state.copyWith(status: FormzStatus.submissionSuccess);
-      } on Exception catch (e) {
+      } on Exception catch (_) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }

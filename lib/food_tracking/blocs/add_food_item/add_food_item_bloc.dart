@@ -251,7 +251,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           status: FormzStatus.submissionSuccess,
           foodItem: item,
         );
-      } on Exception catch (e) {
+      } on Exception catch (_) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }

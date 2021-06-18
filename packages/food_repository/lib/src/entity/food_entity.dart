@@ -71,9 +71,9 @@ class FoodEntity extends Equatable {
       'name': name,
       'calories': calories,
       'macronutrients': macronutrients,
-      'minerals': minerals.map((e) => e.toDocumentSnapshot(e)).toList(),
-      'vitamins': vitamins.map((e) => e.toDocumentSnapshot(e)).toList(),
-      'madeOf': madeOf.map((e) => e.toDocumentSnapshot(e)).toList(),
+      'minerals': minerals.map((e) => e.toDocumentSnapshot()).toList(),
+      'vitamins': vitamins.map((e) => e.toDocumentSnapshot()).toList(),
+      'madeOf': madeOf.map((e) => e.toDocumentSnapshot()).toList(),
       'group': describeEnum(group),
     };
   }

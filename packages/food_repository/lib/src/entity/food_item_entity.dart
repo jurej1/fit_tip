@@ -50,8 +50,8 @@ class FoodItemEntity extends Equatable {
       'calories': calories,
       'dateAdded': Timestamp.fromDate(dateAdded),
       'mealType': describeEnum(mealType),
-      if (macronutrients != null) 'macronutrients': macronutrients!.map((e) => e.toDocumentSnapshot(e)).toList(),
-      if (vitamins != null) 'vitamins': vitamins!.map((e) => e.toDocumentSnapshot(e)).toList()
+      if (macronutrients != null) 'macronutrients': macronutrients!.map((e) => e.toDocumentSnapshot()).toList(),
+      if (vitamins != null) 'vitamins': vitamins!.map((e) => e.toDocumentSnapshot()).toList()
     };
   }
 
