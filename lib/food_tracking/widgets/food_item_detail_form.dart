@@ -104,7 +104,7 @@ class _VitaminsList extends StatelessWidget {
             return ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                'Vitamin' + describeEnum(item.vitamin),
+                'Vitamin ' + describeEnum(item.vitamin),
               ),
               trailing: Text(
                 item.amount.toStringAsFixed(0) + 'g',
