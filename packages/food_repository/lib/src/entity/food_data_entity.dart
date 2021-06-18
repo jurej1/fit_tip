@@ -4,6 +4,11 @@ import 'package:flutter/foundation.dart';
 
 import '../../food_repository.dart';
 
+class _DocKeys {
+  static String name = _DocKeys.name;
+  static String amount = _DocKeys.amount;
+}
+
 abstract class FoodDataEntity extends Equatable {
   final double? amount;
 
@@ -28,8 +33,8 @@ class FoodDataMacroEntity extends FoodDataEntity {
 
   static FoodDataMacroEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
-    final name = data['name'] as String;
-    final amount = data['amount'];
+    final name = data[_DocKeys.name] as String;
+    final amount = data[_DocKeys.amount];
 
     return FoodDataMacroEntity(
       macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == name),
@@ -39,15 +44,15 @@ class FoodDataMacroEntity extends FoodDataEntity {
 
   static FoodDataMacroEntity fromMap(Map<dynamic, dynamic> map) {
     return FoodDataMacroEntity(
-      macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == map['name']),
-      amount: map['amount'],
+      macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == map[_DocKeys.name]),
+      amount: map[_DocKeys.amount],
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      'amount': amount,
-      'name': describeEnum(macronutrient),
+      _DocKeys.amount: amount,
+      _DocKeys.name: describeEnum(macronutrient),
     };
   }
 
@@ -82,22 +87,22 @@ class FoodDataMineralEntity extends FoodDataEntity {
 
   static FoodDataMineralEntity fromMap(Map<dynamic, dynamic> map) {
     return FoodDataMineralEntity(
-      mineral: Mineral.values.firstWhere((e) => describeEnum(e) == map['name']),
-      amount: map['amount'],
+      mineral: Mineral.values.firstWhere((e) => describeEnum(e) == map[_DocKeys.name]),
+      amount: map[_DocKeys.amount],
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      'amount': amount,
-      'name': describeEnum(mineral),
+      _DocKeys.amount: amount,
+      _DocKeys.name: describeEnum(mineral),
     };
   }
 
   static FoodDataMineralEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
-    final name = data['name'] as String;
-    final amount = data['amount'];
+    final name = data[_DocKeys.name] as String;
+    final amount = data[_DocKeys.amount];
 
     return FoodDataMineralEntity(
       mineral: Mineral.values.firstWhere((e) => describeEnum(e) == name),
@@ -118,22 +123,22 @@ class FoodDataVitaminEntity extends FoodDataEntity {
 
   static FoodDataVitaminEntity fromMap(Map<dynamic, dynamic> map) {
     return FoodDataVitaminEntity(
-      vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == map['name']),
-      amount: map['amount'],
+      vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == map[_DocKeys.name]),
+      amount: map[_DocKeys.amount],
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      'amount': amount,
-      'name': describeEnum(vitamin),
+      _DocKeys.amount: amount,
+      _DocKeys.name: describeEnum(vitamin),
     };
   }
 
   static FoodDataVitaminEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
-    final name = data['name'] as String;
-    final amount = data['amount'];
+    final name = data[_DocKeys.name] as String;
+    final amount = data[_DocKeys.amount];
 
     return FoodDataVitaminEntity(
       vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == name),
@@ -173,22 +178,22 @@ class FoodDataMadeOfEntity extends FoodDataEntity {
 
   static FoodDataMadeOfEntity fromMap(Map<dynamic, dynamic> map) {
     return FoodDataMadeOfEntity(
-      madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == map['name']),
-      amount: map['amount'],
+      madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == map[_DocKeys.name]),
+      amount: map[_DocKeys.amount],
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      'amount': amount,
-      'name': describeEnum(madeOf),
+      _DocKeys.amount: amount,
+      _DocKeys.name: describeEnum(madeOf),
     };
   }
 
   static FoodDataMadeOfEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
-    final name = data['name'] as String;
-    final amount = data['amount'];
+    final name = data[_DocKeys.name] as String;
+    final amount = data[_DocKeys.amount];
 
     return FoodDataMadeOfEntity(
       madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == name),
