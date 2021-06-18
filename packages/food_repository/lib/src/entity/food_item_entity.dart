@@ -67,11 +67,10 @@ class FoodItemEntity extends Equatable {
       sourceRef: data['sourceRef'],
       mealType: MealType.values.firstWhere((e) => describeEnum(e) == data['mealType']),
       macronutrients: data.containsKey('macronutrients')
-          ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataMacroEntity.fromDocumentSnapshot(e)).toList()
+          ? (data['macronutrients'] as List<dynamic>).map((e) => FoodDataMacroEntity.fromMap(e)).toList()
           : null,
-      vitamins: data.containsKey('vitamins')
-          ? (data['vitamins'] as List<dynamic>).map((e) => FoodDataVitaminEntity.fromDocumentSnapshot(e)).toList()
-          : null,
+      vitamins:
+          data.containsKey('vitamins') ? (data['vitamins'] as List<dynamic>).map((e) => FoodDataVitaminEntity.fromMap(e)).toList() : null,
     );
   }
 

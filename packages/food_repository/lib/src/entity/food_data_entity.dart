@@ -13,13 +13,6 @@ abstract class FoodDataEntity extends Equatable {
 
   @override
   List<Object?> get props => [amount];
-
-  // Map<String, dynamic> toDocumentSnapshot(Object name) {
-  //   return {
-  //     'amount': amount,
-  //     'name': describeEnum(name),
-  //   };
-  // }
 }
 
 class FoodDataMacroEntity extends FoodDataEntity {
@@ -41,6 +34,13 @@ class FoodDataMacroEntity extends FoodDataEntity {
     return FoodDataMacroEntity(
       macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == name),
       amount: amount,
+    );
+  }
+
+  static FoodDataMacroEntity fromMap(Map<dynamic, dynamic> map) {
+    return FoodDataMacroEntity(
+      macronutrient: Macronutrient.values.firstWhere((e) => describeEnum(e) == map['name']),
+      amount: map['amount'],
     );
   }
 
@@ -80,6 +80,13 @@ class FoodDataMineralEntity extends FoodDataEntity {
     );
   }
 
+  static FoodDataMineralEntity fromMap(Map<dynamic, dynamic> map) {
+    return FoodDataMineralEntity(
+      mineral: Mineral.values.firstWhere((e) => describeEnum(e) == map['name']),
+      amount: map['amount'],
+    );
+  }
+
   Map<String, dynamic> toDocumentSnapshot() {
     return {
       'amount': amount,
@@ -108,6 +115,13 @@ class FoodDataVitaminEntity extends FoodDataEntity {
 
   @override
   List<Object?> get props => [vitamin, amount];
+
+  static FoodDataVitaminEntity fromMap(Map<dynamic, dynamic> map) {
+    return FoodDataVitaminEntity(
+      vitamin: Vitamin.values.firstWhere((e) => describeEnum(e) == map['name']),
+      amount: map['amount'],
+    );
+  }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
@@ -154,6 +168,13 @@ class FoodDataMadeOfEntity extends FoodDataEntity {
     return FoodDataMadeOfEntity(
       madeOf: madeOf ?? this.madeOf,
       amount: amount ?? this.amount,
+    );
+  }
+
+  static FoodDataMadeOfEntity fromMap(Map<dynamic, dynamic> map) {
+    return FoodDataMadeOfEntity(
+      madeOf: MadeOf.values.firstWhere((e) => describeEnum(e) == map['name']),
+      amount: map['amount'],
     );
   }
 
