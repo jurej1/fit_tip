@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import '../../food_repository.dart';
 
 class _DocKeys {
-  static String name = _DocKeys.name;
-  static String amount = _DocKeys.amount;
+  static String name = 'name';
+  static String amount = 'amount';
 }
 
 abstract class FoodDataEntity extends Equatable {
