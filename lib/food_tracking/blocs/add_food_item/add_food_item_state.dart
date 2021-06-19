@@ -31,10 +31,28 @@ class AddFoodItemState extends Equatable {
   final bool showDetail;
   final List<FoodDataVitamin> vitamins;
 
-  factory AddFoodItemState.pure({DateTime? date}) {
+  factory AddFoodItemState.pure({FoodItem? item, DateTime? date}) {
     return AddFoodItemState(
-      dateConsumed: date == null ? DateConsumed.pure() : DateConsumed.pure(date),
+      dateConsumed: item == null ? (date == null ? DateConsumed.pure() : DateConsumed.pure(date)) : DateConsumed.pure(item.dateAdded),
       timeConsumed: TimeConsumed.pure(),
+      amountConsumed: item == null ? AmountConsumed.pure() : AmountConsumed.pure(item.amount.toString()),
+      calorieConsumed: item == null ? CalorieConsumed.pure() : CalorieConsumed.pure(item.calories.toString()),
+      carbs:
+          item != null && item.macronutrients != null && item.macronutrients!.any((element) => element.macronutrient == Macronutrient.carbs)
+              ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.carbs).amount.toString())
+              : AmountDetailConsumed.pure(),
+      fats: item != null && item.macronutrients != null && item.macronutrients!.any((element) => element.macronutrient == Macronutrient.fat)
+          ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.fat).amount.toString())
+          : AmountDetailConsumed.pure(),
+      proteins: item != null &&
+              item.macronutrients != null &&
+              item.macronutrients!.any((element) => element.macronutrient == Macronutrient.protein)
+          ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.protein).amount.toString())
+          : AmountDetailConsumed.pure(),
+      foodItem: item,
+      foodName: item == null ? FoodName.pure() : FoodName.pure(item.name),
+      type: item == null ? MealType.lunch : item.mealType,
+      vitamins: item != null && item.vitamins != null ? item.vitamins! : [],
     );
   }
 
