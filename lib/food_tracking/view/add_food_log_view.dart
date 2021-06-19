@@ -25,6 +25,7 @@ class AddFoodLogView extends StatelessWidget {
                 focusedDate: foodLogFocusedDateBloc,
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
+                foodItem: fooditemDetailBloc?.state.item,
               ),
             ),
             BlocProvider<FoodDailyLogsBloc>.value(

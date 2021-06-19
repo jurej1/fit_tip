@@ -1,6 +1,7 @@
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/blocs/food_item_detail/food_item_detail_bloc.dart';
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -57,7 +58,12 @@ class FoodItemDetailView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                //Edit the food item
+                Navigator.of(context).push(
+                  AddFoodLogView.route(
+                    context,
+                    fooditemDetailBloc: BlocProvider.of<FoodItemDetailBloc>(context),
+                  ),
+                );
               },
             ),
           ],
