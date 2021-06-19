@@ -5,6 +5,7 @@ import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
+import 'package:intl/intl.dart';
 
 class FoodItemDetailView extends StatelessWidget {
   const FoodItemDetailView({Key? key}) : super(key: key);
@@ -203,6 +204,16 @@ class FoodItemData extends StatelessWidget {
                 initialValue: state.item.amount.toString() + 'g',
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Amount'),
+              ),
+              TextFormField(
+                initialValue: DateFormat('d.MMM.yyyy').format(state.item.dateAdded),
+                enabled: false,
+                decoration: inputDecorationStyle.copyWith(labelText: 'Date added'),
+              ),
+              TextFormField(
+                initialValue: DateFormat('h:mm').format(state.item.dateAdded),
+                enabled: false,
+                decoration: inputDecorationStyle.copyWith(labelText: 'Time added'),
               ),
             ],
           ),

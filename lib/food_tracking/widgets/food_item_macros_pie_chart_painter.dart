@@ -25,10 +25,10 @@ class FoodItemMacrosPieChartPainter extends CustomPainter {
     Paint _paint = Paint()
       ..color = Colors.grey
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 30;
+      ..strokeWidth = 40;
 
     final Offset center = Offset(size.width / 2, size.height / 2);
-    final double radius = 75;
+    final double radius = 120;
 
     double startAngle = 0;
     double sweepAngle = 2 * pi;
