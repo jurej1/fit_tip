@@ -30,6 +30,8 @@ class FoodItemDetailBloc extends Bloc<FoodItemDetailEvent, FoodItemDetailState> 
   ) async* {
     if (event is FoodItemDetailDeleteRequested) {
       yield* _mapDeleteRequestedToState();
+    } else if (event is FoodItemDetailUpdated) {
+      yield* _mapUpdatedToState(event);
     }
   }
 
@@ -44,6 +46,12 @@ class FoodItemDetailBloc extends Bloc<FoodItemDetailEvent, FoodItemDetailState> 
       } catch (e) {
         yield FoodItemDetailDeleteFail(state.item);
       }
+    }
+  }
+
+  Stream<FoodItemDetailState> _mapUpdatedToState(FoodItemDetailUpdated event) async* {
+    if (_isAuth && event.foodItem != null) {
+      yield FoodItemDetailInitial(event.foodItem!);
     }
   }
 }

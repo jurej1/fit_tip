@@ -16,12 +16,16 @@ part 'add_food_item_state.dart';
 class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   AddFoodItemBloc({
     FoodLogFocusedDateBloc? focusedDate,
+    FoodItem? foodItem,
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })   : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
         super(
-          AddFoodItemState.pure(date: focusedDate?.state.selectedDate),
+          AddFoodItemState.pure(
+            item: foodItem,
+            date: focusedDate?.state.selectedDate,
+          ),
         );
 
   final FoodRepository _foodRepository;
@@ -216,6 +220,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         final bool hasVitamins = state.vitamins.isNotEmpty;
 
         FoodItem item = FoodItem(
+          id: state.foodItem?.id,
           mealType: state.type,
           name: state.foodName.value,
           dateAdded: DateTime(date.year, date.month, date.day, time.hour, time.minute),
@@ -243,9 +248,15 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           vitamins: hasVitamins ? state.vitamins : null,
         );
 
-        DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);
+        if (state.mode == AddFoodItemStateMode.add) {
+          DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);
 
-        item = item.copyWith(id: docRef.id);
+          item = item.copyWith(id: docRef.id);
+        }
+
+        if (state.mode == AddFoodItemStateMode.edit) {
+          await _foodRepository.updateFoodItem(_user!.id!, item);
+        }
 
         yield state.copyWith(
           status: FormzStatus.submissionSuccess,

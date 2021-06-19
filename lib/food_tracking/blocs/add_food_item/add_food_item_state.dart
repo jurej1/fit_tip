@@ -1,5 +1,7 @@
 part of 'add_food_item_bloc.dart';
 
+enum AddFoodItemStateMode { edit, add }
+
 class AddFoodItemState extends Equatable {
   AddFoodItemState({
     this.status = FormzStatus.pure,
@@ -15,6 +17,7 @@ class AddFoodItemState extends Equatable {
     this.carbs = const AmountDetailConsumed.pure(),
     this.showDetail = false,
     this.vitamins = const [],
+    this.mode = AddFoodItemStateMode.add,
   });
 
   final FormzStatus status;
@@ -30,6 +33,7 @@ class AddFoodItemState extends Equatable {
   final AmountDetailConsumed carbs;
   final bool showDetail;
   final List<FoodDataVitamin> vitamins;
+  final AddFoodItemStateMode mode;
 
   factory AddFoodItemState.pure({FoodItem? item, DateTime? date}) {
     return AddFoodItemState(
@@ -53,6 +57,7 @@ class AddFoodItemState extends Equatable {
       foodName: item == null ? FoodName.pure() : FoodName.pure(item.name),
       type: item == null ? MealType.lunch : item.mealType,
       vitamins: item != null && item.vitamins != null ? item.vitamins! : [],
+      mode: item == null ? AddFoodItemStateMode.add : AddFoodItemStateMode.edit,
     );
   }
 
@@ -72,6 +77,7 @@ class AddFoodItemState extends Equatable {
       carbs,
       showDetail,
       vitamins,
+      mode,
     ];
   }
 
@@ -89,6 +95,7 @@ class AddFoodItemState extends Equatable {
     AmountDetailConsumed? carbs,
     bool? showDetail,
     List<FoodDataVitamin>? vitamins,
+    AddFoodItemStateMode? mode,
   }) {
     return AddFoodItemState(
       status: status ?? this.status,
@@ -104,6 +111,7 @@ class AddFoodItemState extends Equatable {
       carbs: carbs ?? this.carbs,
       showDetail: showDetail ?? this.showDetail,
       vitamins: vitamins ?? this.vitamins,
+      mode: mode ?? this.mode,
     );
   }
 }
