@@ -8,6 +8,7 @@ class FoodItemDetailInputField extends StatelessWidget {
     this.isInvalid = false,
     this.errorText,
     this.keyboardType = TextInputType.number,
+    this.initialValue,
   }) : super(key: key);
 
   final String labelText;
@@ -15,6 +16,7 @@ class FoodItemDetailInputField extends StatelessWidget {
   final String? errorText;
   final bool isInvalid;
   final TextInputType? keyboardType;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class FoodItemDetailInputField extends StatelessWidget {
         Expanded(
           child: TextFormField(
             keyboardType: keyboardType,
+            initialValue: initialValue,
             textAlign: TextAlign.right,
             decoration: InputDecoration(
               border: InputBorder.none,

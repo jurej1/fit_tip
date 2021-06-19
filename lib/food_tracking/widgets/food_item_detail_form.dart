@@ -36,6 +36,7 @@ class _FatsInputField extends StatelessWidget {
       builder: (context, state) {
         return FoodItemDetailInputField(
           errorText: 'Invalid',
+          initialValue: state.fats.value,
           isInvalid: state.fats.invalid,
           labelText: 'Fats',
           onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemFatsChanged(value: val)),
@@ -55,6 +56,7 @@ class _CarbsInputField extends StatelessWidget {
         return FoodItemDetailInputField(
           errorText: 'Invalid',
           isInvalid: state.carbs.invalid,
+          initialValue: state.carbs.value,
           labelText: 'Carbs',
           onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(
             AddFoodItemCarbsChanged(value: val),
