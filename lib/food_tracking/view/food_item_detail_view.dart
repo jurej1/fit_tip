@@ -11,21 +11,21 @@ class FoodItemDetailView extends StatelessWidget {
   static MaterialPageRoute route(
     BuildContext context, {
     required FoodItem item,
-    required FoodDailyLogsBloc foodDailyLogsBloc,
+    // required FoodDailyLogsBloc foodDailyLogsBloc,
   }) {
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
+            BlocProvider.value(
+              value: BlocProvider.of<FoodDailyLogsBloc>(context),
+            ),
             BlocProvider(
               create: (context) => FoodItemDetailBloc(
                 foodItem: item,
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
               ),
-            ),
-            BlocProvider.value(
-              value: foodDailyLogsBloc,
             ),
           ],
           child: FoodItemDetailView(),
@@ -36,7 +36,7 @@ class FoodItemDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocListener<FoodItemDetailBloc, FoodItemDetailState>(
       listener: (context, state) {
         if (state is FoodItemDetailDeleteSuccess) {
           BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogRemoved(foodItem: state.item));
@@ -54,6 +54,12 @@ class FoodItemDetailView extends StatelessWidget {
               },
             ),
             //EDITING FUNCTION
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                //Edit the food item
+              },
+            ),
           ],
         ),
         body: Column(

@@ -19,7 +19,7 @@ class FoodItemTile extends StatelessWidget {
           Navigator.of(context).push(
             FoodItemDetailView.route(
               context,
-              foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
+              // foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
               item: BlocProvider.of<FoodItemTileBloc>(context).state.item,
             ),
           );
