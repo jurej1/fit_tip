@@ -37,6 +37,8 @@ class FoodItemDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return BlocListener<FoodItemDetailBloc, FoodItemDetailState>(
       listener: (context, state) {
         if (state is FoodItemDetailDeleteSuccess) {
@@ -75,9 +77,20 @@ class FoodItemDetailView extends StatelessWidget {
             children: [
               //Pie Chart with carbs, fats, and proteins
               // in the center of the pie char is going to be the amount of calories
-              FoodItemDetailPieChart(),
-
-              //NAME
+              Container(
+                height: 200,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: FoodItemDetailPieChart(),
+                    ),
+                    Expanded(
+                      child: FoodItemData(),
+                    ),
+                  ],
+                ),
+              ),
 
               //Amount
 
@@ -99,15 +112,43 @@ class FoodItemDetailPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
       builder: (context, state) {
-        return Container(
-          height: 150,
-          child: CustomPaint(
-            painter: FoodItemMacrosPieChartPainter(),
-            child: Center(
-              child: Text(
-                state.item.calories.toStringAsFixed(0),
-              ),
+        return CustomPaint(
+          painter: FoodItemMacrosPieChartPainter(),
+          child: Center(
+            child: Text(
+              state.item.calories.toStringAsFixed(0) + 'cal',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class FoodItemData extends StatelessWidget {
+  FoodItemData({Key? key}) : super(key: key);
+
+  final inputDecorationStyle = InputDecoration(border: InputBorder.none);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
+      builder: (context, state) {
+        return Container(
+          child: Column(
+            children: [
+              TextFormField(
+                initialValue: state.item.name,
+                enabled: false,
+                decoration: inputDecorationStyle.copyWith(labelText: 'Name'),
+              ),
+              TextFormField(
+                initialValue: state.item.amount.toString() + 'g',
+                enabled: false,
+                decoration: inputDecorationStyle.copyWith(labelText: 'Amount'),
+              ),
+            ],
           ),
         );
       },
