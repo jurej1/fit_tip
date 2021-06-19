@@ -15,3 +15,4 @@ export 'food_item_detail_form.dart';
 export 'food_item_detail_input_field.dart';
 export 'food_item_vitamins_input_tile.dart';
 export 'vitamin_input_form.dart';
+export 'food_item_macros_pie_chart_painter.dart';

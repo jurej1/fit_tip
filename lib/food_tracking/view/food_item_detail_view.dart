@@ -68,21 +68,49 @@ class FoodItemDetailView extends StatelessWidget {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            //Pie Chart with carbs, fats, and proteins
-            // in the center of the pie char is going to be the amount of calories
+        body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              //Pie Chart with carbs, fats, and proteins
+              // in the center of the pie char is going to be the amount of calories
+              FoodItemDetailPieChart(),
 
-            //NAME
+              //NAME
 
-            //Amount
+              //Amount
 
-            //DATE & TIME
+              //DATE & TIME
 
-            //VITAMINS
-          ],
+              //VITAMINS
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class FoodItemDetailPieChart extends StatelessWidget {
+  const FoodItemDetailPieChart({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
+      builder: (context, state) {
+        return Container(
+          height: 150,
+          child: CustomPaint(
+            painter: FoodItemMacrosPieChartPainter(),
+            child: Center(
+              child: Text(
+                state.item.calories.toStringAsFixed(0),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
