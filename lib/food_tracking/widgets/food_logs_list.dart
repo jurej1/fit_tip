@@ -20,7 +20,6 @@ class FoodLogsList extends StatelessWidget {
     return ListView.builder(
       physics: const ClampingScrollPhysics(),
       itemCount: _foods.length,
-      itemExtent: 40,
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       itemBuilder: (context, index) {

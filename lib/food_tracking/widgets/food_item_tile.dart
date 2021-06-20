@@ -15,16 +15,15 @@ class FoodItemTile extends StatelessWidget {
         }
       },
       child: ListTile(
+        dense: true,
         onTap: () {
           Navigator.of(context).push(
             FoodItemDetailView.route(
               context,
-              // foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
               item: BlocProvider.of<FoodItemTileBloc>(context).state.item,
             ),
           );
         },
-        dense: true,
         title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
           buildWhen: (p, c) => p.item.name != c.item.name,
           builder: (context, state) {
