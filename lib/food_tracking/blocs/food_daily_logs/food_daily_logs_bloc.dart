@@ -105,7 +105,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
       try {
         MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_user!.id!, event.date!);
 
-        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
+        yield FoodDailyLogsLoadSuccess(mealDay: mealDay == null ? MealDay() : mealDay);
       } on Exception catch (e) {
         print('error ' + e.toString());
 
