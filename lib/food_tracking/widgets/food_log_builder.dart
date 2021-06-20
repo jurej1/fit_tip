@@ -1,6 +1,6 @@
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/widgets/food_daily_progres.dart';
-import 'package:fit_tip/food_tracking/widgets/meal_expansion_tile.dart';
+import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,22 +38,22 @@ class FoodLogBuilder extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      MealExpansionTile(
+                      MealCustomTile(
                         meal: state.mealDay?.breakfast,
                         title: 'Breakfest',
                       ),
                       const SizedBox(height: 10),
-                      MealExpansionTile(
+                      MealCustomTile(
                         meal: state.mealDay?.lunch,
                         title: 'Lunch',
                       ),
                       const SizedBox(height: 10),
-                      MealExpansionTile(
+                      MealCustomTile(
                         meal: state.mealDay?.dinner,
                         title: 'Dinner',
                       ),
                       const SizedBox(height: 10),
-                      MealExpansionTile(
+                      MealCustomTile(
                         meal: state.mealDay?.snacks,
                         title: 'Snacks',
                       ),
