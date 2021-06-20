@@ -1,12 +1,9 @@
 part of 'food_item_detail_bloc.dart';
 
-class FoodItemDetailState extends Equatable {
+class FoodItemDetailState {
   const FoodItemDetailState(this.item);
 
   final FoodItem item;
-
-  @override
-  List<Object> get props => [item];
 }
 
 class FoodItemDetailInitial extends FoodItemDetailState {

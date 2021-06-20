@@ -47,16 +47,16 @@ class AddFoodLogView extends StatelessWidget {
     return BlocListener<AddFoodItemBloc, AddFoodItemState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
+          Navigator.of(context).pop();
           if (state.mode == AddFoodItemStateMode.add) {
             BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogAdded(foodItem: state.foodItem));
           }
 
           if (state.mode == AddFoodItemStateMode.edit) {
+            print('success occured');
             BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogUpdated(foodItem: state.foodItem));
             BlocProvider.of<FoodItemDetailBloc>(context).add(FoodItemDetailUpdated(foodItem: state.foodItem));
           }
-
-          Navigator.of(context).pop();
         } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
