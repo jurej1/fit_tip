@@ -31,7 +31,9 @@ class FoodLogsList extends StatelessWidget {
             foodItem: item,
             foodRepository: RepositoryProvider.of<FoodRepository>(context),
           ),
-          child: FoodItemTile(),
+          child: FoodItemTile(
+            key: ValueKey(item.toString()),
+          ),
         );
       },
     );

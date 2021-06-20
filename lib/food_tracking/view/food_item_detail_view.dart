@@ -155,6 +155,7 @@ class FoodItemMacrosData extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: state.item.macronutrients!.map((e) {
               return TextFormField(
+                key: ValueKey(e.amount),
                 initialValue: e.amount.toStringAsFixed(0) + 'g',
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(
@@ -196,21 +197,25 @@ class FoodItemData extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
+                key: ValueKey(state.item.name),
                 initialValue: state.item.name,
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Name'),
               ),
               TextFormField(
+                key: ValueKey(state.item.amount),
                 initialValue: state.item.amount.toString() + 'g',
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Amount'),
               ),
               TextFormField(
+                key: ValueKey(state.item.dateAdded),
                 initialValue: DateFormat('d.MMM.yyyy').format(state.item.dateAdded),
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Date added'),
               ),
               TextFormField(
+                key: ValueKey(DateFormat('hh:mm').format(state.item.dateAdded)),
                 initialValue: DateFormat('hh:mm').format(state.item.dateAdded),
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Time added'),

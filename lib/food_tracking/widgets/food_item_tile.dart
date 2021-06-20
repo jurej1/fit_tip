@@ -25,23 +25,11 @@ class FoodItemTile extends StatelessWidget {
           );
         },
         title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-          buildWhen: (p, c) => p.item.name != c.item.name,
           builder: (context, state) {
             return Text(state.item.name);
           },
         ),
         subtitle: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-          buildWhen: (p, c) {
-            if (p.item.calories != c.item.calories) {
-              return true;
-            }
-
-            if (p.item.amount != c.item.amount) {
-              return true;
-            }
-
-            return false;
-          },
           builder: (context, state) {
             final item = state.item;
             return Text('${item.calories}cal - ${item.amount}g');
