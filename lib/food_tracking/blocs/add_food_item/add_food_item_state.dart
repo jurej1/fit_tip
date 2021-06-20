@@ -38,7 +38,8 @@ class AddFoodItemState extends Equatable {
   factory AddFoodItemState.pure({FoodItem? item, DateTime? date}) {
     return AddFoodItemState(
       dateConsumed: item == null ? (date == null ? DateConsumed.pure() : DateConsumed.pure(date)) : DateConsumed.pure(item.dateAdded),
-      timeConsumed: TimeConsumed.pure(),
+      timeConsumed:
+          item == null ? (TimeConsumed.pure()) : TimeConsumed.pure(TimeOfDay(hour: item.dateAdded.hour, minute: item.dateAdded.minute)),
       amountConsumed: item == null ? AmountConsumed.pure() : AmountConsumed.pure(item.amount.toString()),
       calorieConsumed: item == null ? CalorieConsumed.pure() : CalorieConsumed.pure(item.calories.toString()),
       carbs:
