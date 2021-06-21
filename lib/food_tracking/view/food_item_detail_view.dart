@@ -13,7 +13,6 @@ class FoodItemDetailView extends StatelessWidget {
   static MaterialPageRoute route(
     BuildContext context, {
     required FoodItem item,
-    // required FoodDailyLogsBloc foodDailyLogsBloc,
   }) {
     return MaterialPageRoute(
       builder: (_) {
