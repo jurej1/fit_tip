@@ -16,7 +16,7 @@ class FoodLogBuilder extends StatelessWidget {
           return SizedBox(
             height: 5,
             width: size.width,
-            child: LinearProgressIndicator(),
+            child: const LinearProgressIndicator(),
           );
         } else if (state is FoodDailyLogsLoadSuccess) {
           return Expanded(
@@ -26,18 +26,12 @@ class FoodLogBuilder extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  BlocProvider(
-                    create: (context) => FoodDayProgressBloc(
-                      calorieDailyGoalBloc: BlocProvider.of<CalorieDailyGoalBloc>(context),
-                      foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
-                    ),
-                    child: FoodDailyProgress(),
-                  ),
                   const SizedBox(height: 20),
                   ListView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
+                      const _CalorieChart(),
                       MealCustomTile(
                         meal: state.mealDay?.breakfast,
                         title: 'Breakfest',
@@ -68,6 +62,21 @@ class FoodLogBuilder extends StatelessWidget {
 
         return Container();
       },
+    );
+  }
+}
+
+class _CalorieChart extends StatelessWidget {
+  const _CalorieChart({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => FoodDayProgressBloc(
+        calorieDailyGoalBloc: BlocProvider.of<CalorieDailyGoalBloc>(context),
+        foodDailyLogsBloc: BlocProvider.of<FoodDailyLogsBloc>(context),
+      ),
+      child: const FoodDailyProgress(),
     );
   }
 }
