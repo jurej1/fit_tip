@@ -45,61 +45,69 @@ class FoodItemDetailView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Detail view'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                BlocProvider.of<FoodItemDetailBloc>(context).add(FoodItemDetailDeleteRequested());
-              },
-            ),
-            //EDITING FUNCTION
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.of(context).push(
-                  AddFoodLogView.route(
-                    context,
-                    fooditemDetailBloc: BlocProvider.of<FoodItemDetailBloc>(context),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            children: [
-              //Pie Chart with carbs, fats, and proteins
-              // in the center of the pie char is going to be the amount of calories
-              Container(
-                height: 200,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: FoodItemDetailPieChart(),
-                    ),
-                    Expanded(
-                      child: FoodItemMacrosData(),
-                    ),
-                  ],
-                ),
+          appBar: AppBar(
+            title: Text('Detail view'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  BlocProvider.of<FoodItemDetailBloc>(context).add(FoodItemDetailDeleteRequested());
+                },
               ),
-              FoodItemData(),
-
-              //Amount
-
-              //DATE & TIME
-
-              //VITAMINS
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    AddFoodLogView.route(
+                      context,
+                      fooditemDetailBloc: BlocProvider.of<FoodItemDetailBloc>(context),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
-        ),
-      ),
+          body: BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
+            builder: (context, state) {
+              if (state is FoodItemDetailLoading) {
+                return Center(
+                  child: const CircularProgressIndicator(),
+                );
+              }
+
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    //Pie Chart with carbs, fats, and proteins
+                    // in the center of the pie char is going to be the amount of calories
+                    Container(
+                      height: 200,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: FoodItemDetailPieChart(),
+                          ),
+                          Expanded(
+                            child: FoodItemMacrosData(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    FoodItemData(),
+
+                    //Amount
+
+                    //DATE & TIME
+
+                    //VITAMINS
+                  ],
+                ),
+              );
+            },
+          )),
     );
   }
 }
