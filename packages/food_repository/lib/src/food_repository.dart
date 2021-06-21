@@ -33,7 +33,7 @@ class FoodRepository {
   }
 
   Future<void> updateFoodItem(String userId, FoodItem foodItem) async {
-    return _mealTrackingRef(userId).doc(userId).set(foodItem.toEntity().toDocumentSnapshot(), SetOptions(merge: true));
+    return _mealTrackingRef(userId).doc(foodItem.id).set(foodItem.toEntity().toDocumentSnapshot(), SetOptions(merge: true));
   }
 
   Future<Meal> getMealFodSpecificDay(String userId, DateTime date, MealType type) async {
