@@ -88,7 +88,7 @@ class _MainTile extends StatelessWidget {
                       foodRepository: RepositoryProvider.of<FoodRepository>(context),
                     ),
                     child: FoodItemTile(
-                      key: ValueKey(item.id),
+                      key: ValueKey(item),
                     ),
                   );
                 },

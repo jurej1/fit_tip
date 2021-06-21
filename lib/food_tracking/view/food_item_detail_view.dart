@@ -215,8 +215,8 @@ class FoodItemData extends StatelessWidget {
                 decoration: inputDecorationStyle.copyWith(labelText: 'Date added'),
               ),
               TextFormField(
-                key: ValueKey(DateFormat('hh:mm').format(state.item.dateAdded)),
-                initialValue: DateFormat('hh:mm').format(state.item.dateAdded),
+                key: ValueKey(DateFormat('HH:mm').format(state.item.dateAdded)),
+                initialValue: DateFormat('HH:mm').format(state.item.dateAdded),
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Time added'),
               ),
