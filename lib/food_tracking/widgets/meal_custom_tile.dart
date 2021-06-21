@@ -64,12 +64,10 @@ class _MainTile extends StatelessWidget {
                 color: state.isExpanded ? state.textActiveColor : Colors.white,
               ),
             ),
-            Container(
-              child: _ColapsedTile(
-                amountOfItems: amountOfItems,
-                title: title,
-                meal: meal,
-              ),
+            _ColapsedTile(
+              amountOfItems: amountOfItems,
+              title: title,
+              meal: meal,
             ),
             AnimatedContainer(
               curve: Curves.fastOutSlowIn,

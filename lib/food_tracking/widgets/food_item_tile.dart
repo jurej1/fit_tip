@@ -14,41 +14,43 @@ class FoodItemTile extends StatelessWidget {
           BlocProvider.of<FoodDailyLogsBloc>(context).add(FoodDailyLogsLogRemoved(foodItem: state.item));
         }
       },
-      child: ListTile(
-        dense: true,
-        onTap: () {
-          Navigator.of(context).push(
-            FoodItemDetailView.route(
-              context,
-              item: BlocProvider.of<FoodItemTileBloc>(context).state.item,
-            ),
-          );
-        },
-        title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-          builder: (context, state) {
-            return Text(state.item.name);
-          },
-        ),
-        subtitle: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-          builder: (context, state) {
-            final item = state.item;
-            return Text('${item.calories}cal - ${item.amount}g');
-          },
-        ),
-        trailing: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
-          builder: (context, state) {
-            return IconButton(
-              icon: state is FoodItemTileLoading
-                  ? FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: const CircularProgressIndicator(),
-                    )
-                  : const Icon(Icons.delete),
-              onPressed: () {
-                BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
-              },
+      child: Material(
+        child: ListTile(
+          dense: true,
+          onTap: () {
+            Navigator.of(context).push(
+              FoodItemDetailView.route(
+                context,
+                item: BlocProvider.of<FoodItemTileBloc>(context).state.item,
+              ),
             );
           },
+          title: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+            builder: (context, state) {
+              return Text(state.item.name);
+            },
+          ),
+          subtitle: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+            builder: (context, state) {
+              final item = state.item;
+              return Text('${item.calories}cal - ${item.amount}g');
+            },
+          ),
+          trailing: BlocBuilder<FoodItemTileBloc, FoodItemTileState>(
+            builder: (context, state) {
+              return IconButton(
+                icon: state is FoodItemTileLoading
+                    ? FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: const CircularProgressIndicator(),
+                      )
+                    : const Icon(Icons.delete),
+                onPressed: () {
+                  BlocProvider.of<FoodItemTileBloc>(context).add(FoodItemTileDeleteRequested());
+                },
+              );
+            },
+          ),
         ),
       ),
     );
