@@ -45,44 +45,46 @@ class FoodItemDetailView extends StatelessWidget {
         }
       },
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('Detail view'),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  BlocProvider.of<FoodItemDetailBloc>(context).add(FoodItemDetailDeleteRequested());
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    AddFoodLogView.route(
-                      context,
-                      fooditemDetailBloc: BlocProvider.of<FoodItemDetailBloc>(context),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          body: BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
-            builder: (context, state) {
-              if (state is FoodItemDetailLoading) {
-                return Center(
-                  child: const CircularProgressIndicator(),
+        appBar: AppBar(
+          title: Text('Detail view'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                BlocProvider.of<FoodItemDetailBloc>(context).add(FoodItemDetailDeleteRequested());
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.of(context).push(
+                  AddFoodLogView.route(
+                    context,
+                    fooditemDetailBloc: BlocProvider.of<FoodItemDetailBloc>(context),
+                  ),
                 );
-              }
+              },
+            ),
+          ],
+        ),
+        body: BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
+          builder: (context, state) {
+            if (state is FoodItemDetailLoading) {
+              return Center(
+                child: const CircularProgressIndicator(),
+              );
+            }
 
-              return SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    //Pie Chart with carbs, fats, and proteins
-                    // in the center of the pie char is going to be the amount of calories
-                    Container(
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  //Pie Chart with carbs, fats, and proteins
+                  // in the center of the pie char is going to be the amount of calories
+
+                  if (state.item.containsMacros())
+                    SizedBox(
                       height: 200,
                       child: Row(
                         children: [
@@ -90,104 +92,39 @@ class FoodItemDetailView extends StatelessWidget {
                             width: 200,
                             child: FoodItemDetailPieChart(),
                           ),
-                          Expanded(
-                            child: FoodItemMacrosData(),
-                          ),
+                          Expanded(child: FoodItemMacrosData()),
                         ],
                       ),
                     ),
-                    FoodItemData(),
+                  if (!state.item.containsMacros())
+                    TextFormField(
+                      key: ValueKey(state.item.calories),
+                      initialValue: state.item.calories.toStringAsFixed(0) + 'cal',
+                      enabled: false,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        labelText: 'Calories',
+                      ),
+                    ),
 
-                    //Amount
+                  FoodItemData(),
 
-                    //DATE & TIME
+                  //Amount
 
-                    //VITAMINS
-                  ],
-                ),
-              );
-            },
-          )),
+                  //DATE & TIME
+
+                  //VITAMINS
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
-  }
-}
-
-class FoodItemDetailPieChart extends StatelessWidget {
-  const FoodItemDetailPieChart({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
-      builder: (context, state) {
-        if (state.item.macronutrients == null) {
-          return Center(
-            child: Text(
-              state.item.calories.toStringAsFixed(0) + 'cal',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          );
-        }
-
-        return CustomPaint(
-          painter: FoodItemMacrosPieChartPainter(
-            carbsAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.carbs).amount,
-            fatAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.fat).amount,
-            proteinAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.protein).amount,
-          ),
-          child: Center(
-            child: Text(
-              state.item.calories.toStringAsFixed(0) + 'cal',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class FoodItemMacrosData extends StatelessWidget {
-  FoodItemMacrosData({Key? key}) : super(key: key);
-
-  final inputDecorationStyle = InputDecoration(border: InputBorder.none);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FoodItemDetailBloc, FoodItemDetailState>(
-      builder: (context, state) {
-        if (state.item.macronutrients == null) return Container();
-
-        return Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: state.item.macronutrients!.map((e) {
-              return TextFormField(
-                key: ValueKey(e.amount),
-                initialValue: e.amount.toStringAsFixed(0) + 'g',
-                enabled: false,
-                decoration: inputDecorationStyle.copyWith(
-                  labelText: macronutrientToString(e.macronutrient),
-                  labelStyle: TextStyle(
-                    color: mapMacronutrientToColor(e.macronutrient),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  Color mapMacronutrientToColor(Macronutrient a) {
-    if (a == Macronutrient.fat) {
-      return Colors.red;
-    } else if (a == Macronutrient.carbs) {
-      return Colors.blue;
-    } else if (a == Macronutrient.protein) {
-      return Colors.green;
-    }
-    return Colors.grey;
   }
 }
 
