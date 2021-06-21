@@ -22,10 +22,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   })   : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
         super(
-          AddFoodItemState.pure(
-            item: foodItem,
-            date: focusedDate?.state.selectedDate,
-          ),
+          foodItem == null ? AddFoodItemState.pure(date: focusedDate?.state.selectedDate) : AddFoodItemState.dirty(item: foodItem),
         );
 
   final FoodRepository _foodRepository;

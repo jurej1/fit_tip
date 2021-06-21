@@ -42,6 +42,9 @@ class FoodItem extends Equatable {
     ];
   }
 
+  bool containsMacro(Macronutrient macro) => this.macronutrients?.any((e) => e.macronutrient == macro) ?? false;
+  FoodDataMacro? getMacro(Macronutrient macro) => this.macronutrients?.firstWhere((e) => e.macronutrient == macro);
+
   FoodItem copyWith({
     String? id,
     String? name,

@@ -11,7 +11,7 @@ class MealTypeInput extends StatelessWidget {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
         return ListTile(
-          title: Text('Title'),
+          title: Text('Meal: '),
           trailing: DropdownButton<MealType>(
             value: state.type,
             icon: const Icon(Icons.arrow_drop_down_circle_outlined),

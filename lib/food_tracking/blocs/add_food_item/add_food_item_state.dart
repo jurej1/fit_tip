@@ -35,30 +35,35 @@ class AddFoodItemState extends Equatable {
   final List<FoodDataVitamin> vitamins;
   final AddFoodItemStateMode mode;
 
-  factory AddFoodItemState.pure({FoodItem? item, DateTime? date}) {
+  factory AddFoodItemState.pure({DateTime? date}) {
     return AddFoodItemState(
-      dateConsumed: item == null ? (date == null ? DateConsumed.pure() : DateConsumed.pure(date)) : DateConsumed.pure(item.dateAdded),
-      timeConsumed:
-          item == null ? (TimeConsumed.pure()) : TimeConsumed.pure(TimeOfDay(hour: item.dateAdded.hour, minute: item.dateAdded.minute)),
-      amountConsumed: item == null ? AmountConsumed.pure() : AmountConsumed.pure(item.amount.toString()),
-      calorieConsumed: item == null ? CalorieConsumed.pure() : CalorieConsumed.pure(item.calories.toString()),
-      carbs:
-          item != null && item.macronutrients != null && item.macronutrients!.any((element) => element.macronutrient == Macronutrient.carbs)
-              ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.carbs).amount.toString())
-              : AmountDetailConsumed.pure(),
-      fats: item != null && item.macronutrients != null && item.macronutrients!.any((element) => element.macronutrient == Macronutrient.fat)
-          ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.fat).amount.toString())
-          : AmountDetailConsumed.pure(),
-      proteins: item != null &&
-              item.macronutrients != null &&
-              item.macronutrients!.any((element) => element.macronutrient == Macronutrient.protein)
-          ? AmountDetailConsumed.pure(item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.protein).amount.toString())
-          : AmountDetailConsumed.pure(),
+      dateConsumed: date == null ? DateConsumed.pure() : DateConsumed.pure(date),
+      mode: AddFoodItemStateMode.add,
+      timeConsumed: TimeConsumed.pure(),
+    );
+  }
+
+  factory AddFoodItemState.dirty({required FoodItem item}) {
+    return AddFoodItemState(
+      dateConsumed: DateConsumed.pure(item.dateAdded),
+      timeConsumed: TimeConsumed.pure(TimeOfDay(hour: item.dateAdded.hour, minute: item.dateAdded.minute)),
+      amountConsumed: AmountConsumed.pure(item.amount.toStringAsFixed(0)),
+      calorieConsumed: CalorieConsumed.pure(item.calories.toStringAsFixed(0)),
       foodItem: item,
-      foodName: item == null ? FoodName.pure() : FoodName.pure(item.name),
-      type: item == null ? MealType.lunch : item.mealType,
-      vitamins: item != null && item.vitamins != null ? item.vitamins! : [],
-      mode: item == null ? AddFoodItemStateMode.add : AddFoodItemStateMode.edit,
+      foodName: FoodName.pure(item.name),
+      mode: AddFoodItemStateMode.edit,
+      showDetail: false,
+      type: item.mealType,
+      vitamins: item.vitamins ?? [],
+      carbs: item.containsMacro(Macronutrient.carbs)
+          ? AmountDetailConsumed.pure(item.getMacro(Macronutrient.carbs)!.amount.toStringAsFixed(0))
+          : AmountDetailConsumed.pure(),
+      fats: item.containsMacro(Macronutrient.fat)
+          ? AmountDetailConsumed.dirty(item.getMacro(Macronutrient.fat)!.amount.toStringAsFixed(0))
+          : AmountDetailConsumed.pure(),
+      proteins: item.containsMacro(Macronutrient.protein)
+          ? AmountDetailConsumed.dirty(item.getMacro(Macronutrient.protein)!.amount.toStringAsFixed(0))
+          : AmountDetailConsumed.pure(),
     );
   }
 
