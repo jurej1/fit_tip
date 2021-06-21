@@ -34,7 +34,7 @@ class FoodLogBuilder extends StatelessWidget {
                       const _CalorieChart(),
                       MealCustomTile(
                         meal: state.mealDay?.breakfast,
-                        title: 'Breakfest',
+                        title: 'Breakfast',
                       ),
                       const SizedBox(height: 10),
                       MealCustomTile(

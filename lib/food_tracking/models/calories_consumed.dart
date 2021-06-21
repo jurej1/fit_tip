@@ -3,8 +3,8 @@ import 'package:formz/formz.dart';
 enum CaloriesConsumedValidatorError { invalid }
 
 class CalorieConsumed extends FormzInput<String, CaloriesConsumedValidatorError> {
-  const CalorieConsumed.dirty([String value = '0']) : super.dirty(value);
-  const CalorieConsumed.pure([String value = '0']) : super.pure(value);
+  const CalorieConsumed.dirty([String value = '']) : super.dirty(value);
+  const CalorieConsumed.pure([String value = '']) : super.pure(value);
 
   @override
   CaloriesConsumedValidatorError? validator(String? value) {
