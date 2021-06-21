@@ -9,14 +9,24 @@ class CalorieConsumedInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.calorieConsumed.value,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            labelText: 'Calories',
-            errorText: state.calorieConsumed.invalid ? 'Invalid' : null,
-          ),
-          onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemCalorieChanged(value: val)),
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Calories'),
+            Expanded(
+              child: TextFormField(
+                initialValue: state.calorieConsumed.value,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  errorText: state.calorieConsumed.invalid ? 'Invalid' : null,
+                ),
+                onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemCalorieChanged(value: val)),
+              ),
+            ),
+            Text(' cal'),
+          ],
         );
       },
     );

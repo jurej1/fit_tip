@@ -9,14 +9,23 @@ class AmountConsumedInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.amountConsumed.value,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            labelText: 'Amount',
-            errorText: state.amountConsumed.invalid ? 'Invalid' : null,
-          ),
-          onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemAmountChanged(value: val)),
+        return Row(
+          children: [
+            Text('Amount'),
+            Expanded(
+              child: TextFormField(
+                initialValue: state.amountConsumed.value,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.left,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  errorText: state.amountConsumed.invalid ? 'Invalid' : null,
+                ),
+                onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemAmountChanged(value: val)),
+              ),
+            ),
+            Text('g'),
+          ],
         );
       },
     );
