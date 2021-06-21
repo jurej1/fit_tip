@@ -81,14 +81,14 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
       final item = event.foodItem!;
       final MealType type = item.mealType;
 
-      mealDay = mealDay.copyWith(
+      MealDay newMealDay = mealDay.copyWith(
         breakfast: type == MealType.breakfast ? _updateFoodItemInMeal(item, mealDay.breakfast) : null,
         dinner: type == MealType.dinner ? _updateFoodItemInMeal(item, mealDay.dinner) : null,
         lunch: type == MealType.lunch ? _updateFoodItemInMeal(item, mealDay.lunch) : null,
         snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
       );
 
-      yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
+      yield FoodDailyLogsLoadSuccess(mealDay: newMealDay);
     }
   }
 

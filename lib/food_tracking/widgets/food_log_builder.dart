@@ -19,39 +19,59 @@ class FoodLogBuilder extends StatelessWidget {
             child: const LinearProgressIndicator(),
           );
         } else if (state is FoodDailyLogsLoadSuccess) {
+          // return Expanded(
+          //   child: SingleChildScrollView(
+          //     physics: const ClampingScrollPhysics(),
+          //     padding: const EdgeInsets.symmetric(vertical: 10),
+          //     child: Column(
+          //       children: [
+          //         const SizedBox(height: 40),
+          //         ListView(
+          //           shrinkWrap: true,
+          //           physics: const NeverScrollableScrollPhysics(),
+          //           children: [
+          //             const _CalorieChart(),
+          //             MealCustomTile(
+          //               meal: state.mealDay.breakfast,
+          //               title: 'Breakfast',
+          //             ),
+          //             const SizedBox(height: 10),
+          //             MealCustomTile(
+          //               meal: state.mealDay.lunch,
+          //               title: 'Lunch',
+          //             ),
+          //             const SizedBox(height: 10),
+          //             MealCustomTile(
+          //               meal: state.mealDay.dinner,
+          //               title: 'Dinner',
+          //             ),
+          //             const SizedBox(height: 10),
+          //             MealCustomTile(
+          //               meal: state.mealDay.snacks,
+          //               title: 'Snacks',
+          //             ),
+          //             const SizedBox(height: 75),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // );
           return Expanded(
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   ListView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      const _CalorieChart(),
-                      MealCustomTile(
-                        meal: state.mealDay.breakfast,
-                        title: 'Breakfast',
-                      ),
-                      const SizedBox(height: 10),
                       MealCustomTile(
                         meal: state.mealDay.lunch,
                         title: 'Lunch',
                       ),
-                      const SizedBox(height: 10),
-                      MealCustomTile(
-                        meal: state.mealDay.dinner,
-                        title: 'Dinner',
-                      ),
-                      const SizedBox(height: 10),
-                      MealCustomTile(
-                        meal: state.mealDay.snacks,
-                        title: 'Snacks',
-                      ),
-                      const SizedBox(height: 75),
                     ],
                   ),
                 ],

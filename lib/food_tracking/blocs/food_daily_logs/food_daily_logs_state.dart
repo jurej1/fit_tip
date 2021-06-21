@@ -9,9 +9,7 @@ class FoodDailyLogsLoading extends FoodDailyLogsState {}
 class FoodDailyLogsLoadSuccess extends FoodDailyLogsState {
   final MealDay mealDay;
 
-  const FoodDailyLogsLoadSuccess({
-    required this.mealDay,
-  });
+  const FoodDailyLogsLoadSuccess({required this.mealDay});
 }
 
 class FoodDailyLogsFailure extends FoodDailyLogsState {
