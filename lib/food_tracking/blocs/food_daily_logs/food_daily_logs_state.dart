@@ -10,10 +10,10 @@ abstract class FoodDailyLogsState extends Equatable {
 class FoodDailyLogsLoading extends FoodDailyLogsState {}
 
 class FoodDailyLogsLoadSuccess extends FoodDailyLogsState {
-  final MealDay? mealDay;
+  final MealDay mealDay;
 
   const FoodDailyLogsLoadSuccess({
-    this.mealDay,
+    required this.mealDay,
   });
 
   @override

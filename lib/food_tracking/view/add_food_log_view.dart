@@ -13,7 +13,7 @@ class AddFoodLogView extends StatelessWidget {
 
   static MaterialPageRoute route(
     BuildContext context, {
-    // FoodLogFocusedDateBloc? foodLogFocusedDateBloc,
+    FoodLogFocusedDateBloc? foodLogFocusedDateBloc,
     FoodItemDetailBloc? fooditemDetailBloc,
   }) {
     return MaterialPageRoute(
@@ -22,7 +22,7 @@ class AddFoodLogView extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (context) => AddFoodItemBloc(
-                focusedDate: BlocProvider.of<FoodLogFocusedDateBloc>(context),
+                focusedDate: foodLogFocusedDateBloc,
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
                 foodItem: fooditemDetailBloc?.state.item,

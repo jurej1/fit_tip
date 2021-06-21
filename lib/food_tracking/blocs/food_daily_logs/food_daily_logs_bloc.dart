@@ -40,9 +40,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
 
   Stream<FoodDailyLogsState> _mapLogAddedToState(FoodDailyLogsLogAdded event) async* {
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
-
-      if (mealDay == null) mealDay = MealDay();
+      MealDay mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
 
       final MealType type = event.foodItem!.mealType;
       final item = event.foodItem!;
@@ -60,43 +58,38 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
 
   Stream<FoodDailyLogsState> _mapLogDeletedToState(FoodDailyLogsLogRemoved event) async* {
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
+      MealDay mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
 
-      if (mealDay != null) {
-        final item = event.foodItem!;
-        final MealType type = item.mealType;
+      final item = event.foodItem!;
+      final MealType type = item.mealType;
 
-        mealDay = mealDay.copyWith(
-          breakfast: type == MealType.breakfast ? _removeFoodItemFromMeal(item, mealDay.breakfast) : null,
-          dinner: type == MealType.dinner ? _removeFoodItemFromMeal(item, mealDay.dinner) : null,
-          lunch: type == MealType.lunch ? _removeFoodItemFromMeal(item, mealDay.lunch) : null,
-          snacks: type == MealType.snack ? _removeFoodItemFromMeal(item, mealDay.snacks) : null,
-        );
+      mealDay = mealDay.copyWith(
+        breakfast: type == MealType.breakfast ? _removeFoodItemFromMeal(item, mealDay.breakfast) : null,
+        dinner: type == MealType.dinner ? _removeFoodItemFromMeal(item, mealDay.dinner) : null,
+        lunch: type == MealType.lunch ? _removeFoodItemFromMeal(item, mealDay.lunch) : null,
+        snacks: type == MealType.snack ? _removeFoodItemFromMeal(item, mealDay.snacks) : null,
+      );
 
-        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
-      }
+      yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
     }
   }
 
   Stream<FoodDailyLogsState> _mapLogUpdatedToState(FoodDailyLogsLogUpdated event) async* {
-    print('Log updated');
-
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
-      MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
+      MealDay mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
+      print('Log updated');
 
-      if (mealDay != null) {
-        final item = event.foodItem!;
-        final MealType type = item.mealType;
+      final item = event.foodItem!;
+      final MealType type = item.mealType;
 
-        mealDay = mealDay.copyWith(
-          breakfast: type == MealType.breakfast ? _updateFoodItemInMeal(item, mealDay.breakfast) : null,
-          dinner: type == MealType.dinner ? _updateFoodItemInMeal(item, mealDay.dinner) : null,
-          lunch: type == MealType.lunch ? _updateFoodItemInMeal(item, mealDay.lunch) : null,
-          snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
-        );
+      mealDay = mealDay.copyWith(
+        breakfast: type == MealType.breakfast ? _updateFoodItemInMeal(item, mealDay.breakfast) : null,
+        dinner: type == MealType.dinner ? _updateFoodItemInMeal(item, mealDay.dinner) : null,
+        lunch: type == MealType.lunch ? _updateFoodItemInMeal(item, mealDay.lunch) : null,
+        snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
+      );
 
-        yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
-      }
+      yield FoodDailyLogsLoadSuccess(mealDay: mealDay);
     }
   }
 
