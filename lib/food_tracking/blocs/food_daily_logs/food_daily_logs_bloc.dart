@@ -77,7 +77,6 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   Stream<FoodDailyLogsState> _mapLogUpdatedToState(FoodDailyLogsLogUpdated event) async* {
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
       MealDay mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
-      print('Log updated');
 
       final item = event.foodItem!;
       final MealType type = item.mealType;
@@ -138,19 +137,21 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   }
 
   Meal? _updateFoodItemInMeal(FoodItem item, Meal? meal) {
-    if (meal == null) {
-      return null;
-    } else {
-      List<FoodItem> foods = meal.foods.map((e) {
+    if (meal == null) return null;
+
+    List<FoodItem> foods = meal.foods.map(
+      (e) {
+        print('id comparing element [${e.id}], item [${item.id}]');
+
         if (e.id == item.id) {
           return item;
         }
         return e;
-      }).toList();
+      },
+    ).toList();
 
-      return meal.copyWith(
-        foods: foods,
-      );
-    }
+    return meal.copyWith(
+      foods: foods,
+    );
   }
 }

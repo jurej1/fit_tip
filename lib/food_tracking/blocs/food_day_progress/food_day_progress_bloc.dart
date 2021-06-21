@@ -25,13 +25,13 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
     final logsState = _foodDailyLogsBloc.state;
 
     if (logsState is FoodDailyLogsLoadSuccess) {
-      add(FoodDayProgressDailyLogsUpdated(totalConsumption: logsState.mealDay?.totalCalories));
+      add(FoodDayProgressDailyLogsUpdated(totalConsumption: logsState.mealDay.totalCalories));
     } else if (logsState is FoodDailyLogsFailure) {
       add(FoodDayProgressErroOcurred());
     }
     _logsSubscription = foodDailyLogsBloc.stream.listen((logState) {
       if (logState is FoodDailyLogsLoadSuccess) {
-        add(FoodDayProgressDailyLogsUpdated(totalConsumption: logState.mealDay?.totalCalories));
+        add(FoodDayProgressDailyLogsUpdated(totalConsumption: logState.mealDay.totalCalories));
       } else if (logState is FoodDailyLogsFailure) {
         add(FoodDayProgressErroOcurred());
       }
@@ -69,7 +69,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
       final logState = (_foodDailyLogsBloc.state as FoodDailyLogsLoadSuccess);
 
       yield FoodDayProgressLoadSuccess(
-        calorieConsume: logState.mealDay?.totalCalories ?? 0,
+        calorieConsume: logState.mealDay.totalCalories,
         calorieGoal: event.calorieGoal ?? 0,
       );
     }
