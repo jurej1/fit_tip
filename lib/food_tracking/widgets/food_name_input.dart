@@ -12,7 +12,7 @@ class FoodNameInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.foodName.value,
           decoration: InputDecoration(
-            helperText: 'Food name',
+            labelText: 'Food name',
             errorText: state.foodName.invalid ? 'Invalid input' : null,
           ),
           onChanged: (val) => BlocProvider.of<AddFoodItemBloc>(context).add(AddFoodItemNameChanged(name: val)),
