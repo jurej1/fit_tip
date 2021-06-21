@@ -79,6 +79,8 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   }
 
   Stream<FoodDailyLogsState> _mapLogUpdatedToState(FoodDailyLogsLogUpdated event) async* {
+    print('Log updated');
+
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
       MealDay? mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
 

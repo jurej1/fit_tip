@@ -53,12 +53,7 @@ class FoodDailyLogsView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(
-            AddFoodLogView.route(
-              context,
-              foodLogFocusedDateBloc: BlocProvider.of<FoodLogFocusedDateBloc>(context),
-            ),
-          );
+          Navigator.of(context).push(AddFoodLogView.route(context));
         },
       ),
     );
