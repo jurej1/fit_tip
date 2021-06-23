@@ -16,4 +16,28 @@ class EditCalorieDailyGoalAmountChanged extends EditCalorieDailyGoalEvent {
   List<Object?> get props => [amount];
 }
 
+class EditCalorieDailyGoalCarbsChanged extends EditCalorieDailyGoalEvent {
+  final String amount;
+
+  EditCalorieDailyGoalCarbsChanged(this.amount);
+  @override
+  List<Object?> get props => [amount];
+}
+
+class EditCalorieDailyGoalProteinChanged extends EditCalorieDailyGoalEvent {
+  final String amount;
+  EditCalorieDailyGoalProteinChanged(this.amount);
+
+  @override
+  List<Object?> get props => [amount];
+}
+
+class EditCalorieDailyGoalFatsChanged extends EditCalorieDailyGoalEvent {
+  final String amount;
+  EditCalorieDailyGoalFatsChanged(this.amount);
+
+  @override
+  List<Object?> get props => [amount];
+}
+
 class EditCalorieDailyGoalFormSubmit extends EditCalorieDailyGoalEvent {}

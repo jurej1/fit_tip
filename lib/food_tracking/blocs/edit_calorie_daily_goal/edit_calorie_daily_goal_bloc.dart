@@ -22,12 +22,8 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
         _foodRepository = foodRepository,
         super(
           calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess
-              ? EditCalorieDailyGoalState(
-                  goal: (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal,
-                  calorieGoalConsumption: CalorieGoalConsumption.pure(
-                      (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal!.amount.toStringAsFixed(0)),
-                )
-              : EditCalorieDailyGoalState(),
+              ? EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal!)
+              : EditCalorieDailyGoalState.pure(),
         );
 
   final AuthenticationBloc _authenticationBloc;
@@ -45,6 +41,12 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       yield _mapAmountChangedToState(event);
     } else if (event is EditCalorieDailyGoalFormSubmit) {
       yield* _mapFormSubmitToState();
+    } else if (event is EditCalorieDailyGoalProteinChanged) {
+      yield _mapProteinChangedToState(event);
+    } else if (event is EditCalorieDailyGoalCarbsChanged) {
+      yield _mapCarbsChangedToState(event);
+    } else if (event is EditCalorieDailyGoalFatsChanged) {
+      yield _mapFatsChangedToState(event);
     }
   }
 
@@ -59,26 +61,93 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
 
   Stream<EditCalorieDailyGoalState> _mapFormSubmitToState() async* {
     CalorieGoalConsumption consumption = CalorieGoalConsumption.dirty(state.calorieGoalConsumption.value);
+    final fats = AmountDetailConsumed.dirty(state.fats.value);
+    final carbs = AmountDetailConsumed.dirty(state.carbs.value);
+    final proteins = AmountDetailConsumed.dirty(state.proteins.value);
 
     yield state.copyWith(
-      status: Formz.validate([consumption]),
+      status: Formz.validate([
+        consumption,
+        fats,
+        proteins,
+        carbs,
+      ]),
+      carbs: carbs,
+      fats: fats,
+      proteins: proteins,
       calorieGoalConsumption: consumption,
     );
 
     if (state.status.isValidated && _isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
-      CalorieDailyGoal goal = CalorieDailyGoal(
+      int? carbsValue = int.tryParse(carbs.value);
+      int? proteinValue = int.tryParse(proteins.value);
+      int? fatsValue = int.tryParse(fats.value);
+
+      CalorieDailyGoal goal = state.goal.copyWith(
         amount: double.parse(state.calorieGoalConsumption.value),
         date: _foodLogFocusedDateBloc.state.selectedDate,
+        carbs: carbsValue,
+        proteins: proteinValue,
+        fats: fatsValue,
       );
 
       try {
         await _foodRepository.addCalorieDailyGoal(_user!.id!, goal);
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
+        yield state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          goal: goal,
+        );
       } on Exception catch (_) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
+  }
+
+  EditCalorieDailyGoalState _mapProteinChangedToState(EditCalorieDailyGoalProteinChanged event) {
+    AmountDetailConsumed protein = AmountDetailConsumed.dirty(event.amount);
+
+    return state.copyWith(
+      proteins: protein,
+      status: Formz.validate(
+        [
+          protein,
+          state.carbs,
+          state.fats,
+          state.calorieGoalConsumption,
+        ],
+      ),
+    );
+  }
+
+  EditCalorieDailyGoalState _mapCarbsChangedToState(EditCalorieDailyGoalCarbsChanged event) {
+    final carbs = AmountDetailConsumed.dirty(event.amount);
+
+    return state.copyWith(
+      status: Formz.validate(
+        [
+          carbs,
+          state.proteins,
+          state.fats,
+          state.calorieGoalConsumption,
+        ],
+      ),
+      carbs: carbs,
+    );
+  }
+
+  EditCalorieDailyGoalState _mapFatsChangedToState(EditCalorieDailyGoalFatsChanged event) {
+    final fats = AmountDetailConsumed.dirty(event.amount);
+
+    return state.copyWith(
+      status: Formz.validate([
+        fats,
+        state.proteins,
+        state.calorieGoalConsumption,
+        state.carbs,
+      ]),
+      fats: fats,
+    );
   }
 }
