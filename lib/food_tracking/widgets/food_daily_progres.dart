@@ -130,7 +130,7 @@ class _Carousel extends StatelessWidget {
                     key: ValueKey('Fats'),
                     title: 'Fats',
                     amount: state.fatsConsumed.toString() + 'g',
-                    goal: state.fatsConsumed.toString() + 'g',
+                    goal: state.fatsGoal.toString() + 'g',
                   ),
                 ],
                 options: CarouselOptions(
