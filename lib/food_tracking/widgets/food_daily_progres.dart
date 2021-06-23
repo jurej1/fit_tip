@@ -1,7 +1,9 @@
-import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/water_tracking/water_tracking.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:fit_tip/water_tracking/water_tracking.dart';
 
 class FoodDailyProgress extends StatefulWidget {
   const FoodDailyProgress({Key? key}) : super(key: key);
@@ -49,47 +51,89 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
         } else if (state is FoodDayProgressLoadSuccess) {
           _animationController.forward();
 
-          return SizedBox(
-            height: sizeA,
-            width: size.width,
-            child: AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: ProgressPainter(
-                    maxValue: state.calorieGoal,
-                    primaryValue: _animationController.value * state.calorieConsume,
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: 230,
+                width: 210,
+                child: CarouselSlider(
+                  items: [],
+                  options: CarouselOptions(
+                    height: 200,
+                    pageSnapping: true,
+                    enlargeCenterPage: true,
                   ),
-                  child: child,
-                );
-              },
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${state.calorieConsume.toStringAsFixed(0)}cal',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Daily Goal: ${state.calorieGoal.toStringAsFixed(0)}cal',
-                      style: TextStyle(
-                        color: Colors.grey.shade400,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
+              IgnorePointer(
+                child: SizedBox(
+                  height: sizeA,
+                  width: sizeA,
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return CustomPaint(
+                        painter: ProgressPainter(
+                          maxValue: state.calorieGoal,
+                          primaryValue: _animationController.value * state.calorieConsume,
+                        ),
+                        child: child,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 15,
+                child: Container(
+                  width: 100,
+                  height: 15,
+                  color: Colors.red,
+                ),
+              )
+            ],
           );
         }
 
         return Container();
       },
+    );
+  }
+}
+
+class _CarouselChild extends StatelessWidget {
+  const _CarouselChild({
+    Key? key,
+    required this.calAmount,
+    required this.dailyGoal,
+  }) : super(key: key);
+
+  final String calAmount;
+  final String dailyGoal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '${calAmount}cal',
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Daily Goal: ${dailyGoal}cal',
+            style: TextStyle(
+              color: Colors.grey.shade400,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

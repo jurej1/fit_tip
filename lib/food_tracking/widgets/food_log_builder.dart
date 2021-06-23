@@ -26,37 +26,31 @@ class FoodLogBuilder extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 40),
-                  ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      const _CalorieChart(),
-                      MealCustomTile(
-                        key: UniqueKey(),
-                        meal: state.mealDay.breakfast,
-                        title: 'Breakfast',
-                      ),
-                      const SizedBox(height: 10),
-                      MealCustomTile(
-                        key: UniqueKey(),
-                        meal: state.mealDay.lunch,
-                        title: 'Lunch',
-                      ),
-                      const SizedBox(height: 10),
-                      MealCustomTile(
-                        key: UniqueKey(),
-                        meal: state.mealDay.dinner,
-                        title: 'Dinner',
-                      ),
-                      const SizedBox(height: 10),
-                      MealCustomTile(
-                        key: UniqueKey(),
-                        meal: state.mealDay.snacks,
-                        title: 'Snacks',
-                      ),
-                      const SizedBox(height: 75),
-                    ],
+                  const _CalorieChart(),
+                  MealCustomTile(
+                    key: UniqueKey(),
+                    meal: state.mealDay.breakfast,
+                    title: 'Breakfast',
                   ),
+                  const SizedBox(height: 10),
+                  MealCustomTile(
+                    key: UniqueKey(),
+                    meal: state.mealDay.lunch,
+                    title: 'Lunch',
+                  ),
+                  const SizedBox(height: 10),
+                  MealCustomTile(
+                    key: UniqueKey(),
+                    meal: state.mealDay.dinner,
+                    title: 'Dinner',
+                  ),
+                  const SizedBox(height: 10),
+                  MealCustomTile(
+                    key: UniqueKey(),
+                    meal: state.mealDay.snacks,
+                    title: 'Snacks',
+                  ),
+                  const SizedBox(height: 75),
                 ],
               ),
             ),
