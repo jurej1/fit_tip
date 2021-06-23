@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:food_repository/food_repository.dart';
 
 part 'food_day_progress_event.dart';
 part 'food_day_progress_state.dart';
@@ -17,7 +18,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
     final calState = _calorieDailyGoalBloc.state;
 
     if (calState is CalorieDailyGoalLoadSuccess) {
-      add(FoodDayProgressCalorieGoalUpdated(calorieGoal: calState.calorieDailyGoal?.amount));
+      add(FoodDayProgressCalorieGoalUpdated(calorieGoal: calState.calorieDailyGoal));
     } else if (calState is CalorieDailyGoalFailure) {
       add(FoodDayProgressErroOcurred());
     }
@@ -25,13 +26,13 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
     final logsState = _foodDailyLogsBloc.state;
 
     if (logsState is FoodDailyLogsLoadSuccess) {
-      add(FoodDayProgressDailyLogsUpdated(totalConsumption: logsState.mealDay.totalCalories));
+      add(FoodDayProgressDailyLogsUpdated(mealDay: logsState.mealDay));
     } else if (logsState is FoodDailyLogsFailure) {
       add(FoodDayProgressErroOcurred());
     }
     _logsSubscription = foodDailyLogsBloc.stream.listen((logState) {
       if (logState is FoodDailyLogsLoadSuccess) {
-        add(FoodDayProgressDailyLogsUpdated(totalConsumption: logState.mealDay.totalCalories));
+        add(FoodDayProgressDailyLogsUpdated(mealDay: logState.mealDay));
       } else if (logState is FoodDailyLogsFailure) {
         add(FoodDayProgressErroOcurred());
       }
@@ -39,7 +40,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
 
     _goalSubscription = calorieDailyGoalBloc.stream.listen((calState) {
       if (calState is CalorieDailyGoalLoadSuccess) {
-        add(FoodDayProgressCalorieGoalUpdated(calorieGoal: calState.calorieDailyGoal?.amount));
+        add(FoodDayProgressCalorieGoalUpdated(calorieGoal: calState.calorieDailyGoal));
       } else if (calState is CalorieDailyGoalFailure) {
         add(FoodDayProgressErroOcurred());
       }
@@ -65,23 +66,35 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
   }
 
   Stream<FoodDayProgressState> _mapGoalUpdatedToState(FoodDayProgressCalorieGoalUpdated event) async* {
-    if (event.calorieGoal != null && _foodDailyLogsBloc.state is FoodDailyLogsLoadSuccess) {
+    if (_foodDailyLogsBloc.state is FoodDailyLogsLoadSuccess) {
       final logState = (_foodDailyLogsBloc.state as FoodDailyLogsLoadSuccess);
 
       yield FoodDayProgressLoadSuccess(
         calorieConsume: logState.mealDay.totalCalories,
-        calorieGoal: event.calorieGoal ?? 0,
+        calorieGoal: event.calorieGoal.amount,
+        carbsConsumed: logState.mealDay.getMacroAmount(Macronutrient.carbs),
+        carbsGoal: event.calorieGoal.carbs ?? 0,
+        fatsConsumed: logState.mealDay.getMacroAmount(Macronutrient.fat),
+        fatsGoal: event.calorieGoal.fats ?? 0,
+        proteinConsumed: logState.mealDay.getMacroAmount(Macronutrient.protein),
+        proteinGoal: event.calorieGoal.proteins ?? 0,
       );
     }
   }
 
   Stream<FoodDayProgressState> _mapLogsUpdatedToState(FoodDayProgressDailyLogsUpdated event) async* {
-    if (event.totalConsumption != null && _calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess) {
+    if (_calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess) {
       final calState = _calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess;
 
       yield FoodDayProgressLoadSuccess(
-        calorieConsume: event.totalConsumption!,
-        calorieGoal: calState.calorieDailyGoal?.amount ?? 0,
+        calorieConsume: event.mealDay.totalCalories,
+        calorieGoal: calState.calorieDailyGoal.amount,
+        carbsConsumed: event.mealDay.getMacroAmount(Macronutrient.carbs),
+        carbsGoal: calState.calorieDailyGoal.carbs ?? 0,
+        fatsConsumed: event.mealDay.getMacroAmount(Macronutrient.fat),
+        fatsGoal: calState.calorieDailyGoal.fats ?? 0,
+        proteinConsumed: event.mealDay.getMacroAmount(Macronutrient.protein),
+        proteinGoal: calState.calorieDailyGoal.proteins ?? 0,
       );
     }
   }

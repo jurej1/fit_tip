@@ -28,6 +28,22 @@ class MealDay extends Equatable {
   @override
   List<Object?> get props => [snacks, dinner, lunch, breakfast];
 
+  int getMacroAmount(Macronutrient macro) {
+    final items = List<FoodItem>.from(
+      (snacks != null ? snacks!.foods : []) +
+          (dinner != null ? dinner!.foods : []) +
+          (lunch != null ? lunch!.foods : []) +
+          (breakfast != null ? breakfast!.foods : []),
+    );
+
+    return items.fold(0, (previousValue, element) {
+      if (element.containsMacro(macro)) {
+        return element.getMacro(macro)!.amount.toInt() + previousValue;
+      }
+      return previousValue;
+    });
+  }
+
   MealDay copyWith({
     Meal? snacks,
     Meal? dinner,

@@ -8,10 +8,10 @@ abstract class FoodDayProgressEvent extends Equatable {
 }
 
 class FoodDayProgressCalorieGoalUpdated extends FoodDayProgressEvent {
-  final double? calorieGoal;
+  final CalorieDailyGoal calorieGoal;
 
   FoodDayProgressCalorieGoalUpdated({
-    this.calorieGoal,
+    required this.calorieGoal,
   });
 
   @override
@@ -19,14 +19,14 @@ class FoodDayProgressCalorieGoalUpdated extends FoodDayProgressEvent {
 }
 
 class FoodDayProgressDailyLogsUpdated extends FoodDayProgressEvent {
-  final double? totalConsumption;
+  final MealDay mealDay;
 
   FoodDayProgressDailyLogsUpdated({
-    this.totalConsumption,
+    required this.mealDay,
   });
 
   @override
-  List<Object?> get props => [totalConsumption];
+  List<Object?> get props => [mealDay];
 }
 
 class FoodDayProgressErroOcurred extends FoodDayProgressEvent {}

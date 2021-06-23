@@ -10,10 +10,10 @@ abstract class CalorieDailyGoalState extends Equatable {
 class CalorieDailyGoalLoading extends CalorieDailyGoalState {}
 
 class CalorieDailyGoalLoadSuccess extends CalorieDailyGoalState {
-  final CalorieDailyGoal? calorieDailyGoal;
+  final CalorieDailyGoal calorieDailyGoal;
 
   const CalorieDailyGoalLoadSuccess({
-    this.calorieDailyGoal,
+    required this.calorieDailyGoal,
   });
 
   @override
