@@ -16,10 +16,19 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
     required AuthenticationBloc authenticationBloc,
     required FoodRepository foodRepository,
     required FoodLogFocusedDateBloc foodLogFocusedDateBloc,
+    required CalorieDailyGoalBloc calorieDailyGoalBloc,
   })   : _authenticationBloc = authenticationBloc,
         _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
         _foodRepository = foodRepository,
-        super(EditCalorieDailyGoalState());
+        super(
+          calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess
+              ? EditCalorieDailyGoalState(
+                  goal: (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal,
+                  calorieGoalConsumption: CalorieGoalConsumption.pure(
+                      (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal!.amount.toStringAsFixed(0)),
+                )
+              : EditCalorieDailyGoalState(),
+        );
 
   final AuthenticationBloc _authenticationBloc;
   final FoodRepository _foodRepository;
