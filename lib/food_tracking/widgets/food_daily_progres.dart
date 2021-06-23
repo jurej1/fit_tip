@@ -54,18 +54,7 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
           return Stack(
             alignment: Alignment.center,
             children: [
-              Container(
-                height: 230,
-                width: 210,
-                child: CarouselSlider(
-                  items: [],
-                  options: CarouselOptions(
-                    height: 200,
-                    pageSnapping: true,
-                    enlargeCenterPage: true,
-                  ),
-                ),
-              ),
+              _Carousel(),
               IgnorePointer(
                 child: SizedBox(
                   height: sizeA,
@@ -102,15 +91,75 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
   }
 }
 
+class _Carousel extends StatelessWidget {
+  const _Carousel({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FoodDayProgressBloc, FoodDayProgressState>(
+      builder: (context, state) {
+        if (state is FoodDayProgressLoadSuccess) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Container(
+              height: 230,
+              width: 210,
+              child: CarouselSlider(
+                items: [
+                  _CarouselChild(
+                    key: ValueKey('calories'),
+                    title: 'Calories',
+                    amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
+                    goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
+                  ),
+                  _CarouselChild(
+                    key: ValueKey('proteins'),
+                    title: 'Proteins',
+                    amount: state.proteinConsumed.toString() + 'g',
+                    goal: state.proteinGoal.toString() + 'g',
+                  ),
+                  _CarouselChild(
+                    key: ValueKey('Carbs'),
+                    title: 'Carbs',
+                    amount: state.carbsConsumed.toString() + 'g',
+                    goal: state.carbsGoal.toString() + 'g',
+                  ),
+                  _CarouselChild(
+                    key: ValueKey('Fats'),
+                    title: 'Fats',
+                    amount: state.fatsConsumed.toString() + 'g',
+                    goal: state.fatsConsumed.toString() + 'g',
+                  ),
+                ],
+                options: CarouselOptions(
+                  height: 230,
+                  enableInfiniteScroll: false,
+                  scrollPhysics: const ClampingScrollPhysics(),
+                  enlargeCenterPage: true,
+                ),
+              ),
+            ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
 class _CarouselChild extends StatelessWidget {
   const _CarouselChild({
     Key? key,
-    required this.calAmount,
-    required this.dailyGoal,
+    required this.amount,
+    required this.goal,
+    required this.title,
   }) : super(key: key);
 
-  final String calAmount;
-  final String dailyGoal;
+  final String amount;
+  final String goal;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +168,15 @@ class _CarouselChild extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '${calAmount}cal',
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            amount,
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
@@ -127,7 +184,7 @@ class _CarouselChild extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Daily Goal: ${dailyGoal}cal',
+            'Daily Goal: $goal',
             style: TextStyle(
               color: Colors.grey.shade400,
             ),

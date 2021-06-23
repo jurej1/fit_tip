@@ -75,6 +75,7 @@ class _ProteinInputField extends StatelessWidget {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
         return FoodItemDetailInputField(
+          initialValue: state.proteins.value,
           errorText: 'Invalid',
           isInvalid: state.proteins.invalid,
           labelText: 'Protein',

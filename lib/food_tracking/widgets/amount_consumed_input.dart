@@ -16,7 +16,7 @@ class AmountConsumedInput extends StatelessWidget {
               child: TextFormField(
                 initialValue: state.amountConsumed.value,
                 keyboardType: TextInputType.number,
-                textAlign: TextAlign.left,
+                textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   errorText: state.amountConsumed.invalid ? 'Invalid' : null,
