@@ -44,7 +44,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     } else if (event is AddFoodItemAmountChanged) {
       yield _mapCalorieAmountToState(event);
     } else if (event is AddFoodItemMealTypeChanged) {
-      yield state.copyWith(type: event.value);
+      yield* _mapTypeChangedToState(event);
     } else if (event is AddFoodItemCalorieChanged) {
       yield _mapCalorieChangedToState(event);
     } else if (event is AddFoodItemSubmitForm) {
@@ -77,6 +77,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.carbs,
           state.proteins,
           state.fats,
+          state.type,
         ],
       ),
     );
@@ -96,6 +97,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
+        state.type
       ]),
     );
   }
@@ -114,6 +116,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
+        state.type
       ]),
     );
   }
@@ -132,6 +135,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
+        state.type
       ]),
     );
   }
@@ -150,6 +154,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
+        state.type
       ]),
     );
   }
@@ -168,6 +173,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.foodName,
         state.proteins,
         state.timeConsumed,
+        state.type
       ]),
     );
   }
@@ -178,9 +184,10 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     final foodName = FoodName.dirty(state.foodName.value);
     final calorie = CalorieConsumed.dirty(state.calorieConsumed.value);
     final amount = AmountConsumed.dirty(state.amountConsumed.value);
-    final fat = AmountConsumed.dirty(state.fats.value);
-    final protein = AmountConsumed.dirty(state.proteins.value);
-    final carb = AmountConsumed.dirty(state.carbs.value);
+    final fat = AmountDetailConsumed.dirty(state.fats.value);
+    final protein = AmountDetailConsumed.dirty(state.proteins.value);
+    final carb = AmountDetailConsumed.dirty(state.carbs.value);
+    final type = MealTypeInput.dirty(state.type.value);
 
     yield state.copyWith(
       amountConsumed: amount,
@@ -188,6 +195,10 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       dateConsumed: date,
       foodName: foodName,
       timeConsumed: time,
+      carbs: carb,
+      fats: fat,
+      proteins: protein,
+      type: type,
       status: Formz.validate(
         [
           date,
@@ -198,6 +209,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           fat,
           carb,
           protein,
+          type,
         ],
       ),
     );
@@ -218,7 +230,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
 
         FoodItem item = FoodItem(
           id: state.foodItem?.id,
-          mealType: state.type,
+          mealType: state.type.value,
           name: state.foodName.value,
           dateAdded: DateTime(date.year, date.month, date.day, time.hour, time.minute),
           calories: double.parse(state.calorieConsumed.value),
@@ -280,6 +292,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.foodName,
           state.carbs,
           state.timeConsumed,
+          state.type,
         ],
       ),
     );
@@ -300,6 +313,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.foodName,
           state.carbs,
           state.timeConsumed,
+          state.type,
         ],
       ),
     );
@@ -311,6 +325,27 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       list.add(event.vitamin!);
 
       yield state.copyWith(vitamins: list);
+    }
+  }
+
+  Stream<AddFoodItemState> _mapTypeChangedToState(AddFoodItemMealTypeChanged event) async* {
+    if (event.value != null) {
+      final type = MealTypeInput.dirty(event.value!);
+
+      yield state.copyWith(
+        type: type,
+        status: Formz.validate([
+          type,
+          state.amountConsumed,
+          state.calorieConsumed,
+          state.carbs,
+          state.dateConsumed,
+          state.fats,
+          state.foodName,
+          state.proteins,
+          state.timeConsumed,
+        ]),
+      );
     }
   }
 }
