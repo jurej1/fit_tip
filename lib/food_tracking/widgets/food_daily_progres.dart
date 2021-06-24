@@ -77,41 +77,47 @@ class _Carousel extends StatelessWidget {
             child: Container(
               height: 230,
               width: 210,
-              child: CarouselSlider(
-                items: [
-                  _CarouselChild(
-                    key: ValueKey('calories'),
-                    title: 'Calories',
-                    amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
-                    goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overscroll) {
+                  overscroll.disallowGlow();
+                  return true;
+                },
+                child: CarouselSlider(
+                  items: [
+                    _CarouselChild(
+                      key: ValueKey('calories'),
+                      title: 'Calories',
+                      amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
+                      goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
+                    ),
+                    _CarouselChild(
+                      key: ValueKey('proteins'),
+                      title: 'Proteins',
+                      amount: state.proteinConsumed.toString() + 'g',
+                      goal: state.proteinGoal.toString() + 'g',
+                    ),
+                    _CarouselChild(
+                      key: ValueKey('Carbs'),
+                      title: 'Carbs',
+                      amount: state.carbsConsumed.toString() + 'g',
+                      goal: state.carbsGoal.toString() + 'g',
+                    ),
+                    _CarouselChild(
+                      key: ValueKey('Fats'),
+                      title: 'Fats',
+                      amount: state.fatsConsumed.toString() + 'g',
+                      goal: state.fatsGoal.toString() + 'g',
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    onPageChanged: (index, reason) {
+                      BlocProvider.of<FoodDayProgressBloc>(context).add(FoodDayProgressSelectedViewUpdated(index));
+                    },
+                    height: 230,
+                    enableInfiniteScroll: false,
+                    scrollPhysics: const ClampingScrollPhysics(),
+                    enlargeCenterPage: true,
                   ),
-                  _CarouselChild(
-                    key: ValueKey('proteins'),
-                    title: 'Proteins',
-                    amount: state.proteinConsumed.toString() + 'g',
-                    goal: state.proteinGoal.toString() + 'g',
-                  ),
-                  _CarouselChild(
-                    key: ValueKey('Carbs'),
-                    title: 'Carbs',
-                    amount: state.carbsConsumed.toString() + 'g',
-                    goal: state.carbsGoal.toString() + 'g',
-                  ),
-                  _CarouselChild(
-                    key: ValueKey('Fats'),
-                    title: 'Fats',
-                    amount: state.fatsConsumed.toString() + 'g',
-                    goal: state.fatsGoal.toString() + 'g',
-                  ),
-                ],
-                options: CarouselOptions(
-                  onPageChanged: (index, reason) {
-                    BlocProvider.of<FoodDayProgressBloc>(context).add(FoodDayProgressSelectedViewUpdated(index));
-                  },
-                  height: 230,
-                  enableInfiniteScroll: false,
-                  scrollPhysics: const ClampingScrollPhysics(),
-                  enlargeCenterPage: true,
                 ),
               ),
             ),
