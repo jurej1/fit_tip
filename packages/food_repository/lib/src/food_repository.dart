@@ -110,20 +110,19 @@ class FoodRepository {
       } else {
         DateTime dayStart = DateTime(date.year, date.month, date.day, 0, 0, 0);
         QuerySnapshot querySnapshot =
-            await _goalTrackingRef(userId).orderBy('date', descending: true).where('date', isLessThanOrEqualTo: dayStart).limit(1).get();
+            await _goalTrackingRef(userId).orderBy('date', descending: true).where('date', isLessThan: dayStart).limit(1).get();
 
         if (querySnapshot.size == 0) {
-          CalorieDailyGoal goal = CalorieDailyGoal(
-            amount: 2000,
-            date: DateTime.now(),
-          );
+          CalorieDailyGoal goal = CalorieDailyGoal(amount: 2200, date: date, fats: 55, carbs: 250, proteins: 52);
 
           addCalorieDailyGoal(userId, goal);
           return goal;
         } else {
           CalorieDailyGoal goal = CalorieDailyGoal.fromEntity(
-            CalorieDailyGoalEntity.fromDocumentSnapshot(querySnapshot.docs.first),
-          );
+            CalorieDailyGoalEntity.fromDocumentSnapshot(
+              querySnapshot.docs.first,
+            ),
+          ).copyWith(date: date, id: CalorieDailyGoal.generateId(date));
           addCalorieDailyGoal(userId, goal);
           return goal;
         }
@@ -134,6 +133,8 @@ class FoodRepository {
   }
 
   Future<void> addCalorieDailyGoal(String userId, CalorieDailyGoal calorieDailyGoal) {
+    print('Goal : ${calorieDailyGoal.toString()}');
+
     return _goalTrackingRef(userId).doc(calorieDailyGoal.id).set(calorieDailyGoal.toEntity().toDocumentSnapshot());
   }
 

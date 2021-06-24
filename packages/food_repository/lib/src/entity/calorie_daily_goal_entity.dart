@@ -83,7 +83,6 @@ class CalorieDailyGoalEntity extends Equatable {
       amount: data[_DocKeys.amount],
       carbs: data[_DocKeys.carbs],
       fats: data[_DocKeys.fats],
-      id: snap.id,
       proteins: data[_DocKeys.proteins],
     );
   }
