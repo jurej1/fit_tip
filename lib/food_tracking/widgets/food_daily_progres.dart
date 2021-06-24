@@ -75,11 +75,7 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
               ),
               Positioned(
                 bottom: 15,
-                child: Container(
-                  width: 100,
-                  height: 15,
-                  color: Colors.red,
-                ),
+                child: _SelectedViewDisplayer(),
               ),
             ],
           );
@@ -191,6 +187,46 @@ class _CarouselChild extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SelectedViewDisplayer extends StatelessWidget {
+  const _SelectedViewDisplayer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FoodDayProgressBloc, FoodDayProgressState>(
+      builder: (context, state) {
+        if (state is FoodDayProgressLoadSuccess) {
+          return Container(
+            width: 100,
+            height: 15,
+            color: Colors.red,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                FoodDayProgressCarouselView.values.length,
+                (index) {
+                  bool isSelected = FoodDayProgressCarouselView.values[index] == state.selectedView;
+                  final double size = isSelected ? 10 : 5;
+
+                  return Container(
+                    height: size,
+                    width: size,
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.grey : Colors.grey.shade300,
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 }
