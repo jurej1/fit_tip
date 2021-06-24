@@ -25,7 +25,7 @@ class FoodLogBuilder extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
                   const _CalorieChart(),
                   MealCustomTile(
                     key: UniqueKey(),
