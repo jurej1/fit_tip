@@ -42,12 +42,19 @@ class FoodDailyLogsView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Daily logs'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
+          BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
+            builder: (context, state) {
+              if (state is CalorieDailyGoalLoadSuccess) {
+                return IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
+                  },
+                );
+              }
+              return Container();
             },
-          ),
+          )
         ],
       ),
       body: SizedBox(
