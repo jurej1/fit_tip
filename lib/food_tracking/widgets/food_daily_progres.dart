@@ -209,7 +209,7 @@ class _SelectedViewDisplayer extends StatelessWidget {
                 FoodDayProgressCarouselView.values.length,
                 (index) {
                   bool isSelected = FoodDayProgressCarouselView.values[index] == state.selectedView;
-                  final double size = isSelected ? 10 : 5;
+                  final double size = isSelected ? 10 : 8;
 
                   return Container(
                     height: size,
