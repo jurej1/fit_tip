@@ -205,7 +205,6 @@ class _SelectedViewDisplayer extends StatelessWidget {
           return Container(
             width: 100,
             height: 15,
-            color: Colors.red,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(
