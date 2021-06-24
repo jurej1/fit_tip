@@ -120,6 +120,10 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
   Color getSecondaryColorBasedOnView() {
     return getPrimaryColorBasedOnView().withOpacity(0.4);
   }
+
+  double getSelectedViewDisplayerFactor() {
+    return FoodDayProgressCarouselView.values.indexOf(selectedView).toDouble();
+  }
 }
 
 class FoodDayProgressFailure extends FoodDayProgressState {}

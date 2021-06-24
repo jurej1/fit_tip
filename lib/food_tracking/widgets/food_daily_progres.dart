@@ -175,35 +175,98 @@ class _CarouselChild extends StatelessWidget {
   }
 }
 
-class _SelectedViewDisplayer extends StatelessWidget {
+class _SelectedViewDisplayer extends StatefulWidget {
   const _SelectedViewDisplayer({Key? key}) : super(key: key);
 
   @override
+  __SelectedViewDisplayerState createState() => __SelectedViewDisplayerState();
+}
+
+class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  final double dotSize = 10;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: 0,
+      upperBound: 4,
+      duration: Duration(milliseconds: 450),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FoodDayProgressBloc, FoodDayProgressState>(
+    return BlocConsumer<FoodDayProgressBloc, FoodDayProgressState>(
+      listener: (context, state) {
+        if (state is FoodDayProgressLoadSuccess) {
+          _animationController.animateTo(state.getSelectedViewDisplayerFactor());
+        }
+      },
       builder: (context, state) {
         if (state is FoodDayProgressLoadSuccess) {
           return Container(
-            width: 100,
+            width: 80,
             height: 15,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                FoodDayProgressCarouselView.values.length,
-                (index) {
-                  bool isSelected = FoodDayProgressCarouselView.values[index] == state.selectedView;
-                  final double size = isSelected ? 10 : 8;
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(
+                    FoodDayProgressCarouselView.values.length,
+                    (index) {
+                      return Container(
+                        height: dotSize,
+                        width: dotSize,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          shape: BoxShape.circle,
+                        ),
+                      );
+                    },
+                  ),
+                ),
 
-                  return Container(
-                    height: size,
-                    width: size,
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.grey : Colors.grey.shade300,
-                      shape: BoxShape.circle,
-                    ),
-                  );
-                },
-              ),
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, _) {
+                    return Positioned(
+                      left: 23.333 * _animationController.value,
+                      child: Container(
+                        height: dotSize,
+                        width: dotSize,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                // AnimatedPositioned(
+                // child: Container(
+                //   height: dotSize,
+                //   width: dotSize,
+                //   decoration: BoxDecoration(
+                //     color: Colors.blue,
+                //     shape: BoxShape.circle,
+                //   ),
+                // ),
+                //   left: 23.3333 * state.getSelectedViewDisplayerFactor(),
+                //   duration: const Duration(milliseconds: 300),
+                // ),
+              ],
             ),
           );
         }
