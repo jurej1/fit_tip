@@ -12,7 +12,7 @@ class FoodRepository {
     return _firebaseFirestore.collection('users').doc(userId).collection('meal_tracking');
   }
 
-  CollectionReference _goalTrackingRfef(String userId) {
+  CollectionReference _goalTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('meal_goals');
   }
 
@@ -103,14 +103,14 @@ class FoodRepository {
     String calGoalId = CalorieDailyGoalEntity.generateId(date);
 
     try {
-      DocumentSnapshot snapshot = await _goalTrackingRfef(userId).doc(calGoalId).get();
+      DocumentSnapshot snapshot = await _goalTrackingRef(userId).doc(calGoalId).get();
 
       if (snapshot.exists && snapshot.data() != null) {
         return CalorieDailyGoal.fromEntity(CalorieDailyGoalEntity.fromDocumentSnapshot(snapshot));
       } else {
         DateTime dayStart = DateTime(date.year, date.month, date.day, 0, 0, 0);
         QuerySnapshot querySnapshot =
-            await _goalTrackingRfef(userId).orderBy('dateAdded', descending: true).where('dateAdded', isLessThan: dayStart).limit(1).get();
+            await _goalTrackingRef(userId).orderBy('date', descending: true).where('date', isLessThanOrEqualTo: dayStart).limit(1).get();
 
         if (querySnapshot.size == 0) {
           CalorieDailyGoal goal = CalorieDailyGoal(
@@ -121,7 +121,9 @@ class FoodRepository {
           addCalorieDailyGoal(userId, goal);
           return goal;
         } else {
-          CalorieDailyGoal goal = CalorieDailyGoal.fromEntity(CalorieDailyGoalEntity.fromDocumentSnapshot(querySnapshot.docs.first));
+          CalorieDailyGoal goal = CalorieDailyGoal.fromEntity(
+            CalorieDailyGoalEntity.fromDocumentSnapshot(querySnapshot.docs.first),
+          );
           addCalorieDailyGoal(userId, goal);
           return goal;
         }
@@ -132,15 +134,15 @@ class FoodRepository {
   }
 
   Future<void> addCalorieDailyGoal(String userId, CalorieDailyGoal calorieDailyGoal) {
-    return _goalTrackingRfef(userId).doc(calorieDailyGoal.id).set(calorieDailyGoal.toEntity().toDocumentSnapshot());
+    return _goalTrackingRef(userId).doc(calorieDailyGoal.id).set(calorieDailyGoal.toEntity().toDocumentSnapshot());
   }
 
   Future<void> deleteCalorieDailyGoal(String userId, CalorieDailyGoal calorieDailyGoal) {
-    return _goalTrackingRfef(userId).doc(calorieDailyGoal.id).delete();
+    return _goalTrackingRef(userId).doc(calorieDailyGoal.id).delete();
   }
 
   Future<void> updateCalorieDailyGoal(String userId, CalorieDailyGoal calorieDailyGoal) {
-    return _goalTrackingRfef(userId).doc(calorieDailyGoal.id).set(
+    return _goalTrackingRef(userId).doc(calorieDailyGoal.id).set(
           calorieDailyGoal.toEntity().toDocumentSnapshot(),
           SetOptions(merge: true),
         );

@@ -82,7 +82,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       int? fatsValue = int.tryParse(fats.value);
 
       CalorieDailyGoal goal = state.goal.copyWith(
-        amount: double.parse(state.calorieGoalConsumption.value),
+        amount: int.parse(state.calorieGoalConsumption.value),
         date: _foodLogFocusedDateBloc.state.selectedDate,
         carbs: carbsValue,
         proteins: proteinValue,

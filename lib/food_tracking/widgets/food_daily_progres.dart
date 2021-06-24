@@ -64,7 +64,7 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
                     builder: (context, child) {
                       return CustomPaint(
                         painter: ProgressPainter(
-                          maxValue: state.calorieGoal,
+                          maxValue: state.calorieGoal.toDouble(),
                           primaryValue: _animationController.value * state.calorieConsume,
                         ),
                         child: child,

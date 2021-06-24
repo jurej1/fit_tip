@@ -12,8 +12,8 @@ abstract class FoodDayProgressState extends Equatable {
 class FoodDayProgressLoading extends FoodDayProgressState {}
 
 class FoodDayProgressLoadSuccess extends FoodDayProgressState {
-  final double calorieGoal;
-  final double calorieConsume;
+  final int calorieGoal;
+  final int calorieConsume;
 
   final int fatsGoal;
   final int fatsConsumed;
@@ -52,8 +52,8 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
       ];
 
   FoodDayProgressLoadSuccess copyWith({
-    double? calorieGoal,
-    double? calorieConsume,
+    int? calorieGoal,
+    int? calorieConsume,
     int? fatsGoal,
     int? fatsConsumed,
     int? carbsGoal,

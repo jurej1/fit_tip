@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:food_repository/src/entity/calorie_daily_goal_entity.dart';
 
 class CalorieDailyGoal extends Equatable {
-  final double amount;
+  final int amount;
   final int? fats;
   final int? proteins;
   final int? carbs;
@@ -32,7 +32,7 @@ class CalorieDailyGoal extends Equatable {
   }
 
   CalorieDailyGoal copyWith({
-    double? amount,
+    int? amount,
     int? fats,
     int? proteins,
     int? carbs,

@@ -6,14 +6,14 @@ class MealDay extends Equatable {
   final Meal? dinner;
   final Meal? lunch;
   final Meal? breakfast;
-  final double totalCalories;
+  final int totalCalories;
 
   MealDay({
     this.snacks,
     this.dinner,
     this.lunch,
     this.breakfast,
-    double? totalCalories,
+    int? totalCalories,
   }) : this.totalCalories = totalCalories ??
             List<FoodItem>.from(
               (snacks != null ? snacks.foods : []) +
@@ -21,8 +21,8 @@ class MealDay extends Equatable {
                   (lunch != null ? lunch.foods : []) +
                   (breakfast != null ? breakfast.foods : []),
             ).fold(
-              0.0,
-              (p, e) => p + e.calories,
+              0,
+              (p, e) => p + e.calories.toInt(),
             );
 
   @override

@@ -10,7 +10,7 @@ class _DocKeys {
 }
 
 class CalorieDailyGoalEntity extends Equatable {
-  final double amount;
+  final int amount;
   final DateTime date;
   final int? fats;
   final int? proteins;
@@ -40,7 +40,7 @@ class CalorieDailyGoalEntity extends Equatable {
   }
 
   CalorieDailyGoalEntity copyWith({
-    double? amount,
+    int? amount,
     DateTime? date,
     int? fats,
     int? proteins,
