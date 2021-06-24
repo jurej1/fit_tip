@@ -106,9 +106,19 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
   Color getPrimaryColorBasedOnView() {
     if (selectedView == FoodDayProgressCarouselView.calories) {
       return Colors.blue;
+    } else if (selectedView == FoodDayProgressCarouselView.carbs) {
+      return Colors.green;
+    } else if (selectedView == FoodDayProgressCarouselView.fats) {
+      return Colors.red;
+    } else if (selectedView == FoodDayProgressCarouselView.proteins) {
+      return Colors.orange;
     }
 
     return Colors.blue;
+  }
+
+  Color getSecondaryColorBasedOnView() {
+    return getPrimaryColorBasedOnView().withOpacity(0.4);
   }
 }
 

@@ -43,6 +43,8 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
                   child: _AnimatedProgressBar(
                     maxValue: state.getMaxValueBasedOnView().toDouble(),
                     primaryValue: state.getPrimaryValueBasedOnView().toDouble(),
+                    primaryColor: state.getPrimaryColorBasedOnView(),
+                    secondaryColor: state.getSecondaryColorBasedOnView(),
                   ),
                 ),
               ),
@@ -211,10 +213,14 @@ class _AnimatedProgressBar extends StatefulWidget {
     Key? key,
     required this.primaryValue,
     required this.maxValue,
+    required this.primaryColor,
+    required this.secondaryColor,
   }) : super(key: key);
 
   final double primaryValue;
   final double maxValue;
+  final Color primaryColor;
+  final Color secondaryColor;
 
   @override
   __AnimatedProgressBarState createState() => __AnimatedProgressBarState();
@@ -248,6 +254,8 @@ class __AnimatedProgressBarState extends State<_AnimatedProgressBar> with Single
       builder: (context, child) {
         return CustomPaint(
           painter: ProgressPainter(
+            innerColor: widget.primaryColor,
+            outerColor: widget.secondaryColor,
             maxValue: widget.maxValue,
             primaryValue: _animationController.value * widget.primaryValue,
           ),
