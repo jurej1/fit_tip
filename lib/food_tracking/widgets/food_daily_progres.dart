@@ -35,7 +35,7 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
           return Stack(
             alignment: Alignment.center,
             children: [
-              _Carousel(),
+              const _Carousel(),
               IgnorePointer(
                 child: SizedBox(
                   height: sizeA,
@@ -72,11 +72,10 @@ class _Carousel extends StatelessWidget {
     return BlocBuilder<FoodDayProgressBloc, FoodDayProgressState>(
       builder: (context, state) {
         if (state is FoodDayProgressLoadSuccess) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(50),
+          return ClipOval(
             child: Container(
               height: 230,
-              width: 210,
+              width: 200,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowGlow();
