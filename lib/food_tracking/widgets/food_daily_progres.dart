@@ -15,23 +15,6 @@ class FoodDailyProgress extends StatefulWidget {
 class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTickerProviderStateMixin {
   final double sizeA = 250;
 
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 450),
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -49,8 +32,6 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
         } else if (state is FoodDayProgressFailure) {
           return Container();
         } else if (state is FoodDayProgressLoadSuccess) {
-          _animationController.forward();
-
           return Stack(
             alignment: Alignment.center,
             children: [
@@ -59,17 +40,10 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
                 child: SizedBox(
                   height: sizeA,
                   width: sizeA,
-                  child: AnimatedBuilder(
-                    animation: _animationController,
-                    builder: (context, child) {
-                      return CustomPaint(
-                        painter: ProgressPainter(
-                          maxValue: state.calorieGoal.toDouble(),
-                          primaryValue: _animationController.value * state.calorieConsume,
-                        ),
-                        child: child,
-                      );
-                    },
+                  child: _AnimatedProgressBar(
+                    maxValue: state.getMaxValueBasedOnView().toDouble(),
+                    primaryValue: state.getPrimaryValueBasedOnView().toDouble(),
+                    previousPrimaryValue: state.getPrimaryValueBasedOnPreviousView().toDouble(),
                   ),
                 ),
               ),
@@ -228,6 +202,61 @@ class _SelectedViewDisplayer extends StatelessWidget {
         }
 
         return Container();
+      },
+    );
+  }
+}
+
+class _AnimatedProgressBar extends StatefulWidget {
+  const _AnimatedProgressBar({
+    Key? key,
+    required this.primaryValue,
+    required this.maxValue,
+    double? previousPrimaryValue,
+  })  : this.previousPrimaryValue = previousPrimaryValue ?? 0,
+        super(key: key);
+
+  final double primaryValue;
+  final double maxValue;
+  final double previousPrimaryValue;
+
+  @override
+  __AnimatedProgressBarState createState() => __AnimatedProgressBarState();
+}
+
+class __AnimatedProgressBarState extends State<_AnimatedProgressBar> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _animationController.reset();
+    _animationController.forward();
+
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return CustomPaint(
+          painter: ProgressPainter(
+            maxValue: widget.maxValue,
+            primaryValue: _animationController.value * widget.primaryValue,
+          ),
+          child: child,
+        );
       },
     );
   }
