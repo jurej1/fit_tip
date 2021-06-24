@@ -29,4 +29,13 @@ class FoodDayProgressDailyLogsUpdated extends FoodDayProgressEvent {
   List<Object?> get props => [mealDay];
 }
 
+class FoodDayProgressSelectedViewUpdated extends FoodDayProgressEvent {
+  final FoodDayProgressCarouselView view;
+
+  const FoodDayProgressSelectedViewUpdated(this.view);
+
+  @override
+  List<Object?> get props => [view];
+}
+
 class FoodDayProgressErroOcurred extends FoodDayProgressEvent {}

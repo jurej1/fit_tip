@@ -80,7 +80,7 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
                   height: 15,
                   color: Colors.red,
                 ),
-              )
+              ),
             ],
           );
         }

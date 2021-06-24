@@ -60,6 +60,8 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
       yield* _mapGoalUpdatedToState(event);
     } else if (event is FoodDayProgressDailyLogsUpdated) {
       yield* _mapLogsUpdatedToState(event);
+    } else if (event is FoodDayProgressSelectedViewUpdated) {
+      yield* _mapViewUpdatedToState(event);
     } else if (event is FoodDayProgressErroOcurred) {
       yield FoodDayProgressFailure();
     }
@@ -96,6 +98,12 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
         proteinConsumed: event.mealDay.getMacroAmount(Macronutrient.protein),
         proteinGoal: calState.calorieDailyGoal.proteins ?? 0,
       );
+    }
+  }
+
+  Stream<FoodDayProgressState> _mapViewUpdatedToState(FoodDayProgressSelectedViewUpdated event) async* {
+    if (state is FoodDayProgressLoadSuccess) {
+      yield (state as FoodDayProgressLoadSuccess).copyWith(selectedView: event.view);
     }
   }
 

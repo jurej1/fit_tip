@@ -1,5 +1,7 @@
 part of 'food_day_progress_bloc.dart';
 
+enum FoodDayProgressCarouselView { calories, proteins, carbs, fats }
+
 abstract class FoodDayProgressState extends Equatable {
   const FoodDayProgressState();
 
@@ -22,6 +24,8 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
   final int proteinGoal;
   final int proteinConsumed;
 
+  final FoodDayProgressCarouselView selectedView;
+
   FoodDayProgressLoadSuccess({
     this.calorieGoal = 0,
     this.calorieConsume = 0,
@@ -31,10 +35,35 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
     this.fatsGoal = 0,
     this.proteinConsumed = 0,
     this.proteinGoal = 0,
+    this.selectedView = FoodDayProgressCarouselView.calories,
   });
 
   @override
   List<Object> get props => [calorieGoal, calorieConsume];
+
+  FoodDayProgressLoadSuccess copyWith({
+    double? calorieGoal,
+    double? calorieConsume,
+    int? fatsGoal,
+    int? fatsConsumed,
+    int? carbsGoal,
+    int? carbsConsumed,
+    int? proteinGoal,
+    int? proteinConsumed,
+    FoodDayProgressCarouselView? selectedView,
+  }) {
+    return FoodDayProgressLoadSuccess(
+      calorieGoal: calorieGoal ?? this.calorieGoal,
+      calorieConsume: calorieConsume ?? this.calorieConsume,
+      fatsGoal: fatsGoal ?? this.fatsGoal,
+      fatsConsumed: fatsConsumed ?? this.fatsConsumed,
+      carbsGoal: carbsGoal ?? this.carbsGoal,
+      carbsConsumed: carbsConsumed ?? this.carbsConsumed,
+      proteinGoal: proteinGoal ?? this.proteinGoal,
+      proteinConsumed: proteinConsumed ?? this.proteinConsumed,
+      selectedView: selectedView ?? this.selectedView,
+    );
+  }
 }
 
 class FoodDayProgressFailure extends FoodDayProgressState {}
