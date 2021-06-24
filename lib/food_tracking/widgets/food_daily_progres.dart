@@ -191,8 +191,8 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
     _animationController = AnimationController(
       vsync: this,
       lowerBound: 0,
-      upperBound: 4,
-      duration: Duration(milliseconds: 450),
+      upperBound: FoodDayProgressCarouselView.values.length.toDouble(),
+      duration: const Duration(milliseconds: 450),
     );
 
     super.initState();
@@ -236,36 +236,24 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
                     },
                   ),
                 ),
-
                 AnimatedBuilder(
                   animation: _animationController,
                   builder: (context, _) {
                     return Positioned(
                       left: 23.333 * _animationController.value,
-                      child: Container(
+                      child: AnimatedContainer(
+                        curve: Curves.fastOutSlowIn,
+                        duration: const Duration(milliseconds: 250),
                         height: dotSize,
                         width: dotSize,
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: state.getPrimaryColorBasedOnView(),
                           shape: BoxShape.circle,
                         ),
                       ),
                     );
                   },
                 ),
-
-                // AnimatedPositioned(
-                // child: Container(
-                //   height: dotSize,
-                //   width: dotSize,
-                //   decoration: BoxDecoration(
-                //     color: Colors.blue,
-                //     shape: BoxShape.circle,
-                //   ),
-                // ),
-                //   left: 23.3333 * state.getSelectedViewDisplayerFactor(),
-                //   duration: const Duration(milliseconds: 300),
-                // ),
               ],
             ),
           );
