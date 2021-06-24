@@ -103,7 +103,9 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
 
   Stream<FoodDayProgressState> _mapViewUpdatedToState(FoodDayProgressSelectedViewUpdated event) async* {
     if (state is FoodDayProgressLoadSuccess) {
-      yield (state as FoodDayProgressLoadSuccess).copyWith(selectedView: event.view);
+      yield (state as FoodDayProgressLoadSuccess).copyWith(
+        selectedView: FoodDayProgressCarouselView.values[event.index],
+      );
     }
   }
 

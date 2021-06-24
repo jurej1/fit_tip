@@ -130,6 +130,9 @@ class _Carousel extends StatelessWidget {
                   ),
                 ],
                 options: CarouselOptions(
+                  onPageChanged: (index, reason) {
+                    BlocProvider.of<FoodDayProgressBloc>(context).add(FoodDayProgressSelectedViewUpdated(index));
+                  },
                   height: 230,
                   enableInfiniteScroll: false,
                   scrollPhysics: const ClampingScrollPhysics(),

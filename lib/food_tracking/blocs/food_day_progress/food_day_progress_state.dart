@@ -39,7 +39,17 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
   });
 
   @override
-  List<Object> get props => [calorieGoal, calorieConsume];
+  List<Object> get props => [
+        calorieGoal,
+        calorieConsume,
+        fatsGoal,
+        fatsConsumed,
+        carbsGoal,
+        carbsConsumed,
+        proteinGoal,
+        proteinConsumed,
+        selectedView,
+      ];
 
   FoodDayProgressLoadSuccess copyWith({
     double? calorieGoal,
