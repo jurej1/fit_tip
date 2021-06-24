@@ -105,6 +105,7 @@ class _VitaminsList extends StatelessWidget {
             final item = state.vitamins.value[index];
 
             return ListTile(
+              key: ValueKey(item),
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Vitamin ' + describeEnum(item.vitamin),
