@@ -20,11 +20,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
   })   : _authenticationBloc = authenticationBloc,
         _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
         _foodRepository = foodRepository,
-        super(
-          calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess
-              ? EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal!)
-              : EditCalorieDailyGoalState.pure(),
-        );
+        super(EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal));
 
   final AuthenticationBloc _authenticationBloc;
   final FoodRepository _foodRepository;
