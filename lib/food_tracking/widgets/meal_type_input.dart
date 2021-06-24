@@ -13,7 +13,7 @@ class MealTypeInput extends StatelessWidget {
         return ListTile(
           title: Text('Meal: '),
           trailing: DropdownButton<MealType>(
-            value: state.type,
+            value: state.type.value,
             icon: const Icon(Icons.arrow_drop_down_circle_outlined),
             items: MealType.values.map((e) {
               return DropdownMenuItem(

@@ -10,7 +10,7 @@ class AddFoodItemState extends Equatable {
     this.foodName = const FoodName.pure(),
     this.calorieConsumed = const CalorieConsumed.pure(),
     this.amountConsumed = const AmountConsumed.pure(),
-    this.type = const MealTypeInput.pure(),
+    this.type = const MealTypeInputFormzModel.pure(),
     this.foodItem,
     this.fats = const AmountDetailConsumed.pure(),
     this.proteins = const AmountDetailConsumed.pure(),
@@ -26,7 +26,7 @@ class AddFoodItemState extends Equatable {
   final FoodName foodName;
   final CalorieConsumed calorieConsumed;
   final AmountConsumed amountConsumed;
-  final MealTypeInput type;
+  final MealTypeInputFormzModel type;
   final FoodItem? foodItem;
   final AmountDetailConsumed fats;
   final AmountDetailConsumed proteins;
@@ -53,7 +53,7 @@ class AddFoodItemState extends Equatable {
       foodName: FoodName.pure(item.name),
       mode: AddFoodItemStateMode.edit,
       showDetail: false,
-      type: MealTypeInput.pure(item.mealType),
+      type: MealTypeInputFormzModel.pure(item.mealType),
       vitamins: item.vitamins ?? [],
       carbs: item.containsMacro(Macronutrient.carbs)
           ? AmountDetailConsumed.pure(item.getMacro(Macronutrient.carbs)!.amount.toStringAsFixed(0))
@@ -94,7 +94,7 @@ class AddFoodItemState extends Equatable {
     FoodName? foodName,
     CalorieConsumed? calorieConsumed,
     AmountConsumed? amountConsumed,
-    MealTypeInput? type,
+    MealTypeInputFormzModel? type,
     FoodItem? foodItem,
     AmountDetailConsumed? fats,
     AmountDetailConsumed? proteins,

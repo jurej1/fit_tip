@@ -187,7 +187,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     final fat = AmountDetailConsumed.dirty(state.fats.value);
     final protein = AmountDetailConsumed.dirty(state.proteins.value);
     final carb = AmountDetailConsumed.dirty(state.carbs.value);
-    final type = MealTypeInput.dirty(state.type.value);
+    final type = MealTypeInputFormzModel.dirty(state.type.value);
 
     yield state.copyWith(
       amountConsumed: amount,
@@ -330,7 +330,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
 
   Stream<AddFoodItemState> _mapTypeChangedToState(AddFoodItemMealTypeChanged event) async* {
     if (event.value != null) {
-      final type = MealTypeInput.dirty(event.value!);
+      final type = MealTypeInputFormzModel.dirty(event.value!);
 
       yield state.copyWith(
         type: type,

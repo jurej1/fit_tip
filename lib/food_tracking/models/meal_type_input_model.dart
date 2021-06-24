@@ -3,9 +3,9 @@ import 'package:formz/formz.dart';
 
 enum MealTypeInputModelValidationError { invalid }
 
-class MealTypeInput extends FormzInput<MealType, MealTypeInputModelValidationError> {
-  const MealTypeInput.dirty([MealType value = MealType.lunch]) : super.dirty(value);
-  const MealTypeInput.pure([MealType value = MealType.lunch]) : super.pure(value);
+class MealTypeInputFormzModel extends FormzInput<MealType, MealTypeInputModelValidationError> {
+  const MealTypeInputFormzModel.dirty([MealType value = MealType.lunch]) : super.dirty(value);
+  const MealTypeInputFormzModel.pure([MealType value = MealType.lunch]) : super.pure(value);
 
   @override
   MealTypeInputModelValidationError? validator(MealType? value) {
