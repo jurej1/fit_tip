@@ -78,6 +78,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.proteins,
           state.fats,
           state.type,
+          state.vitamins
         ],
       ),
     );
@@ -97,7 +98,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
-        state.type
+        state.type,
+        state.vitamins
       ]),
     );
   }
@@ -116,7 +118,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
-        state.type
+        state.type,
+        state.vitamins,
       ]),
     );
   }
@@ -135,7 +138,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
-        state.type
+        state.type,
+        state.vitamins,
       ]),
     );
   }
@@ -154,7 +158,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.carbs,
         state.proteins,
         state.fats,
-        state.type
+        state.type,
+        state.vitamins,
       ]),
     );
   }
@@ -173,7 +178,8 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         state.foodName,
         state.proteins,
         state.timeConsumed,
-        state.type
+        state.type,
+        state.vitamins,
       ]),
     );
   }
@@ -188,6 +194,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     final protein = AmountDetailConsumed.dirty(state.proteins.value);
     final carb = AmountDetailConsumed.dirty(state.carbs.value);
     final type = MealTypeInputFormzModel.dirty(state.type.value);
+    final vitamins = VitaminsListModel.dirty(state.vitamins.value);
 
     yield state.copyWith(
       amountConsumed: amount,
@@ -199,6 +206,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
       fats: fat,
       proteins: protein,
       type: type,
+      vitamins: vitamins,
       status: Formz.validate(
         [
           date,
@@ -210,6 +218,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           carb,
           protein,
           type,
+          vitamins,
         ],
       ),
     );
@@ -226,7 +235,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         final bool hasProtein = state.proteins.value.isNotEmpty;
         final bool hasMacros = hasFats || hasCarbs || hasProtein;
 
-        final bool hasVitamins = state.vitamins.isNotEmpty;
+        final bool hasVitamins = state.vitamins.value.isNotEmpty;
 
         FoodItem item = FoodItem(
           id: state.foodItem?.id,
@@ -254,7 +263,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
                     )
                 ]
               : null,
-          vitamins: hasVitamins ? state.vitamins : null,
+          vitamins: hasVitamins ? state.vitamins.value : null,
         );
 
         if (state.mode == AddFoodItemStateMode.add) {
@@ -293,6 +302,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.carbs,
           state.timeConsumed,
           state.type,
+          state.vitamins,
         ],
       ),
     );
@@ -314,6 +324,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.carbs,
           state.timeConsumed,
           state.type,
+          state.vitamins,
         ],
       ),
     );
@@ -321,10 +332,28 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
 
   Stream<AddFoodItemState> _mapVitaminAddedToState(AddFooditemVitaminAdded event) async* {
     if (event.vitamin != null) {
-      List<FoodDataVitamin> list = List.from(state.vitamins);
+      List<FoodDataVitamin> list = List.from(state.vitamins.value);
       list.add(event.vitamin!);
 
-      yield state.copyWith(vitamins: list);
+      final vitamins = VitaminsListModel.dirty(list);
+
+      yield state.copyWith(
+        vitamins: vitamins,
+        status: Formz.validate(
+          [
+            vitamins,
+            state.amountConsumed,
+            state.calorieConsumed,
+            state.dateConsumed,
+            state.proteins,
+            state.foodName,
+            state.carbs,
+            state.timeConsumed,
+            state.type,
+            state.fats,
+          ],
+        ),
+      );
     }
   }
 
@@ -344,6 +373,7 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
           state.foodName,
           state.proteins,
           state.timeConsumed,
+          state.vitamins,
         ]),
       );
     }

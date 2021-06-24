@@ -95,14 +95,14 @@ class _VitaminsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddFoodItemBloc, AddFoodItemState>(
       builder: (context, state) {
-        if (state.vitamins.isEmpty) return Container();
+        if (state.vitamins.value.isEmpty) return Container();
 
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: state.vitamins.length,
+          itemCount: state.vitamins.value.length,
           itemBuilder: (context, index) {
-            final item = state.vitamins[index];
+            final item = state.vitamins.value[index];
 
             return ListTile(
               contentPadding: EdgeInsets.zero,

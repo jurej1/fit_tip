@@ -16,7 +16,7 @@ class AddFoodItemState extends Equatable {
     this.proteins = const AmountDetailConsumed.pure(),
     this.carbs = const AmountDetailConsumed.pure(),
     this.showDetail = false,
-    this.vitamins = const [],
+    this.vitamins = const VitaminsListModel.pure(),
     this.mode = AddFoodItemStateMode.add,
   });
 
@@ -32,7 +32,7 @@ class AddFoodItemState extends Equatable {
   final AmountDetailConsumed proteins;
   final AmountDetailConsumed carbs;
   final bool showDetail;
-  final List<FoodDataVitamin> vitamins;
+  final VitaminsListModel vitamins;
   final AddFoodItemStateMode mode;
 
   factory AddFoodItemState.pure({DateTime? date}) {
@@ -54,7 +54,7 @@ class AddFoodItemState extends Equatable {
       mode: AddFoodItemStateMode.edit,
       showDetail: false,
       type: MealTypeInputFormzModel.pure(item.mealType),
-      vitamins: item.vitamins ?? [],
+      vitamins: VitaminsListModel.pure(item.vitamins ?? []),
       carbs: item.containsMacro(Macronutrient.carbs)
           ? AmountDetailConsumed.pure(item.getMacro(Macronutrient.carbs)!.amount.toStringAsFixed(0))
           : AmountDetailConsumed.pure(),
@@ -100,7 +100,7 @@ class AddFoodItemState extends Equatable {
     AmountDetailConsumed? proteins,
     AmountDetailConsumed? carbs,
     bool? showDetail,
-    List<FoodDataVitamin>? vitamins,
+    VitaminsListModel? vitamins,
     AddFoodItemStateMode? mode,
   }) {
     return AddFoodItemState(
