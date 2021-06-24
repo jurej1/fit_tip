@@ -44,6 +44,15 @@ class MealDay extends Equatable {
     });
   }
 
+  List<FoodItem> getAllFoodItems() {
+    return List<FoodItem>.from(
+      (snacks != null ? snacks!.foods : []) +
+          (dinner != null ? dinner!.foods : []) +
+          (lunch != null ? lunch!.foods : []) +
+          (breakfast != null ? breakfast!.foods : []),
+    );
+  }
+
   MealDay copyWith({
     Meal? snacks,
     Meal? dinner,

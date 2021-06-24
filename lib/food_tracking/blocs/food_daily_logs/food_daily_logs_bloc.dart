@@ -81,11 +81,19 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
       final item = event.foodItem!;
       final MealType type = item.mealType;
 
+      List<FoodItem> updatedList = mealDay.getAllFoodItems().map((e) {
+        if (e.id == event.foodItem!.id) {
+          return event.foodItem!;
+        }
+
+        return e;
+      }).toList();
+
       MealDay newMealDay = mealDay.copyWith(
-        breakfast: type == MealType.breakfast ? _updateFoodItemInMeal(item, mealDay.breakfast) : null,
-        dinner: type == MealType.dinner ? _updateFoodItemInMeal(item, mealDay.dinner) : null,
-        lunch: type == MealType.lunch ? _updateFoodItemInMeal(item, mealDay.lunch) : null,
-        snacks: type == MealType.snack ? _updateFoodItemInMeal(item, mealDay.snacks) : null,
+        breakfast: _updateFoodItemInMeal(updatedList, mealDay.breakfast),
+        dinner: _updateFoodItemInMeal(updatedList, mealDay.dinner),
+        lunch: _updateFoodItemInMeal(updatedList, mealDay.lunch),
+        snacks: _updateFoodItemInMeal(updatedList, mealDay.snacks),
       );
 
       yield FoodDailyLogsLoadSuccess(mealDay: newMealDay);
@@ -136,22 +144,11 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
     }
   }
 
-  Meal? _updateFoodItemInMeal(FoodItem item, Meal? meal) {
+  Meal? _updateFoodItemInMeal(List<FoodItem> items, Meal? meal) {
     if (meal == null) return null;
 
-    List<FoodItem> foods = meal.foods.map(
-      (e) {
-        print('id comparing element [${e.id}], item [${item.id}]');
-
-        if (e.id == item.id) {
-          return item;
-        }
-        return e;
-      },
-    ).toList();
-
     return meal.copyWith(
-      foods: foods,
+      foods: items.where((e) => e.mealType == meal.type).toList(),
     );
   }
 }
