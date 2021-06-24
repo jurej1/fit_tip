@@ -24,6 +24,9 @@ class FoodItemDetailPieChart extends StatelessWidget {
             carbsAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.carbs).amount,
             fatAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.fat).amount,
             proteinAmount: state.item.macronutrients!.firstWhere((e) => e.macronutrient == Macronutrient.protein).amount,
+            proteinColor: Colors.orange,
+            carbsColor: Colors.green,
+            fatColor: Colors.red,
           ),
           child: _Text(
             text: state.item.calories.toStringAsFixed(0),

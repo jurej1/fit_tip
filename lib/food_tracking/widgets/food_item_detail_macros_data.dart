@@ -42,7 +42,7 @@ class FoodItemMacrosData extends StatelessWidget {
     } else if (a == Macronutrient.carbs) {
       return Colors.blue;
     } else if (a == Macronutrient.protein) {
-      return Colors.green;
+      return Colors.orange;
     }
     return Colors.grey;
   }

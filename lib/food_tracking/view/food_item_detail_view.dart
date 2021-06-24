@@ -80,9 +80,6 @@ class FoodItemDetailView extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
-                  //Pie Chart with carbs, fats, and proteins
-                  // in the center of the pie char is going to be the amount of calories
-
                   if (state.item.containsMacros())
                     SizedBox(
                       height: 200,
@@ -110,14 +107,7 @@ class FoodItemDetailView extends StatelessWidget {
                         labelText: 'Calories',
                       ),
                     ),
-
                   FoodItemData(),
-
-                  //Amount
-
-                  //DATE & TIME
-
-                  //VITAMINS
                 ],
               ),
             );
