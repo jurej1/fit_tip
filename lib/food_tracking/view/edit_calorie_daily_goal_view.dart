@@ -74,12 +74,9 @@ class EditCalorieDailyGoalView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               children: [
                 CaloriesAmountInputField(),
-                //Fats input
                 FatsAmountInput(),
-                //Carbs input
                 CarbsAmountInput(),
-                //protein input
-                ProteinAmountInput()
+                ProteinAmountInput(),
               ],
             );
           },
