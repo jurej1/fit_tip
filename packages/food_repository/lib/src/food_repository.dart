@@ -133,8 +133,6 @@ class FoodRepository {
   }
 
   Future<void> addCalorieDailyGoal(String userId, CalorieDailyGoal calorieDailyGoal) {
-    print('Goal : ${calorieDailyGoal.toString()}');
-
     return _goalTrackingRef(userId).doc(calorieDailyGoal.id).set(calorieDailyGoal.toEntity().toDocumentSnapshot());
   }
 
