@@ -43,7 +43,6 @@ class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTicker
                   child: _AnimatedProgressBar(
                     maxValue: state.getMaxValueBasedOnView().toDouble(),
                     primaryValue: state.getPrimaryValueBasedOnView().toDouble(),
-                    previousPrimaryValue: state.getPrimaryValueBasedOnPreviousView().toDouble(),
                   ),
                 ),
               ),
@@ -212,13 +211,10 @@ class _AnimatedProgressBar extends StatefulWidget {
     Key? key,
     required this.primaryValue,
     required this.maxValue,
-    double? previousPrimaryValue,
-  })  : this.previousPrimaryValue = previousPrimaryValue ?? 0,
-        super(key: key);
+  }) : super(key: key);
 
   final double primaryValue;
   final double maxValue;
-  final double previousPrimaryValue;
 
   @override
   __AnimatedProgressBarState createState() => __AnimatedProgressBarState();

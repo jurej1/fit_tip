@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:flutter/material.dart';
 import 'package:food_repository/food_repository.dart';
 
 part 'food_day_progress_event.dart';

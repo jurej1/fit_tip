@@ -25,7 +25,6 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
   final int proteinConsumed;
 
   final FoodDayProgressCarouselView selectedView;
-  FoodDayProgressCarouselView? previousView;
 
   FoodDayProgressLoadSuccess({
     this.calorieGoal = 0,
@@ -37,7 +36,6 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
     this.proteinGoal = 0,
     this.proteinConsumed = 0,
     this.selectedView = FoodDayProgressCarouselView.calories,
-    this.previousView,
   });
 
   @override
@@ -75,7 +73,6 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
       proteinGoal: proteinGoal ?? this.proteinGoal,
       proteinConsumed: proteinConsumed ?? this.proteinConsumed,
       selectedView: selectedView ?? this.selectedView,
-      previousView: previousView ?? this.previousView,
     );
   }
 
@@ -106,31 +103,12 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
     return 0;
   }
 
-  int getPrimaryValueBasedOnPreviousView() {
-    if (previousView == FoodDayProgressCarouselView.calories) {
-      return this.calorieConsume;
-    } else if (previousView == FoodDayProgressCarouselView.carbs) {
-      return carbsConsumed;
-    } else if (previousView == FoodDayProgressCarouselView.fats) {
-      return fatsConsumed;
-    } else if (previousView == FoodDayProgressCarouselView.proteins) {
-      return proteinConsumed;
-    }
-    return 0;
-  }
-
-  int getMaxValueBasedOnPreviousView() {
-    if (previousView == FoodDayProgressCarouselView.calories) {
-      return this.calorieGoal;
-    } else if (previousView == FoodDayProgressCarouselView.carbs) {
-      return this.carbsGoal;
-    } else if (previousView == FoodDayProgressCarouselView.fats) {
-      return this.fatsGoal;
-    } else if (previousView == FoodDayProgressCarouselView.proteins) {
-      return this.proteinGoal;
+  Color getPrimaryColorBasedOnView() {
+    if (selectedView == FoodDayProgressCarouselView.calories) {
+      return Colors.blue;
     }
 
-    return 0;
+    return Colors.blue;
   }
 }
 
