@@ -75,7 +75,7 @@ class _Carousel extends StatelessWidget {
           return ClipOval(
             child: Container(
               height: 230,
-              width: 200,
+              width: 210,
               child: NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (overscroll) {
                   overscroll.disallowGlow();
