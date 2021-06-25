@@ -7,21 +7,23 @@ import 'package:formz/formz.dart';
 import 'package:water_repository/water_repository.dart';
 
 class AddWaterDailyGoalView extends StatelessWidget {
-  // static const routeName = 'add_water_daily_goal_view';
-
   static MaterialPageRoute route(BuildContext context) {
+    final waterDailyGoalBloc = BlocProvider.of<WaterDailyGoalBloc>(context);
+    final waterDayLogFocusedDate = BlocProvider.of<WaterLogFocusedDayBloc>(context);
+
     return MaterialPageRoute(builder: (_) {
       return MultiBlocProvider(
         providers: [
           BlocProvider<AddWaterDailyGoalBloc>(
             create: (context) => AddWaterDailyGoalBloc(
-              waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+              waterDailyGoalBloc: waterDailyGoalBloc,
+              waterLogFocusedDayBloc: waterDayLogFocusedDate,
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           ),
           BlocProvider.value(
-            value: BlocProvider.of<WaterDailyGoalBloc>(context),
+            value: waterDailyGoalBloc,
           ),
         ],
         child: AddWaterDailyGoalView(),
@@ -70,13 +72,23 @@ class _AmountInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddWaterDailyGoalBloc, AddWaterDailyGoalState>(
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.amount.value,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            helperText: 'Amount',
-          ),
-          onChanged: (val) => BlocProvider.of<AddWaterDailyGoalBloc>(context).add(AddWaterDailyGoalAmountChanged(val)),
+        return Row(
+          children: [
+            Text('Amount'),
+            Expanded(
+              child: TextFormField(
+                textAlign: TextAlign.right,
+                initialValue: state.amount.value,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  errorText: state.amount.invalid ? 'Invalid' : null,
+                  border: InputBorder.none,
+                ),
+                onChanged: (val) => BlocProvider.of<AddWaterDailyGoalBloc>(context).add(AddWaterDailyGoalAmountChanged(val)),
+              ),
+            ),
+            Text('ml'),
+          ],
         );
       },
     );

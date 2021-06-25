@@ -17,10 +17,19 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
     required WaterRepository waterRepository,
     required AuthenticationBloc authenticationBloc,
     required WaterLogFocusedDayBloc waterLogFocusedDayBloc,
+    required WaterDailyGoalBloc waterDailyGoalBloc,
   })   : _waterRepository = waterRepository,
         _authenticationBloc = authenticationBloc,
         _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
-        super(AddWaterDailyGoalState());
+        super(
+          AddWaterDailyGoalState(
+            amount: (waterDailyGoalBloc.state is WaterDailyGoalLoadSuccess)
+                ? WaterGoalAmount.pure(
+                    (waterDailyGoalBloc.state as WaterDailyGoalLoadSuccess).goal.amount.toStringAsFixed(0),
+                  )
+                : WaterGoalAmount.pure(),
+          ),
+        );
 
   final WaterLogFocusedDayBloc _waterLogFocusedDayBloc;
   final WaterRepository _waterRepository;
