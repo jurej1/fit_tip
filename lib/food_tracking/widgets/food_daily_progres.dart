@@ -5,14 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 
-class FoodDailyProgress extends StatefulWidget {
-  const FoodDailyProgress({Key? key}) : super(key: key);
+class FoodDailyProgress extends StatelessWidget {
+  const FoodDailyProgress();
 
-  @override
-  _FoodDailyProgressState createState() => _FoodDailyProgressState();
-}
-
-class _FoodDailyProgressState extends State<FoodDailyProgress> with SingleTickerProviderStateMixin {
   final double sizeA = 250;
 
   @override
@@ -187,14 +182,9 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
 
   @override
   void initState() {
-    final progressBloc = BlocProvider.of<FoodDayProgressBloc>(context);
-
     _animationController = AnimationController(
       vsync: this,
       lowerBound: 0,
-      value: (progressBloc.state is FoodDayProgressLoadSuccess)
-          ? (progressBloc.state as FoodDayProgressLoadSuccess).getSelectedViewIndex()
-          : 0,
       upperBound: FoodDayProgressCarouselView.values.length.toDouble(),
       duration: const Duration(milliseconds: 450),
     );
