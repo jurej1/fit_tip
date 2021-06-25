@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,7 @@ class DateConsumedInput extends StatelessWidget {
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: state.dateConsumed.value,
-              firstDate: state.dateConsumed.value.subtract(const Duration(days: 365)),
+              firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
               lastDate: DateTime.now(),
             );
 
