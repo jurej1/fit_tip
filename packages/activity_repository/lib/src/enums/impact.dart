@@ -1,0 +1,1 @@
+enum Impact { high, low }

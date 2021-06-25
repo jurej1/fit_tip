@@ -1,0 +1,4 @@
+enum WorkoutRoutineType {
+  split,
+  fullBody,
+}
