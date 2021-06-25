@@ -72,6 +72,8 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
     if (_foodDailyLogsBloc.state is FoodDailyLogsLoadSuccess) {
       final logState = (_foodDailyLogsBloc.state as FoodDailyLogsLoadSuccess);
 
+      final currentState = this.state;
+
       yield FoodDayProgressLoadSuccess(
         calorieConsume: logState.mealDay.totalCalories,
         calorieGoal: event.calorieGoal.amount,
@@ -81,6 +83,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
         fatsGoal: event.calorieGoal.fats ?? 0,
         proteinConsumed: logState.mealDay.getMacroAmount(Macronutrient.protein),
         proteinGoal: event.calorieGoal.proteins ?? 0,
+        selectedView: (currentState is FoodDayProgressLoadSuccess) ? currentState.selectedView : null,
       );
     }
   }
@@ -88,6 +91,8 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
   Stream<FoodDayProgressState> _mapLogsUpdatedToState(FoodDayProgressDailyLogsUpdated event) async* {
     if (_calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess) {
       final calState = _calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess;
+
+      final currentState = this.state;
 
       yield FoodDayProgressLoadSuccess(
         calorieConsume: event.mealDay.totalCalories,
@@ -98,6 +103,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
         fatsGoal: calState.calorieDailyGoal.fats ?? 0,
         proteinConsumed: event.mealDay.getMacroAmount(Macronutrient.protein),
         proteinGoal: calState.calorieDailyGoal.proteins ?? 0,
+        selectedView: (currentState is FoodDayProgressLoadSuccess) ? currentState.selectedView : null,
       );
     }
   }
@@ -106,10 +112,7 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
     if (state is FoodDayProgressLoadSuccess) {
       final current = state as FoodDayProgressLoadSuccess;
 
-      yield current.copyWith(
-        selectedView: FoodDayProgressCarouselView.values[event.index],
-        previousView: current.selectedView,
-      );
+      yield current.copyWith(selectedView: FoodDayProgressCarouselView.values[event.index]);
     }
   }
 

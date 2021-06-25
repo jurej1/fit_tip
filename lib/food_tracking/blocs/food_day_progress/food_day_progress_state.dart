@@ -35,8 +35,8 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
     this.carbsConsumed = 0,
     this.proteinGoal = 0,
     this.proteinConsumed = 0,
-    this.selectedView = FoodDayProgressCarouselView.calories,
-  });
+    FoodDayProgressCarouselView? selectedView,
+  }) : this.selectedView = selectedView ?? FoodDayProgressCarouselView.calories;
 
   @override
   List<Object> get props => [
@@ -61,7 +61,6 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
     int? proteinGoal,
     int? proteinConsumed,
     FoodDayProgressCarouselView? selectedView,
-    FoodDayProgressCarouselView? previousView,
   }) {
     return FoodDayProgressLoadSuccess(
       calorieGoal: calorieGoal ?? this.calorieGoal,
@@ -110,11 +109,9 @@ class FoodDayProgressLoadSuccess extends FoodDayProgressState {
       return Colors.green;
     } else if (selectedView == FoodDayProgressCarouselView.fats) {
       return Colors.red;
-    } else if (selectedView == FoodDayProgressCarouselView.proteins) {
+    } else {
       return Colors.orange;
     }
-
-    return Colors.blue;
   }
 
   Color getSecondaryColorBasedOnView() {
