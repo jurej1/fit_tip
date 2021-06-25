@@ -1,11 +1,13 @@
-import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/food_tracking/blocs/food_item_detail/food_item_detail_bloc.dart';
-import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:intl/intl.dart';
+
+import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:fit_tip/food_tracking/blocs/blocs.dart';
+import 'package:fit_tip/food_tracking/blocs/food_item_detail/food_item_detail_bloc.dart';
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 
 class FoodItemDetailView extends StatelessWidget {
   const FoodItemDetailView({Key? key}) : super(key: key);
@@ -108,6 +110,7 @@ class FoodItemDetailView extends StatelessWidget {
                       ),
                     ),
                   FoodItemData(),
+                  if (state.item.vitamins != null) _VitaminsList(vitamins: state.item.vitamins!),
                 ],
               ),
             );
@@ -154,8 +157,39 @@ class FoodItemData extends StatelessWidget {
                 enabled: false,
                 decoration: inputDecorationStyle.copyWith(labelText: 'Time added'),
               ),
+              TextFormField(
+                key: ValueKey(state.item.mealType),
+                initialValue: mapMealTypeToString(state.item.mealType),
+                enabled: false,
+                decoration: inputDecorationStyle.copyWith(labelText: 'Meal '),
+              ),
             ],
           ),
+        );
+      },
+    );
+  }
+}
+
+class _VitaminsList extends StatelessWidget {
+  const _VitaminsList({
+    Key? key,
+    required this.vitamins,
+  }) : super(key: key);
+
+  final List<FoodDataVitamin> vitamins;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: vitamins.length,
+      itemBuilder: (context, index) {
+        final item = vitamins[index];
+
+        return ListTile(
+          key: ValueKey(item),
+          title: Text('Vitamin ${describeEnum(item.vitamin)}'),
+          trailing: Text('${item.amount.toStringAsFixed(0)}g'),
         );
       },
     );
