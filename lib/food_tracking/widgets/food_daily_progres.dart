@@ -187,9 +187,14 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
 
   @override
   void initState() {
+    final progressBloc = BlocProvider.of<FoodDayProgressBloc>(context);
+
     _animationController = AnimationController(
       vsync: this,
       lowerBound: 0,
+      value: (progressBloc.state is FoodDayProgressLoadSuccess)
+          ? (progressBloc.state as FoodDayProgressLoadSuccess).getSelectedViewIndex()
+          : 0,
       upperBound: FoodDayProgressCarouselView.values.length.toDouble(),
       duration: const Duration(milliseconds: 450),
     );
@@ -208,7 +213,7 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
     return BlocConsumer<FoodDayProgressBloc, FoodDayProgressState>(
       listener: (context, state) {
         if (state is FoodDayProgressLoadSuccess) {
-          _animationController.animateTo(state.getSelectedViewDisplayerFactor());
+          _animationController.animateTo(state.getSelectedViewIndex());
         }
       },
       builder: (context, state) {
