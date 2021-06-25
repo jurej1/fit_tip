@@ -2,26 +2,29 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
-import 'utilities/app_routes.dart';
 import 'weight_tracking/weight.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
   final WeightRepository _weightRepository;
   final WaterRepository _waterRepository;
+  final FoodRepository _foodRepository;
 
   App({
     Key? key,
     required AuthenticationRepository authenticationRepository,
     required WeightRepository weightRepository,
     required WaterRepository waterRepository,
+    required FoodRepository foodRepository,
   })   : _authenticationRepository = authenticationRepository,
         _waterRepository = waterRepository,
         _weightRepository = weightRepository,
+        _foodRepository = foodRepository,
         super(key: key);
 
   final _navigatorState = GlobalKey<NavigatorState>();
@@ -33,6 +36,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: _authenticationRepository),
         RepositoryProvider.value(value: _weightRepository),
         RepositoryProvider.value(value: _waterRepository),
+        RepositoryProvider.value(value: _foodRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -75,9 +79,9 @@ class App extends StatelessWidget {
                   listenWhen: (previous, current) => previous.status != current.status,
                   listener: (context, state) {
                     if (state.status == AuthenticationStatus.unauthenticated) {
-                      _navigatorState.currentState!.pushReplacementNamed(LoginView.routeName);
+                      _navigatorState.currentState!.pushReplacement(LoginView.route(context));
                     } else if (state.status == AuthenticationStatus.authenticated) {
-                      _navigatorState.currentState!.pushReplacementNamed(Home.routeName);
+                      _navigatorState.currentState!.pushReplacement(Home.route(context));
                     }
                   },
                 ),
@@ -91,7 +95,6 @@ class App extends StatelessWidget {
             );
           },
           home: _SplashScreen(),
-          routes: appRoutes(),
         ),
       ),
     );

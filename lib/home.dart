@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'authentication/authentication.dart';
 
 class Home extends StatelessWidget {
-  static const routeName = 'home_route';
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(builder: (_) => Home());
+  }
 
   @override
   Widget build(BuildContext context) {

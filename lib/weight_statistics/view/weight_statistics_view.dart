@@ -1,9 +1,34 @@
 import 'package:fit_tip/weight_statistics/weight_statistics.dart';
+import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
+import 'package:weight_repository/weight_repository.dart' as weight_rep;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeightStatisticsView extends StatelessWidget {
-  static const routeName = 'weight_statistics_view';
+  // static const routeName = 'weight_statistics_view';
+
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(builder: (_) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<WeightStatisticsBloc>(
+            create: (context) => WeightStatisticsBloc(
+              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+            ),
+          ),
+          BlocProvider<WeightGoalStatisticsBloc>(
+            create: (context) => WeightGoalStatisticsBloc(
+              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+            ),
+          ),
+        ],
+        child: WeightStatisticsView(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

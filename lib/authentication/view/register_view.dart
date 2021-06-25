@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/authentication/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,16 @@ import 'package:formz/formz.dart';
 import '../authentication.dart';
 
 class RegisterView extends StatefulWidget {
-  static const routeName = 'register_view';
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return BlocProvider<RegisterFormBloc>(
+          create: (_) => RegisterFormBloc(authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+          child: RegisterView(),
+        );
+      },
+    );
+  }
 
   @override
   _RegisterViewState createState() => _RegisterViewState();
@@ -74,7 +84,7 @@ class _RegisterViewState extends State<RegisterView> {
                   title: 'Have an account? Login',
                   onPressed: () {
                     if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
-                    Navigator.of(context).pushReplacementNamed(LoginView.routeName);
+                    Navigator.of(context).pushReplacement(LoginView.route(context));
                   },
                 ),
               ],

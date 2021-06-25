@@ -1,9 +1,40 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:water_repository/water_repository.dart';
 
 class WaterLogView extends StatelessWidget {
-  static const routeName = 'water_log_view';
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(builder: (_) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<WaterLogFocusedDayBloc>(
+            create: (context) => WaterLogFocusedDayBloc(),
+          ),
+          BlocProvider<WaterLogDayBloc>(
+            create: (context) => WaterLogDayBloc(
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
+          ),
+          BlocProvider<WaterDailyGoalBloc>(create: (context) {
+            return WaterDailyGoalBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              waterRepository: RepositoryProvider.of<WaterRepository>(context),
+            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
+          }),
+          BlocProvider<WaterLogConsumptionBloc>(
+            create: (context) => WaterLogConsumptionBloc(
+              waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
+              waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
+            ),
+          ),
+        ],
+        child: WaterLogView(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +45,7 @@ class WaterLogView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                AddWaterDailyGoalView.routeName,
-                arguments: {
-                  0: BlocProvider.of<WaterDailyGoalBloc>(context),
-                  1: BlocProvider.of<WaterLogFocusedDayBloc>(context),
-                },
-              );
+              Navigator.of(context).push(AddWaterDailyGoalView.route(context));
             },
           ),
         ],

@@ -33,7 +33,7 @@ class WeightTile extends StatelessWidget {
         secondaryBackground: _dismissibleBackground(Alignment.centerRight),
         child: ListTile(
           onLongPress: () {
-            Navigator.of(context).pushNamed(AddWeightView.routeName, arguments: weight);
+            Navigator.of(context).push(AddWeightView.route(context, weight));
           },
           leading: Text(
             weight.weight!.toDouble().toString() +

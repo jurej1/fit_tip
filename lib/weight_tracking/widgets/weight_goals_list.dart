@@ -22,7 +22,7 @@ class WeightGoalsList extends StatelessWidget {
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                Navigator.of(context).pushNamed(EditWeightGoalView.routeName);
+                Navigator.of(context).push(EditWeightGoalView.route(context));
               },
             ),
           ),
@@ -39,7 +39,7 @@ class WeightGoalsList extends StatelessWidget {
           SizedBox(height: height),
           GoalRow(
             text: 'Target date',
-            value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.beginDate!) : '',
+            value: goal.targetDate != null ? DateFormat('dd.MM.yyyy').format(goal.targetDate!) : '',
           ),
           SizedBox(height: height),
           GoalRow(

@@ -13,11 +13,14 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  food_repository:
+    path: packages/food_repository
   water_repository:
     path: packages/water_repository
   weight_repository:
     path: packages/weight_repository
   another_flushbar: ^1.10.18
+  carousel_slider: ^4.0.0
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0

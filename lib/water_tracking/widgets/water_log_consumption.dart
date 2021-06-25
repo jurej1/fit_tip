@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:fit_tip/water_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -38,16 +36,16 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
           _animationController.forward();
           return Container(
             height: sizeA,
-            width: sizeA,
             child: AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
                 return CustomPaint(
-                    painter: ProgressPainter(
-                      primaryValue: _animationController.value * state.amount,
-                      maxValue: state.max,
-                    ),
-                    child: child);
+                  painter: ProgressPainter(
+                    primaryValue: _animationController.value * state.amount,
+                    maxValue: state.max,
+                  ),
+                  child: child,
+                );
               },
               child: Center(
                 child: Column(
@@ -76,7 +74,6 @@ class _WaterLogConsumptionState extends State<WaterLogConsumption> with SingleTi
         if (state is WaterLogConsumptionLoading) {
           return Container(
             height: sizeA,
-            width: sizeA,
             child: Center(
               child: const CircularProgressIndicator(),
             ),

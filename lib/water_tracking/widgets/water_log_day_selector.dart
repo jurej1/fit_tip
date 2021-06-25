@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class WaterLogDaySelector extends StatelessWidget {
                   DateTime? value = await showDatePicker(
                     context: context,
                     initialDate: state.selectedDate,
-                    firstDate: state.selectedDate.subtract(const Duration(days: 365)),
+                    firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
                     lastDate: DateTime.now(),
                   );
 

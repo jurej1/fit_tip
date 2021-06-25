@@ -5,7 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeightTrackingView extends StatelessWidget {
-  static const routeName = 'weight_tracking_view';
+  // static const routeName = 'weight_tracking_view';
+
+  static MaterialPageRoute route(BuildContext context) {
+    BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
+    BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
+    return MaterialPageRoute(
+      builder: (_) {
+        return WeightTrackingView();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +25,13 @@ class WeightTrackingView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.pie_chart),
             onPressed: () {
-              Navigator.of(context).pushNamed(WeightStatisticsView.routeName);
+              Navigator.of(context).push(WeightStatisticsView.route(context));
             },
           ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddWeightView.routeName);
+              Navigator.of(context).push(AddWeightView.route(context));
             },
           )
         ],

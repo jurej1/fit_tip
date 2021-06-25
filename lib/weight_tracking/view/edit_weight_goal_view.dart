@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/utilities/app_config.dart';
 import 'package:fit_tip/weight_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,26 @@ import 'package:formz/formz.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 class EditWeightGoalView extends StatelessWidget {
-  static const routeName = 'edit_weight_goal_view';
+  // static const routeName = 'edit_weight_goal_view';
+
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<EditWeightGoalFormBloc>(
+              create: (context) => EditWeightGoalFormBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
+                weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              ),
+            ),
+          ],
+          child: EditWeightGoalView(),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
