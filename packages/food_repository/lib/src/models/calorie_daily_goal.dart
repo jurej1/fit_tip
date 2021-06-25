@@ -6,6 +6,10 @@ class CalorieDailyGoal extends Equatable {
   final int? fats;
   final int? proteins;
   final int? carbs;
+  final int? breakfast;
+  final int? lunch;
+  final int? dinner;
+  final int? snack;
   final DateTime date;
   final String id;
 
@@ -15,6 +19,10 @@ class CalorieDailyGoal extends Equatable {
     this.fats,
     this.proteins,
     this.carbs,
+    this.breakfast,
+    this.dinner,
+    this.lunch,
+    this.snack,
     DateTime? date,
   })  : this.date = date ?? DateTime.now(),
         this.id = id ?? generateId(date ?? DateTime.now());
@@ -26,6 +34,10 @@ class CalorieDailyGoal extends Equatable {
       fats,
       proteins,
       carbs,
+      breakfast,
+      lunch,
+      dinner,
+      snack,
       date,
       id,
     ];
@@ -36,6 +48,10 @@ class CalorieDailyGoal extends Equatable {
     int? fats,
     int? proteins,
     int? carbs,
+    int? breakfast,
+    int? lunch,
+    int? dinner,
+    int? snack,
     DateTime? date,
     String? id,
   }) {
@@ -44,6 +60,10 @@ class CalorieDailyGoal extends Equatable {
       fats: fats ?? this.fats,
       proteins: proteins ?? this.proteins,
       carbs: carbs ?? this.carbs,
+      breakfast: breakfast ?? this.breakfast,
+      lunch: lunch ?? this.lunch,
+      dinner: dinner ?? this.dinner,
+      snack: snack ?? this.snack,
       date: date ?? this.date,
       id: id ?? this.id,
     );
@@ -61,6 +81,10 @@ class CalorieDailyGoal extends Equatable {
       carbs: carbs,
       fats: fats,
       proteins: proteins,
+      breakfast: breakfast,
+      dinner: dinner,
+      lunch: lunch,
+      snack: snack,
     );
   }
 
@@ -72,6 +96,10 @@ class CalorieDailyGoal extends Equatable {
       fats: entity.fats,
       id: entity.id,
       proteins: entity.proteins,
+      breakfast: entity.breakfast,
+      dinner: entity.dinner,
+      lunch: entity.lunch,
+      snack: entity.snack,
     );
   }
 }
