@@ -92,7 +92,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
     final carbs = AmountDetailConsumed.dirty(state.carbs.value);
     final proteins = AmountDetailConsumed.dirty(state.proteins.value);
     final breakfast = CalorieGoalConsumption.dirty(state.breakfast.value);
-    final lunch = CalorieGoalConsumption.dirty(state.breakfast.value);
+    final lunch = CalorieGoalConsumption.dirty(state.lunch.value);
     final dinner = CalorieGoalConsumption.dirty(state.dinner.value);
     final snack = CalorieGoalConsumption.dirty(state.snack.value);
 

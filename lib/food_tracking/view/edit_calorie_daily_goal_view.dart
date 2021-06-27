@@ -57,6 +57,7 @@ class EditCalorieDailyGoalView extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.check),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalFormSubmit());
               },
             )
@@ -77,7 +78,6 @@ class EditCalorieDailyGoalView extends StatelessWidget {
                 FatsAmountInput(),
                 CarbsAmountInput(),
                 ProteinAmountInput(),
-                //Meals inputs
                 MealsTitle(),
                 BreakfastInput(),
                 LunchInput(),
@@ -208,7 +208,7 @@ class BreakfastInput extends StatelessWidget {
           onChanged: (val) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalBreakfastChanged(val));
           },
-          unit: 'g',
+          unit: 'cal',
           title: 'Breakfast',
         );
       },
@@ -228,7 +228,7 @@ class LunchInput extends StatelessWidget {
           onChanged: (val) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalLunchChanged(val));
           },
-          unit: 'g',
+          unit: 'cal',
           title: 'Lunch',
         );
       },
@@ -248,7 +248,7 @@ class DinnerInput extends StatelessWidget {
           onChanged: (value) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalDinnerChanged(value));
           },
-          unit: 'g',
+          unit: 'cal',
           title: 'Dinner',
         );
       },
@@ -268,7 +268,7 @@ class SnackInput extends StatelessWidget {
           onChanged: (value) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalSnackChanged(value));
           },
-          unit: 'g',
+          unit: 'cal',
           title: 'Snack',
         );
       },
