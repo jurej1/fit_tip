@@ -52,7 +52,9 @@ class EditCalorieDailyGoalBloc
       yield _mapLunchChangedToState(event);
     } else if (event is EditCalorieDailyGoalDinnerChanged) {
       yield _mapDinnerChangedToState(event);
-    } else if (event is EditCalorieDailyGoalSnackChanged) {}
+    } else if (event is EditCalorieDailyGoalSnackChanged) {
+      yield _mapSnackChangedToState(event);
+    }
   }
 
   EditCalorieDailyGoalState _mapAmountChangedToState(
@@ -252,6 +254,27 @@ class EditCalorieDailyGoalBloc
           state.carbs,
           state.fats,
           state.proteins,
+        ],
+      ),
+    );
+  }
+
+  EditCalorieDailyGoalState _mapSnackChangedToState(
+      EditCalorieDailyGoalSnackChanged event) {
+    final snack = CalorieGoalConsumption.dirty(event.value);
+
+    return state.copyWith(
+      snack: snack,
+      status: Formz.validate(
+        [
+          snack,
+          state.breakfast,
+          state.lunch,
+          state.dinner,
+          state.calorieGoalConsumption,
+          state.carbs,
+          state.proteins,
+          state.fats,
         ],
       ),
     );
