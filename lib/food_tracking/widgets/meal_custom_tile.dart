@@ -12,21 +12,20 @@ class MealCustomTile extends StatelessWidget {
     Key? key,
     this.meal,
     required this.title,
-  })   : this.amountOfItems = meal?.foods.length ?? 0,
-        super(key: key);
+  }) : super(key: key);
 
   final Meal? meal;
   final String title;
-  final int amountOfItems;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MealCustomTileBloc(),
-      child: _MainTile(
-        amountOfItems: amountOfItems,
-        title: title,
+      create: (context) => MealCustomTileBloc(
         meal: meal,
+        calorieDailyGoalBloc: BlocProvider.of<CalorieDailyGoalBloc>(context),
+      ),
+      child: _MainTile(
+        title: title,
       ),
     );
   }
@@ -35,18 +34,10 @@ class MealCustomTile extends StatelessWidget {
 class _MainTile extends StatelessWidget {
   _MainTile({
     Key? key,
-    this.meal,
     required this.title,
-    required this.amountOfItems,
-  })   : this.hasFoods = meal?.foods.isNotEmpty ?? false,
-        this.foods = meal?.foods ?? [],
-        super(key: key);
+  }) : super(key: key);
 
-  final Meal? meal;
   final String title;
-  final int amountOfItems;
-  final bool hasFoods;
-  final List<FoodItem> foods;
   final Duration duration = const Duration(milliseconds: 300);
 
   @override
@@ -65,21 +56,21 @@ class _MainTile extends StatelessWidget {
               ),
             ),
             _ColapsedTile(
-              amountOfItems: amountOfItems,
+              amountOfItems: state.foods.length,
               title: title,
-              meal: meal,
+              meal: state.meal,
             ),
             AnimatedContainer(
               curve: Curves.fastOutSlowIn,
               duration: duration,
-              height: state.isExpanded ? calculateHeight() : 0,
+              height: state.isExpanded ? calculateHeight(state) : 0,
               child: ListView.builder(
                 physics: const ClampingScrollPhysics(),
-                itemCount: foods.length,
+                itemCount: state.foods.length,
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final item = foods[index];
+                  final item = state.foods[index];
 
                   return BlocProvider(
                     create: (context) => FoodItemTileBloc(
@@ -100,8 +91,8 @@ class _MainTile extends StatelessWidget {
     );
   }
 
-  double calculateHeight() {
-    return hasFoods ? (foods.length < 5 ? (foods.length * 65) : (4 * 65)) : 0;
+  double calculateHeight(MealCustomTileState state) {
+    return state.hasFoods() ? (state.foods.length < 5 ? (state.props.length * 65) : (4 * 65)) : 0;
   }
 }
 
@@ -136,7 +127,9 @@ class _ColapsedTile extends StatelessWidget {
             ),
           ),
           trailing: Text(
-            (meal?.totalCalories.toStringAsFixed(0) ?? '0') + ' cal',
+            (meal?.totalCalories.toStringAsFixed(0) ?? '0') +
+                ' cal' +
+                '${state.mealCalorieGoal != null ? (' / ' + state.mealCalorieGoal.toString() + 'cal') : ''}',
             style: TextStyle(
               color: state.isExpanded ? state.textActiveColor : Colors.black,
             ),
