@@ -64,16 +64,18 @@ class EditCalorieDailyGoalBloc
 
     return state.copyWith(
       calorieGoalConsumption: consumption,
-      status: Formz.validate([
-        consumption,
-        state.breakfast,
-        state.lunch,
-        state.dinner,
-        state.snack,
-        state.fats,
-        state.carbs,
-        state.proteins,
-      ]),
+      status: Formz.validate(
+        [
+          consumption,
+          state.breakfast,
+          state.lunch,
+          state.dinner,
+          state.snack,
+          state.fats,
+          state.carbs,
+          state.proteins,
+        ],
+      ),
     );
   }
 
