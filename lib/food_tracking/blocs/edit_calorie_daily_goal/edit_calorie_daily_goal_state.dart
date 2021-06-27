@@ -3,7 +3,7 @@ part of 'edit_calorie_daily_goal_bloc.dart';
 class EditCalorieDailyGoalState extends Equatable {
   const EditCalorieDailyGoalState({
     this.status = FormzStatus.pure,
-    required this.calorieGoalConsumption,
+    required this.calorieDailyConsumptionGoal,
     required this.goal,
     this.fats = const AmountDetailConsumed.pure(),
     this.proteins = const AmountDetailConsumed.pure(),
@@ -15,7 +15,7 @@ class EditCalorieDailyGoalState extends Equatable {
   });
 
   final FormzStatus status;
-  final CalorieDailyConsumptionGoal calorieGoalConsumption;
+  final CalorieDailyConsumptionGoal calorieDailyConsumptionGoal;
   final CalorieDailyGoal goal;
   final AmountDetailConsumed fats;
   final AmountDetailConsumed proteins;
@@ -38,7 +38,7 @@ class EditCalorieDailyGoalState extends Equatable {
   List<Object> get props {
     return [
       status,
-      calorieGoalConsumption,
+      calorieDailyConsumptionGoal,
       goal,
       fats,
       proteins,
@@ -52,7 +52,7 @@ class EditCalorieDailyGoalState extends Equatable {
 
   factory EditCalorieDailyGoalState.dirty(CalorieDailyGoal goal) {
     return EditCalorieDailyGoalState(
-      calorieGoalConsumption: CalorieDailyConsumptionGoal.pure(value: goal.amount.toStringAsFixed(0)),
+      calorieDailyConsumptionGoal: CalorieDailyConsumptionGoal.pure(value: goal.amount.toStringAsFixed(0)),
       carbs: AmountDetailConsumed.pure(
         goal.carbs != null ? goal.carbs.toString() : '',
       ),
@@ -92,7 +92,7 @@ class EditCalorieDailyGoalState extends Equatable {
   }) {
     return EditCalorieDailyGoalState(
       status: status ?? this.status,
-      calorieGoalConsumption: calorieGoalConsumption ?? this.calorieGoalConsumption,
+      calorieDailyConsumptionGoal: calorieGoalConsumption ?? this.calorieDailyConsumptionGoal,
       goal: goal ?? this.goal,
       fats: fats ?? this.fats,
       proteins: proteins ?? this.proteins,

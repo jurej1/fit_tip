@@ -82,7 +82,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
 
   Stream<EditCalorieDailyGoalState> _mapFormSubmitToState() async* {
     CalorieDailyConsumptionGoal consumption = CalorieDailyConsumptionGoal.dirty(
-      value: state.calorieGoalConsumption.value,
+      value: state.calorieDailyConsumptionGoal.value,
       breakfast: state.breakfast.value,
       dinner: state.dinner.value,
       lunch: state.lunch.value,
@@ -129,7 +129,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       int? dinnerValue = int.tryParse(dinner.value);
 
       CalorieDailyGoal goal = state.goal.copyWith(
-        amount: int.parse(state.calorieGoalConsumption.value),
+        amount: int.parse(state.calorieDailyConsumptionGoal.value),
         date: _foodLogFocusedDateBloc.state.selectedDate,
         carbs: carbsValue,
         proteins: proteinValue,
@@ -162,7 +162,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
           protein,
           state.carbs,
           state.fats,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.breakfast,
           state.lunch,
           state.dinner,
@@ -181,7 +181,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
           carbs,
           state.proteins,
           state.fats,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.breakfast,
           state.lunch,
           state.dinner,
@@ -199,7 +199,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       status: Formz.validate([
         fats,
         state.proteins,
-        state.calorieGoalConsumption,
+        state.calorieDailyConsumptionGoal,
         state.carbs,
         state.breakfast,
         state.dinner,
@@ -217,7 +217,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       status: Formz.validate(
         [
           breakfast,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.carbs,
           state.fats,
           state.dinner,
@@ -237,7 +237,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       status: Formz.validate(
         [
           lunch,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.proteins,
           state.fats,
           state.carbs,
@@ -260,7 +260,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
           state.breakfast,
           state.lunch,
           state.snack,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.carbs,
           state.fats,
           state.proteins,
@@ -280,7 +280,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
           state.breakfast,
           state.lunch,
           state.dinner,
-          state.calorieGoalConsumption,
+          state.calorieDailyConsumptionGoal,
           state.carbs,
           state.proteins,
           state.fats,
