@@ -11,8 +11,7 @@ import 'package:formz/formz.dart';
 part 'edit_calorie_daily_goal_event.dart';
 part 'edit_calorie_daily_goal_state.dart';
 
-class EditCalorieDailyGoalBloc
-    extends Bloc<EditCalorieDailyGoalEvent, EditCalorieDailyGoalState> {
+class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalorieDailyGoalState> {
   EditCalorieDailyGoalBloc({
     required AuthenticationBloc authenticationBloc,
     required FoodRepository foodRepository,
@@ -21,9 +20,7 @@ class EditCalorieDailyGoalBloc
   })  : _authenticationBloc = authenticationBloc,
         _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
         _foodRepository = foodRepository,
-        super(EditCalorieDailyGoalState.dirty(
-            (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess)
-                .calorieDailyGoal));
+        super(EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal));
 
   final AuthenticationBloc _authenticationBloc;
   final FoodRepository _foodRepository;
@@ -57,10 +54,14 @@ class EditCalorieDailyGoalBloc
     }
   }
 
-  EditCalorieDailyGoalState _mapAmountChangedToState(
-      EditCalorieDailyGoalAmountChanged event) {
-    CalorieGoalConsumption consumption =
-        CalorieGoalConsumption.dirty(event.amount ?? '');
+  EditCalorieDailyGoalState _mapAmountChangedToState(EditCalorieDailyGoalAmountChanged event) {
+    CalorieDailyConsumptionGoal consumption = CalorieDailyConsumptionGoal.dirty(
+      value: event.amount,
+      breakfast: state.breakfast.value,
+      dinner: state.dinner.value,
+      lunch: state.lunch.value,
+      snack: state.snack.value,
+    );
 
     return state.copyWith(
       calorieGoalConsumption: consumption,
@@ -80,8 +81,13 @@ class EditCalorieDailyGoalBloc
   }
 
   Stream<EditCalorieDailyGoalState> _mapFormSubmitToState() async* {
-    CalorieGoalConsumption consumption =
-        CalorieGoalConsumption.dirty(state.calorieGoalConsumption.value);
+    CalorieDailyConsumptionGoal consumption = CalorieDailyConsumptionGoal.dirty(
+      value: state.calorieGoalConsumption.value,
+      breakfast: state.breakfast.value,
+      dinner: state.dinner.value,
+      lunch: state.lunch.value,
+      snack: state.snack.value,
+    );
     final fats = AmountDetailConsumed.dirty(state.fats.value);
     final carbs = AmountDetailConsumed.dirty(state.carbs.value);
     final proteins = AmountDetailConsumed.dirty(state.proteins.value);
@@ -117,6 +123,10 @@ class EditCalorieDailyGoalBloc
       int? carbsValue = int.tryParse(carbs.value);
       int? proteinValue = int.tryParse(proteins.value);
       int? fatsValue = int.tryParse(fats.value);
+      int? breakfastValue = int.tryParse(breakfast.value);
+      int? lunchValue = int.tryParse(lunch.value);
+      int? snackValue = int.tryParse(snack.value);
+      int? dinnerValue = int.tryParse(dinner.value);
 
       CalorieDailyGoal goal = state.goal.copyWith(
         amount: int.parse(state.calorieGoalConsumption.value),
@@ -124,6 +134,10 @@ class EditCalorieDailyGoalBloc
         carbs: carbsValue,
         proteins: proteinValue,
         fats: fatsValue,
+        breakfast: breakfastValue,
+        dinner: dinnerValue,
+        lunch: lunchValue,
+        snack: snackValue,
       );
 
       try {
@@ -138,8 +152,7 @@ class EditCalorieDailyGoalBloc
     }
   }
 
-  EditCalorieDailyGoalState _mapProteinChangedToState(
-      EditCalorieDailyGoalProteinChanged event) {
+  EditCalorieDailyGoalState _mapProteinChangedToState(EditCalorieDailyGoalProteinChanged event) {
     AmountDetailConsumed protein = AmountDetailConsumed.dirty(event.amount);
 
     return state.copyWith(
@@ -159,8 +172,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapCarbsChangedToState(
-      EditCalorieDailyGoalCarbsChanged event) {
+  EditCalorieDailyGoalState _mapCarbsChangedToState(EditCalorieDailyGoalCarbsChanged event) {
     final carbs = AmountDetailConsumed.dirty(event.amount);
 
     return state.copyWith(
@@ -180,8 +192,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapFatsChangedToState(
-      EditCalorieDailyGoalFatsChanged event) {
+  EditCalorieDailyGoalState _mapFatsChangedToState(EditCalorieDailyGoalFatsChanged event) {
     final fats = AmountDetailConsumed.dirty(event.amount);
 
     return state.copyWith(
@@ -199,8 +210,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapBreakfastChangedToState(
-      EditCalorieDailyGoalBreakfastChanged event) {
+  EditCalorieDailyGoalState _mapBreakfastChangedToState(EditCalorieDailyGoalBreakfastChanged event) {
     final breakfast = CalorieGoalConsumption.dirty(event.value);
     return state.copyWith(
       breakfast: breakfast,
@@ -219,8 +229,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapLunchChangedToState(
-      EditCalorieDailyGoalLunchChanged event) {
+  EditCalorieDailyGoalState _mapLunchChangedToState(EditCalorieDailyGoalLunchChanged event) {
     final lunch = CalorieGoalConsumption.dirty(event.value);
 
     return state.copyWith(
@@ -240,8 +249,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapDinnerChangedToState(
-      EditCalorieDailyGoalDinnerChanged event) {
+  EditCalorieDailyGoalState _mapDinnerChangedToState(EditCalorieDailyGoalDinnerChanged event) {
     final dinner = CalorieGoalConsumption.dirty(event.value);
 
     return state.copyWith(
@@ -261,8 +269,7 @@ class EditCalorieDailyGoalBloc
     );
   }
 
-  EditCalorieDailyGoalState _mapSnackChangedToState(
-      EditCalorieDailyGoalSnackChanged event) {
+  EditCalorieDailyGoalState _mapSnackChangedToState(EditCalorieDailyGoalSnackChanged event) {
     final snack = CalorieGoalConsumption.dirty(event.value);
 
     return state.copyWith(
