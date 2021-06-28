@@ -30,11 +30,11 @@ class MealCustomTileState extends Equatable {
     return MealCustomTileState(
       meal: meal,
       textActiveColor: textActiveColor ?? Colors.blue,
-      mealCalorieGoal: _calorieMealGoal(meal?.type, calorieDailyGoal),
+      mealCalorieGoal: calorieMealGoal(meal?.type, calorieDailyGoal),
     );
   }
 
-  static int? _calorieMealGoal(MealType? type, CalorieDailyGoal? calorieDailyGoal) {
+  static int? calorieMealGoal(MealType? type, CalorieDailyGoal? calorieDailyGoal) {
     if (calorieDailyGoal == null || type == null) return null;
 
     if (type == MealType.breakfast) {

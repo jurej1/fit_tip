@@ -14,15 +14,28 @@ class MealCustomTileBloc extends Bloc<MealCustomTileEvent, MealCustomTileState> 
     Color textActiveColor = Colors.blue,
     Meal? meal,
     required CalorieDailyGoalBloc calorieDailyGoalBloc,
-  }) : super(
+  })  : this._calorieDailyGoalBloc = calorieDailyGoalBloc,
+        super(
           MealCustomTileState.initial(
             textActiveColor: textActiveColor,
             meal: meal,
-            calorieDailyGoal: (calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess)
-                ? (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal
-                : null,
           ),
-        );
+        ) {
+    final calState = _calorieDailyGoalBloc.state;
+
+    if (calState is CalorieDailyGoalLoadSuccess) {
+      add(_MealCustomTileBlocUpdated((calState.calorieDailyGoal)));
+    }
+
+    _calorieDailyGoalSubscription = _calorieDailyGoalBloc.stream.listen((calState) {
+      if (calState is CalorieDailyGoalLoadSuccess) {
+        add(_MealCustomTileBlocUpdated((calState.calorieDailyGoal)));
+      }
+    });
+  }
+
+  late final StreamSubscription _calorieDailyGoalSubscription;
+  final CalorieDailyGoalBloc _calorieDailyGoalBloc;
 
   @override
   Stream<MealCustomTileState> mapEventToState(
@@ -30,6 +43,19 @@ class MealCustomTileBloc extends Bloc<MealCustomTileEvent, MealCustomTileState> 
   ) async* {
     if (event is MealCustomTileExpandedPressed) {
       yield state.copyWith(isExpanded: !state.isExpanded);
+    } else if (event is _MealCustomTileBlocUpdated) {
+      yield state.copyWith(
+        mealCalorieGoal: MealCustomTileState.calorieMealGoal(
+          state.meal?.type,
+          event.calorieDailyGoal,
+        ),
+      );
     }
+  }
+
+  @override
+  Future<void> close() {
+    _calorieDailyGoalSubscription.cancel();
+    return super.close();
   }
 }
