@@ -3,6 +3,7 @@ import 'package:fit_tip/food_tracking/widgets/food_daily_progres.dart';
 import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 
 class FoodLogBuilder extends StatelessWidget {
   const FoodLogBuilder({Key? key}) : super(key: key);
@@ -29,23 +30,27 @@ class FoodLogBuilder extends StatelessWidget {
                   const _CalorieChart(),
                   MealCustomTile(
                     key: UniqueKey(),
+                    mealType: MealType.breakfast,
                     meal: state.mealDay.breakfast,
                     title: 'Breakfast',
                   ),
                   const SizedBox(height: 10),
                   MealCustomTile(
+                    mealType: MealType.lunch,
                     key: UniqueKey(),
                     meal: state.mealDay.lunch,
                     title: 'Lunch',
                   ),
                   const SizedBox(height: 10),
                   MealCustomTile(
+                    mealType: MealType.dinner,
                     key: UniqueKey(),
                     meal: state.mealDay.dinner,
                     title: 'Dinner',
                   ),
                   const SizedBox(height: 10),
                   MealCustomTile(
+                    mealType: MealType.snack,
                     key: UniqueKey(),
                     meal: state.mealDay.snacks,
                     title: 'Snacks',

@@ -13,12 +13,13 @@ class MealCustomTileBloc extends Bloc<MealCustomTileEvent, MealCustomTileState> 
   MealCustomTileBloc({
     Color textActiveColor = Colors.blue,
     Meal? meal,
+    required MealType mealType,
     required CalorieDailyGoalBloc calorieDailyGoalBloc,
   })  : this._calorieDailyGoalBloc = calorieDailyGoalBloc,
         super(
-          MealCustomTileState.initial(
-            textActiveColor: textActiveColor,
+          MealCustomTileState(
             meal: meal,
+            mealType: mealType,
           ),
         ) {
     final calState = _calorieDailyGoalBloc.state;
@@ -46,7 +47,7 @@ class MealCustomTileBloc extends Bloc<MealCustomTileEvent, MealCustomTileState> 
     } else if (event is _MealCustomTileBlocUpdated) {
       yield state.copyWith(
         mealCalorieGoal: MealCustomTileState.calorieMealGoal(
-          state.meal?.type,
+          state.mealType,
           event.calorieDailyGoal,
         ),
       );

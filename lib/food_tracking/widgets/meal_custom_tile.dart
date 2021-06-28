@@ -12,15 +12,18 @@ class MealCustomTile extends StatelessWidget {
     Key? key,
     this.meal,
     required this.title,
+    required this.mealType,
   }) : super(key: key);
 
   final Meal? meal;
   final String title;
+  final MealType mealType;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => MealCustomTileBloc(
+        mealType: mealType,
         meal: meal,
         calorieDailyGoalBloc: BlocProvider.of<CalorieDailyGoalBloc>(context),
       ),
@@ -92,7 +95,7 @@ class _MainTile extends StatelessWidget {
   }
 
   double calculateHeight(MealCustomTileState state) {
-    return state.hasFoods() ? (state.foods.length < 5 ? (state.props.length * 65) : (4 * 65)) : 0;
+    return state.hasFoods() ? (state.foods.length < 5 ? (state.foods.length * 65) : (4 * 65)) : 0;
   }
 }
 
@@ -126,13 +129,23 @@ class _ColapsedTile extends StatelessWidget {
               color: state.isExpanded ? state.textActiveColor.withOpacity(0.4) : Colors.grey.shade400,
             ),
           ),
-          trailing: Text(
-            (meal?.totalCalories.toStringAsFixed(0) ?? '0') +
-                ' cal' +
-                '${state.mealCalorieGoal != null ? (' / ' + state.mealCalorieGoal.toString() + 'cal') : ''}',
-            style: TextStyle(
-              color: state.isExpanded ? state.textActiveColor : Colors.black,
-            ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                (meal?.totalCalories.toStringAsFixed(0) ?? '0') + ' cal',
+                style: TextStyle(
+                  color: state.isExpanded ? state.textActiveColor : Colors.black,
+                ),
+              ),
+              if (state.mealCalorieGoal != null)
+                Text(
+                  ' / ' + state.mealCalorieGoal.toString() + ' cal',
+                  style: TextStyle(
+                    color: state.isExpanded ? state.textActiveColor.withOpacity(0.4) : Colors.grey.shade400,
+                  ),
+                )
+            ],
           ),
           onTap: () {
             BlocProvider.of<MealCustomTileBloc>(context).add(MealCustomTileExpandedPressed());
