@@ -78,11 +78,14 @@ class EditCalorieDailyGoalView extends StatelessWidget {
                 FatsAmountInput(),
                 CarbsAmountInput(),
                 ProteinAmountInput(),
-                MealsTitle(),
-                BreakfastInput(),
-                LunchInput(),
-                DinnerInput(),
-                SnackInput()
+                MealsTitle(
+                  children: [
+                    BreakfastInput(),
+                    LunchInput(),
+                    DinnerInput(),
+                    SnackInput(),
+                  ],
+                ),
               ],
             );
           },
@@ -277,10 +280,37 @@ class SnackInput extends StatelessWidget {
 }
 
 class MealsTitle extends StatelessWidget {
-  const MealsTitle({Key? key}) : super(key: key);
+  const MealsTitle({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
+
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    return Text('Meal goals');
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade200,
+      ),
+      width: size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Meals goals:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+          ...children,
+        ],
+      ),
+    );
   }
 }
