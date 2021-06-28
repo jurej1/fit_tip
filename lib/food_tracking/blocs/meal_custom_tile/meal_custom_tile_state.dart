@@ -35,16 +35,14 @@ class MealCustomTileState extends Equatable {
   }
 
   static int? calorieMealGoal(MealType? type, CalorieDailyGoal? calorieDailyGoal) {
-    if (calorieDailyGoal == null || type == null) return null;
-
     if (type == MealType.breakfast) {
-      return calorieDailyGoal.breakfast;
+      return calorieDailyGoal?.breakfast;
     } else if (type == MealType.lunch) {
-      return calorieDailyGoal.lunch;
+      return calorieDailyGoal?.lunch;
     } else if (type == MealType.dinner) {
-      return calorieDailyGoal.dinner;
+      return calorieDailyGoal?.dinner;
     } else if (type == MealType.snack) {
-      return calorieDailyGoal.snack;
+      return calorieDailyGoal?.snack;
     }
   }
 
