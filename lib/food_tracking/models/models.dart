@@ -8,3 +8,4 @@ export 'amount_detail_consumed.dart';
 export 'vitamin_input.dart';
 export 'meal_type_input_model.dart';
 export 'vitamins_list_model.dart';
+export 'calorie_daily_consumption_goal.dart';

@@ -13,7 +13,7 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
   CalorieDailyGoalBloc({
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _foodRepository = foodRepository,
+  })  : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
         super(CalorieDailyGoalLoading());
 

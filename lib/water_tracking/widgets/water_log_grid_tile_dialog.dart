@@ -76,7 +76,6 @@ class _Header extends StatelessWidget {
                       deleteIconColor: Colors.white,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       onDeleted: () async {
-                        //TODO Prevent chosing the time in the future
                         TimeOfDay? selectedTime = await showTimePicker(
                           context: context,
                           initialTime: log.time,
