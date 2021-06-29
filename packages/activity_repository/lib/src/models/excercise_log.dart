@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:activity_repository/activity_repository.dart';
 import 'package:activity_repository/src/entity/entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ExcerciseLog extends Equatable {
@@ -78,5 +79,11 @@ class ExcerciseLog extends Equatable {
       startTime: entity.startTime,
       id: entity.id,
     );
+  }
+
+  static List<ExcerciseLog> fromQuerySnapshot(QuerySnapshot snapshot) {
+    if (snapshot.size == 0) return [];
+
+    return snapshot.docs.map((e) => ExcerciseLog.fromEntity(ExcerciseLogEntity.fromDocumentSnapshot(e))).toList();
   }
 }
