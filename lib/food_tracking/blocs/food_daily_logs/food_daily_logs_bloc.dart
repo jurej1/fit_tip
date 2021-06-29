@@ -13,7 +13,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   FoodDailyLogsBloc({
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _foodRepository = foodRepository,
+  })  : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
         super(FoodDailyLogsLoading());
 
@@ -77,9 +77,6 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
   Stream<FoodDailyLogsState> _mapLogUpdatedToState(FoodDailyLogsLogUpdated event) async* {
     if (_isAuth && state is FoodDailyLogsLoadSuccess && event.foodItem != null) {
       MealDay mealDay = (state as FoodDailyLogsLoadSuccess).mealDay;
-
-      final item = event.foodItem!;
-      final MealType type = item.mealType;
 
       List<FoodItem> updatedList = mealDay.getAllFoodItems().map((e) {
         if (e.id == event.foodItem!.id) {
