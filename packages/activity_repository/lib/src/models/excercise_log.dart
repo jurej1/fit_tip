@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:activity_repository/activity_repository.dart';
 import 'package:activity_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
@@ -9,6 +11,7 @@ class ExcerciseLog extends Equatable {
   final Intensity intensity;
   final int calories;
   final DateTime startTime;
+  final ExcerciseType type;
 
   const ExcerciseLog({
     String? id,
@@ -17,6 +20,7 @@ class ExcerciseLog extends Equatable {
     required this.intensity,
     required this.calories,
     required this.startTime,
+    required this.type,
   }) : this.id = id ?? '';
 
   @override
@@ -28,6 +32,7 @@ class ExcerciseLog extends Equatable {
       intensity,
       calories,
       startTime,
+      type,
     ];
   }
 
@@ -38,6 +43,7 @@ class ExcerciseLog extends Equatable {
     Intensity? intensity,
     int? calories,
     DateTime? startTime,
+    ExcerciseType? type,
   }) {
     return ExcerciseLog(
       id: id ?? this.id,
@@ -46,11 +52,14 @@ class ExcerciseLog extends Equatable {
       intensity: intensity ?? this.intensity,
       calories: calories ?? this.calories,
       startTime: startTime ?? this.startTime,
+      type: type ?? this.type,
     );
   }
 
   ExcerciseLogEntity toEntity() {
     return ExcerciseLogEntity(
+      id: id,
+      type: type,
       name: name,
       duration: duration,
       intensity: intensity,
@@ -59,13 +68,15 @@ class ExcerciseLog extends Equatable {
     );
   }
 
-  static ExcerciseLog fromEntity(ExcerciseLog entity) {
+  static ExcerciseLog fromEntity(ExcerciseLogEntity entity) {
     return ExcerciseLog(
+      type: entity.type,
       name: entity.name,
       duration: entity.duration,
       intensity: entity.intensity,
       calories: entity.calories,
       startTime: entity.startTime,
+      id: entity.id,
     );
   }
 }

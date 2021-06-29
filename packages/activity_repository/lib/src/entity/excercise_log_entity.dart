@@ -9,6 +9,7 @@ class _DocKeys {
   static String intensity = 'intensity';
   static String calories = 'calories';
   static String startTime = 'startTime';
+  static String type = 'type';
 }
 
 class ExcerciseLogEntity extends Equatable {
@@ -18,6 +19,7 @@ class ExcerciseLogEntity extends Equatable {
   final Intensity intensity;
   final int calories;
   final DateTime startTime;
+  final ExcerciseType type;
 
   ExcerciseLogEntity({
     String? id,
@@ -26,6 +28,7 @@ class ExcerciseLogEntity extends Equatable {
     required this.intensity,
     required this.calories,
     required this.startTime,
+    required this.type,
   }) : this.id = id ?? '';
 
   @override
@@ -37,6 +40,7 @@ class ExcerciseLogEntity extends Equatable {
       intensity,
       calories,
       startTime,
+      type,
     ];
   }
 
@@ -47,6 +51,7 @@ class ExcerciseLogEntity extends Equatable {
     Intensity? intensity,
     int? calories,
     DateTime? startTime,
+    ExcerciseType? type,
   }) {
     return ExcerciseLogEntity(
       id: id ?? this.id,
@@ -55,6 +60,7 @@ class ExcerciseLogEntity extends Equatable {
       intensity: intensity ?? this.intensity,
       calories: calories ?? this.calories,
       startTime: startTime ?? this.startTime,
+      type: type ?? this.type,
     );
   }
 
@@ -65,6 +71,7 @@ class ExcerciseLogEntity extends Equatable {
       _DocKeys.intensity: describeEnum(this.intensity),
       _DocKeys.name: this.name,
       _DocKeys.startTime: Timestamp.fromDate(this.startTime),
+      _DocKeys.type: describeEnum(this.type),
     };
   }
 
@@ -72,11 +79,10 @@ class ExcerciseLogEntity extends Equatable {
     final data = snap.data() as Map<String, dynamic>;
 
     return ExcerciseLogEntity(
+      type: ExcerciseType.values.firstWhere((e) => describeEnum(e) == describeEnum(data[_DocKeys.type])),
       name: data[_DocKeys.name],
       duration: data[_DocKeys.duration],
-      intensity: Intensity.values.firstWhere(
-        (e) => describeEnum(e) == describeEnum(data[_DocKeys.intensity]),
-      ),
+      intensity: Intensity.values.firstWhere((e) => describeEnum(e) == describeEnum(data[_DocKeys.intensity])),
       calories: data[_DocKeys.calories],
       startTime: data[_DocKeys.startTime],
     );
