@@ -35,8 +35,4 @@ class ActivityRepository {
   Future<QuerySnapshot> getExcerciseLogsByExcerciseType(String userId, ExcerciseType type) {
     return _activityTrackingRef(userId).where('type', isEqualTo: describeEnum(type)).get();
   }
-
-  Future<QuerySnapshot> getExcerciseLogsByIntensity(String userId, Intensity intensity) {
-    return _activityTrackingRef(userId).where('intensity', isEqualTo: describeEnum(intensity)).get();
-  }
 }
