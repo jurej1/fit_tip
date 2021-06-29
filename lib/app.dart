@@ -1,3 +1,4 @@
+import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
   final WeightRepository _weightRepository;
   final WaterRepository _waterRepository;
   final FoodRepository _foodRepository;
+  final ActivityRepository _activityRepository;
 
   App({
     Key? key,
@@ -21,10 +23,12 @@ class App extends StatelessWidget {
     required WeightRepository weightRepository,
     required WaterRepository waterRepository,
     required FoodRepository foodRepository,
-  })   : _authenticationRepository = authenticationRepository,
+    required ActivityRepository activityRepository,
+  })  : _authenticationRepository = authenticationRepository,
         _waterRepository = waterRepository,
         _weightRepository = weightRepository,
         _foodRepository = foodRepository,
+        _activityRepository = activityRepository,
         super(key: key);
 
   final _navigatorState = GlobalKey<NavigatorState>();
