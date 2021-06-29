@@ -8,9 +8,8 @@ abstract class EditCalorieDailyGoalEvent extends Equatable {
 }
 
 class EditCalorieDailyGoalAmountChanged extends EditCalorieDailyGoalEvent {
-  final String? amount;
-
-  EditCalorieDailyGoalAmountChanged({this.amount});
+  final String amount;
+  EditCalorieDailyGoalAmountChanged(this.amount);
 
   @override
   List<Object?> get props => [amount];
@@ -38,6 +37,42 @@ class EditCalorieDailyGoalFatsChanged extends EditCalorieDailyGoalEvent {
 
   @override
   List<Object?> get props => [amount];
+}
+
+class EditCalorieDailyGoalBreakfastChanged extends EditCalorieDailyGoalEvent {
+  final String value;
+
+  const EditCalorieDailyGoalBreakfastChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditCalorieDailyGoalLunchChanged extends EditCalorieDailyGoalEvent {
+  final String value;
+
+  const EditCalorieDailyGoalLunchChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditCalorieDailyGoalDinnerChanged extends EditCalorieDailyGoalEvent {
+  final String value;
+
+  const EditCalorieDailyGoalDinnerChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class EditCalorieDailyGoalSnackChanged extends EditCalorieDailyGoalEvent {
+  final String value;
+
+  const EditCalorieDailyGoalSnackChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class EditCalorieDailyGoalFormSubmit extends EditCalorieDailyGoalEvent {}

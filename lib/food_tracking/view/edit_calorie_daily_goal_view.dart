@@ -57,6 +57,7 @@ class EditCalorieDailyGoalView extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.check),
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalFormSubmit());
               },
             )
@@ -77,6 +78,14 @@ class EditCalorieDailyGoalView extends StatelessWidget {
                 FatsAmountInput(),
                 CarbsAmountInput(),
                 ProteinAmountInput(),
+                MealsTitle(
+                  children: [
+                    BreakfastInput(),
+                    LunchInput(),
+                    DinnerInput(),
+                    SnackInput(),
+                  ],
+                ),
               ],
             );
           },
@@ -98,22 +107,35 @@ class CaloriesAmountInputField extends StatelessWidget {
             Text('Daily goal:'),
             Expanded(
               child: TextFormField(
-                key: ValueKey(state.calorieGoalConsumption),
-                initialValue: state.calorieGoalConsumption.value,
-                textAlign: TextAlign.right,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                ),
-                onChanged: (val) {
-                  BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(amount: val));
-                },
-              ),
+                  key: ValueKey(state.calorieDailyConsumptionGoal),
+                  initialValue: state.calorieDailyConsumptionGoal.value,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    errorText: showErrorTest(state),
+                  ),
+                  onChanged: (val) {
+                    BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(val));
+                  }),
             ),
             Text('cal'),
           ],
         );
       },
     );
+  }
+
+  String? showErrorTest(EditCalorieDailyGoalState state) {
+    if (state.calorieDailyConsumptionGoal.invalid) {
+      CalorieDailyConsumptionGoalValidationError? error = state.calorieDailyConsumptionGoal.error;
+
+      if (error == CalorieDailyConsumptionGoalValidationError.invalid) {
+        return 'Invalid';
+      } else if (error == CalorieDailyConsumptionGoalValidationError.mealsContainsMoreCalories) {
+        return 'Meals contain more calories';
+      }
+    }
+    return null;
   }
 }
 
@@ -173,6 +195,122 @@ class CarbsAmountInput extends StatelessWidget {
           key: ValueKey(state.carbs),
         );
       },
+    );
+  }
+}
+
+class BreakfastInput extends StatelessWidget {
+  const BreakfastInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
+      builder: (context, state) {
+        return RowInputField(
+          initialValue: state.breakfast.value,
+          onChanged: (val) {
+            BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalBreakfastChanged(val));
+          },
+          unit: 'cal',
+          title: 'Breakfast',
+        );
+      },
+    );
+  }
+}
+
+class LunchInput extends StatelessWidget {
+  const LunchInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
+      builder: (context, state) {
+        return RowInputField(
+          initialValue: state.lunch.value,
+          onChanged: (val) {
+            BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalLunchChanged(val));
+          },
+          unit: 'cal',
+          title: 'Lunch',
+        );
+      },
+    );
+  }
+}
+
+class DinnerInput extends StatelessWidget {
+  const DinnerInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
+      builder: (context, state) {
+        return RowInputField(
+          initialValue: state.dinner.value,
+          onChanged: (value) {
+            BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalDinnerChanged(value));
+          },
+          unit: 'cal',
+          title: 'Dinner',
+        );
+      },
+    );
+  }
+}
+
+class SnackInput extends StatelessWidget {
+  const SnackInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
+      builder: (context, state) {
+        return RowInputField(
+          initialValue: state.snack.value,
+          onChanged: (value) {
+            BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalSnackChanged(value));
+          },
+          unit: 'cal',
+          title: 'Snack',
+        );
+      },
+    );
+  }
+}
+
+class MealsTitle extends StatelessWidget {
+  const MealsTitle({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade200,
+      ),
+      width: size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Meals goals:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+          ),
+          ...children,
+        ],
+      ),
     );
   }
 }

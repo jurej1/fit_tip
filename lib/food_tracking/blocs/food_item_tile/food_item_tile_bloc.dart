@@ -10,11 +10,12 @@ part 'food_item_tile_event.dart';
 part 'food_item_tile_state.dart';
 
 class FoodItemTileBloc extends Bloc<FoodItemTileEvent, FoodItemTileState> {
-  FoodItemTileBloc({
-    required FoodItem foodItem,
-    required FoodRepository foodRepository,
-    required AuthenticationBloc authenticationBloc,
-  })   : _authenticationBloc = authenticationBloc,
+  FoodItemTileBloc(
+      {required FoodItem foodItem,
+      required FoodRepository foodRepository,
+      required AuthenticationBloc authenticationBloc,
+      int? caloriegoal})
+      : _authenticationBloc = authenticationBloc,
         _foodRepository = foodRepository,
         super(FoodItemTileInitial(foodItem));
 

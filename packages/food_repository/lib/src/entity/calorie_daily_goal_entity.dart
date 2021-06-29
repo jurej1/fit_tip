@@ -7,6 +7,10 @@ class _DocKeys {
   static String fats = 'fats';
   static String proteins = 'proteins';
   static String carbs = 'carbs';
+  static String breakfast = 'breakfast';
+  static String lunch = 'lunch';
+  static String dinner = 'dinner';
+  static String snack = 'snack';
 }
 
 class CalorieDailyGoalEntity extends Equatable {
@@ -15,15 +19,23 @@ class CalorieDailyGoalEntity extends Equatable {
   final int? fats;
   final int? proteins;
   final int? carbs;
+  final int? breakfast;
+  final int? lunch;
+  final int? dinner;
+  final int? snack;
   final String id;
 
   CalorieDailyGoalEntity({
     String? id,
-    this.amount = 2000,
     DateTime? date,
+    this.amount = 2000,
     this.fats,
     this.proteins,
     this.carbs,
+    this.breakfast,
+    this.lunch,
+    this.dinner,
+    this.snack,
   })  : this.date = date ?? DateTime.now(),
         this.id = id ?? generateId(date ?? DateTime.now());
 
@@ -35,6 +47,10 @@ class CalorieDailyGoalEntity extends Equatable {
       fats,
       proteins,
       carbs,
+      breakfast,
+      lunch,
+      dinner,
+      snack,
       id,
     ];
   }
@@ -45,6 +61,10 @@ class CalorieDailyGoalEntity extends Equatable {
     int? fats,
     int? proteins,
     int? carbs,
+    int? breakfast,
+    int? lunch,
+    int? dinner,
+    int? snack,
     String? id,
   }) {
     return CalorieDailyGoalEntity(
@@ -53,6 +73,10 @@ class CalorieDailyGoalEntity extends Equatable {
       fats: fats ?? this.fats,
       proteins: proteins ?? this.proteins,
       carbs: carbs ?? this.carbs,
+      breakfast: breakfast ?? this.breakfast,
+      lunch: lunch ?? this.lunch,
+      dinner: dinner ?? this.dinner,
+      snack: snack ?? this.snack,
       id: id ?? this.id,
     );
   }
@@ -66,6 +90,10 @@ class CalorieDailyGoalEntity extends Equatable {
       if (this.carbs != null) _DocKeys.carbs: this.carbs,
       if (this.proteins != null) _DocKeys.proteins: this.proteins,
       if (this.fats != null) _DocKeys.fats: this.fats,
+      if (this.dinner != null) _DocKeys.dinner: this.dinner,
+      if (this.snack != null) _DocKeys.snack: this.snack,
+      if (this.lunch != null) _DocKeys.lunch: this.lunch,
+      if (this.breakfast != null) _DocKeys.breakfast: this.breakfast,
     };
   }
 
@@ -84,6 +112,10 @@ class CalorieDailyGoalEntity extends Equatable {
       carbs: data[_DocKeys.carbs],
       fats: data[_DocKeys.fats],
       proteins: data[_DocKeys.proteins],
+      breakfast: data[_DocKeys.breakfast],
+      dinner: data[_DocKeys.dinner],
+      lunch: data[_DocKeys.lunch],
+      snack: data[_DocKeys.snack],
     );
   }
 }
