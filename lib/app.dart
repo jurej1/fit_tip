@@ -41,6 +41,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: _weightRepository),
         RepositoryProvider.value(value: _waterRepository),
         RepositoryProvider.value(value: _foodRepository),
+        RepositoryProvider.value(value: _activityRepository)
       ],
       child: MultiBlocProvider(
         providers: [
