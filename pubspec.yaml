@@ -19,6 +19,8 @@ dependencies:
     path: packages/water_repository
   weight_repository:
     path: packages/weight_repository
+  activity_repository:
+    path: packages/activity_repository
   another_flushbar: ^1.10.18
   carousel_slider: ^4.0.0
   cloud_firestore: ^2.2.0
