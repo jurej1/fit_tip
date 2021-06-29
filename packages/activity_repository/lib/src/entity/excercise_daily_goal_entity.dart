@@ -28,19 +28,32 @@ class ExcerciseDailyGoalEntity extends Equatable {
         this.date = date ?? DateTime.now();
 
   @override
-  List<Object> get props => [caloriesBurnedPerWeek, workoutsPerWeek, minutesPerWorkout, minutesPerDay];
+  List<Object> get props {
+    return [
+      caloriesBurnedPerWeek,
+      workoutsPerWeek,
+      minutesPerWorkout,
+      minutesPerDay,
+      id,
+      date,
+    ];
+  }
 
   ExcerciseDailyGoalEntity copyWith({
     int? caloriesBurnedPerWeek,
     int? workoutsPerWeek,
     int? minutesPerWorkout,
     int? minutesPerDay,
+    String? id,
+    DateTime? date,
   }) {
     return ExcerciseDailyGoalEntity(
       caloriesBurnedPerWeek: caloriesBurnedPerWeek ?? this.caloriesBurnedPerWeek,
       workoutsPerWeek: workoutsPerWeek ?? this.workoutsPerWeek,
       minutesPerWorkout: minutesPerWorkout ?? this.minutesPerWorkout,
       minutesPerDay: minutesPerDay ?? this.minutesPerDay,
+      id: id ?? this.id,
+      date: date ?? this.date,
     );
   }
 
