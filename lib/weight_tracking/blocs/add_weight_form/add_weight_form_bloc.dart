@@ -4,7 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/enums/enums.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:fit_tip/weight_tracking/weight.dart' as model;
 import 'package:flutter/material.dart';
 
