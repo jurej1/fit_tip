@@ -3,6 +3,7 @@ import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/blocs/food_item_detail/food_item_detail_bloc.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/food_tracking/widgets/widgets.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -13,16 +14,17 @@ class AddFoodLogView extends StatelessWidget {
 
   static MaterialPageRoute route(
     BuildContext context, {
-    FoodLogFocusedDateBloc? foodLogFocusedDateBloc,
     FoodItemDetailBloc? fooditemDetailBloc,
   }) {
+    DaySelectorBloc daySelectorBloc = BlocProvider.of<DaySelectorBloc>(context);
+
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => AddFoodItemBloc(
-                focusedDate: foodLogFocusedDateBloc,
+                focusedDate: daySelectorBloc,
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
                 foodItem: fooditemDetailBloc?.state.item,

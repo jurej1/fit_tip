@@ -1,6 +1,7 @@
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -11,7 +12,7 @@ class EditCalorieDailyGoalView extends StatelessWidget {
 
   static MaterialPageRoute route(BuildContext context) {
     final calorieDailyGoalBloc = BlocProvider.of<CalorieDailyGoalBloc>(context);
-    final foodLogFocusedDate = BlocProvider.of<FoodLogFocusedDateBloc>(context);
+    final daySelectorBloc = BlocProvider.of<DaySelectorBloc>(context);
 
     return MaterialPageRoute(
       builder: (context) {
@@ -21,7 +22,7 @@ class EditCalorieDailyGoalView extends StatelessWidget {
               create: (_) => EditCalorieDailyGoalBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
-                foodLogFocusedDateBloc: foodLogFocusedDate,
+                foodLogFocusedDateBloc: daySelectorBloc,
                 calorieDailyGoalBloc: calorieDailyGoalBloc,
               ),
             ),

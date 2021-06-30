@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:formz/formz.dart';
@@ -15,11 +16,11 @@ part 'add_food_item_state.dart';
 
 class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
   AddFoodItemBloc({
-    FoodLogFocusedDateBloc? focusedDate,
+    DaySelectorBloc? focusedDate,
     FoodItem? foodItem,
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _foodRepository = foodRepository,
+  })  : _foodRepository = foodRepository,
         _authenticationBloc = authenticationBloc,
         super(
           foodItem == null ? AddFoodItemState.pure(date: focusedDate?.state.selectedDate) : AddFoodItemState.dirty(item: foodItem),

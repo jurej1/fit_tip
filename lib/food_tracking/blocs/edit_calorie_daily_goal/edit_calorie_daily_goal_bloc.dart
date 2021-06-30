@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:formz/formz.dart';
 
@@ -15,7 +16,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
   EditCalorieDailyGoalBloc({
     required AuthenticationBloc authenticationBloc,
     required FoodRepository foodRepository,
-    required FoodLogFocusedDateBloc foodLogFocusedDateBloc,
+    required DaySelectorBloc foodLogFocusedDateBloc,
     required CalorieDailyGoalBloc calorieDailyGoalBloc,
   })  : _authenticationBloc = authenticationBloc,
         _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
@@ -24,7 +25,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
 
   final AuthenticationBloc _authenticationBloc;
   final FoodRepository _foodRepository;
-  final FoodLogFocusedDateBloc _foodLogFocusedDateBloc;
+  final DaySelectorBloc _foodLogFocusedDateBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;

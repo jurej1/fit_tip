@@ -19,6 +19,10 @@ class DaySelectorBloc extends Bloc<DaySelectorEvent, DaySelectorState> {
       }
     } else if (event is DaySelectorPreviousDayRequested) {
       yield state.copyWith(selectedDate: state.selectedDate.subtract(const Duration(days: 1)));
+    } else if (event is DaySelectorDatePicked) {
+      if (event.date != null) {
+        yield state.copyWith(selectedDate: event.date);
+      }
     }
   }
 }
