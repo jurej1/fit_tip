@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/blocs/water_sheet_tile/water_sheet_tile_bloc.dart';
 import 'package:fit_tip/water_tracking/widgets/widgets.dart';
@@ -44,7 +45,7 @@ class AddWaterLogSheet extends StatelessWidget {
                         cup: item,
                         authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                         waterRepository: RepositoryProvider.of<WaterRepository>(context),
-                        waterLogFocusedDayBloc: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+                        waterLogFocusedDayBloc: BlocProvider.of<DaySelectorBloc>(context),
                       ),
                     ),
                   ],

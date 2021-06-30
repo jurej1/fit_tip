@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/blocs/blocs.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/blocs/add_water_daily_goal/add_water_daily_goal_bloc.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:water_repository/water_repository.dart';
 class AddWaterDailyGoalView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     final waterDailyGoalBloc = BlocProvider.of<WaterDailyGoalBloc>(context);
-    final waterDayLogFocusedDate = BlocProvider.of<WaterLogFocusedDayBloc>(context);
+    final daySelectorBloc = BlocProvider.of<DaySelectorBloc>(context);
 
     return MaterialPageRoute(builder: (_) {
       return MultiBlocProvider(
@@ -17,7 +18,7 @@ class AddWaterDailyGoalView extends StatelessWidget {
           BlocProvider<AddWaterDailyGoalBloc>(
             create: (context) => AddWaterDailyGoalBloc(
               waterDailyGoalBloc: waterDailyGoalBloc,
-              waterLogFocusedDayBloc: waterDayLogFocusedDate,
+              waterLogFocusedDayBloc: daySelectorBloc,
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
