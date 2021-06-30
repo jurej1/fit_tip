@@ -1,4 +1,7 @@
+import 'package:fit_tip/excercise_tracking/activity_tracking.dart';
+import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExcerciseDailyTrackingView extends StatelessWidget {
   const ExcerciseDailyTrackingView({Key? key}) : super(key: key);
@@ -6,7 +9,14 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
   static route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return ExcerciseDailyTrackingView();
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => DaySelectorBloc(),
+            ),
+          ],
+          child: ExcerciseDailyTrackingView(),
+        );
       },
     );
   }
@@ -16,6 +26,11 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Excercise tracking'),
+      ),
+      body: Column(
+        children: [
+          ExcerciseDaySelector(),
+        ],
       ),
     );
   }

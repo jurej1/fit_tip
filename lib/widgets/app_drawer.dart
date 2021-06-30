@@ -1,3 +1,4 @@
+import 'package:fit_tip/excercise_tracking/activity_tracking.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
@@ -32,6 +33,13 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).push(FoodDailyLogsView.route(context));
               },
             ),
+            ListTile(
+              leading: Icon(Icons.sports),
+              title: Text('Excercise tracking'),
+              onTap: () {
+                Navigator.of(context).push(ExcerciseDailyTrackingView.route(context));
+              },
+            )
           ],
         ),
       ),
