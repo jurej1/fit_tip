@@ -1,8 +1,8 @@
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
+import 'package:fit_tip/widgets/day_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class WaterLogDaySelector extends StatelessWidget {
   @override
@@ -13,39 +13,12 @@ class WaterLogDaySelector extends StatelessWidget {
         BlocProvider.of<WaterLogDayBloc>(context).add(WaterLogFocusedDayUpdated(state.selectedDate));
       },
       builder: (context, state) {
-        return Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios_rounded),
-                onPressed: () {
-                  BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogPreviousDayPressed());
-                },
-              ),
-              TextButton(
-                onPressed: () async {
-                  DateTime? value = await showDatePicker(
-                    context: context,
-                    initialDate: state.selectedDate,
-                    firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
-                    lastDate: DateTime.now(),
-                  );
-
-                  BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogDatePicked(value));
-                },
-                child: Text(
-                  DateFormat('d.MMMM.yyyy').format(state.selectedDate),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.arrow_forward_ios_rounded),
-                onPressed: () {
-                  BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogNextDayPressed());
-                },
-              ),
-            ],
-          ),
+        return DaySelector(
+          arrowBackPressed: () => BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogPreviousDayPressed()),
+          arrowFowardPressed: () => BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogNextDayPressed()),
+          selectedDate: state.selectedDate,
+          firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
+          dayChoosed: (DateTime? date) => BlocProvider.of<WaterLogFocusedDayBloc>(context).add(WaterLogDatePicked(date)),
         );
       },
     );
