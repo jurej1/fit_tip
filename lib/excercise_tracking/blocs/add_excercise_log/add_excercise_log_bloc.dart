@@ -21,7 +21,6 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
       double index = offset / event.itemWidth;
 
       yield state.copyWith(
-        offset: event.controller.offset,
         focusedIndex: index.round(),
       );
     }

@@ -1,20 +1,19 @@
 part of 'add_excercise_log_bloc.dart';
 
 class AddExcerciseLogState extends Equatable {
-  const AddExcerciseLogState({this.offset = 0.0, this.focusedIndex = 0});
+  const AddExcerciseLogState({
+    this.focusedIndex = 0,
+  });
 
-  final double offset;
   final int focusedIndex;
 
   @override
-  List<Object> get props => [offset, focusedIndex];
+  List<Object> get props => [focusedIndex];
 
   AddExcerciseLogState copyWith({
-    double? offset,
     int? focusedIndex,
   }) {
     return AddExcerciseLogState(
-      offset: offset ?? this.offset,
       focusedIndex: focusedIndex ?? this.focusedIndex,
     );
   }
