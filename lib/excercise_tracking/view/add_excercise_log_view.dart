@@ -1,3 +1,5 @@
+import 'package:activity_repository/activity_repository.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,10 @@ class AddExcerciseLogView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => AddExcerciseLogBloc(),
+              create: (context) => AddExcerciseLogBloc(
+                activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              ),
             ),
             BlocProvider.value(
               value: excerciseDailyListBloc,
