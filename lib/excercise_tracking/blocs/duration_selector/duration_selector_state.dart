@@ -1,22 +1,11 @@
-part of 'add_excercise_log_bloc.dart';
+part of 'duration_selector_bloc.dart';
 
-class AddExcerciseLogState extends Equatable {
-  const AddExcerciseLogState({
-    this.focusedIndex = 0,
-  });
+class DurationSelectorState extends Equatable {
+  const DurationSelectorState({this.focusedIndex = 0});
 
   final int focusedIndex;
-
   @override
   List<Object> get props => [focusedIndex];
-
-  AddExcerciseLogState copyWith({
-    int? focusedIndex,
-  }) {
-    return AddExcerciseLogState(
-      focusedIndex: focusedIndex ?? this.focusedIndex,
-    );
-  }
 
   double getAnimateToValue(double itemWidth) {
     return (itemWidth * focusedIndex);
@@ -35,5 +24,13 @@ class AddExcerciseLogState extends Equatable {
     int min = (value - hours).toInt() * 60;
 
     return '${hours}h ${min}min';
+  }
+
+  DurationSelectorState copyWith({
+    int? focusedIndex,
+  }) {
+    return DurationSelectorState(
+      focusedIndex: focusedIndex ?? this.focusedIndex,
+    );
   }
 }
