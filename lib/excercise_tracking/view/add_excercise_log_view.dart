@@ -84,7 +84,7 @@ class _DurationSelectorState extends State<DurationSelector> {
             width: 20,
           );
         },
-        itemCount: 1440,
+        itemCount: 288,
       ),
     );
   }
