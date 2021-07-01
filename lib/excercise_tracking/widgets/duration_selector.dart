@@ -2,14 +2,26 @@ import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DurationSelector extends StatefulWidget {
+class DurationSelector extends StatelessWidget {
   const DurationSelector({Key? key}) : super(key: key);
 
   @override
-  _DurationSelectorState createState() => _DurationSelectorState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => DurationSelectorBloc(),
+      child: _Body(),
+    );
+  }
 }
 
-class _DurationSelectorState extends State<DurationSelector> {
+class _Body extends StatefulWidget {
+  const _Body({Key? key}) : super(key: key);
+
+  @override
+  __BodyState createState() => __BodyState();
+}
+
+class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
@@ -20,11 +32,10 @@ class _DurationSelectorState extends State<DurationSelector> {
     _scrollController = ScrollController();
   }
 
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocListener<AddExcerciseLogBloc, AddExcerciseLogState>(
+    return BlocListener<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         _scrollController.animateTo(
           state.getAnimateToValue(itemWidth),
@@ -38,7 +49,7 @@ class _DurationSelectorState extends State<DurationSelector> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
+            BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
               builder: (context, state) {
                 return Container(
                   padding: EdgeInsets.all(10),
@@ -54,8 +65,8 @@ class _DurationSelectorState extends State<DurationSelector> {
               child: NotificationListener<ScrollNotification>(
                 onNotification: (scrollNotification) {
                   if (scrollNotification is ScrollEndNotification) {
-                    BlocProvider.of<AddExcerciseLogBloc>(context).add(
-                      AddExcerciseLogDurationUpdated(
+                    BlocProvider.of<DurationSelectorBloc>(context).add(
+                      DurationSelectorValueUpdated(
                         controller: _scrollController,
                         itemWidth: itemWidth,
                         screenWidth: size.width,

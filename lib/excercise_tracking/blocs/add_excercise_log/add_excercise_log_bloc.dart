@@ -15,14 +15,14 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
     AddExcerciseLogEvent event,
   ) async* {
     if (event is AddExcerciseLogDurationUpdated) {
-      final ScrollController controller = event.controller;
-      final int offset = controller.offset.toInt();
+      // final ScrollController controller = event.controller;
+      // final int offset = controller.offset.toInt();
 
-      double index = offset / event.itemWidth;
+      // double index = offset / event.itemWidth;
 
-      yield state.copyWith(
-        focusedIndex: index.round(),
-      );
+      // yield state.copyWith(
+      //   focusedIndex: index.round(),
+      // );
     }
   }
 }
