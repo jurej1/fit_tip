@@ -8,15 +8,9 @@ abstract class AddExcerciseLogEvent extends Equatable {
 }
 
 class AddExcerciseLogDurationUpdated extends AddExcerciseLogEvent {
-  final ScrollController controller;
-  final double itemWidth;
-  final double screenWidth;
+  final int value;
 
-  const AddExcerciseLogDurationUpdated({
-    required this.controller,
-    required this.itemWidth,
-    required this.screenWidth,
-  });
+  const AddExcerciseLogDurationUpdated([this.value = 0]);
   @override
-  List<Object> get props => [controller, itemWidth, screenWidth];
+  List<Object> get props => [value];
 }

@@ -42,6 +42,8 @@ class __BodyState extends State<_Body> {
           duration: const Duration(milliseconds: 350),
           curve: Curves.fastOutSlowIn,
         );
+
+        BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(state.mapIndexToMinutes()));
       },
       child: Container(
         width: size.width,

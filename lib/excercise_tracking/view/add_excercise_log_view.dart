@@ -34,11 +34,6 @@ class AddExcerciseLogView extends StatelessWidget {
       body: Column(
         children: [
           DurationSelector(),
-          BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
-            builder: (context, state) {
-              return Text('index = ${state.focusedIndex}');
-            },
-          ),
         ],
       ),
     );
