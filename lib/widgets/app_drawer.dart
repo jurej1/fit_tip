@@ -1,4 +1,4 @@
-import 'package:fit_tip/excercise_tracking/activity_tracking.dart';
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
