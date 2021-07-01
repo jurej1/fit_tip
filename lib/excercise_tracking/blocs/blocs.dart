@@ -1,1 +1,1 @@
-export 'excercise_daily_focused_date/excercise_daily_focused_date_bloc.dart';
+export 'excercise_daily_list/excercise_daily_list_bloc.dart';
