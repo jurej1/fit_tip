@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DurationSelector extends StatelessWidget {
-  const DurationSelector({Key? key}) : super(key: key);
+  const DurationSelector({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,12 @@ class __BodyState extends State<_Body> {
     _scrollController = ScrollController();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
@@ -43,7 +51,11 @@ class __BodyState extends State<_Body> {
           curve: Curves.fastOutSlowIn,
         );
 
-        BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(state.mapIndexToMinutes()));
+        BlocProvider.of<AddExcerciseLogBloc>(context).add(
+          AddExcerciseLogDurationUpdated(
+            state.mapIndexToMinutes(),
+          ),
+        );
       },
       child: Container(
         width: size.width,

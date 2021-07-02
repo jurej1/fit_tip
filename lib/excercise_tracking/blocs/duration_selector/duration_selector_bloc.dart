@@ -8,7 +8,15 @@ part 'duration_selector_event.dart';
 part 'duration_selector_state.dart';
 
 class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorState> {
-  DurationSelectorBloc() : super(DurationSelectorState());
+  DurationSelectorBloc({
+    int? duration,
+  }) : super(
+          duration != null
+              ? DurationSelectorState(
+                  focusedIndex: DurationSelectorState.mapMinutesToIndex(duration),
+                )
+              : DurationSelectorState(),
+        );
 
   @override
   Stream<DurationSelectorState> mapEventToState(

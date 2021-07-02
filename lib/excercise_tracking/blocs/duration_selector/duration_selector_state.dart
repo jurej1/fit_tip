@@ -4,6 +4,7 @@ class DurationSelectorState extends Equatable {
   const DurationSelectorState({this.focusedIndex = 0});
 
   final int focusedIndex;
+
   @override
   List<Object> get props => [focusedIndex];
 
@@ -13,6 +14,10 @@ class DurationSelectorState extends Equatable {
 
   int mapIndexToMinutes() {
     return this.focusedIndex * 5;
+  }
+
+  static int mapMinutesToIndex(int minutes) {
+    return (minutes ~/ 5).toInt();
   }
 
   String mapIndexToText() {
