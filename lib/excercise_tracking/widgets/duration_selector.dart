@@ -70,7 +70,7 @@ class __BodyState extends State<_Body> {
             BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
               builder: (context, state) {
                 return Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.green,
