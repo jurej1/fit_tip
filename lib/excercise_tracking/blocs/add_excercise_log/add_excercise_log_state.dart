@@ -10,6 +10,8 @@ class AddExcerciseLogState extends Equatable {
   final ExcerciseStartDate date;
   final ExcerciseTypeInput type;
 
+  final ExcerciseLog? excerciseLog;
+
   const AddExcerciseLogState({
     this.duration = const ExcerciseDuration.pure(),
     this.status = FormzStatus.pure,
@@ -18,6 +20,7 @@ class AddExcerciseLogState extends Equatable {
     this.calories = const ExcerciseCalories.pure(),
     required this.time,
     required this.date,
+    this.excerciseLog,
     this.type = const ExcerciseTypeInput.pure(),
   });
 
@@ -29,7 +32,7 @@ class AddExcerciseLogState extends Equatable {
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       duration,
       status,
@@ -39,6 +42,7 @@ class AddExcerciseLogState extends Equatable {
       time,
       date,
       type,
+      excerciseLog,
     ];
   }
 
@@ -51,6 +55,7 @@ class AddExcerciseLogState extends Equatable {
     ExcerciseStartTime? time,
     ExcerciseStartDate? date,
     ExcerciseTypeInput? type,
+    ExcerciseLog? excerciseLog,
   }) {
     return AddExcerciseLogState(
       duration: duration ?? this.duration,
@@ -61,6 +66,7 @@ class AddExcerciseLogState extends Equatable {
       time: time ?? this.time,
       date: date ?? this.date,
       type: type ?? this.type,
+      excerciseLog: excerciseLog ?? this.excerciseLog,
     );
   }
 }
