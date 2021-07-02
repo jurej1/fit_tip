@@ -148,6 +148,7 @@ class _TimeInput extends StatelessWidget {
             state.time.value.format(context),
           ),
           onTap: () async {
+            FocusScope.of(context).unfocus();
             TimeOfDay? time = await showTimePicker(context: context, initialTime: state.time.value);
             BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogTimeUpdated(time));
           },
@@ -171,6 +172,8 @@ class _DateInput extends StatelessWidget {
             DateFormat('dd.MMMM.yyyy').format(state.date.value),
           ),
           onTap: () async {
+            FocusScope.of(context).unfocus();
+
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: state.date.value,
@@ -198,6 +201,8 @@ class _ExcerciseTypeInput extends StatelessWidget {
           title: Text('Excercise Type: '),
           trailing: Text(describeEnum(state.type.value)),
           onTap: () async {
+            FocusScope.of(context).unfocus();
+
             ExcerciseType? type = await showModalBottomSheet<ExcerciseType?>(
               context: context,
               builder: (_) {

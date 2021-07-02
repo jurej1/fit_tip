@@ -19,6 +19,8 @@ class IntensityInput extends StatelessWidget {
           ),
           trailing: Text(describeEnum(state.intensity.value)),
           onTap: () async {
+            FocusScope.of(context).unfocus();
+
             Intensity? intensitsy = await showModalBottomSheet<Intensity?>(
               context: context,
               isScrollControlled: true,
