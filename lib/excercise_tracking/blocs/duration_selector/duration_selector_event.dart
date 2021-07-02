@@ -19,12 +19,3 @@ class DurationSelectorValueUpdated extends DurationSelectorEvent {
   @override
   List<Object> get props => [controller, itemWidth];
 }
-
-class DurationSelectorWidgetWidthUpdated extends DurationSelectorEvent {
-  final double width;
-
-  const DurationSelectorWidgetWidthUpdated(this.width);
-
-  @override
-  List<Object> get props => [width];
-}

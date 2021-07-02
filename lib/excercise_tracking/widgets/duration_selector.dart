@@ -47,8 +47,6 @@ class __BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorWidgetWidthUpdated(context.size!.width));
-
     return BlocListener<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         _scrollController.animateTo(
@@ -101,7 +99,7 @@ class __BodyState extends State<_Body> {
                     itemBuilder: (context, index) {
                       if (index == 0 || index == 289) {
                         return Container(
-                          width: state.widgetWidth * 0.5 - (itemWidth * 0.5),
+                          width: size.width * 0.5 - (itemWidth * 0.5),
                         );
                       }
                       return Container(

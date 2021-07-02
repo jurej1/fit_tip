@@ -24,15 +24,13 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
   ) async* {
     if (event is DurationSelectorValueUpdated) {
       final ScrollController controller = event.controller;
-      final int offset = controller.offset.toInt();
+      final double offset = controller.offset;
 
       double index = offset / event.itemWidth;
 
       yield state.copyWith(
         focusedIndex: index.round(),
       );
-    } else if (event is DurationSelectorWidgetWidthUpdated) {
-      yield state.copyWith(widgetWidth: event.width);
     }
   }
 }
