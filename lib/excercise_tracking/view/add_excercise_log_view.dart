@@ -38,7 +38,7 @@ class AddExcerciseLogView extends StatelessWidget {
       ),
       body: Column(
         children: [
-          DurationSelector(),
+          const DurationSelector(duration: 20),
         ],
       ),
     );

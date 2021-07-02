@@ -33,7 +33,9 @@ class __BodyState extends State<_Body> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController = ScrollController(
+      initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth),
+    );
   }
 
   @override
