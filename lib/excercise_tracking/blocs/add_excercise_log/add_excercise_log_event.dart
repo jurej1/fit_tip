@@ -55,4 +55,12 @@ class AddExcerciseLogDateUpdated extends AddExcerciseLogEvent {
   List<Object?> get props => [value];
 }
 
+class AddExcerciseLogTypeUpdated extends AddExcerciseLogEvent {
+  final ExcerciseType? type;
+
+  const AddExcerciseLogTypeUpdated(this.type);
+  @override
+  List<Object?> get props => [type];
+}
+
 class AddExcerciseLogFormSubmit extends AddExcerciseLogEvent {}

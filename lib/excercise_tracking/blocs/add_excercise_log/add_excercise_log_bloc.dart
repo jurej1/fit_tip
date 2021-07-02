@@ -45,6 +45,8 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
       yield* _mapTimeUpatedToState(event);
     } else if (event is AddExcerciseLogDateUpdated) {
       yield* _mapDateUpdatedToState(event);
+    } else if (event is AddExcerciseLogTypeUpdated) {
+      yield* _mapTypeUpdatedToState(event);
     } else if (event is AddExcerciseLogFormSubmit) {
       yield* _mapFormSubmitToState();
     }
@@ -110,14 +112,25 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
     }
   }
 
+  Stream<AddExcerciseLogState> _mapTypeUpdatedToState(AddExcerciseLogTypeUpdated event) async* {
+    if (event.type != null) {
+      final type = ExcerciseTypeInput.dirty(event.type!);
+
+      yield state.copyWith(
+        type: type,
+        status: Formz.validate([type, state.calories, state.date, state.duration, state.intensity, state.name, state.time]),
+      );
+    }
+  }
+
   Stream<AddExcerciseLogState> _mapFormSubmitToState() async* {
     final calorie = ExcerciseCalories.dirty(state.calories.value);
     final duration = ExcerciseDuration.dirty(state.duration.value);
     final date = ExcerciseStartDate.dirty(state.date.value);
     final time = ExcerciseStartTime.pure(state.time.value);
-    final intensity = ExcerciseIntensity.pure(state.intensity.value);
+    final intensity = ExcerciseIntensity.dirty(state.intensity.value);
     final name = ExcerciseName.dirty(state.name.value);
-    final type = ExcerciseTypeInput.pure(state.type.value);
+    final type = ExcerciseTypeInput.dirty(state.type.value);
 
     yield state.copyWith(
       calories: calorie,

@@ -3,6 +3,7 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/widgets/widgets.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -55,6 +56,7 @@ class AddExcerciseLogView extends StatelessWidget {
               _wrappedPadding(const _CaloriesInput()),
               _wrappedPadding(const _TimeInput()),
               _wrappedPadding(const _DateInput()),
+              _wrappedPadding(const _ExcerciseTypeInput()),
             ],
           );
         },
@@ -163,6 +165,7 @@ class _DateInput extends StatelessWidget {
     return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text('Date: '),
           trailing: Text(
             DateFormat('dd.MMMM.yyyy').format(state.date.value),
@@ -174,6 +177,56 @@ class _DateInput extends StatelessWidget {
               firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
               lastDate: DateTime.now(),
             );
+
+            BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDateUpdated(date));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _ExcerciseTypeInput extends StatelessWidget {
+  const _ExcerciseTypeInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Excercise Type: '),
+          trailing: Text(describeEnum(state.type.value)),
+          onTap: () async {
+            ExcerciseType? type = await showModalBottomSheet<ExcerciseType?>(
+              context: context,
+              builder: (_) {
+                return Container(
+                  height: size.height * 0.5,
+                  child: ExcerciseLogBottomSheet(
+                    itemCount: ExcerciseType.values.length,
+                    itemBuilder: (context, index) {
+                      final item = ExcerciseType.values[index];
+                      final isSelected = item == state.type.value;
+
+                      return ListTile(
+                        title: Text(
+                          describeEnum(item),
+                          style: TextStyle(
+                            color: isSelected ? Colors.blue : Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pop(item);
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+
+            BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogTypeUpdated(type));
           },
         );
       },
