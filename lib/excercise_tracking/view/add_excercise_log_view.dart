@@ -49,6 +49,7 @@ class AddExcerciseLogView extends StatelessWidget {
             children: [
               _ExcerciseNameInput(),
               _DurationInput(),
+              IntensityInput(),
             ],
           );
         },

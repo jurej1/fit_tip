@@ -12,20 +12,27 @@ class ExcerciseLogBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Column(
       children: [
-        const SizedBox(height: 10),
+        const SizedBox(height: 15),
         Container(
-          height: 5,
-          width: 45,
+          height: 7,
+          width: size.width * 0.3,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey.shade400,
           ),
         ),
-        ListView.builder(
-          itemCount: itemCount,
-          itemBuilder: itemBuilder,
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: itemCount,
+            itemBuilder: itemBuilder,
+          ),
         ),
       ],
     );

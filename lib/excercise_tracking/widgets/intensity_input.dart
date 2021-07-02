@@ -10,8 +10,6 @@ class IntensityInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
       builder: (context, state) {
         return ListTile(
@@ -19,10 +17,17 @@ class IntensityInput extends StatelessWidget {
           leading: Text(
             'Intensity',
           ),
+          trailing: Text(describeEnum(state.intensity.value)),
           onTap: () async {
             Intensity? intensitsy = await showModalBottomSheet<Intensity?>(
               context: context,
               isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
               builder: (_) {
                 return _BottomSheet(selectedIntensity: state.intensity.value);
               },
