@@ -11,6 +11,7 @@ class AddExcerciseLogState extends Equatable {
   final ExcerciseTypeInput type;
 
   final ExcerciseLog? excerciseLog;
+  final FormMode mode;
 
   const AddExcerciseLogState({
     this.duration = const ExcerciseDuration.pure(),
@@ -22,12 +23,27 @@ class AddExcerciseLogState extends Equatable {
     required this.date,
     this.excerciseLog,
     this.type = const ExcerciseTypeInput.pure(),
+    this.mode = FormMode.add,
   });
 
   factory AddExcerciseLogState.initial() {
     return AddExcerciseLogState(
       time: ExcerciseStartTime.pure(),
       date: ExcerciseStartDate.pure(),
+    );
+  }
+
+  factory AddExcerciseLogState.edit(ExcerciseLog log) {
+    return AddExcerciseLogState(
+      time: ExcerciseStartTime.pure(TimeOfDay(hour: log.startTime.hour, minute: log.startTime.minute)),
+      date: ExcerciseStartDate.pure(log.startTime),
+      calories: ExcerciseCalories.pure(log.calories.toStringAsFixed(0)),
+      duration: ExcerciseDuration.pure(log.duration),
+      excerciseLog: log,
+      intensity: ExcerciseIntensity.pure(log.intensity),
+      mode: FormMode.edit,
+      name: ExcerciseName.pure(log.name),
+      type: ExcerciseTypeInput.pure(log.type),
     );
   }
 
@@ -43,6 +59,7 @@ class AddExcerciseLogState extends Equatable {
       date,
       type,
       excerciseLog,
+      mode,
     ];
   }
 
@@ -56,6 +73,7 @@ class AddExcerciseLogState extends Equatable {
     ExcerciseStartDate? date,
     ExcerciseTypeInput? type,
     ExcerciseLog? excerciseLog,
+    FormMode? mode,
   }) {
     return AddExcerciseLogState(
       duration: duration ?? this.duration,
@@ -67,6 +85,7 @@ class AddExcerciseLogState extends Equatable {
       date: date ?? this.date,
       type: type ?? this.type,
       excerciseLog: excerciseLog ?? this.excerciseLog,
+      mode: mode ?? this.mode,
     );
   }
 }

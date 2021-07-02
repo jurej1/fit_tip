@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
@@ -17,9 +18,10 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
   AddExcerciseLogBloc({
     required AuthenticationBloc authenticationBloc,
     required ActivityRepository activityRepository,
+    ExcerciseLog? excerciseLog,
   })  : _activityRepository = activityRepository,
         _authenticationBloc = authenticationBloc,
-        super(AddExcerciseLogState.initial());
+        super(excerciseLog == null ? AddExcerciseLogState.initial() : AddExcerciseLogState.edit(excerciseLog));
 
   final ActivityRepository _activityRepository;
   final AuthenticationBloc _authenticationBloc;
@@ -144,10 +146,15 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
           type: state.type.value,
         );
 
-        DocumentReference ref = await _activityRepository.addExcerciseLog(_user!.id!, log);
-        log = log.copyWith(id: ref.id);
+        if (state.mode == FormMode.add) {
+          DocumentReference ref = await _activityRepository.addExcerciseLog(_user!.id!, log);
+          log = log.copyWith(id: ref.id);
 
-        yield state.copyWith(excerciseLog: log, status: FormzStatus.submissionSuccess);
+          yield state.copyWith(excerciseLog: log, status: FormzStatus.submissionSuccess);
+        } else if (state.mode == FormMode.edit) {
+          await _activityRepository.updateExcerciseLog(_user!.id!, log);
+          yield state.copyWith(excerciseLog: log, status: FormzStatus.submissionSuccess);
+        }
       } catch (error) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
