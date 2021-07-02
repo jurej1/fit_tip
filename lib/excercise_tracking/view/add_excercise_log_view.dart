@@ -47,13 +47,20 @@ class AddExcerciseLogView extends StatelessWidget {
           return ListView(
             physics: const ClampingScrollPhysics(),
             children: [
-              _ExcerciseNameInput(),
-              _DurationInput(),
-              IntensityInput(),
+              _wrappedPadding(const _ExcerciseNameInput()),
+              const _DurationInput(),
+              _wrappedPadding(const IntensityInput()),
             ],
           );
         },
       ),
+    );
+  }
+
+  Widget _wrappedPadding(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: child,
     );
   }
 }
