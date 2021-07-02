@@ -5,12 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DurationSelector extends StatelessWidget {
   const DurationSelector({
     Key? key,
+    this.duration,
   }) : super(key: key);
 
+  final int? duration;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DurationSelectorBloc(),
+      create: (context) => DurationSelectorBloc(duration: duration),
       child: _Body(),
     );
   }
