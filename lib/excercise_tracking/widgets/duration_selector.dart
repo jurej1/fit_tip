@@ -47,6 +47,8 @@ class __BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
+    BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorWidgetWidthUpdated(context.size!.width));
+
     return BlocListener<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         _scrollController.animateTo(
@@ -80,41 +82,41 @@ class __BodyState extends State<_Body> {
               },
             ),
             Expanded(
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollEndNotification) {
-                    BlocProvider.of<DurationSelectorBloc>(context).add(
-                      DurationSelectorValueUpdated(
-                        controller: _scrollController,
-                        itemWidth: itemWidth,
-                        screenWidth: size.width,
-                      ),
-                    );
-                  }
+              child: NotificationListener<ScrollNotification>(onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollEndNotification) {
+                  BlocProvider.of<DurationSelectorBloc>(context).add(
+                    DurationSelectorValueUpdated(
+                      controller: _scrollController,
+                      itemWidth: itemWidth,
+                    ),
+                  );
+                }
 
-                  return false;
-                },
-                child: ListView.builder(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    if (index == 0 || index == 289) {
+                return false;
+              }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
+                builder: (context, state) {
+                  return ListView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      if (index == 0 || index == 289) {
+                        return Container(
+                          width: state.widgetWidth * 0.5 - (itemWidth * 0.5),
+                        );
+                      }
                       return Container(
-                        width: size.width * 0.5 - (itemWidth * 0.5),
+                        height: 200,
+                        width: itemWidth,
+                        padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.25),
+                        child: ColoredBox(
+                          color: Colors.blue,
+                        ),
                       );
-                    }
-                    return Container(
-                      height: 200,
-                      width: itemWidth,
-                      padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.25),
-                      child: ColoredBox(
-                        color: Colors.blue,
-                      ),
-                    );
-                  },
-                  itemCount: 288 + 2,
-                ),
-              ),
+                    },
+                    itemCount: 288 + 2,
+                  );
+                },
+              )),
             ),
           ],
         ),

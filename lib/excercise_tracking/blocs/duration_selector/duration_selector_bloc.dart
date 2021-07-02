@@ -31,6 +31,8 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
       yield state.copyWith(
         focusedIndex: index.round(),
       );
+    } else if (event is DurationSelectorWidgetWidthUpdated) {
+      yield state.copyWith(widgetWidth: event.width);
     }
   }
 }

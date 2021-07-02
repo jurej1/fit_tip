@@ -1,12 +1,16 @@
 part of 'duration_selector_bloc.dart';
 
 class DurationSelectorState extends Equatable {
-  const DurationSelectorState({this.focusedIndex = 0});
+  const DurationSelectorState({
+    this.focusedIndex = 0,
+    this.widgetWidth = 0,
+  });
 
   final int focusedIndex;
+  final double widgetWidth;
 
   @override
-  List<Object> get props => [focusedIndex];
+  List<Object> get props => [focusedIndex, widgetWidth];
 
   double getAnimateToValue(double itemWidth) {
     return (itemWidth * focusedIndex);
@@ -33,9 +37,11 @@ class DurationSelectorState extends Equatable {
 
   DurationSelectorState copyWith({
     int? focusedIndex,
+    double? widgetWidth,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
+      widgetWidth: widgetWidth ?? this.widgetWidth,
     );
   }
 }

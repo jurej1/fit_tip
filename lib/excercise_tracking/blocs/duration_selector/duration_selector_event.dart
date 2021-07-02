@@ -10,26 +10,21 @@ abstract class DurationSelectorEvent extends Equatable {
 class DurationSelectorValueUpdated extends DurationSelectorEvent {
   final ScrollController controller;
   final double itemWidth;
-  final double screenWidth;
 
   const DurationSelectorValueUpdated({
     required this.controller,
     required this.itemWidth,
-    required this.screenWidth,
   });
 
-  DurationSelectorValueUpdated copyWith({
-    ScrollController? controller,
-    double? itemWidth,
-    double? screenWidth,
-  }) {
-    return DurationSelectorValueUpdated(
-      controller: controller ?? this.controller,
-      itemWidth: itemWidth ?? this.itemWidth,
-      screenWidth: screenWidth ?? this.screenWidth,
-    );
-  }
+  @override
+  List<Object> get props => [controller, itemWidth];
+}
+
+class DurationSelectorWidgetWidthUpdated extends DurationSelectorEvent {
+  final double width;
+
+  const DurationSelectorWidgetWidthUpdated(this.width);
 
   @override
-  List<Object> get props => [controller, itemWidth, screenWidth];
+  List<Object> get props => [width];
 }
