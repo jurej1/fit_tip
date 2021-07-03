@@ -8,7 +8,6 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<ExcerciseDailyListBloc, ExcerciseDailyListState>(
       builder: (context, state) {
         if (state is ExcerciseDailyListLoading) {
