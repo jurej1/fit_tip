@@ -4,12 +4,17 @@ import 'package:fit_tip/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../excercise_tracking.dart';
+
 class ExcerciseDaySelector extends StatelessWidget {
   const ExcerciseDaySelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DaySelectorBloc, DaySelectorState>(
+    return BlocConsumer<DaySelectorBloc, DaySelectorState>(
+      listener: (context, state) {
+        BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListDateUpdated(state.selectedDate));
+      },
       builder: (context, state) {
         return DaySelector(
           arrowBackPressed: () => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorPreviousDayRequested()),

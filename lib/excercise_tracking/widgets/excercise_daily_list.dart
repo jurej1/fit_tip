@@ -14,6 +14,8 @@ class ExcerciseDailyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: _length,
       itemBuilder: (context, index) {
         final item = excercises[index];

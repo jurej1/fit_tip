@@ -33,14 +33,20 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Excercise tracking'),
       ),
-      body: Column(
-        children: [
-          ExcerciseDaySelector(),
-        ],
+      body: SizedBox(
+        height: size.height,
+        width: size.width,
+        child: Column(
+          children: [
+            ExcerciseDaySelector(),
+            ExcerciseDailyListBuilder(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

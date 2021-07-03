@@ -8,6 +8,7 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<ExcerciseDailyListBloc, ExcerciseDailyListState>(
       builder: (context, state) {
         if (state is ExcerciseDailyListLoading) {
@@ -19,12 +20,18 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
             child: Text('Oops something went wrong'),
           );
         } else if (state is ExcerciseDailyListLoadSuccess) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                //TODO: Daily goals
-                ExcerciseDailyList(excercises: state.excercises),
-              ],
+          return Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: 200,
+                    height: 200,
+                    color: Colors.red,
+                  ),
+                  ExcerciseDailyList(excercises: state.excercises),
+                ],
+              ),
             ),
           );
         }
