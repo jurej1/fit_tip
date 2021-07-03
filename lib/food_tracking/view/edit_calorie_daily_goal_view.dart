@@ -108,16 +108,18 @@ class CaloriesAmountInputField extends StatelessWidget {
             Text('Daily goal:'),
             Expanded(
               child: TextFormField(
-                  key: ValueKey(state.calorieDailyConsumptionGoal),
-                  initialValue: state.calorieDailyConsumptionGoal.value,
-                  textAlign: TextAlign.right,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    errorText: showErrorTest(state),
-                  ),
-                  onChanged: (val) {
-                    BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(val));
-                  }),
+                key: ValueKey(state.calorieDailyConsumptionGoal),
+                initialValue: state.calorieDailyConsumptionGoal.value,
+                textAlign: TextAlign.right,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  // errorText: showErrorTest(state),
+                ),
+                onChanged: (val) {
+                  BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(val));
+                },
+              ),
             ),
             Text('cal'),
           ],
@@ -149,6 +151,7 @@ class FatsAmountInput extends StatelessWidget {
       builder: (context, state) {
         return RowInputField(
           initialValue: state.fats.value,
+          keyboardType: TextInputType.number,
           onChanged: (val) => BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalFatsChanged(val)),
           title: 'Fats',
           unit: 'g',
@@ -168,6 +171,7 @@ class ProteinAmountInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.proteins.value,
           onChanged: (val) => BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalProteinChanged(val)),
           title: 'Protein',
@@ -188,6 +192,7 @@ class CarbsAmountInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.carbs.value,
           onChanged: (val) => BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalCarbsChanged(val)),
           title: 'Carbs',
@@ -208,6 +213,7 @@ class BreakfastInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.breakfast.value,
           onChanged: (val) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalBreakfastChanged(val));
@@ -228,6 +234,7 @@ class LunchInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.lunch.value,
           onChanged: (val) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalLunchChanged(val));
@@ -248,6 +255,7 @@ class DinnerInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.dinner.value,
           onChanged: (value) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalDinnerChanged(value));
@@ -268,6 +276,7 @@ class SnackInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.snack.value,
           onChanged: (value) {
             BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalSnackChanged(value));

@@ -7,6 +7,7 @@ class RowInputField extends StatelessWidget {
     required this.onChanged,
     required this.unit,
     required this.title,
+    required this.keyboardType,
     this.errorText,
   }) : super(key: key);
 
@@ -15,6 +16,7 @@ class RowInputField extends StatelessWidget {
   final String unit;
   final String title;
   final String? errorText;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class RowInputField extends StatelessWidget {
             key: key,
             initialValue: initialValue,
             textAlign: TextAlign.right,
+            keyboardType: keyboardType,
             decoration: InputDecoration(
               errorText: errorText,
               border: InputBorder.none,

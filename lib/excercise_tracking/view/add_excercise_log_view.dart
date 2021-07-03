@@ -122,6 +122,7 @@ class _CaloriesInput extends StatelessWidget {
     return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
       builder: (context, state) {
         return RowInputField(
+          keyboardType: TextInputType.number,
           initialValue: state.calories.value,
           onChanged: (value) {
             BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogCaloriesUpdated(value));
