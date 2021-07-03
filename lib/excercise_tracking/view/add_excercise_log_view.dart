@@ -39,6 +39,14 @@ class AddExcerciseLogView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Excercise Log'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogFormSubmit());
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
         builder: (context, state) {
@@ -66,7 +74,7 @@ class AddExcerciseLogView extends StatelessWidget {
 
   Widget _wrappedPadding(Widget child) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: child,
     );
   }
@@ -145,12 +153,19 @@ class _TimeInput extends StatelessWidget {
         return ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text('Start time: '),
-          trailing: Text(
-            state.time.value.format(context),
-          ),
+          trailing: Text('${state.time.value.hour}:${state.time.value.minute}'),
           onTap: () async {
             FocusScope.of(context).unfocus();
-            TimeOfDay? time = await showTimePicker(context: context, initialTime: state.time.value);
+            TimeOfDay? time = await showTimePicker(
+              context: context,
+              initialTime: state.time.value,
+              builder: (BuildContext context, Widget? child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                  child: child!,
+                );
+              },
+            );
             BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogTimeUpdated(time));
           },
         );
@@ -199,6 +214,7 @@ class _ExcerciseTypeInput extends StatelessWidget {
     return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text('Excercise Type: '),
           trailing: Text(describeEnum(state.type.value)),
           onTap: () async {
