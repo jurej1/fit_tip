@@ -53,6 +53,7 @@ class AddExcerciseLogView extends StatelessWidget {
           if (state.status.isSubmissionInProgress) {
             Navigator.of(context).pop();
             ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(content: Text('Excercise added successfully')));
+            BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListLogAdded(state.excerciseLog));
           } else if (state.status.isSubmissionFailure) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error occured')));
           }
