@@ -73,6 +73,7 @@ class EditCalorieDailyGoalView extends StatelessWidget {
             }
 
             return ListView(
+              physics: const ClampingScrollPhysics(),
               padding: EdgeInsets.all(10),
               children: [
                 CaloriesAmountInputField(),
