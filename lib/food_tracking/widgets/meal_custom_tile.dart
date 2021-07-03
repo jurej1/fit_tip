@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -49,14 +50,10 @@ class _MainTile extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            AnimatedContainer(
+            TilePressedLineIndicator(
+              isExpanded: state.isExpanded,
               duration: duration,
-              height: state.isExpanded ? 1.75 : 0,
-              width: state.isExpanded ? MediaQuery.of(context).size.width * 0.8 : 0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: state.isExpanded ? state.textActiveColor : Colors.white,
-              ),
+              color: state.textActiveColor,
             ),
             _ColapsedTile(
               amountOfItems: state.foods.length,

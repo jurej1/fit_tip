@@ -1,5 +1,6 @@
 import 'package:activity_repository/activity_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ExcerciseDailyList extends StatelessWidget {
   const ExcerciseDailyList({
@@ -26,8 +27,13 @@ class ExcerciseDailyList extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = excercises[index];
 
-        return ListTile(
+        return ExpansionTile(
+          key: ValueKey(item),
           title: Text(item.name),
+          subtitle: Text(
+            DateFormat('HH:mm').format(item.startTime),
+            style: TextStyle(color: Colors.grey.shade400),
+          ),
         );
       },
     );
