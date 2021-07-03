@@ -11,8 +11,10 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
     return BlocBuilder<ExcerciseDailyListBloc, ExcerciseDailyListState>(
       builder: (context, state) {
         if (state is ExcerciseDailyListLoading) {
-          return const Center(
-            child: const CircularProgressIndicator(),
+          return Expanded(
+            child: const Center(
+              child: const CircularProgressIndicator(),
+            ),
           );
         } else if (state is ExcerciseDailyListFailure) {
           return Center(

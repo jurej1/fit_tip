@@ -13,6 +13,12 @@ class ExcerciseDailyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (_length == 0) {
+      return Center(
+        child: Text('You do not have any excercises.'),
+      );
+    }
+
     return ListView.builder(
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
