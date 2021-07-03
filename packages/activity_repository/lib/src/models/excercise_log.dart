@@ -82,6 +82,12 @@ class ExcerciseLog extends Equatable {
   static List<ExcerciseLog> fromQuerySnapshot(QuerySnapshot snapshot) {
     if (snapshot.size == 0) return [];
 
-    return snapshot.docs.map((e) => ExcerciseLog.fromEntity(ExcerciseLogEntity.fromDocumentSnapshot(e))).toList();
+    return snapshot.docs
+        .map(
+          (e) => ExcerciseLog.fromEntity(
+            ExcerciseLogEntity.fromDocumentSnapshot(e),
+          ),
+        )
+        .toList();
   }
 }

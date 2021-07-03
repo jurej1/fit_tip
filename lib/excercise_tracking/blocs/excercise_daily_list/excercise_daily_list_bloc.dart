@@ -51,6 +51,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
       yield ExcerciseDailyListLoadSuccess(ExcerciseLog.fromQuerySnapshot(snapshot));
     } catch (error) {
+      print('error: ${error.toString()}');
       yield ExcerciseDailyListFailure();
     }
   }

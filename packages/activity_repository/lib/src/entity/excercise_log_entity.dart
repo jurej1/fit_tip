@@ -78,13 +78,16 @@ class ExcerciseLogEntity extends Equatable {
   static ExcerciseLogEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
 
+    final Timestamp startTime = data[_DocKeys.startTime] as Timestamp;
+
     return ExcerciseLogEntity(
-      type: ExcerciseType.values.firstWhere((e) => describeEnum(e) == describeEnum(data[_DocKeys.type])),
+      type: ExcerciseType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
       name: data[_DocKeys.name],
       duration: data[_DocKeys.duration],
-      intensity: Intensity.values.firstWhere((e) => describeEnum(e) == describeEnum(data[_DocKeys.intensity])),
+      intensity: Intensity.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.intensity]),
       calories: data[_DocKeys.calories],
-      startTime: data[_DocKeys.startTime],
+      startTime: startTime.toDate(),
+      id: snap.id,
     );
   }
 }
