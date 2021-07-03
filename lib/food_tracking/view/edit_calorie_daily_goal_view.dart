@@ -103,26 +103,14 @@ class CaloriesAmountInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
-        return Row(
-          children: [
-            Text('Daily goal:'),
-            Expanded(
-              child: TextFormField(
-                key: ValueKey(state.calorieDailyConsumptionGoal),
-                initialValue: state.calorieDailyConsumptionGoal.value,
-                textAlign: TextAlign.right,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  // errorText: showErrorTest(state),
-                ),
-                onChanged: (val) {
-                  BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(val));
-                },
-              ),
-            ),
-            Text('cal'),
-          ],
+        return RowInputField(
+          initialValue: state.calorieDailyConsumptionGoal.value,
+          onChanged: (val) {
+            BlocProvider.of<EditCalorieDailyGoalBloc>(context).add(EditCalorieDailyGoalAmountChanged(val));
+          },
+          unit: 'cal',
+          title: 'Daily goal:',
+          keyboardType: TextInputType.number,
         );
       },
     );
@@ -156,7 +144,7 @@ class FatsAmountInput extends StatelessWidget {
           title: 'Fats',
           unit: 'g',
           errorText: state.fats.invalid ? 'Invalid' : null,
-          key: ValueKey(state.fats),
+          key: ValueKey('fats_goal'),
         );
       },
     );
@@ -177,7 +165,7 @@ class ProteinAmountInput extends StatelessWidget {
           title: 'Protein',
           unit: 'g',
           errorText: state.proteins.invalid ? 'Invalid' : null,
-          key: ValueKey(state.proteins),
+          key: ValueKey('protein_goal'),
         );
       },
     );
@@ -198,7 +186,7 @@ class CarbsAmountInput extends StatelessWidget {
           title: 'Carbs',
           unit: 'g',
           errorText: state.carbs.invalid ? 'Invalid' : null,
-          key: ValueKey(state.carbs),
+          key: ValueKey('carbs_goal'),
         );
       },
     );
@@ -213,6 +201,7 @@ class BreakfastInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          key: ValueKey('breakfast_goal'),
           keyboardType: TextInputType.number,
           initialValue: state.breakfast.value,
           onChanged: (val) {
@@ -234,6 +223,7 @@ class LunchInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          key: ValueKey('lunch_goal'),
           keyboardType: TextInputType.number,
           initialValue: state.lunch.value,
           onChanged: (val) {
@@ -255,6 +245,7 @@ class DinnerInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          key: ValueKey('dinner_input'),
           keyboardType: TextInputType.number,
           initialValue: state.dinner.value,
           onChanged: (value) {
@@ -276,6 +267,7 @@ class SnackInput extends StatelessWidget {
     return BlocBuilder<EditCalorieDailyGoalBloc, EditCalorieDailyGoalState>(
       builder: (context, state) {
         return RowInputField(
+          key: ValueKey('snack_input'),
           keyboardType: TextInputType.number,
           initialValue: state.snack.value,
           onChanged: (value) {
