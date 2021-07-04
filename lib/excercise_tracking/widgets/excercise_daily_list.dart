@@ -26,8 +26,11 @@ class ExcerciseDailyList extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
-      itemCount: _length,
+      itemCount: _length + 1,
       itemBuilder: (context, index) {
+        if (index == _length) {
+          return const SizedBox(height: 90);
+        }
         final item = excercises[index];
 
         return BlocProvider(
@@ -36,7 +39,9 @@ class ExcerciseDailyList extends StatelessWidget {
             activityRepository: RepositoryProvider.of<ActivityRepository>(context),
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
           ),
-          child: ExcerciseTile(),
+          child: ExcerciseTile(
+            key: ValueKey(item.id),
+          ),
         );
       },
     );
