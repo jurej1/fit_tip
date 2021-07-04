@@ -12,22 +12,43 @@ class ExcerciseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExcerciseTileBloc, ExcerciseTileState>(
+    return BlocConsumer<ExcerciseTileBloc, ExcerciseTileState>(
+      listener: (context, state) {
+        if (state is ExcerciseTileDeleteSuccess) {
+          BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListLogRemoved(state.excerciseLog));
+        }
+      },
       builder: (context, state) {
-        return AnimatedContainer(
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          height: state.isExpanded ? 110 : 50,
-          duration: const Duration(milliseconds: 300),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade100,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Column(
-            children: [
-              _Tile(height: 40),
-              _AnimatedDetailsList(height: state.isExpanded ? 60 : 0),
-            ],
+        return Material(
+          color: Colors.blue.shade100,
+          borderRadius: BorderRadius.circular(10),
+          child: InkWell(
+            onLongPress: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<ExcerciseTileBloc>(context),
+                    child: _ActionDialog(),
+                  );
+                },
+              );
+            },
+            child: AnimatedContainer(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              height: state.isExpanded ? 110 : 50,
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Column(
+                children: [
+                  _Tile(height: 40),
+                  _AnimatedDetailsList(height: state.isExpanded ? 60 : 0),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -112,7 +133,8 @@ class _Tile extends StatelessWidget {
                   )
                 ],
               ),
-              _AnimatedIconArrow(),
+              if (state is ExcerciseTileLoading) CircularProgressIndicator(),
+              if (!(state is ExcerciseTileLoading)) _AnimatedIconArrow(),
             ],
           ),
         );
@@ -235,6 +257,29 @@ class RowDisplayer extends StatelessWidget {
       style: TextStyle(
           // color: Colors.grey.shade400,
           ),
+    );
+  }
+}
+
+class _ActionDialog extends StatelessWidget {
+  const _ActionDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            onTap: () {
+              BlocProvider.of<ExcerciseTileBloc>(context).add(ExcerciseTileDeleteRequested());
+              Navigator.of(context).pop();
+            },
+            title: Text('Delete'),
+            trailing: const Icon(Icons.delete),
+          ),
+        ],
+      ),
     );
   }
 }
