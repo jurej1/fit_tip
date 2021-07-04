@@ -8,7 +8,9 @@ import 'package:intl/intl.dart';
 import '../excercise_tracking.dart';
 
 class ExcerciseTile extends StatelessWidget {
-  const ExcerciseTile({Key? key}) : super(key: key);
+  ExcerciseTile({Key? key}) : super(key: key);
+
+  final _borderRadius = BorderRadius.circular(10);
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,9 @@ class ExcerciseTile extends StatelessWidget {
       builder: (context, state) {
         return Material(
           color: Colors.blue.shade100,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: _borderRadius,
           child: InkWell(
+            borderRadius: _borderRadius,
             onLongPress: () {
               showDialog(
                 context: context,
@@ -35,12 +38,9 @@ class ExcerciseTile extends StatelessWidget {
               );
             },
             child: AnimatedContainer(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
               height: state.isExpanded ? 110 : 50,
               duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              decoration: BoxDecoration(borderRadius: _borderRadius),
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Column(
                 children: [
@@ -267,10 +267,12 @@ class _ActionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
+            contentPadding: EdgeInsets.zero,
             onTap: () {
               BlocProvider.of<ExcerciseTileBloc>(context).add(ExcerciseTileDeleteRequested());
               Navigator.of(context).pop();
