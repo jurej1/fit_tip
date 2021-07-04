@@ -151,32 +151,22 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
-        final TimeOfDay time = state.time.value;
-        final DateTime date = state.date.value;
-
-        ExcerciseLog log = ExcerciseLog(
-          name: state.name.value,
-          duration: state.duration.value,
-          intensity: state.intensity.value,
-          calories: int.parse(state.calories.value),
-          startTime: DateTime(date.year, date.month, date.day, time.hour, time.minute),
-          type: state.type.value,
-        );
-
         if (state.mode == FormMode.add) {
-          DocumentReference ref = await _activityRepository.addExcerciseLog(_user!.id!, log);
-          log = log.copyWith(id: ref.id);
+          DocumentReference ref = await _activityRepository.addExcerciseLog(
+            _user!.id!,
+            state.excerciseLog,
+          );
 
           yield state.copyWith(
-            excerciseLog: log,
             status: FormzStatus.submissionSuccess,
+            id: ref.id,
           );
         } else if (state.mode == FormMode.edit) {
-          await _activityRepository.updateExcerciseLog(_user!.id!, log);
-          yield state.copyWith(
-            excerciseLog: log,
-            status: FormzStatus.submissionSuccess,
+          await _activityRepository.updateExcerciseLog(
+            _user!.id!,
+            state.excerciseLog,
           );
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
         }
       } catch (error) {
         yield state.copyWith(status: FormzStatus.submissionFailure);

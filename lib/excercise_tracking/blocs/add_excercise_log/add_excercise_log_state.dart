@@ -10,8 +10,8 @@ class AddExcerciseLogState extends Equatable {
   final ExcerciseStartDate date;
   final ExcerciseTypeInput type;
 
-  final ExcerciseLog? excerciseLog;
   final FormMode mode;
+  final String id;
 
   const AddExcerciseLogState({
     this.duration = const ExcerciseDuration.pure(),
@@ -21,9 +21,9 @@ class AddExcerciseLogState extends Equatable {
     this.calories = const ExcerciseCalories.pure(),
     required this.time,
     required this.date,
-    this.excerciseLog,
     this.type = const ExcerciseTypeInput.pure(),
     this.mode = FormMode.add,
+    this.id = '',
   });
 
   factory AddExcerciseLogState.initial(DateTime date) {
@@ -39,16 +39,16 @@ class AddExcerciseLogState extends Equatable {
       date: ExcerciseStartDate.pure(log.startTime),
       calories: ExcerciseCalories.pure(log.calories.toStringAsFixed(0)),
       duration: ExcerciseDuration.pure(log.duration),
-      excerciseLog: log,
       intensity: ExcerciseIntensity.pure(log.intensity),
       mode: FormMode.edit,
       name: ExcerciseName.pure(log.name),
       type: ExcerciseTypeInput.pure(log.type),
+      id: log.id,
     );
   }
 
   @override
-  List<Object?> get props {
+  List<Object> get props {
     return [
       duration,
       status,
@@ -58,8 +58,8 @@ class AddExcerciseLogState extends Equatable {
       time,
       date,
       type,
-      excerciseLog,
       mode,
+      id,
     ];
   }
 
@@ -72,8 +72,8 @@ class AddExcerciseLogState extends Equatable {
     ExcerciseStartTime? time,
     ExcerciseStartDate? date,
     ExcerciseTypeInput? type,
-    ExcerciseLog? excerciseLog,
     FormMode? mode,
+    String? id,
   }) {
     return AddExcerciseLogState(
       duration: duration ?? this.duration,
@@ -84,8 +84,27 @@ class AddExcerciseLogState extends Equatable {
       time: time ?? this.time,
       date: date ?? this.date,
       type: type ?? this.type,
-      excerciseLog: excerciseLog ?? this.excerciseLog,
       mode: mode ?? this.mode,
+      id: id ?? this.id,
+    );
+  }
+
+  ExcerciseLog get excerciseLog {
+    final newDate = date.value;
+    final newTime = time.value;
+    return ExcerciseLog(
+      name: this.name.value,
+      duration: duration.value,
+      intensity: intensity.value,
+      calories: int.parse(calories.value),
+      startTime: DateTime(
+        newDate.year,
+        newDate.month,
+        newDate.day,
+        newTime.hour,
+        newTime.minute,
+      ),
+      type: type.value,
     );
   }
 }
