@@ -5,3 +5,4 @@ export 'excercise_log_bottom_shee.dart';
 export 'excercise_daily_list_builder.dart';
 export 'excercise_daily_list.dart';
 export 'excercise_tile.dart';
+export 'excercise_daily_goal_progress.dart';

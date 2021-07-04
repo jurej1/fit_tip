@@ -27,11 +27,7 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
               physics: const ClampingScrollPhysics(),
               child: Column(
                 children: [
-                  Container(
-                    width: 200,
-                    height: 200,
-                    color: Colors.red,
-                  ),
+                  ExcerciseDailyGoalProgress(),
                   const SizedBox(height: 15),
                   ExcerciseDailyList(excercises: state.excercises),
                 ],
