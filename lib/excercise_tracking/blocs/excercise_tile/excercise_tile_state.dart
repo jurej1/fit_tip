@@ -15,14 +15,20 @@ abstract class ExcerciseTileState extends Equatable {
 
 class ExcerciseTileInitial extends ExcerciseTileState {
   const ExcerciseTileInitial(ExcerciseLog excerciseLog, bool isExpanded) : super(excerciseLog, isExpanded);
+  @override
+  List<Object> get props => [excerciseLog, isExpanded];
 }
 
 class ExcerciseTileLoading extends ExcerciseTileState {
   const ExcerciseTileLoading(ExcerciseLog excerciseLog, bool isExpanded) : super(excerciseLog, isExpanded);
+  @override
+  List<Object> get props => [excerciseLog, isExpanded];
 }
 
 class ExcerciseTileDeleteSuccess extends ExcerciseTileState {
   const ExcerciseTileDeleteSuccess(ExcerciseLog excerciseLog, bool isExpanded) : super(excerciseLog, isExpanded);
+  @override
+  List<Object> get props => [excerciseLog, isExpanded];
 }
 
 class ExcerciseTileDeleteFail extends ExcerciseTileState {
