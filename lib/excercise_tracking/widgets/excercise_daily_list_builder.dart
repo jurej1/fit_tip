@@ -30,7 +30,7 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
                     height: 200,
                     color: Colors.red,
                   ),
-                  ExcerciseDailyList(excercises: state.excercises),
+                  const ExcerciseDailyList(),
                 ],
               ),
             ),
