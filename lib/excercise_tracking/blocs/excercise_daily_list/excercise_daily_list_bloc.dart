@@ -57,12 +57,12 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
   Stream<ExcerciseDailyListState> _mapLogAddedToState(ExcerciseDailyListLogAdded event) async* {
     if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
-      List<ExcerciseLog> logs = List<ExcerciseLog>.from((state as ExcerciseDailyListLoadSuccess).excercises);
+      List<ExcerciseLog> logs = (state as ExcerciseDailyListLoadSuccess).excercises;
 
-      logs.add(event.log!);
-      logs.sort((a, b) {
-        return b.startTime.compareTo(a.startTime);
-      });
+      if (logs.isEmpty)
+        logs.add(event.log!);
+      else
+        logs.insert(0, event.log!);
 
       yield ExcerciseDailyListLoadSuccess(logs);
     }
@@ -70,7 +70,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
   Stream<ExcerciseDailyListState> _mapLogUpdatedToState(ExcerciseDailyListLogUpdated event) async* {
     if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
-      List<ExcerciseLog> logs = List<ExcerciseLog>.from((state as ExcerciseDailyListLoadSuccess).excercises);
+      List<ExcerciseLog> logs = (state as ExcerciseDailyListLoadSuccess).excercises;
 
       logs.map((e) {
         if (e.id == event.log!.id) {
@@ -86,7 +86,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
   Stream<ExcerciseDailyListState> _mapLogRemovedToState(ExcerciseDailyListLogRemoved event) async* {
     if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
-      List<ExcerciseLog> logs = List<ExcerciseLog>.from((state as ExcerciseDailyListLoadSuccess).excercises);
+      List<ExcerciseLog> logs = (state as ExcerciseDailyListLoadSuccess).excercises;
 
       logs.remove(event.log!);
 
