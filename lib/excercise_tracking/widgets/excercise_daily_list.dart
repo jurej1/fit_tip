@@ -23,7 +23,10 @@ class ExcerciseDailyList extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return SizedBox(height: 10);
+      },
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemCount: _length + 1,
