@@ -65,8 +65,6 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
         logs.insert(0, event.log!);
       }
 
-      print('item added: ${logs}');
-
       yield ExcerciseDailyListLoadSuccess(logs);
     }
   }
