@@ -133,7 +133,12 @@ class _Tile extends StatelessWidget {
                   )
                 ],
               ),
-              if (state is ExcerciseTileLoading) CircularProgressIndicator(),
+              if (state is ExcerciseTileLoading)
+                SizedBox(
+                  height: height * 0.7,
+                  width: height * 0.7,
+                  child: CircularProgressIndicator(),
+                ),
               if (!(state is ExcerciseTileLoading)) _AnimatedIconArrow(),
             ],
           ),
