@@ -93,7 +93,7 @@ class AddExcerciseLogState extends Equatable {
     final newDate = date.value;
     final newTime = time.value;
     return ExcerciseLog(
-      name: this.name.value,
+      name: name.value,
       duration: duration.value,
       intensity: intensity.value,
       calories: int.parse(calories.value),

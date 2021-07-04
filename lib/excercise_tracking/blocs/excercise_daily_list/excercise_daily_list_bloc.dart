@@ -33,7 +33,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     } else if (event is ExcerciseDailyListLogUpdated) {
       yield* _mapLogUpdatedToState(event);
     } else if (event is ExcerciseDailyListLogAdded) {
-      yield* _mapLogAddedToStaet(event);
+      yield* _mapLogAddedToState(event);
     } else if (event is ExcerciseDailyListLogRemoved) {
       yield* _mapLogRemovedToState(event);
     }
@@ -55,13 +55,9 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     }
   }
 
-  Stream<ExcerciseDailyListState> _mapLogAddedToStaet(ExcerciseDailyListLogAdded event) async* {
-    print('item added 1');
-
+  Stream<ExcerciseDailyListState> _mapLogAddedToState(ExcerciseDailyListLogAdded event) async* {
     if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
       List<ExcerciseLog> logs = List<ExcerciseLog>.from((state as ExcerciseDailyListLoadSuccess).excercises);
-
-      print('item added 2');
 
       logs.add(event.log!);
       logs.sort((a, b) {
