@@ -1,5 +1,9 @@
 import 'package:activity_repository/activity_repository.dart';
+import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ExcerciseDailyList extends StatelessWidget {
@@ -27,13 +31,13 @@ class ExcerciseDailyList extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = excercises[index];
 
-        return ExpansionTile(
-          key: ValueKey(item),
-          title: Text(item.name),
-          subtitle: Text(
-            DateFormat('HH:mm').format(item.startTime),
-            style: TextStyle(color: Colors.grey.shade400),
+        return BlocProvider(
+          create: (context) => ExcerciseTileBloc(
+            excerciseLog: item,
+            activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
           ),
+          child: ExcerciseTile(),
         );
       },
     );
