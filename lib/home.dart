@@ -1,4 +1,4 @@
-import 'package:fit_tip/widgets/app_drawer.dart';
+import 'package:fit_tip/shared/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
