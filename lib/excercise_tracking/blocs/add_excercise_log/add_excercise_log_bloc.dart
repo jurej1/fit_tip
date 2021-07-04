@@ -167,10 +167,16 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
           DocumentReference ref = await _activityRepository.addExcerciseLog(_user!.id!, log);
           log = log.copyWith(id: ref.id);
 
-          yield state.copyWith(excerciseLog: log, status: FormzStatus.submissionSuccess);
+          yield state.copyWith(
+            excerciseLog: log,
+            status: FormzStatus.submissionSuccess,
+          );
         } else if (state.mode == FormMode.edit) {
           await _activityRepository.updateExcerciseLog(_user!.id!, log);
-          yield state.copyWith(excerciseLog: log, status: FormzStatus.submissionSuccess);
+          yield state.copyWith(
+            excerciseLog: log,
+            status: FormzStatus.submissionSuccess,
+          );
         }
       } catch (error) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
