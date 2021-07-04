@@ -23,6 +23,8 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
         } else if (state is ExcerciseDailyListLoadSuccess) {
           return Expanded(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 10),
+              physics: const ClampingScrollPhysics(),
               child: Column(
                 children: [
                   Container(
