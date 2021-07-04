@@ -27,7 +27,7 @@ class DaySelector extends StatelessWidget {
           onPressed: arrowBackPressed,
         ),
         TextButton(
-          child: Text(DateFormat('d.MMMM.yyyy').format(selectedDate)),
+          child: Text(DateFormat('EEEE, d MMM').format(selectedDate)),
           onPressed: () async {
             DateTime? date = await showDatePicker(
               context: context,
