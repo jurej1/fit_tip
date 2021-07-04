@@ -28,7 +28,7 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
               create: (context) => ExcerciseDailyGoalBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 activityRepository: RepositoryProvider.of<ActivityRepository>(context),
-              ),
+              )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
           ],
           child: ExcerciseDailyTrackingView(),
