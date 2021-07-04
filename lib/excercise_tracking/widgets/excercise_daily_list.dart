@@ -4,7 +4,6 @@ import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class ExcerciseDailyList extends StatelessWidget {
   const ExcerciseDailyList({

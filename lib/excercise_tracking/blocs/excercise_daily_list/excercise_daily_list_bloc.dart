@@ -56,8 +56,12 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
   }
 
   Stream<ExcerciseDailyListState> _mapLogAddedToStaet(ExcerciseDailyListLogAdded event) async* {
-    if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
+    print('item added 1');
+
+    if (state is ExcerciseDailyListLoadSuccess && _isAuth) {
       List<ExcerciseLog> logs = List<ExcerciseLog>.from((state as ExcerciseDailyListLoadSuccess).excercises);
+
+      print('item added 2');
 
       logs.add(event.log!);
       logs.sort((a, b) {
