@@ -30,6 +30,7 @@ class ExcerciseDailyList extends StatelessWidget {
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
       itemCount: _length + 1,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       itemBuilder: (context, index) {
         if (index == _length) {
           return const SizedBox(height: 70);
