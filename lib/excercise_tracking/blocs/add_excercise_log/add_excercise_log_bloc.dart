@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -18,10 +19,13 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
   AddExcerciseLogBloc({
     required AuthenticationBloc authenticationBloc,
     required ActivityRepository activityRepository,
+    required DaySelectorBloc daySelectorBloc,
     ExcerciseLog? excerciseLog,
   })  : _activityRepository = activityRepository,
         _authenticationBloc = authenticationBloc,
-        super(excerciseLog == null ? AddExcerciseLogState.initial() : AddExcerciseLogState.edit(excerciseLog));
+        super(excerciseLog == null
+            ? AddExcerciseLogState.initial(daySelectorBloc.state.selectedDate)
+            : AddExcerciseLogState.edit(excerciseLog));
 
   final ActivityRepository _activityRepository;
   final AuthenticationBloc _authenticationBloc;

@@ -26,10 +26,10 @@ class AddExcerciseLogState extends Equatable {
     this.mode = FormMode.add,
   });
 
-  factory AddExcerciseLogState.initial() {
+  factory AddExcerciseLogState.initial(DateTime date) {
     return AddExcerciseLogState(
       time: ExcerciseStartTime.pure(),
-      date: ExcerciseStartDate.pure(),
+      date: ExcerciseStartDate.pure(date),
     );
   }
 

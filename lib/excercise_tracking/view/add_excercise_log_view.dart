@@ -3,6 +3,7 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/widgets/widgets.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,12 +15,14 @@ class AddExcerciseLogView extends StatelessWidget {
 
   static route(BuildContext context) {
     final excerciseDailyListBloc = BlocProvider.of<ExcerciseDailyListBloc>(context);
+    final daySelectorBloc = BlocProvider.of<DaySelectorBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => AddExcerciseLogBloc(
+                daySelectorBloc: daySelectorBloc,
                 activityRepository: RepositoryProvider.of<ActivityRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
