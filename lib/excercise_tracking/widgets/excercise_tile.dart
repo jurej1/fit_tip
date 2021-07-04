@@ -108,7 +108,7 @@ class _Tile extends StatelessWidget {
                 children: [
                   Text(state.excerciseLog.name),
                   Text(
-                    DateFormat('HH:mm').format(state.excerciseLog.startTime),
+                    '${DateFormat('HH:mm').format(state.excerciseLog.startTime)} - ${DateFormat('HH:mm').format(state.excerciseLog.endTime)}',
                   )
                 ],
               ),

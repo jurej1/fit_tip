@@ -35,6 +35,10 @@ class ExcerciseLog extends Equatable {
     ];
   }
 
+  DateTime get endTime {
+    return startTime.add(Duration(minutes: this.duration));
+  }
+
   ExcerciseLog copyWith({
     String? id,
     String? name,
