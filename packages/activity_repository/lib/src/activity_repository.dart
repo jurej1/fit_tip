@@ -35,7 +35,10 @@ class ActivityRepository {
     final lowerBound = DateTime(date.year, date.month, date.day);
     final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
-    return _activityTrackingRef(userId).orderBy('startTime').where('startTime', isGreaterThan: lowerBound, isLessThan: upperBound).get();
+    return _activityTrackingRef(userId)
+        .orderBy('startTime', descending: true)
+        .where('startTime', isGreaterThan: lowerBound, isLessThan: upperBound)
+        .get();
   }
 
   Future<QuerySnapshot> getExcerciseLogsByExcerciseType(String userId, ExcerciseType type) {
