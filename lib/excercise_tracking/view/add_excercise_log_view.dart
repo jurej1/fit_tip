@@ -4,6 +4,7 @@ import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/widgets/widgets.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,8 +54,12 @@ class AddExcerciseLogView extends StatelessWidget {
       ),
       body: BlocConsumer<AddExcerciseLogBloc, AddExcerciseLogState>(
         listener: (context, state) {
-          if (state.status.isSubmissionInProgress) {
-            BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListLogAdded(state.excerciseLog));
+          if (state.status.isSubmissionSuccess) {
+            if (state.mode == FormMode.add) {
+              BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListLogAdded(state.excerciseLog));
+            } else {
+              BlocProvider.of<ExcerciseDailyListBloc>(context).add(ExcerciseDailyListLogUpdated(state.excerciseLog));
+            }
             Navigator.of(context).pop();
             ScaffoldMessenger.maybeOf(context)?.showSnackBar(SnackBar(content: Text('Excercise added successfully')));
           } else if (state.status.isSubmissionFailure) {

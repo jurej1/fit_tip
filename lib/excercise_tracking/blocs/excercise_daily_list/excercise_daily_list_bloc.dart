@@ -59,10 +59,13 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     if (state is ExcerciseDailyListLoadSuccess && event.log != null && _isAuth) {
       List<ExcerciseLog> logs = (state as ExcerciseDailyListLoadSuccess).excercises;
 
-      if (logs.isEmpty)
+      if (logs.isEmpty) {
         logs.add(event.log!);
-      else
+      } else {
         logs.insert(0, event.log!);
+      }
+
+      print('item added: ${logs}');
 
       yield ExcerciseDailyListLoadSuccess(logs);
     }

@@ -43,7 +43,7 @@ class ExcerciseDailyList extends StatelessWidget {
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
           ),
           child: ExcerciseTile(
-            key: ValueKey(item.id),
+            key: ValueKey(item),
           ),
         );
       },
