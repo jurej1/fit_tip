@@ -1,8 +1,8 @@
 part of 'excercise_daily_progress_bloc.dart';
 
 enum ExcerciseDailyProgressView {
+  minutesWorkout,
   caloriesBurned,
-  minutesPerWorkout,
   avgMinutesPerWorkout,
 }
 
@@ -29,7 +29,7 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
     required this.minutesWorkout,
     required this.caloriesBurned,
     required this.avgMinutesPerWorkout,
-    this.view = ExcerciseDailyProgressView.caloriesBurned,
+    this.view = ExcerciseDailyProgressView.minutesWorkout,
   });
 
   ExcerciseDailyProgressLoadSuccess copyWith({
@@ -49,32 +49,37 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
   }
 
   @override
-  List<Object> get props => [goal, minutesWorkout, caloriesBurned, avgMinutesPerWorkout];
+  List<Object> get props => [
+        goal,
+        minutesWorkout,
+        caloriesBurned,
+        avgMinutesPerWorkout,
+      ];
 
   int getPrimaryValue() {
     if (this.view == ExcerciseDailyProgressView.avgMinutesPerWorkout) {
       return this.avgMinutesPerWorkout;
-    } else if (this.view == ExcerciseDailyProgressView.caloriesBurned) {
-      return this.caloriesBurned;
-    } else {
+    } else if (this.view == ExcerciseDailyProgressView.minutesWorkout) {
       return this.minutesWorkout;
+    } else {
+      return this.caloriesBurned;
     }
   }
 
   int getMaxValue() {
     if (this.view == ExcerciseDailyProgressView.avgMinutesPerWorkout) {
       return goal.minutesPerWorkout;
-    } else if (this.view == ExcerciseDailyProgressView.caloriesBurned) {
-      return goal.caloriesBurnedPerDay;
-    } else {
+    } else if (this.view == ExcerciseDailyProgressView.minutesWorkout) {
       return goal.minutesPerDay;
+    } else {
+      return goal.caloriesBurnedPerDay;
     }
   }
 
   Color getPrimaryColor() {
-    if (this.view == ExcerciseDailyProgressView.caloriesBurned) {
+    if (this.view == ExcerciseDailyProgressView.minutesWorkout) {
       return Colors.red;
-    } else if (this.view == ExcerciseDailyProgressView.minutesPerWorkout) {
+    } else if (this.view == ExcerciseDailyProgressView.caloriesBurned) {
       return Colors.green;
     } else {
       return Colors.blue;
