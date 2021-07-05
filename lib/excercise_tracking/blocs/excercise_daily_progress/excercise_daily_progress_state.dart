@@ -18,16 +18,16 @@ class ExcerciseDailyProgressLoading extends ExcerciseDailyProgressState {}
 class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
   final ExcerciseDailyGoal goal;
 
-  final int minutesWorkout;
-  final int caloriesBurned;
+  final int minutesPerDay;
+  final int caloriesBurnedPerDay;
   final int avgMinutesPerWorkout;
 
   final ExcerciseDailyProgressView view;
 
   const ExcerciseDailyProgressLoadSuccess({
     required this.goal,
-    required this.minutesWorkout,
-    required this.caloriesBurned,
+    required this.minutesPerDay,
+    required this.caloriesBurnedPerDay,
     required this.avgMinutesPerWorkout,
     this.view = ExcerciseDailyProgressView.minutesWorkout,
   });
@@ -41,23 +41,23 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
   }) {
     return ExcerciseDailyProgressLoadSuccess(
       goal: goal ?? this.goal,
-      minutesWorkout: minutesWorkout ?? this.minutesWorkout,
-      caloriesBurned: caloriesBurned ?? this.caloriesBurned,
+      minutesPerDay: minutesWorkout ?? this.minutesPerDay,
+      caloriesBurnedPerDay: caloriesBurned ?? this.caloriesBurnedPerDay,
       avgMinutesPerWorkout: avgMinutesPerWorkout ?? this.avgMinutesPerWorkout,
       view: view ?? this.view,
     );
   }
 
   @override
-  List<Object> get props => [goal, minutesWorkout, caloriesBurned, avgMinutesPerWorkout, view];
+  List<Object> get props => [goal, minutesPerDay, caloriesBurnedPerDay, avgMinutesPerWorkout, view];
 
   int getPrimaryValue() {
     if (this.view == ExcerciseDailyProgressView.avgMinutesPerWorkout) {
       return this.avgMinutesPerWorkout;
     } else if (this.view == ExcerciseDailyProgressView.minutesWorkout) {
-      return this.minutesWorkout;
+      return this.minutesPerDay;
     } else {
-      return this.caloriesBurned;
+      return this.caloriesBurnedPerDay;
     }
   }
 
