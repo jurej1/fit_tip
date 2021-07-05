@@ -70,6 +70,20 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
       return goal.minutesPerDay;
     }
   }
+
+  Color getPrimaryColor() {
+    if (this.view == ExcerciseDailyProgressView.caloriesBurned) {
+      return Colors.red;
+    } else if (this.view == ExcerciseDailyProgressView.minutesPerWorkout) {
+      return Colors.green;
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  Color getSecondaryColor() {
+    return getPrimaryColor().withOpacity(0.35);
+  }
 }
 
 class ExcerciseDailyProgressFailure extends ExcerciseDailyProgressState {

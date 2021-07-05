@@ -1,5 +1,6 @@
-import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
+
+import 'package:fit_tip/water_tracking/water_tracking.dart';
 
 class AnimatedProgressBar extends StatefulWidget {
   const AnimatedProgressBar({
@@ -8,12 +9,14 @@ class AnimatedProgressBar extends StatefulWidget {
     required this.maxValue,
     required this.primaryColor,
     required this.secondaryColor,
+    this.child,
   }) : super(key: key);
 
   final double primaryValue;
   final double maxValue;
   final Color primaryColor;
   final Color secondaryColor;
+  final Widget? child;
 
   @override
   __AnimatedProgressBarState createState() => __AnimatedProgressBarState();
@@ -44,6 +47,7 @@ class __AnimatedProgressBarState extends State<AnimatedProgressBar> with SingleT
 
     return AnimatedBuilder(
       animation: _animationController,
+      child: widget.child,
       builder: (context, child) {
         return CustomPaint(
           painter: ProgressPainter(

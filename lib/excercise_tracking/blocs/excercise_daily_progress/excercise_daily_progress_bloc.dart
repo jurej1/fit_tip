@@ -5,6 +5,7 @@ import 'package:activity_repository/activity_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
+import 'package:flutter/material.dart';
 
 import '../blocs.dart';
 
@@ -121,6 +122,8 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
   }
 
   int calculateAvgMinutesPerWorkoutFromExcercises(List<ExcerciseLog> excercises) {
-    return calculateMinutesWorokutFromExcercises(excercises) ~/ excercises.length;
+    if (excercises.isEmpty) return 0;
+
+    return (calculateMinutesWorokutFromExcercises(excercises) / excercises.length).round();
   }
 }

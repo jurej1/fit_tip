@@ -9,16 +9,12 @@ class ExcerciseDailyGoalProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      width: 200,
-      child: BlocProvider(
-        create: (context) => ExcerciseDailyProgressBloc(
-          excerciseDailyListBloc: BlocProvider.of<ExcerciseDailyListBloc>(context),
-          excerciseDailyGoalBloc: BlocProvider.of<ExcerciseDailyGoalBloc>(context),
-        ),
-        child: _Body(),
+    return BlocProvider(
+      create: (context) => ExcerciseDailyProgressBloc(
+        excerciseDailyListBloc: BlocProvider.of<ExcerciseDailyListBloc>(context),
+        excerciseDailyGoalBloc: BlocProvider.of<ExcerciseDailyGoalBloc>(context),
       ),
+      child: _Body(),
     );
   }
 }
@@ -34,13 +30,28 @@ class _Body extends StatelessWidget {
           return Stack(
             alignment: Alignment.center,
             children: [
-              AnimatedProgressBar(
-                primaryValue: state.getPrimaryValue().toDouble(),
-                maxValue: state.getMaxValue().toDouble(),
-                primaryColor: Colors.blue,
-                secondaryColor: Colors.green,
+              Column(
+                children: [
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: AnimatedProgressBar(
+                      primaryValue: state.getPrimaryValue().toDouble(),
+                      maxValue: state.getMaxValue().toDouble(),
+                      primaryColor: state.getPrimaryColor(),
+                      secondaryColor: state.getSecondaryColor(),
+                    ),
+                  ),
+                ],
               ),
             ],
+          );
+        } else if (state is ExcerciseDailyProgressLoading) {
+          return SizedBox(
+            height: 220,
+            width: 220,
+            child: const CircularProgressIndicator(),
           );
         }
         return Container();
