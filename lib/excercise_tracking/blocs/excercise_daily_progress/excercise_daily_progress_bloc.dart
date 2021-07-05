@@ -103,11 +103,12 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
   }
 
   Stream<ExcerciseDailyProgressState> _mapViewUpdatedToState(ExcerciseDailyProgressViewUpdated event) async* {
-    if (this.state is ExcerciseDailyProgressLoadSuccess) {
+    if (state is ExcerciseDailyProgressLoadSuccess) {
+      print('View changed');
       final currentState = state as ExcerciseDailyProgressLoadSuccess;
 
       yield currentState.copyWith(
-        view: ExcerciseDailyProgressView.values[event.index],
+        view: ExcerciseDailyProgressView.values.elementAt(event.index),
       );
     }
   }

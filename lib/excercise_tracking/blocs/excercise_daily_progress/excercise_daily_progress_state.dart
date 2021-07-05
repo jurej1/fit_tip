@@ -49,12 +49,7 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
   }
 
   @override
-  List<Object> get props => [
-        goal,
-        minutesWorkout,
-        caloriesBurned,
-        avgMinutesPerWorkout,
-      ];
+  List<Object> get props => [goal, minutesWorkout, caloriesBurned, avgMinutesPerWorkout, view];
 
   int getPrimaryValue() {
     if (this.view == ExcerciseDailyProgressView.avgMinutesPerWorkout) {

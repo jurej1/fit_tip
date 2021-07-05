@@ -99,6 +99,9 @@ class _Carousel extends StatelessWidget {
               ),
             ],
             options: CarouselOptions(
+              onPageChanged: (index, optins) {
+                BlocProvider.of<ExcerciseDailyProgressBloc>(context).add(ExcerciseDailyProgressViewUpdated(index));
+              },
               enableInfiniteScroll: false,
             ),
           );
