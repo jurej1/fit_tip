@@ -79,25 +79,25 @@ class _Carousel extends StatelessWidget {
                 },
                 child: CarouselSlider(
                   items: [
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('calories'),
                       title: 'Calories',
                       amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
                       goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('proteins'),
                       title: 'Proteins',
                       amount: state.proteinConsumed.toString() + 'g',
                       goal: state.proteinGoal.toString() + 'g',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('Carbs'),
                       title: 'Carbs',
                       amount: state.carbsConsumed.toString() + 'g',
                       goal: state.carbsGoal.toString() + 'g',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('Fats'),
                       title: 'Fats',
                       amount: state.fatsConsumed.toString() + 'g',
@@ -120,52 +120,6 @@ class _Carousel extends StatelessWidget {
         }
         return Container();
       },
-    );
-  }
-}
-
-class _CarouselChild extends StatelessWidget {
-  const _CarouselChild({
-    Key? key,
-    required this.amount,
-    required this.goal,
-    required this.title,
-  }) : super(key: key);
-
-  final String amount;
-  final String goal;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            amount,
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Daily Goal: $goal',
-            style: TextStyle(
-              color: Colors.grey.shade400,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
