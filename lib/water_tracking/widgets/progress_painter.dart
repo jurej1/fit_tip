@@ -18,9 +18,10 @@ class ProgressPainter extends CustomPainter {
     this.outerWidth = 40,
     Color? outerColor,
     Color? innerColor,
-    required this.maxValue,
+    required double maxValue,
   })  : this.outerColor = outerColor ?? Colors.blue.shade200,
-        this.innerColor = innerColor ?? Colors.blue;
+        this.innerColor = innerColor ?? Colors.blue,
+        this.maxValue = maxValue == 0 ? 1 : maxValue;
 
   @override
   void paint(Canvas canvas, Size size) {
