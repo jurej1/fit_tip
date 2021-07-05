@@ -19,7 +19,7 @@ class ProgressPainter extends CustomPainter {
     Color? outerColor,
     Color? innerColor,
     required this.maxValue,
-  })   : this.outerColor = outerColor ?? Colors.blue.shade200,
+  })  : this.outerColor = outerColor ?? Colors.blue.shade200,
         this.innerColor = innerColor ?? Colors.blue;
 
   @override

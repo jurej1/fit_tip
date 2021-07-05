@@ -10,9 +10,9 @@ class ExcerciseDailyGoal extends Equatable {
   final DateTime date;
 
   ExcerciseDailyGoal({
-    this.caloriesBurnedPerDay = 0,
-    this.workoutsPerWeek = 0,
-    this.minutesPerWorkout = 0,
+    this.caloriesBurnedPerDay = 300,
+    this.workoutsPerWeek = 3,
+    this.minutesPerWorkout = 30,
     this.minutesPerDay = 60,
     String? id,
     DateTime? date,
