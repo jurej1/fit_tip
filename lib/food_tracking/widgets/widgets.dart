@@ -19,3 +19,4 @@ export 'meal_custom_tile.dart';
 export 'food_item_detail_pie_chart.dart';
 export 'food_item_detail_macros_data.dart';
 export 'row_input_field.dart';
+export 'animated_progress_bar.dart';

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/water_tracking/water_tracking.dart';
+
+import 'widgets.dart';
 
 class FoodDailyProgress extends StatelessWidget {
   const FoodDailyProgress();
@@ -35,7 +36,7 @@ class FoodDailyProgress extends StatelessWidget {
                 child: SizedBox(
                   height: sizeA,
                   width: sizeA,
-                  child: _AnimatedProgressBar(
+                  child: AnimatedProgressBar(
                     maxValue: state.getMaxValueBasedOnView().toDouble(),
                     primaryValue: state.getPrimaryValueBasedOnView().toDouble(),
                     primaryColor: state.getPrimaryColorBasedOnView(),
@@ -254,64 +255,6 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
         }
 
         return Container();
-      },
-    );
-  }
-}
-
-class _AnimatedProgressBar extends StatefulWidget {
-  const _AnimatedProgressBar({
-    Key? key,
-    required this.primaryValue,
-    required this.maxValue,
-    required this.primaryColor,
-    required this.secondaryColor,
-  }) : super(key: key);
-
-  final double primaryValue;
-  final double maxValue;
-  final Color primaryColor;
-  final Color secondaryColor;
-
-  @override
-  __AnimatedProgressBarState createState() => __AnimatedProgressBarState();
-}
-
-class __AnimatedProgressBarState extends State<_AnimatedProgressBar> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _animationController.reset();
-    _animationController.forward();
-
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: ProgressPainter(
-            innerColor: widget.primaryColor,
-            outerColor: widget.secondaryColor,
-            maxValue: widget.maxValue,
-            primaryValue: _animationController.value * widget.primaryValue,
-          ),
-          child: child,
-        );
       },
     );
   }
