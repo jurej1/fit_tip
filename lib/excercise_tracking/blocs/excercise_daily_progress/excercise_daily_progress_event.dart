@@ -25,4 +25,12 @@ class _ExcerciseDailyProgressGoalUpdated extends ExcerciseDailyProgressEvent {
   List<Object> get props => [goal];
 }
 
+class ExcerciseDailyProgressViewUpdated extends ExcerciseDailyProgressEvent {
+  final int index;
+
+  const ExcerciseDailyProgressViewUpdated(this.index);
+  @override
+  List<Object> get props => [index];
+}
+
 class _ExcerciseDailyProgressGoalFailRequested extends ExcerciseDailyProgressEvent {}

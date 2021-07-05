@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:activity_repository/activity_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -64,6 +65,8 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
       yield* _mapExcercisesUpdatedToState(event);
     } else if (event is _ExcerciseDailyProgressGoalUpdated) {
       yield* _mapGoalUpdatedToState(event);
+    } else if (event is ExcerciseDailyProgressViewUpdated) {
+      yield* _mapViewUpdatedToState(event);
     }
   }
 
@@ -77,9 +80,12 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
   Stream<ExcerciseDailyProgressState> _mapExcercisesUpdatedToState(_ExcerciseDailyProgressExcercisesUpdated event) async* {
     if (_excerciseDailyGoalBloc.state is ExcerciseDailyGoalLoadSuccess) {
       final goalState = _excerciseDailyGoalBloc.state as ExcerciseDailyGoalLoadSuccess;
+
       yield ExcerciseDailyProgressLoadSuccess(
         goal: goalState.goal,
-        excercises: event.excercises,
+        avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(event.excercises),
+        caloriesBurned: calculateCalorieBurnedFromExcercises(event.excercises),
+        minutesWorkout: calculateMinutesWorokutFromExcercises(event.excercises),
       );
     }
   }
@@ -89,8 +95,32 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
       final listState = _excerciseDailyListBloc.state as ExcerciseDailyListLoadSuccess;
       yield ExcerciseDailyProgressLoadSuccess(
         goal: event.goal,
-        excercises: listState.excercises,
+        avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(listState.excercises),
+        caloriesBurned: calculateCalorieBurnedFromExcercises(listState.excercises),
+        minutesWorkout: calculateMinutesWorokutFromExcercises(listState.excercises),
       );
     }
+  }
+
+  Stream<ExcerciseDailyProgressState> _mapViewUpdatedToState(ExcerciseDailyProgressViewUpdated event) async* {
+    if (this.state is ExcerciseDailyProgressLoadSuccess) {
+      final currentState = state as ExcerciseDailyProgressLoadSuccess;
+
+      yield currentState.copyWith(
+        view: ExcerciseDailyProgressView.values[event.index],
+      );
+    }
+  }
+
+  int calculateCalorieBurnedFromExcercises(List<ExcerciseLog> excercises) {
+    return excercises.fold(0, (p, e) => p + e.calories);
+  }
+
+  int calculateMinutesWorokutFromExcercises(List<ExcerciseLog> excercises) {
+    return excercises.fold(0, (p, e) => p + e.duration);
+  }
+
+  int calculateAvgMinutesPerWorkoutFromExcercises(List<ExcerciseLog> excercises) {
+    return calculateMinutesWorokutFromExcercises(excercises) ~/ excercises.length;
   }
 }
