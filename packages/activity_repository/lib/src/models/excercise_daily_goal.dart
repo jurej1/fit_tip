@@ -2,7 +2,7 @@ import 'package:activity_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
 
 class ExcerciseDailyGoal extends Equatable {
-  final int caloriesBurnedPerWeek;
+  final int caloriesBurnedPerDay;
   final int workoutsPerWeek;
   final int minutesPerWorkout;
   final int minutesPerDay;
@@ -10,7 +10,7 @@ class ExcerciseDailyGoal extends Equatable {
   final DateTime date;
 
   ExcerciseDailyGoal({
-    this.caloriesBurnedPerWeek = 0,
+    this.caloriesBurnedPerDay = 0,
     this.workoutsPerWeek = 0,
     this.minutesPerWorkout = 0,
     this.minutesPerDay = 60,
@@ -22,7 +22,7 @@ class ExcerciseDailyGoal extends Equatable {
   @override
   List<Object> get props {
     return [
-      caloriesBurnedPerWeek,
+      caloriesBurnedPerDay,
       workoutsPerWeek,
       minutesPerWorkout,
       minutesPerDay,
@@ -40,7 +40,7 @@ class ExcerciseDailyGoal extends Equatable {
     DateTime? date,
   }) {
     return ExcerciseDailyGoal(
-      caloriesBurnedPerWeek: caloriesBurnedPerWeek ?? this.caloriesBurnedPerWeek,
+      caloriesBurnedPerDay: caloriesBurnedPerWeek ?? this.caloriesBurnedPerDay,
       workoutsPerWeek: workoutsPerWeek ?? this.workoutsPerWeek,
       minutesPerWorkout: minutesPerWorkout ?? this.minutesPerWorkout,
       minutesPerDay: minutesPerDay ?? this.minutesPerDay,
@@ -55,7 +55,7 @@ class ExcerciseDailyGoal extends Equatable {
 
   ExcerciseDailyGoalEntity toEntity() {
     return ExcerciseDailyGoalEntity(
-      caloriesBurnedPerWeek: caloriesBurnedPerWeek,
+      caloriesBurnedPerWeek: caloriesBurnedPerDay,
       date: date,
       id: id,
       minutesPerDay: minutesPerDay,
@@ -66,7 +66,7 @@ class ExcerciseDailyGoal extends Equatable {
 
   factory ExcerciseDailyGoal.fromEntity(ExcerciseDailyGoalEntity entity) {
     return ExcerciseDailyGoal(
-      caloriesBurnedPerWeek: entity.caloriesBurnedPerWeek,
+      caloriesBurnedPerDay: entity.caloriesBurnedPerWeek,
       date: entity.date,
       id: entity.id,
       minutesPerDay: entity.minutesPerDay,
