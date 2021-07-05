@@ -83,12 +83,12 @@ class _Carousel extends StatelessWidget {
           return CarouselSlider(
             items: [
               CarouselTile(
-                amount: state.minutesWorkout.toStringAsFixed(0) + 'min',
+                amount: state.minutesPerDay.toStringAsFixed(0) + 'min',
                 goal: state.goal.minutesPerDay.toStringAsFixed(0) + 'min',
                 title: 'Active min',
               ),
               CarouselTile(
-                amount: state.caloriesBurned.toStringAsFixed(0) + 'cal',
+                amount: state.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
                 goal: state.goal.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
                 title: 'Calories burned',
               ),

@@ -84,8 +84,8 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
       yield ExcerciseDailyProgressLoadSuccess(
         goal: goalState.goal,
         avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(event.excercises),
-        caloriesBurned: calculateCalorieBurnedFromExcercises(event.excercises),
-        minutesWorkout: calculateMinutesWorokutFromExcercises(event.excercises),
+        caloriesBurnedPerDay: calculateCalorieBurnedFromExcercises(event.excercises),
+        minutesPerDay: calculateMinutesWorokutFromExcercises(event.excercises),
       );
     }
   }
@@ -96,8 +96,8 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
       yield ExcerciseDailyProgressLoadSuccess(
         goal: event.goal,
         avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(listState.excercises),
-        caloriesBurned: calculateCalorieBurnedFromExcercises(listState.excercises),
-        minutesWorkout: calculateMinutesWorokutFromExcercises(listState.excercises),
+        caloriesBurnedPerDay: calculateCalorieBurnedFromExcercises(listState.excercises),
+        minutesPerDay: calculateMinutesWorokutFromExcercises(listState.excercises),
       );
     }
   }
