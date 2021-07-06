@@ -29,6 +29,16 @@ class EditExcerciseDailyGoalState extends Equatable {
     ];
   }
 
+  factory EditExcerciseDailyGoalState.initial(ExcerciseDailyGoalLoadSuccess state) {
+    return EditExcerciseDailyGoalState(
+      date: state.goal.date,
+      caloriesBurnedPerDay: ExcerciseCalories.pure(state.goal.caloriesBurnedPerDay.toStringAsFixed(0)),
+      minutesPerDay: ExcerciseCalories.pure(state.goal.minutesPerDay.toStringAsFixed(0)),
+      minutesPerWorkout: ExcerciseCalories.pure(state.goal.minutesPerWorkout.toStringAsFixed(0)),
+      workoutsPerWeek: ExcerciseCalories.pure(state.goal.workoutsPerWeek.toStringAsFixed(0)),
+    );
+  }
+
   ExcerciseDailyGoal goal() {
     return ExcerciseDailyGoal(
       date: this.date,

@@ -23,6 +23,7 @@ class EditExcerciseDailyGoalView extends StatelessWidget {
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 activityRepository: RepositoryProvider.of<ActivityRepository>(context),
                 daySelectorBloc: daySelectorBloc,
+                excerciseDailyGoalBloc: excerciseDailyGoalBloc,
               ),
             ),
             BlocProvider.value(value: excerciseDailyGoalBloc)

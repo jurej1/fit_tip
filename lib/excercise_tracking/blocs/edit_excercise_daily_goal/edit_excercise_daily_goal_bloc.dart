@@ -5,6 +5,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:formz/formz.dart';
@@ -17,9 +18,14 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
     required AuthenticationBloc authenticationBloc,
     required ActivityRepository activityRepository,
     required DaySelectorBloc daySelectorBloc,
+    required ExcerciseDailyGoalBloc excerciseDailyGoalBloc,
   })  : _authenticationBloc = authenticationBloc,
         _activityRepository = activityRepository,
-        super(EditExcerciseDailyGoalState(date: daySelectorBloc.state.selectedDate));
+        super(
+          excerciseDailyGoalBloc.state is ExcerciseDailyGoalLoadSuccess
+              ? EditExcerciseDailyGoalState.initial(excerciseDailyGoalBloc.state as ExcerciseDailyGoalLoadSuccess)
+              : EditExcerciseDailyGoalState(date: daySelectorBloc.state.selectedDate),
+        );
 
   final AuthenticationBloc _authenticationBloc;
   final ActivityRepository _activityRepository;
