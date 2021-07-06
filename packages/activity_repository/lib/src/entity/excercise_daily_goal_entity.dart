@@ -73,9 +73,11 @@ class ExcerciseDailyGoalEntity extends Equatable {
 
   static ExcerciseDailyGoalEntity fromDocumentSnapshot(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
+
+    final dateTimestamp = data[_DocKeys.date] as Timestamp;
     return ExcerciseDailyGoalEntity(
       caloriesBurnedPerWeek: data[_DocKeys.caloriesBurnedPerWeek],
-      date: data[_DocKeys.date],
+      date: dateTimestamp.toDate(),
       id: snap.id,
       minutesPerDay: data[_DocKeys.minutesPerDay],
       minutesPerWorkout: data[_DocKeys.minutesPerWorkout],
