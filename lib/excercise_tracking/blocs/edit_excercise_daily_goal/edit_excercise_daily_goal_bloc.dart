@@ -5,7 +5,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:formz/formz.dart';
@@ -20,12 +19,10 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
     required DaySelectorBloc daySelectorBloc,
   })  : _authenticationBloc = authenticationBloc,
         _activityRepository = activityRepository,
-        _daySelectorBloc = daySelectorBloc,
         super(EditExcerciseDailyGoalState(date: daySelectorBloc.state.selectedDate));
 
   final AuthenticationBloc _authenticationBloc;
   final ActivityRepository _activityRepository;
-  final DaySelectorBloc _daySelectorBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;
@@ -36,7 +33,7 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
   ) async* {
     if (event is EditExcerciseDailyGoalMinutesPerDayUpdated) {
       yield* _mapMinutesPerDayUpdatedToState(event);
-    } else if (event is EditExcerciseDailyGoalCaloriesBurnedPerWeekUpdated) {
+    } else if (event is EditExcerciseDailyGoalCaloriesBurnedPerDayUpdated) {
       yield* _mapCaloriesBurnedPerWeek(event);
     } else if (event is EditExcerciseDailyGoalMinutesPerWorkoutUpdated) {
       yield* _mapMinutesPerWorkoutUpdatedToState(event);
@@ -63,7 +60,7 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
     );
   }
 
-  Stream<EditExcerciseDailyGoalState> _mapCaloriesBurnedPerWeek(EditExcerciseDailyGoalCaloriesBurnedPerWeekUpdated event) async* {
+  Stream<EditExcerciseDailyGoalState> _mapCaloriesBurnedPerWeek(EditExcerciseDailyGoalCaloriesBurnedPerDayUpdated event) async* {
     final caloriesBurnedPerDay = ExcerciseCalories.dirty(event.value);
 
     yield state.copyWith(

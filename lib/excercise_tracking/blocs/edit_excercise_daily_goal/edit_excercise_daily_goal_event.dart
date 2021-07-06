@@ -7,10 +7,10 @@ abstract class EditExcerciseDailyGoalEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EditExcerciseDailyGoalCaloriesBurnedPerWeekUpdated extends EditExcerciseDailyGoalEvent {
+class EditExcerciseDailyGoalCaloriesBurnedPerDayUpdated extends EditExcerciseDailyGoalEvent {
   final String value;
 
-  const EditExcerciseDailyGoalCaloriesBurnedPerWeekUpdated(this.value);
+  const EditExcerciseDailyGoalCaloriesBurnedPerDayUpdated(this.value);
 
   @override
   List<Object> get props => [value];

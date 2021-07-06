@@ -4,3 +4,4 @@ export 'duration_selector/duration_selector_bloc.dart';
 export 'excercise_tile/excercise_tile_bloc.dart';
 export 'excercise_daily_goal/excercise_daily_goal_bloc.dart';
 export 'excercise_daily_progress/excercise_daily_progress_bloc.dart';
+export 'edit_excercise_daily_goal/edit_excercise_daily_goal_bloc.dart';
