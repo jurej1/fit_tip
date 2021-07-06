@@ -12,6 +12,7 @@ class EditExcerciseDailyGoalView extends StatelessWidget {
 
   static MaterialPageRoute route(BuildContext context) {
     final daySelectorBloc = BlocProvider.of<DaySelectorBloc>(context);
+    final excerciseDailyGoalBloc = BlocProvider.of<ExcerciseDailyGoalBloc>(context);
 
     return MaterialPageRoute(
       builder: (_) {
@@ -23,7 +24,8 @@ class EditExcerciseDailyGoalView extends StatelessWidget {
                 activityRepository: RepositoryProvider.of<ActivityRepository>(context),
                 daySelectorBloc: daySelectorBloc,
               ),
-            )
+            ),
+            BlocProvider.value(value: excerciseDailyGoalBloc)
           ],
           child: EditExcerciseDailyGoalView(),
         );
@@ -45,7 +47,19 @@ class EditExcerciseDailyGoalView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<EditExcerciseDailyGoalBloc, EditExcerciseDailyGoalState>(
+      body: BlocConsumer<EditExcerciseDailyGoalBloc, EditExcerciseDailyGoalState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionSuccess) {
+            Navigator.of(context).pop();
+            BlocProvider.of<ExcerciseDailyGoalBloc>(context).add(ExcerciseDailyGoalUpdated(state.goal()));
+          } else if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Oops something went wrong'),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state.status.isSubmissionInProgress) {
             return const Center(
@@ -53,7 +67,10 @@ class EditExcerciseDailyGoalView extends StatelessWidget {
             );
           }
           return ListView(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 10,
+            ),
             physics: const ClampingScrollPhysics(),
             children: [
               const _MinutesPerDayInput(),
