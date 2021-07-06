@@ -43,6 +43,14 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Excercise tracking'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(EditExcerciseDailyGoalView.route(context));
+            },
+            icon: Icon(Icons.edit),
+          ),
+        ],
       ),
       body: SizedBox(
         height: size.height,

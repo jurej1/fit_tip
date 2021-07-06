@@ -43,4 +43,4 @@ class EditExcerciseDailyGoalMinutesPerDayUpdated extends EditExcerciseDailyGoalE
   List<Object> get props => [value];
 }
 
-class EditExcerciseDailyGoalFormSubmited extends ExcerciseDailyGoalEvent {}
+class EditExcerciseDailyGoalFormSubmited extends EditExcerciseDailyGoalEvent {}
