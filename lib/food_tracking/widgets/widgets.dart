@@ -21,3 +21,4 @@ export 'food_item_detail_macros_data.dart';
 export 'row_input_field.dart';
 export 'animated_progress_bar.dart';
 export 'carousel_tile.dart';
+export 'selected_view_displayer.dart';

@@ -163,48 +163,11 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
       },
       builder: (context, state) {
         if (state is FoodDayProgressLoadSuccess) {
-          return Container(
-            width: 80,
-            height: 15,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    FoodDayProgressCarouselView.values.length,
-                    (index) {
-                      return Container(
-                        height: dotSize,
-                        width: dotSize,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, _) {
-                    return Positioned(
-                      left: 23.333 * _animationController.value,
-                      child: AnimatedContainer(
-                        curve: Curves.fastOutSlowIn,
-                        duration: const Duration(milliseconds: 250),
-                        height: dotSize,
-                        width: dotSize,
-                        decoration: BoxDecoration(
-                          color: state.getPrimaryColorBasedOnView(),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+          return SelectedViewDisplayer(
+            dotSize: dotSize,
+            length: FoodDayProgressCarouselView.values.length,
+            controller: _animationController,
+            selectedColor: state.getPrimaryColorBasedOnView(),
           );
         }
 
