@@ -50,7 +50,7 @@ class SelectedViewDisplayer extends StatelessWidget {
             animation: controller,
             builder: (context, _) {
               return Positioned(
-                left: getConstMultiplier() * controller.value,
+                left: (getConstMultiplier() * controller.value),
                 child: AnimatedContainer(
                   curve: Curves.fastOutSlowIn,
                   duration: const Duration(milliseconds: 250),
