@@ -12,9 +12,7 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
     int? duration,
   }) : super(
           duration != null
-              ? DurationSelectorState(
-                  focusedIndex: DurationSelectorState.mapMinutesToIndex(duration),
-                )
+              ? DurationSelectorState(focusedIndex: DurationSelectorState.mapMinutesToIndex(duration))
               : DurationSelectorState(),
         );
 
@@ -26,10 +24,18 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
       final ScrollController controller = event.controller;
       final double offset = controller.offset;
 
+      print('offset: [$offset]');
+
       double index = offset / event.itemWidth;
 
+      print('index: [$index]');
+      print('index round: [${index.round()}]');
+
+      final focusedIndex = index.round();
+
       yield state.copyWith(
-        focusedIndex: index.round(),
+        focusedIndex: focusedIndex,
+        offset: offset,
       );
     }
   }

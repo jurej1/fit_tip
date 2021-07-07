@@ -3,16 +3,38 @@ part of 'duration_selector_bloc.dart';
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({
     this.focusedIndex = 0,
-    this.widgetWidth = 0,
+    this.offset = 0,
   });
 
   final int focusedIndex;
-  final double widgetWidth;
+  final double offset;
 
   @override
-  List<Object> get props => [focusedIndex, widgetWidth];
-
+  List<Object> get props => [focusedIndex, offset];
   double getAnimateToValue(double itemWidth) {
+    double centerOffset = focusedIndex * itemWidth;
+    if (this.offset % itemWidth == 0) {
+      return centerOffset;
+    }
+
+    if (this.offset > centerOffset) {
+      double a = offset % centerOffset;
+
+      if (a < 15) {
+        return centerOffset;
+      } else if (a >= 15) {
+        return centerOffset + itemWidth;
+      }
+    } else if (this.offset < centerOffset) {
+      double a = offset % centerOffset;
+
+      if (centerOffset - 15 > a) {
+        return centerOffset;
+      } else {
+        return centerOffset - 30;
+      }
+    }
+
     return (itemWidth * focusedIndex);
   }
 
@@ -37,11 +59,11 @@ class DurationSelectorState extends Equatable {
 
   DurationSelectorState copyWith({
     int? focusedIndex,
-    double? widgetWidth,
+    double? offset,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
-      widgetWidth: widgetWidth ?? this.widgetWidth,
+      offset: offset ?? this.offset,
     );
   }
 }

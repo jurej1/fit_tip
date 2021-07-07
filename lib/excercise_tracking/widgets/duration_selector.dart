@@ -55,11 +55,7 @@ class __BodyState extends State<_Body> {
           curve: Curves.fastOutSlowIn,
         );
 
-        BlocProvider.of<AddExcerciseLogBloc>(context).add(
-          AddExcerciseLogDurationUpdated(
-            state.mapIndexToMinutes(),
-          ),
-        );
+        BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(state.mapIndexToMinutes()));
       },
       child: Container(
         width: size.width,
@@ -94,24 +90,24 @@ class __BodyState extends State<_Body> {
               }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
                 builder: (context, state) {
                   return ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      if (index == 0 || index == 289) {
-                        return Container(
-                          width: size.width * 0.5 - (itemWidth * 0.5),
-                        );
-                      }
                       return Container(
                         height: 200,
                         width: itemWidth,
                         padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.25),
-                        child: ColoredBox(
+                        decoration: BoxDecoration(
                           color: Colors.blue,
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        // child: ColoredBox(
+                        //   color: Colors.blue,
+                        // ),
                       );
                     },
-                    itemCount: 288 + 2,
+                    itemCount: 288,
                   );
                 },
               )),
