@@ -84,6 +84,10 @@ class ExcerciseDailyProgressLoadSuccess extends ExcerciseDailyProgressState {
   Color getSecondaryColor() {
     return getPrimaryColor().withOpacity(0.35);
   }
+
+  double getIndexOfView() {
+    return ExcerciseDailyProgressView.values.indexOf(view).toDouble();
+  }
 }
 
 class ExcerciseDailyProgressFailure extends ExcerciseDailyProgressState {

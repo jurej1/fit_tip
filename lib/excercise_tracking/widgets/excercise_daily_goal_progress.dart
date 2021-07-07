@@ -53,6 +53,10 @@ class _Body extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 15,
+                    child: const _SelectedViewDisplayer(),
+                  )
                 ],
               ),
             ],
@@ -104,6 +108,55 @@ class _Carousel extends StatelessWidget {
               },
               enableInfiniteScroll: false,
             ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class _SelectedViewDisplayer extends StatefulWidget {
+  const _SelectedViewDisplayer({Key? key}) : super(key: key);
+
+  @override
+  __SelectedViewDisplayerState createState() => __SelectedViewDisplayerState();
+}
+
+class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ExcerciseDailyProgressBloc, ExcerciseDailyProgressState>(
+      listener: (context, state) {
+        if (state is ExcerciseDailyProgressLoadSuccess) {
+          _animationController.animateTo(state.getIndexOfView());
+        }
+      },
+      builder: (context, state) {
+        if (state is ExcerciseDailyProgressLoadSuccess) {
+          return SelectedViewDisplayer(
+            dotSize: 15,
+            length: ExcerciseDailyProgressView.values.length,
+            controller: _animationController,
+            selectedColor: state.getPrimaryColor(),
           );
         }
         return Container();
