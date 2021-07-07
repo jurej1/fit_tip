@@ -148,14 +148,13 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
     return BlocConsumer<ExcerciseDailyProgressBloc, ExcerciseDailyProgressState>(
       listener: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
-          print('updating view');
           _animationController.animateTo(state.getIndexOfView());
         }
       },
       builder: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
           return SelectedViewDisplayer(
-            dotSize: 15,
+            dotSize: 10,
             length: ExcerciseDailyProgressView.values.length,
             controller: _animationController,
             selectedColor: state.getPrimaryColor(),

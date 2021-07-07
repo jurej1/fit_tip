@@ -74,6 +74,8 @@ class SelectedViewDisplayer extends StatelessWidget {
 
     double b = width - a;
 
-    return b / (length - 1);
+    double whitespace = b / (length - 1);
+
+    return whitespace + dotSize;
   }
 }
