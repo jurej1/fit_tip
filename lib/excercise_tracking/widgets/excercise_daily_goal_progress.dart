@@ -131,6 +131,7 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
+      upperBound: ExcerciseDailyProgressView.values.length.toDouble(),
     );
 
     super.initState();
@@ -147,6 +148,7 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
     return BlocConsumer<ExcerciseDailyProgressBloc, ExcerciseDailyProgressState>(
       listener: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
+          print('updating view');
           _animationController.animateTo(state.getIndexOfView());
         }
       },
