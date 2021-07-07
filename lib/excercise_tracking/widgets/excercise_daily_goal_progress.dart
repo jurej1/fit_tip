@@ -84,29 +84,35 @@ class _Carousel extends StatelessWidget {
     return BlocBuilder<ExcerciseDailyProgressBloc, ExcerciseDailyProgressState>(
       builder: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
-          return CarouselSlider(
-            items: [
-              CarouselTile(
-                amount: state.minutesPerDay.toStringAsFixed(0) + 'min',
-                goal: state.goal.minutesPerDay.toStringAsFixed(0) + 'min',
-                title: 'Active min',
+          return NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overscroll) {
+              overscroll.disallowGlow();
+              return true;
+            },
+            child: CarouselSlider(
+              items: [
+                CarouselTile(
+                  amount: state.minutesPerDay.toStringAsFixed(0) + 'min',
+                  goal: state.goal.minutesPerDay.toStringAsFixed(0) + 'min',
+                  title: 'Active min',
+                ),
+                CarouselTile(
+                  amount: state.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
+                  goal: state.goal.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
+                  title: 'Calories burned',
+                ),
+                CarouselTile(
+                  amount: state.avgMinutesPerWorkout.toStringAsFixed(0) + 'min',
+                  goal: state.goal.minutesPerWorkout.toStringAsFixed(0) + 'min',
+                  title: 'Avg workout \nduration',
+                ),
+              ],
+              options: CarouselOptions(
+                onPageChanged: (index, optins) {
+                  BlocProvider.of<ExcerciseDailyProgressBloc>(context).add(ExcerciseDailyProgressViewUpdated(index));
+                },
+                enableInfiniteScroll: false,
               ),
-              CarouselTile(
-                amount: state.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
-                goal: state.goal.caloriesBurnedPerDay.toStringAsFixed(0) + 'cal',
-                title: 'Calories burned',
-              ),
-              CarouselTile(
-                amount: state.avgMinutesPerWorkout.toStringAsFixed(0) + 'min',
-                goal: state.goal.minutesPerWorkout.toStringAsFixed(0) + 'min',
-                title: 'Avg workout \nduration',
-              ),
-            ],
-            options: CarouselOptions(
-              onPageChanged: (index, optins) {
-                BlocProvider.of<ExcerciseDailyProgressBloc>(context).add(ExcerciseDailyProgressViewUpdated(index));
-              },
-              enableInfiniteScroll: false,
             ),
           );
         }
@@ -154,7 +160,7 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
       builder: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
           return SelectedViewDisplayer(
-            dotSize: 15,
+            dotSize: 12,
             length: ExcerciseDailyProgressView.values.length,
             controller: _animationController,
             selectedColor: state.getPrimaryColor(),
