@@ -154,7 +154,7 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
       builder: (context, state) {
         if (state is ExcerciseDailyProgressLoadSuccess) {
           return SelectedViewDisplayer(
-            dotSize: 10,
+            dotSize: 15,
             length: ExcerciseDailyProgressView.values.length,
             controller: _animationController,
             selectedColor: state.getPrimaryColor(),
