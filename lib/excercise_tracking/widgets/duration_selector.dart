@@ -29,12 +29,13 @@ class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
+  final double separatorWidth = 5;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController(
-      initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth),
+      initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth, separatorWidth),
     );
   }
 
@@ -50,7 +51,7 @@ class __BodyState extends State<_Body> {
     return BlocListener<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         _scrollController.animateTo(
-          state.getAnimateToValue(itemWidth),
+          state.getAnimateToValue(itemWidth, separatorWidth),
           duration: const Duration(milliseconds: 350),
           curve: Curves.fastOutSlowIn,
         );
@@ -89,7 +90,13 @@ class __BodyState extends State<_Body> {
                 return false;
               }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
                 builder: (context, state) {
-                  return ListView.builder(
+                  return ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: separatorWidth,
+                        width: separatorWidth,
+                      );
+                    },
                     padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
@@ -102,9 +109,6 @@ class __BodyState extends State<_Body> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        // child: ColoredBox(
-                        //   color: Colors.blue,
-                        // ),
                       );
                     },
                     itemCount: 288,

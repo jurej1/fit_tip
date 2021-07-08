@@ -11,8 +11,8 @@ class DurationSelectorState extends Equatable {
 
   @override
   List<Object> get props => [focusedIndex, offset];
-  double getAnimateToValue(double itemWidth) {
-    return itemWidth * focusedIndex;
+  double getAnimateToValue(double itemWidth, double separatorWidth) {
+    return itemWidth * focusedIndex + (separatorWidth * focusedIndex);
   }
 
   int mapIndexToMinutes() {
