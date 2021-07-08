@@ -80,7 +80,7 @@ class __BodyState extends State<_Body> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.grey.shade200,
                 ),
-                child: Text('${state.mapIndexToMinutes()} min'),
+                child: Text('${state.mapIndexToText()}'),
               ),
               const SizedBox(height: 5),
               Expanded(
