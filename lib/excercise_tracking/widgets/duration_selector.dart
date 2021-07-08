@@ -142,11 +142,12 @@ class _TextDisplayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
       builder: (context, state) {
-        return Container(
+        return AnimatedContainer(
+          duration: state.animationDuration,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
+            color: state.status == DurationSelectorStatus.scrolling ? Colors.blue.shade100 : Colors.grey.shade200,
           ),
           child: Text(
             state.mapIndexToText(),
