@@ -36,7 +36,6 @@ class __BodyState extends State<_Body> {
 
   final double itemWidth = 30;
   final double columnHeight = 140;
-  final Duration _duration = const Duration(milliseconds: 300);
 
   @override
   void initState() {
@@ -95,7 +94,7 @@ class __BodyState extends State<_Body> {
 
                       _scrollController.animateTo(
                         state.getAnimateToValue(itemWidth),
-                        duration: _duration,
+                        duration: state.animationDuration,
                         curve: Curves.fastOutSlowIn,
                       );
                     }
@@ -111,7 +110,7 @@ class __BodyState extends State<_Body> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return AnimatedContainer(
-                        duration: _duration,
+                        duration: state.animationDuration,
                         width: itemWidth,
                         padding: EdgeInsets.symmetric(
                           horizontal: state.horizontalPadding(index, itemWidth),
@@ -120,7 +119,7 @@ class __BodyState extends State<_Body> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: AnimatedContainer(
-                            duration: _duration,
+                            duration: state.animationDuration,
                             color: state.backgroundColor(index),
                           ),
                         ),

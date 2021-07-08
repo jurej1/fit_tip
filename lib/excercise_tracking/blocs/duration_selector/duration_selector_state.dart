@@ -58,6 +58,14 @@ class DurationSelectorState extends Equatable {
     return 3600;
   }
 
+  Duration get animationDuration {
+    if (isScrolling) {
+      return Duration(milliseconds: 150);
+    } else {
+      return Duration(milliseconds: 300);
+    }
+  }
+
   double verticalPadding(int index, double itemWidth) {
     if (index == focusedIndex) {
       return 0.0;
