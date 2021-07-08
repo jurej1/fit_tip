@@ -29,13 +29,12 @@ class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
-  final double separatorWidth = 5;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController(
-      initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth, separatorWidth),
+      initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth),
     );
   }
 
@@ -51,7 +50,7 @@ class __BodyState extends State<_Body> {
     return BlocListener<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         _scrollController.animateTo(
-          state.getAnimateToValue(itemWidth, separatorWidth),
+          state.getAnimateToValue(itemWidth),
           duration: const Duration(milliseconds: 350),
           curve: Curves.fastOutSlowIn,
         );
@@ -90,13 +89,7 @@ class __BodyState extends State<_Body> {
                 return false;
               }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
                 builder: (context, state) {
-                  return ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: separatorWidth,
-                        width: separatorWidth,
-                      );
-                    },
+                  return ListView.builder(
                     padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
