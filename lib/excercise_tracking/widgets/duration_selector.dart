@@ -102,7 +102,7 @@ class __BodyState extends State<_Body> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 300),
                             color: state.backgroundColor(index),
                           ),
                         ),
