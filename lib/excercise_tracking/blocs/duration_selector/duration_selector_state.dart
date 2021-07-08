@@ -49,6 +49,10 @@ class DurationSelectorState extends Equatable {
   String mapIndexToText() {
     if (this.focusedIndex < 60) {
       return '${focusedIndex}min';
+    } else if (this.focusedIndex % 60 == 0) {
+      final double hours = focusedIndex / 60;
+
+      return '${hours.toInt()}h';
     }
 
     double a = focusedIndex / 60;

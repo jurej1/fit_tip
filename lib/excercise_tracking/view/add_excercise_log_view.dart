@@ -181,7 +181,12 @@ class _TimeInput extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text('Start time: '),
+          title: Text(
+            'Start time: ',
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
           trailing: Text('${state.time.value.hour}:${state.time.value.minute}'),
           onTap: () async {
             FocusScope.of(context).unfocus();
@@ -212,7 +217,12 @@ class _DateInput extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text('Date: '),
+          title: Text(
+            'Date: ',
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
           trailing: Text(
             DateFormat('dd.MMMM.yyyy').format(state.date.value),
           ),
@@ -244,7 +254,12 @@ class _ExcerciseTypeInput extends StatelessWidget {
       builder: (context, state) {
         return ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text('Excercise Type: '),
+          title: Text(
+            'Excercise Type: ',
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
           trailing: Text(describeEnum(state.type.value)),
           onTap: () async {
             FocusScope.of(context).unfocus();
