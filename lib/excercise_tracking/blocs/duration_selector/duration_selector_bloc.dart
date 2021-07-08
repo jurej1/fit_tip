@@ -20,7 +20,7 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
   Stream<DurationSelectorState> mapEventToState(
     DurationSelectorEvent event,
   ) async* {
-    if (event is DurationSelectorValueUpdated) {
+    if (event is DurationSelectorScrollEnded) {
       final ScrollController controller = event.controller;
       final double offset = controller.offset;
 

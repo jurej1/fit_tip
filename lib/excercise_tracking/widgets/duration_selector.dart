@@ -81,9 +81,10 @@ class __BodyState extends State<_Body> {
             Expanded(
               child: NotificationListener<ScrollNotification>(
                 onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollEndNotification) {
+                  if (scrollNotification is ScrollUpdateNotification) {
+                  } else if (scrollNotification is ScrollEndNotification) {
                     BlocProvider.of<DurationSelectorBloc>(context).add(
-                      DurationSelectorValueUpdated(
+                      DurationSelectorScrollEnded(
                         controller: _scrollController,
                         itemWidth: itemWidth,
                       ),

@@ -7,11 +7,11 @@ abstract class DurationSelectorEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DurationSelectorValueUpdated extends DurationSelectorEvent {
+class DurationSelectorScrollEnded extends DurationSelectorEvent {
   final ScrollController controller;
   final double itemWidth;
 
-  const DurationSelectorValueUpdated({
+  const DurationSelectorScrollEnded({
     required this.controller,
     required this.itemWidth,
   });
