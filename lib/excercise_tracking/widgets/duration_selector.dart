@@ -51,7 +51,11 @@ class __BodyState extends State<_Body> {
 
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(state.mapIndexToMinutes()));
+        BlocProvider.of<AddExcerciseLogBloc>(context).add(
+          AddExcerciseLogDurationUpdated(
+            state.mapIndexToMinutes(),
+          ),
+        );
       },
       builder: (context, state) {
         return Container(
