@@ -107,16 +107,21 @@ class _DurationInput extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Duration:'),
-            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 6),
+              child: Text(
+                'Duration:',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            const SizedBox(height: 7),
             DurationSelector(
               duration: state.duration.value,
-              onValueUpdated: (context, state) {
-                BlocProvider.of<AddExcerciseLogBloc>(context).add(
-                  AddExcerciseLogDurationUpdated(
-                    state.mapIndexToMinutes(),
-                  ),
-                );
+              onValueUpdated: (minutes) {
+                BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(minutes));
               },
             ),
           ],

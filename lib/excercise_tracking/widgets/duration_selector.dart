@@ -10,7 +10,7 @@ class DurationSelector extends StatelessWidget {
   }) : super(key: key);
 
   final int? duration;
-  final void Function(BuildContext context, DurationSelectorState state) onValueUpdated;
+  final void Function(int minutes) onValueUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class DurationSelector extends StatelessWidget {
 
 class _Body extends StatefulWidget {
   const _Body({Key? key, required this.onValueUpdated}) : super(key: key);
-  final void Function(BuildContext context, DurationSelectorState state) onValueUpdated;
+  final void Function(int minutes) onValueUpdated;
 
   @override
   __BodyState createState() => __BodyState();
@@ -56,7 +56,7 @@ class __BodyState extends State<_Body> {
 
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        widget.onValueUpdated(context, state);
+        widget.onValueUpdated(state.mapIndexToMinutes());
 
         if (state.status == DurationSelectorStatus.scrollEnded) {
           _scrollController.animateTo(
@@ -74,7 +74,7 @@ class __BodyState extends State<_Body> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _TextDisplayer(text: state.mapIndexToText()),
+              _TextDisplayer(),
               const SizedBox(height: 5),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
@@ -136,20 +136,23 @@ class __BodyState extends State<_Body> {
 class _TextDisplayer extends StatelessWidget {
   const _TextDisplayer({
     Key? key,
-    required this.text,
   }) : super(key: key);
-
-  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey.shade200,
-      ),
-      child: Text(text),
+    return BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.grey.shade200,
+          ),
+          child: Text(
+            state.mapIndexToText(),
+          ),
+        );
+      },
     );
   }
 }
