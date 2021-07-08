@@ -74,14 +74,7 @@ class __BodyState extends State<_Body> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey.shade200,
-                ),
-                child: Text('${state.mapIndexToText()}'),
-              ),
+              _TextDisplayer(text: state.mapIndexToText()),
               const SizedBox(height: 5),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
@@ -136,6 +129,27 @@ class __BodyState extends State<_Body> {
           ),
         );
       },
+    );
+  }
+}
+
+class _TextDisplayer extends StatelessWidget {
+  const _TextDisplayer({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.grey.shade200,
+      ),
+      child: Text(text),
     );
   }
 }
