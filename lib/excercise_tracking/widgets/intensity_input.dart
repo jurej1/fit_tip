@@ -1,4 +1,4 @@
-import 'package:activity_repository/activity_repository.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

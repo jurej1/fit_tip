@@ -1,4 +1,4 @@
-import 'package:activity_repository/activity_repository.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
 
 enum ExcerciseTypeInputValidationError { invalid }

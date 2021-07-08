@@ -1,7 +1,7 @@
-import 'package:activity_repository/activity_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,7 +42,7 @@ class ExcerciseDailyList extends StatelessWidget {
           key: ValueKey(item),
           create: (context) => ExcerciseTileBloc(
             excerciseLog: item,
-            activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
           ),
           child: ExcerciseTile(),

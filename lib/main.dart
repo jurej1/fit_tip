@@ -1,6 +1,6 @@
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -22,7 +22,7 @@ Future<void> main() async {
       weightRepository: WeightRepository(),
       waterRepository: WaterRepository(),
       foodRepository: FoodRepository(),
-      activityRepository: ActivityRepository(),
+      fitnessRepository: FitnessRepository(),
     ),
   );
 }

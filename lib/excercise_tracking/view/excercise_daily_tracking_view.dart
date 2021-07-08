@@ -1,9 +1,9 @@
-import 'package:activity_repository/activity_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/view/add_excercise_log_view.dart';
 import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,14 +20,14 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => ExcerciseDailyListBloc(
-                activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               )..add(ExcerciseDailyListDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
             BlocProvider(
               create: (context) => ExcerciseDailyGoalBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
               )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
           ],

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +8,7 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/shared/shared.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
@@ -18,16 +18,16 @@ part 'add_excercise_log_state.dart';
 class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogState> {
   AddExcerciseLogBloc({
     required AuthenticationBloc authenticationBloc,
-    required ActivityRepository activityRepository,
+    required FitnessRepository fitnessREpository,
     required DaySelectorBloc daySelectorBloc,
     ExcerciseLog? excerciseLog,
-  })  : _activityRepository = activityRepository,
+  })  : _fitnessRepository = fitnessREpository,
         _authenticationBloc = authenticationBloc,
         super(excerciseLog == null
             ? AddExcerciseLogState.initial(daySelectorBloc.state.selectedDate)
             : AddExcerciseLogState.edit(excerciseLog));
 
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
@@ -152,7 +152,7 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
 
       try {
         if (state.mode == FormMode.add) {
-          DocumentReference ref = await _activityRepository.addExcerciseLog(
+          DocumentReference ref = await _fitnessRepository.addExcerciseLog(
             _user!.id!,
             state.excerciseLog,
           );
@@ -162,7 +162,7 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
             id: ref.id,
           );
         } else if (state.mode == FormMode.edit) {
-          await _activityRepository.updateExcerciseLog(
+          await _fitnessRepository.updateExcerciseLog(
             _user!.id!,
             state.excerciseLog,
           );

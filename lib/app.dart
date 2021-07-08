@@ -1,6 +1,6 @@
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:fit_tip/home.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -15,7 +15,7 @@ class App extends StatelessWidget {
   final WeightRepository _weightRepository;
   final WaterRepository _waterRepository;
   final FoodRepository _foodRepository;
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _fitnessRepository;
 
   App({
     Key? key,
@@ -23,12 +23,12 @@ class App extends StatelessWidget {
     required WeightRepository weightRepository,
     required WaterRepository waterRepository,
     required FoodRepository foodRepository,
-    required ActivityRepository activityRepository,
+    required FitnessRepository fitnessRepository,
   })  : _authenticationRepository = authenticationRepository,
         _waterRepository = waterRepository,
         _weightRepository = weightRepository,
         _foodRepository = foodRepository,
-        _activityRepository = activityRepository,
+        _fitnessRepository = fitnessRepository,
         super(key: key);
 
   final _navigatorState = GlobalKey<NavigatorState>();
@@ -41,7 +41,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: _weightRepository),
         RepositoryProvider.value(value: _waterRepository),
         RepositoryProvider.value(value: _foodRepository),
-        RepositoryProvider.value(value: _activityRepository)
+        RepositoryProvider.value(value: _fitnessRepository)
       ],
       child: MultiBlocProvider(
         providers: [

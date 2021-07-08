@@ -1,10 +1,10 @@
-import 'package:activity_repository/activity_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/widgets/widgets.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/shared/shared.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +24,7 @@ class AddExcerciseLogView extends StatelessWidget {
             BlocProvider(
               create: (context) => AddExcerciseLogBloc(
                 daySelectorBloc: daySelectorBloc,
-                activityRepository: RepositoryProvider.of<ActivityRepository>(context),
+                fitnessREpository: RepositoryProvider.of<FitnessRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
             ),

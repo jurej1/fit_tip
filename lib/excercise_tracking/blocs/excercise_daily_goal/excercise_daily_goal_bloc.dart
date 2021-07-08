@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:activity_repository/activity_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 
 part 'excercise_daily_goal_event.dart';
 part 'excercise_daily_goal_state.dart';
@@ -12,13 +12,13 @@ part 'excercise_daily_goal_state.dart';
 class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDailyGoalState> {
   ExcerciseDailyGoalBloc({
     required AuthenticationBloc authenticationBloc,
-    required ActivityRepository activityRepository,
-  })  : _activityRepository = activityRepository,
+    required FitnessRepository fitnessRepository,
+  })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         super(ExcerciseDailyGoalLoading());
 
   final AuthenticationBloc _authenticationBloc;
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _fitnessRepository;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;
@@ -39,7 +39,7 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
       yield ExcerciseDailyGoalLoading();
 
       try {
-        ExcerciseDailyGoal goal = await _activityRepository.getExcerciseDailyGoal(_user!.id!, event.date);
+        ExcerciseDailyGoal goal = await _fitnessRepository.getExcerciseDailyGoal(_user!.id!, event.date);
 
         yield ExcerciseDailyGoalLoadSuccess(goal);
       } on Exception catch (e) {

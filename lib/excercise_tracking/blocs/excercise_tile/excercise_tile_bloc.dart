@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 
 part 'excercise_tile_event.dart';
 part 'excercise_tile_state.dart';
@@ -12,13 +12,13 @@ part 'excercise_tile_state.dart';
 class ExcerciseTileBloc extends Bloc<ExcerciseTileEvent, ExcerciseTileState> {
   ExcerciseTileBloc({
     required ExcerciseLog excerciseLog,
-    required ActivityRepository activityRepository,
+    required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
-  })  : this._activityRepository = activityRepository,
+  })  : this._activityRepository = fitnessRepository,
         this._authenticationBloc = authenticationBloc,
         super(ExcerciseTileInitial(excerciseLog, false));
 
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _activityRepository;
   final AuthenticationBloc _authenticationBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;

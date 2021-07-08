@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:activity_repository/activity_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../blocs.dart';

@@ -1,24 +1,24 @@
 import 'dart:async';
 
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 
 part 'excercise_daily_list_event.dart';
 part 'excercise_daily_list_state.dart';
 
 class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDailyListState> {
   ExcerciseDailyListBloc({
-    required ActivityRepository activityRepository,
+    required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
-  })  : _activityRepository = activityRepository,
+  })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         super(ExcerciseDailyListLoading());
 
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
@@ -47,7 +47,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     yield ExcerciseDailyListLoading();
 
     try {
-      QuerySnapshot snapshot = await _activityRepository.getExcerciseLogsForDay(_user!.id!, event.date);
+      QuerySnapshot snapshot = await _fitnessRepository.getExcerciseLogsForDay(_user!.id!, event.date);
 
       yield ExcerciseDailyListLoadSuccess(ExcerciseLog.fromQuerySnapshot(snapshot));
     } catch (error) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:activity_repository/activity_repository.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -8,6 +7,7 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/excercise_tracking/models/models.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
 
 part 'edit_excercise_daily_goal_event.dart';
@@ -16,11 +16,11 @@ part 'edit_excercise_daily_goal_state.dart';
 class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditExcerciseDailyGoalState> {
   EditExcerciseDailyGoalBloc({
     required AuthenticationBloc authenticationBloc,
-    required ActivityRepository activityRepository,
+    required FitnessRepository fitnessRepository,
     required DaySelectorBloc daySelectorBloc,
     required ExcerciseDailyGoalBloc excerciseDailyGoalBloc,
   })  : _authenticationBloc = authenticationBloc,
-        _activityRepository = activityRepository,
+        _fitnessRepository = fitnessRepository,
         super(
           excerciseDailyGoalBloc.state is ExcerciseDailyGoalLoadSuccess
               ? EditExcerciseDailyGoalState.initial(excerciseDailyGoalBloc.state as ExcerciseDailyGoalLoadSuccess)
@@ -28,7 +28,7 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
         );
 
   final AuthenticationBloc _authenticationBloc;
-  final ActivityRepository _activityRepository;
+  final FitnessRepository _fitnessRepository;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;
@@ -127,7 +127,7 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
 
       try {
         ExcerciseDailyGoal goal = state.goal();
-        await _activityRepository.addExcerciseDailyGoal(_user!.id!, goal);
+        await _fitnessRepository.addExcerciseDailyGoal(_user!.id!, goal);
 
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } catch (e) {
