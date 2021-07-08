@@ -49,85 +49,85 @@ class __BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocListener<DurationSelectorBloc, DurationSelectorState>(
+    return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        _scrollController.animateTo(
-          state.getAnimateToValue(itemWidth),
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.fastOutSlowIn,
-        );
-
         BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(state.mapIndexToMinutes()));
       },
-      child: Container(
-        width: size.width,
-        height: columnHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
-              builder: (context, state) {
-                return Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.green,
-                  ),
-                  child: Text('${state.mapIndexToMinutes()} min'),
-                );
-              },
-            ),
-            const SizedBox(height: 5),
-            Expanded(
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollUpdateNotification) {
-                  } else if (scrollNotification is ScrollEndNotification) {
-                    BlocProvider.of<DurationSelectorBloc>(context).add(
-                      DurationSelectorScrollEnded(
-                        controller: _scrollController,
-                        itemWidth: itemWidth,
-                      ),
-                    );
-                  }
+      builder: (context, state) {
+        return Container(
+          width: size.width,
+          height: columnHeight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.green,
+                ),
+                child: Text('${state.mapIndexToMinutes()} min'),
+              ),
+              const SizedBox(height: 5),
+              Expanded(
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollNotification) {
+                    if (scrollNotification is ScrollUpdateNotification) {
+                      BlocProvider.of<DurationSelectorBloc>(context).add(
+                        DurationSelectorScrollUpdated(
+                          controller: _scrollController,
+                          itemWidth: itemWidth,
+                        ),
+                      );
+                    } else if (scrollNotification is ScrollEndNotification) {
+                      BlocProvider.of<DurationSelectorBloc>(context).add(
+                        DurationSelectorScrollUpdated(
+                          controller: _scrollController,
+                          itemWidth: itemWidth,
+                        ),
+                      );
 
-                  return false;
-                },
-                child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
-                  builder: (context, state) {
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.5 - (itemWidth * 0.5),
-                      ),
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return AnimatedContainer(
-                          duration: _duration,
-                          width: itemWidth,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: state.horizontalPadding(index, itemWidth),
-                            vertical: state.verticalPadding(index, itemWidth),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: AnimatedContainer(
-                              duration: _duration,
-                              color: state.backgroundColor(index),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: state.itemsLenght,
-                    );
+                      _scrollController.animateTo(
+                        state.getAnimateToValue(itemWidth),
+                        duration: _duration,
+                        curve: Curves.fastOutSlowIn,
+                      );
+                    }
+
+                    return false;
                   },
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.5 - (itemWidth * 0.5),
+                    ),
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return AnimatedContainer(
+                        duration: _duration,
+                        width: itemWidth,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: state.horizontalPadding(index, itemWidth),
+                          vertical: state.verticalPadding(index, itemWidth),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: _duration,
+                            color: state.backgroundColor(index),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: state.itemsLenght,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
