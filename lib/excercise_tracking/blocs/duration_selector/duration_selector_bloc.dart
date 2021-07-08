@@ -20,19 +20,23 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
   Stream<DurationSelectorState> mapEventToState(
     DurationSelectorEvent event,
   ) async* {
-    yield* mapScrollToState(event);
     if (event is DurationSelectorScrollUpdated) {
+      yield* mapScrollToState(event.itemWidth, event.controller);
+
       yield state.copyWith(status: DurationSelectorStatus.scrolling);
     } else if (event is DurationSelectorScrollEnd) {
-      yield state.copyWith(status: DurationSelectorStatus.still);
+      yield* mapScrollToState(event.itemWidth, event.controller);
+
+      yield state.copyWith(status: DurationSelectorStatus.scrollEnded);
+    } else if (event is DurationSelectorListSnapped) {
+      yield state.copyWith(status: DurationSelectorStatus.initial);
     }
   }
 
-  Stream<DurationSelectorState> mapScrollToState(DurationSelectorEvent event) async* {
-    final ScrollController controller = event.controller;
+  Stream<DurationSelectorState> mapScrollToState(double itemWidth, ScrollController controller) async* {
     final double offset = controller.offset;
 
-    final double index = offset / event.itemWidth;
+    final double index = offset / itemWidth;
 
     final focusedIndex = index.round();
 
