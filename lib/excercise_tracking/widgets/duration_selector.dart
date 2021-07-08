@@ -34,7 +34,7 @@ class _Body extends StatefulWidget {
 class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
-  final double itemWidth = 30;
+  final double itemWidth = 25;
   final double columnHeight = 140;
 
   @override
@@ -75,7 +75,7 @@ class __BodyState extends State<_Body> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _TextDisplayer(),
-              const SizedBox(height: 5),
+              const SizedBox(height: 7),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
