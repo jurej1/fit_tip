@@ -80,9 +80,13 @@ class DurationSelectorState extends Equatable {
       return itemWidth * 0.2;
     } else if (index + 4 == focusedIndex || index - 4 == focusedIndex) {
       return itemWidth * 0.25;
+    } else if (index + 5 == focusedIndex || index - 5 == focusedIndex) {
+      return itemWidth * 0.3;
+    } else if (index + 6 == focusedIndex || index - 6 == focusedIndex) {
+      return itemWidth * 0.35;
     }
 
-    return itemWidth * 0.3;
+    return itemWidth * 0.4;
   }
 
   DurationSelectorState copyWith({
