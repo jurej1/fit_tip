@@ -12,29 +12,6 @@ class DurationSelectorState extends Equatable {
   @override
   List<Object> get props => [focusedIndex, offset];
   double getAnimateToValue(double itemWidth) {
-    double centerOffset = focusedIndex * itemWidth;
-    if (this.offset % itemWidth == 0) {
-      return centerOffset;
-    }
-
-    if (this.offset > centerOffset) {
-      double a = offset % centerOffset;
-
-      if (a < 15) {
-        return centerOffset;
-      } else if (a >= 15) {
-        return centerOffset + itemWidth;
-      }
-    } else if (this.offset < centerOffset) {
-      double a = offset % centerOffset;
-
-      if (centerOffset - 15 > a) {
-        return centerOffset;
-      } else {
-        return centerOffset - 30;
-      }
-    }
-
     return (itemWidth * focusedIndex);
   }
 
