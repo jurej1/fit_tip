@@ -57,7 +57,8 @@ class __BodyState extends State<_Body> {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         widget.onValueUpdated(context, state);
-        if (!state.isScrolling) {
+
+        if (state.status == DurationSelectorStatus.still) {
           _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
             duration: state.animationDuration,
@@ -86,14 +87,14 @@ class __BodyState extends State<_Body> {
                   onNotification: (scrollNotification) {
                     if (scrollNotification is ScrollUpdateNotification) {
                       BlocProvider.of<DurationSelectorBloc>(context).add(
-                        DurationSelectorScrollEnd(
+                        DurationSelectorScrollUpdated(
                           scrollController: _scrollController,
                           itemWidth: itemWidth,
                         ),
                       );
                     } else if (scrollNotification is ScrollEndNotification) {
                       BlocProvider.of<DurationSelectorBloc>(context).add(
-                        DurationSelectorScrollUpdated(
+                        DurationSelectorScrollEnd(
                           scrollController: _scrollController,
                           itemWidth: itemWidth,
                         ),

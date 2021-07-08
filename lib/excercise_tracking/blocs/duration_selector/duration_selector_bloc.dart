@@ -22,9 +22,9 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
   ) async* {
     yield* mapScrollToState(event);
     if (event is DurationSelectorScrollUpdated) {
-      yield state.copyWith(isScrolling: true);
+      yield state.copyWith(status: DurationSelectorStatus.scrolling);
     } else if (event is DurationSelectorScrollEnd) {
-      yield state.copyWith(isScrolling: false);
+      yield state.copyWith(status: DurationSelectorStatus.still);
     }
   }
 

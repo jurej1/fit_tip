@@ -1,18 +1,20 @@
 part of 'duration_selector_bloc.dart';
 
+enum DurationSelectorStatus { initial, scrolling, still }
+
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({
     this.focusedIndex = 0,
     this.offset = 0,
-    this.isScrolling = false,
+    this.status = DurationSelectorStatus.initial,
   });
 
   final int focusedIndex;
   final double offset;
-  final bool isScrolling;
+  final DurationSelectorStatus status;
 
   @override
-  List<Object> get props => [focusedIndex, offset, isScrolling];
+  List<Object> get props => [focusedIndex, offset, status];
 
   double getAnimateToValue(double itemWidth) {
     return itemWidth * focusedIndex;
@@ -60,7 +62,7 @@ class DurationSelectorState extends Equatable {
   }
 
   Duration get animationDuration {
-    if (isScrolling) {
+    if (status == DurationSelectorStatus.scrolling) {
       return Duration(milliseconds: 150);
     } else {
       return Duration(milliseconds: 300);
@@ -86,12 +88,12 @@ class DurationSelectorState extends Equatable {
   DurationSelectorState copyWith({
     int? focusedIndex,
     double? offset,
-    bool? isScrolling,
+    DurationSelectorStatus? status,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
       offset: offset ?? this.offset,
-      isScrolling: isScrolling ?? this.isScrolling,
+      status: status ?? this.status,
     );
   }
 }
