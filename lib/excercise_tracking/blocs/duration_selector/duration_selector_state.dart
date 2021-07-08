@@ -21,7 +21,7 @@ class DurationSelectorState extends Equatable {
     if (focusedIndex == index) {
       return Colors.blue;
     } else if (focusedIndex < index) {
-      return Colors.grey;
+      return Colors.grey.shade300;
     } else {
       return Colors.blue.shade100;
     }
