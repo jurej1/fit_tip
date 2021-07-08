@@ -80,15 +80,15 @@ class __BodyState extends State<_Body> {
                   onNotification: (scrollNotification) {
                     if (scrollNotification is ScrollUpdateNotification) {
                       BlocProvider.of<DurationSelectorBloc>(context).add(
-                        DurationSelectorScrollUpdated(
-                          controller: _scrollController,
+                        DurationSelectorScrollEnd(
+                          scrollController: _scrollController,
                           itemWidth: itemWidth,
                         ),
                       );
                     } else if (scrollNotification is ScrollEndNotification) {
                       BlocProvider.of<DurationSelectorBloc>(context).add(
                         DurationSelectorScrollUpdated(
-                          controller: _scrollController,
+                          scrollController: _scrollController,
                           itemWidth: itemWidth,
                         ),
                       );

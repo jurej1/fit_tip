@@ -4,13 +4,15 @@ class DurationSelectorState extends Equatable {
   const DurationSelectorState({
     this.focusedIndex = 0,
     this.offset = 0,
+    this.isScrolling = false,
   });
 
   final int focusedIndex;
   final double offset;
+  final bool isScrolling;
 
   @override
-  List<Object> get props => [focusedIndex, offset];
+  List<Object> get props => [focusedIndex, offset, isScrolling];
   double getAnimateToValue(double itemWidth) {
     return itemWidth * focusedIndex;
   }
@@ -75,10 +77,12 @@ class DurationSelectorState extends Equatable {
   DurationSelectorState copyWith({
     int? focusedIndex,
     double? offset,
+    bool? isScrolling,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
       offset: offset ?? this.offset,
+      isScrolling: isScrolling ?? this.isScrolling,
     );
   }
 }
