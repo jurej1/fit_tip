@@ -25,7 +25,7 @@ class DurationSelectorState extends Equatable {
     }
   }
 
-  double getPadding(int index, double itemWidth) {
+  double horizontalPadding(int index, double itemWidth) {
     if (index == focusedIndex) {
       return itemWidth * 0.27;
     } else {
@@ -54,6 +54,22 @@ class DurationSelectorState extends Equatable {
 
   int get itemsLenght {
     return 3600;
+  }
+
+  double verticalPadding(int index, double itemWidth) {
+    if (index == focusedIndex) {
+      return 0.0;
+    } else if (index + 1 == focusedIndex || index - 1 == focusedIndex) {
+      return itemWidth * 0.1;
+    } else if (index + 2 == focusedIndex || index - 2 == focusedIndex) {
+      return itemWidth * 0.15;
+    } else if (index + 3 == focusedIndex || index - 3 == focusedIndex) {
+      return itemWidth * 0.2;
+    } else if (index + 4 == focusedIndex || index - 4 == focusedIndex) {
+      return itemWidth * 0.25;
+    }
+
+    return itemWidth * 0.3;
   }
 
   DurationSelectorState copyWith({

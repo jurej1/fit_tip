@@ -29,7 +29,7 @@ class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
-  final double itemHeight = 150;
+  final double columnHeight = 140;
   final Duration _duration = const Duration(milliseconds: 300);
 
   @override
@@ -61,7 +61,7 @@ class __BodyState extends State<_Body> {
       },
       child: Container(
         width: size.width,
-        height: 150,
+        height: columnHeight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -77,6 +77,7 @@ class __BodyState extends State<_Body> {
                 );
               },
             ),
+            const SizedBox(height: 5),
             Expanded(
               child: NotificationListener<ScrollNotification>(
                 onNotification: (scrollNotification) {
@@ -95,15 +96,19 @@ class __BodyState extends State<_Body> {
                   builder: (context, state) {
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.5 - (itemWidth * 0.5),
+                      ),
                       controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return AnimatedContainer(
                           duration: _duration,
-                          height: itemHeight,
                           width: itemWidth,
-                          padding: EdgeInsets.symmetric(horizontal: state.getPadding(index, itemWidth)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: state.horizontalPadding(index, itemWidth),
+                            vertical: state.verticalPadding(index, itemWidth),
+                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: AnimatedContainer(
