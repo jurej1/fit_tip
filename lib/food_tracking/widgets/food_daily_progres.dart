@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/water_tracking/water_tracking.dart';
+
+import 'widgets.dart';
 
 class FoodDailyProgress extends StatelessWidget {
   const FoodDailyProgress();
@@ -35,7 +36,7 @@ class FoodDailyProgress extends StatelessWidget {
                 child: SizedBox(
                   height: sizeA,
                   width: sizeA,
-                  child: _AnimatedProgressBar(
+                  child: AnimatedProgressBar(
                     maxValue: state.getMaxValueBasedOnView().toDouble(),
                     primaryValue: state.getPrimaryValueBasedOnView().toDouble(),
                     primaryColor: state.getPrimaryColorBasedOnView(),
@@ -78,25 +79,25 @@ class _Carousel extends StatelessWidget {
                 },
                 child: CarouselSlider(
                   items: [
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('calories'),
                       title: 'Calories',
                       amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
                       goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('proteins'),
                       title: 'Proteins',
                       amount: state.proteinConsumed.toString() + 'g',
                       goal: state.proteinGoal.toString() + 'g',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('Carbs'),
                       title: 'Carbs',
                       amount: state.carbsConsumed.toString() + 'g',
                       goal: state.carbsGoal.toString() + 'g',
                     ),
-                    _CarouselChild(
+                    CarouselTile(
                       key: ValueKey('Fats'),
                       title: 'Fats',
                       amount: state.fatsConsumed.toString() + 'g',
@@ -119,52 +120,6 @@ class _Carousel extends StatelessWidget {
         }
         return Container();
       },
-    );
-  }
-}
-
-class _CarouselChild extends StatelessWidget {
-  const _CarouselChild({
-    Key? key,
-    required this.amount,
-    required this.goal,
-    required this.title,
-  }) : super(key: key);
-
-  final String amount;
-  final String goal;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            amount,
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Daily Goal: $goal',
-            style: TextStyle(
-              color: Colors.grey.shade400,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -208,110 +163,15 @@ class __SelectedViewDisplayerState extends State<_SelectedViewDisplayer> with Si
       },
       builder: (context, state) {
         if (state is FoodDayProgressLoadSuccess) {
-          return Container(
-            width: 80,
-            height: 15,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    FoodDayProgressCarouselView.values.length,
-                    (index) {
-                      return Container(
-                        height: dotSize,
-                        width: dotSize,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, _) {
-                    return Positioned(
-                      left: 23.333 * _animationController.value,
-                      child: AnimatedContainer(
-                        curve: Curves.fastOutSlowIn,
-                        duration: const Duration(milliseconds: 250),
-                        height: dotSize,
-                        width: dotSize,
-                        decoration: BoxDecoration(
-                          color: state.getPrimaryColorBasedOnView(),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+          return SelectedViewDisplayer(
+            dotSize: dotSize,
+            length: FoodDayProgressCarouselView.values.length,
+            controller: _animationController,
+            selectedColor: state.getPrimaryColorBasedOnView(),
           );
         }
 
         return Container();
-      },
-    );
-  }
-}
-
-class _AnimatedProgressBar extends StatefulWidget {
-  const _AnimatedProgressBar({
-    Key? key,
-    required this.primaryValue,
-    required this.maxValue,
-    required this.primaryColor,
-    required this.secondaryColor,
-  }) : super(key: key);
-
-  final double primaryValue;
-  final double maxValue;
-  final Color primaryColor;
-  final Color secondaryColor;
-
-  @override
-  __AnimatedProgressBarState createState() => __AnimatedProgressBarState();
-}
-
-class __AnimatedProgressBarState extends State<_AnimatedProgressBar> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _animationController.reset();
-    _animationController.forward();
-
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: ProgressPainter(
-            innerColor: widget.primaryColor,
-            outerColor: widget.secondaryColor,
-            maxValue: widget.maxValue,
-            primaryValue: _animationController.value * widget.primaryValue,
-          ),
-          child: child,
-        );
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,20 +10,20 @@ class WaterLogView extends StatelessWidget {
     return MaterialPageRoute(builder: (_) {
       return MultiBlocProvider(
         providers: [
-          BlocProvider<WaterLogFocusedDayBloc>(
-            create: (context) => WaterLogFocusedDayBloc(),
+          BlocProvider<DaySelectorBloc>(
+            create: (context) => DaySelectorBloc(),
           ),
           BlocProvider<WaterLogDayBloc>(
             create: (context) => WaterLogDayBloc(
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate)),
+            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
           ),
           BlocProvider<WaterDailyGoalBloc>(create: (context) {
             return WaterDailyGoalBloc(
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               waterRepository: RepositoryProvider.of<WaterRepository>(context),
-            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<WaterLogFocusedDayBloc>(context).state.selectedDate));
+            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate));
           }),
           BlocProvider<WaterLogConsumptionBloc>(
             create: (context) => WaterLogConsumptionBloc(
@@ -75,7 +76,7 @@ class WaterLogView extends StatelessWidget {
                     child: AddWaterLogSheet(),
                   ),
                   BlocProvider.value(
-                    value: BlocProvider.of<WaterLogFocusedDayBloc>(context),
+                    value: BlocProvider.of<DaySelectorBloc>(context),
                   ),
                 ],
                 child: AddWaterLogSheet(),

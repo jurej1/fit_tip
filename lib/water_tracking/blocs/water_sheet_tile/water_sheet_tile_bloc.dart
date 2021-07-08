@@ -4,7 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart' as rep
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/water_tracking/blocs/blocs.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,15 +17,15 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
     required WaterCup cup,
     required WaterRepository waterRepository,
     required AuthenticationBloc authenticationBloc,
-    required WaterLogFocusedDayBloc waterLogFocusedDayBloc,
-  })   : _waterRepository = waterRepository,
+    required DaySelectorBloc waterLogFocusedDayBloc,
+  })  : _waterRepository = waterRepository,
         _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
         _authenticationBloc = authenticationBloc,
         super(WaterSheetTileState(cup: cup));
 
   final WaterRepository _waterRepository;
   final AuthenticationBloc _authenticationBloc;
-  final WaterLogFocusedDayBloc _waterLogFocusedDayBloc;
+  final DaySelectorBloc _waterLogFocusedDayBloc;
 
   bool get isAuth => _authenticationBloc.state.isAuthenticated;
   rep.User? get user => _authenticationBloc.state.user;

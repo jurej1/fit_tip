@@ -1,5 +1,6 @@
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
@@ -12,20 +13,20 @@ class FoodDailyLogsView extends StatelessWidget {
       builder: (_) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider<FoodLogFocusedDateBloc>(
-              create: (context) => FoodLogFocusedDateBloc(),
+            BlocProvider<DaySelectorBloc>(
+              create: (context) => DaySelectorBloc(),
             ),
             BlocProvider<CalorieDailyGoalBloc>(
               create: (context) => CalorieDailyGoalBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+              )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
             BlocProvider<FoodDailyLogsBloc>(
               create: (context) => FoodDailyLogsBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<FoodLogFocusedDateBloc>(context).state.selectedDate)),
+              )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             )
           ],
           child: FoodDailyLogsView(),

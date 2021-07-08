@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart' as rep
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/shared/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/models/models.dart';
 import 'package:formz/formz.dart';
@@ -16,9 +17,9 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
   AddWaterDailyGoalBloc({
     required WaterRepository waterRepository,
     required AuthenticationBloc authenticationBloc,
-    required WaterLogFocusedDayBloc waterLogFocusedDayBloc,
+    required DaySelectorBloc waterLogFocusedDayBloc,
     required WaterDailyGoalBloc waterDailyGoalBloc,
-  })   : _waterRepository = waterRepository,
+  })  : _waterRepository = waterRepository,
         _authenticationBloc = authenticationBloc,
         _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
         super(
@@ -31,7 +32,7 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
           ),
         );
 
-  final WaterLogFocusedDayBloc _waterLogFocusedDayBloc;
+  final DaySelectorBloc _waterLogFocusedDayBloc;
   final WaterRepository _waterRepository;
   final AuthenticationBloc _authenticationBloc;
 
