@@ -1,7 +1,7 @@
-import 'package:activity_repository/activity_repository.dart';
-import 'package:activity_repository/src/entity/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/src/entity/entity.dart';
+import 'package:fitness_repository/src/enums/enums.dart';
 
 class ExcerciseLog extends Equatable {
   final String id;

@@ -1,5 +1,5 @@
-import 'package:activity_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/src/entity/entity.dart';
 
 class ExcerciseDailyGoal extends Equatable {
   final int caloriesBurnedPerDay;

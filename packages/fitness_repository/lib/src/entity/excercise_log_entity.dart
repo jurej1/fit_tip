@@ -1,7 +1,8 @@
-import 'package:activity_repository/src/enums/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+
+import '../../fitness_repository.dart';
 
 class _DocKeys {
   static String name = 'name';

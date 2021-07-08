@@ -1,15 +1,14 @@
-import 'package:activity_repository/activity_repository.dart';
-import 'package:activity_repository/src/entity/excercise_daily_goal_entity.dart';
-import 'package:activity_repository/src/models/excercise_daily_goal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
+import 'entity/entity.dart';
+import 'enums/enums.dart';
 import 'models/models.dart';
 
-class ActivityRepository {
+class FitnessRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  ActivityRepository({FirebaseFirestore? firebaseFirestore}) : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+  FitnessRepository({FirebaseFirestore? firebaseFirestore}) : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   CollectionReference _activityTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_tracking');
