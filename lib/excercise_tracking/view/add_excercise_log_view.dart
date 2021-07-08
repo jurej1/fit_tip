@@ -111,6 +111,13 @@ class _DurationInput extends StatelessWidget {
             const SizedBox(height: 10),
             DurationSelector(
               duration: state.duration.value,
+              onValueUpdated: (context, state) {
+                BlocProvider.of<AddExcerciseLogBloc>(context).add(
+                  AddExcerciseLogDurationUpdated(
+                    state.mapIndexToMinutes(),
+                  ),
+                );
+              },
             ),
           ],
         );

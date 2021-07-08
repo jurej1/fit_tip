@@ -5,21 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DurationSelector extends StatelessWidget {
   const DurationSelector({
     Key? key,
+    required this.onValueUpdated,
     this.duration,
   }) : super(key: key);
 
   final int? duration;
+  final void Function(BuildContext context, DurationSelectorState state) onValueUpdated;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DurationSelectorBloc(duration: duration),
-      child: _Body(),
+      child: _Body(
+        onValueUpdated: onValueUpdated,
+      ),
     );
   }
 }
 
 class _Body extends StatefulWidget {
-  const _Body({Key? key}) : super(key: key);
+  const _Body({Key? key, required this.onValueUpdated}) : super(key: key);
+  final void Function(BuildContext context, DurationSelectorState state) onValueUpdated;
 
   @override
   __BodyState createState() => __BodyState();
@@ -51,11 +57,7 @@ class __BodyState extends State<_Body> {
 
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        BlocProvider.of<AddExcerciseLogBloc>(context).add(
-          AddExcerciseLogDurationUpdated(
-            state.mapIndexToMinutes(),
-          ),
-        );
+        widget.onValueUpdated(context, state);
       },
       builder: (context, state) {
         return Container(
@@ -68,7 +70,7 @@ class __BodyState extends State<_Body> {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.green,
+                  color: Colors.grey.shade200,
                 ),
                 child: Text('${state.mapIndexToMinutes()} min'),
               ),
