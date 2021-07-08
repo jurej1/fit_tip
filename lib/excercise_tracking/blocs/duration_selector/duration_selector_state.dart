@@ -52,6 +52,10 @@ class DurationSelectorState extends Equatable {
     return '${hours}h ${min}min';
   }
 
+  int get itemsLenght {
+    return 3600;
+  }
+
   DurationSelectorState copyWith({
     int? focusedIndex,
     double? offset,

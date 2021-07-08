@@ -29,6 +29,7 @@ class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
+  final double itemHeight = 150;
   final Duration _duration = const Duration(milliseconds: 300);
 
   @override
@@ -77,43 +78,46 @@ class __BodyState extends State<_Body> {
               },
             ),
             Expanded(
-              child: NotificationListener<ScrollNotification>(onNotification: (scrollNotification) {
-                if (scrollNotification is ScrollEndNotification) {
-                  BlocProvider.of<DurationSelectorBloc>(context).add(
-                    DurationSelectorValueUpdated(
-                      controller: _scrollController,
-                      itemWidth: itemWidth,
-                    ),
-                  );
-                }
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is ScrollEndNotification) {
+                    BlocProvider.of<DurationSelectorBloc>(context).add(
+                      DurationSelectorValueUpdated(
+                        controller: _scrollController,
+                        itemWidth: itemWidth,
+                      ),
+                    );
+                  }
 
-                return false;
-              }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
-                builder: (context, state) {
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return AnimatedContainer(
-                        duration: _duration,
-                        height: 200,
-                        width: itemWidth,
-                        padding: EdgeInsets.symmetric(horizontal: state.getPadding(index, itemWidth)),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: AnimatedContainer(
-                            duration: _duration,
-                            color: state.backgroundColor(index),
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: 288,
-                  );
+                  return false;
                 },
-              )),
+                child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
+                  builder: (context, state) {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return AnimatedContainer(
+                          duration: _duration,
+                          height: itemHeight,
+                          width: itemWidth,
+                          padding: EdgeInsets.symmetric(horizontal: state.getPadding(index, itemWidth)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: AnimatedContainer(
+                              duration: _duration,
+                              color: state.backgroundColor(index),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: state.itemsLenght,
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
