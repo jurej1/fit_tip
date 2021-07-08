@@ -17,6 +17,16 @@ class DurationSelectorState extends Equatable {
     return itemWidth * focusedIndex;
   }
 
+  Color backgroundColor(int index) {
+    if (focusedIndex == index) {
+      return Colors.blue;
+    } else if (focusedIndex < index) {
+      return Colors.grey;
+    } else {
+      return Colors.blue.shade100;
+    }
+  }
+
   int mapIndexToMinutes() {
     return this.focusedIndex;
   }

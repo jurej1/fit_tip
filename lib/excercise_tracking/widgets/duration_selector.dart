@@ -90,6 +90,7 @@ class __BodyState extends State<_Body> {
               }, child: BlocBuilder<DurationSelectorBloc, DurationSelectorState>(
                 builder: (context, state) {
                   return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(horizontal: size.width * 0.5 - (itemWidth * 0.5)),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
@@ -98,9 +99,12 @@ class __BodyState extends State<_Body> {
                         height: 200,
                         width: itemWidth,
                         padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.25),
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 400),
+                            color: state.backgroundColor(index),
+                          ),
                         ),
                       );
                     },
