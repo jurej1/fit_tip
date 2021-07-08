@@ -57,6 +57,13 @@ class __BodyState extends State<_Body> {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
         widget.onValueUpdated(context, state);
+        if (!state.isScrolling) {
+          _scrollController.animateTo(
+            state.getAnimateToValue(itemWidth),
+            duration: state.animationDuration,
+            curve: Curves.fastOutSlowIn,
+          );
+        }
       },
       builder: (context, state) {
         return Container(
@@ -90,12 +97,6 @@ class __BodyState extends State<_Body> {
                           scrollController: _scrollController,
                           itemWidth: itemWidth,
                         ),
-                      );
-
-                      _scrollController.animateTo(
-                        state.getAnimateToValue(itemWidth),
-                        duration: state.animationDuration,
-                        curve: Curves.fastOutSlowIn,
                       );
                     }
 

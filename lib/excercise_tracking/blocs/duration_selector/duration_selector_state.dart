@@ -13,6 +13,7 @@ class DurationSelectorState extends Equatable {
 
   @override
   List<Object> get props => [focusedIndex, offset, isScrolling];
+
   double getAnimateToValue(double itemWidth) {
     return itemWidth * focusedIndex;
   }
