@@ -25,6 +25,14 @@ class DurationSelectorState extends Equatable {
     }
   }
 
+  double getPadding(int index, double itemWidth) {
+    if (index == focusedIndex) {
+      return itemWidth * 0.27;
+    } else {
+      return itemWidth * 0.35;
+    }
+  }
+
   int mapIndexToMinutes() {
     return focusedIndex;
   }

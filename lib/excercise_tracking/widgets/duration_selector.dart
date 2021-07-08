@@ -29,6 +29,7 @@ class __BodyState extends State<_Body> {
   late final ScrollController _scrollController;
 
   final double itemWidth = 30;
+  final Duration _duration = const Duration(milliseconds: 300);
 
   @override
   void initState() {
@@ -95,14 +96,15 @@ class __BodyState extends State<_Body> {
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return Container(
+                      return AnimatedContainer(
+                        duration: _duration,
                         height: 200,
                         width: itemWidth,
-                        padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.25),
+                        padding: EdgeInsets.symmetric(horizontal: state.getPadding(index, itemWidth)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
+                            duration: _duration,
                             color: state.backgroundColor(index),
                           ),
                         ),
