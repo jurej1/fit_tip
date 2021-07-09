@@ -154,7 +154,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate]),
     );
 
-    if (state.status.isValid) {
+    if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     }
   }
