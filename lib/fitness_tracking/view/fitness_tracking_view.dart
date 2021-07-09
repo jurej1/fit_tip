@@ -22,8 +22,32 @@ class FitnessTrackingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: FitnessTrackingViewSelector(),
+    return BlocBuilder<FitnessTrackingViewCubit, FitnessTrackingWorkoutPage>(
+      builder: (context, page) {
+        return Scaffold(
+          body: _body(page),
+          bottomNavigationBar: FitnessTrackingViewSelector(),
+        );
+      },
     );
+  }
+
+  Widget _body(FitnessTrackingWorkoutPage page) {
+    if (page == FitnessTrackingWorkoutPage.active) {
+      return Container(
+        child: Center(
+          child: Text('Active'),
+        ),
+      );
+    }
+    if (page == FitnessTrackingWorkoutPage.all) {
+      return Container(
+        child: Center(
+          child: Text('All'),
+        ),
+      );
+    }
+
+    return Container();
   }
 }
