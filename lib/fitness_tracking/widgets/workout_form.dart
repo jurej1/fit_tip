@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:formz/formz.dart';
 
 import '../fitness_tracking.dart';
 
@@ -16,7 +17,9 @@ class WorkoutForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AddWorkoutFormBloc, AddWorkoutFormState>(
       listener: (context, state) {
-        BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
+        if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
+        }
       },
       child: ListView(
         padding: const EdgeInsets.all(12),
