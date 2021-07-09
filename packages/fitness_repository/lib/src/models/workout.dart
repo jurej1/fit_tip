@@ -4,7 +4,7 @@ import 'package:fitness_repository/fitness_repository.dart';
 class Workout extends Equatable {
   final String id;
   final WorkoutGoal goal;
-  final WorkoutRoutineType type;
+  final WorkoutType type;
   final Level level;
   final int duration;
   final int daysPerWeek;
@@ -41,7 +41,7 @@ class Workout extends Equatable {
   Workout copyWith({
     String? id,
     WorkoutGoal? goal,
-    WorkoutRoutineType? type,
+    WorkoutType? type,
     Level? level,
     int? duration,
     int? daysPerWeek,

@@ -1,4 +1,4 @@
-enum WorkoutRoutineType {
+enum WorkoutType {
   split,
   fullBody,
 }
