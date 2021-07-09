@@ -19,6 +19,7 @@ class WorkoutDayEntity extends Equatable {
   final int day;
   final List<MuscleGroup>? musclesTargeted;
   final List<WorkoutExcerciseEntity> excercises;
+  final bool haveExcercisesBeenFetched;
 
   const WorkoutDayEntity({
     required this.id,
@@ -26,6 +27,7 @@ class WorkoutDayEntity extends Equatable {
     required this.day,
     this.musclesTargeted,
     this.excercises = const [],
+    this.haveExcercisesBeenFetched = false,
   });
 
   int get numberOfExcercises => excercises.length;
@@ -38,6 +40,7 @@ class WorkoutDayEntity extends Equatable {
       day,
       musclesTargeted,
       excercises,
+      haveExcercisesBeenFetched,
     ];
   }
 
@@ -47,6 +50,7 @@ class WorkoutDayEntity extends Equatable {
     int? day,
     List<MuscleGroup>? musclesTargeted,
     List<WorkoutExcerciseEntity>? excercises,
+    bool? haveExcercisesBeenLoaded,
   }) {
     return WorkoutDayEntity(
       id: id ?? this.id,
@@ -54,6 +58,7 @@ class WorkoutDayEntity extends Equatable {
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
+      haveExcercisesBeenFetched: haveExcercisesBeenLoaded ?? this.haveExcercisesBeenFetched,
     );
   }
 
