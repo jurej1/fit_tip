@@ -27,7 +27,15 @@ class AddWorkoutView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AddWorkoutViewAppBar(),
-      body: WorkoutForm(),
+      body: BlocBuilder<AddWorkoutViewCubit, AddWorkoutFormView>(
+        builder: (context, view) {
+          if (view == AddWorkoutFormView.workout) {
+            return WorkoutForm();
+          } else {
+            return WorkoutDaysForm();
+          }
+        },
+      ),
     );
   }
 }

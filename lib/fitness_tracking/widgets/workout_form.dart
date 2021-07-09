@@ -14,16 +14,21 @@ class WorkoutForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(12),
-      children: [
-        const _WorkoutGoalInput(),
-        const _WorkoutTypeInput(),
-        const _WorkoutDurationInput(),
-        const _WorkoutDaysPerWeekInput(),
-        const _WorkoutTimePerWorkoutInput(),
-        const _WorkoutStartDateInput(),
-      ],
+    return BlocListener<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
+      },
+      child: ListView(
+        padding: const EdgeInsets.all(12),
+        children: [
+          const _WorkoutGoalInput(),
+          const _WorkoutTypeInput(),
+          const _WorkoutDurationInput(),
+          const _WorkoutDaysPerWeekInput(),
+          const _WorkoutTimePerWorkoutInput(),
+          const _WorkoutStartDateInput(),
+        ],
+      ),
     );
   }
 }
