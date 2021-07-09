@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:fitness_repository/src/entity/entity.dart';
 
 class WorkoutDay extends Equatable {
   final String id;
@@ -8,13 +9,15 @@ class WorkoutDay extends Equatable {
   final List<MuscleGroup>? musclesTargeted;
   final int numberOfExcercises;
   final List<WorkoutExcercise> excercises;
+  final bool haveExcercisesBeenFetched;
 
-  WorkoutDay({
+  const WorkoutDay({
     required this.id,
     this.note,
     required this.day,
     this.musclesTargeted,
     required this.numberOfExcercises,
+    this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
   });
 
@@ -27,6 +30,7 @@ class WorkoutDay extends Equatable {
       musclesTargeted,
       numberOfExcercises,
       excercises,
+      haveExcercisesBeenFetched,
     ];
   }
 
@@ -37,6 +41,7 @@ class WorkoutDay extends Equatable {
     List<MuscleGroup>? musclesTargeted,
     int? numberOfExcercises,
     List<WorkoutExcercise>? excercises,
+    bool? haveExcercisesBeenFetched,
   }) {
     return WorkoutDay(
       id: id ?? this.id,
@@ -45,6 +50,30 @@ class WorkoutDay extends Equatable {
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       numberOfExcercises: numberOfExcercises ?? this.numberOfExcercises,
       excercises: excercises ?? this.excercises,
+      haveExcercisesBeenFetched: haveExcercisesBeenFetched ?? this.haveExcercisesBeenFetched,
+    );
+  }
+
+  static WorkoutDay fromEntity(WorkoutDayEntity entity) {
+    return WorkoutDay(
+      day: entity.day,
+      id: entity.id,
+      numberOfExcercises: entity.numberOfExcercises,
+      excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
+      haveExcercisesBeenFetched: entity.haveExcercisesBeenFetched,
+      musclesTargeted: entity.musclesTargeted,
+      note: entity.note,
+    );
+  }
+
+  WorkoutDayEntity toEntity() {
+    return WorkoutDayEntity(
+      id: id,
+      day: day,
+      excercises: excercises.map((e) => e.toEntity()).toList(),
+      haveExcercisesBeenFetched: haveExcercisesBeenFetched,
+      musclesTargeted: musclesTargeted,
+      note: note,
     );
   }
 }
