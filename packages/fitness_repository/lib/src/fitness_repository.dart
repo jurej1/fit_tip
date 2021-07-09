@@ -18,6 +18,10 @@ class FitnessRepository {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_goal_tracking');
   }
 
+  CollectionReference _fitnessTrackingPlanRef(String userId) {
+    return _firebaseFirestore.collection('users').doc(userId).collection('fitness_tracking_plan');
+  }
+
   Future<void> deleteExcerciseLog(String userId, ExcerciseLog log) {
     return _activityTrackingRef(userId).doc(log.id).delete();
   }
@@ -74,5 +78,17 @@ class FitnessRepository {
 
       return ExcerciseDailyGoal();
     }
+  }
+
+  Future<void> deleteWorkout(String userId, Workout workout) {
+    return _fitnessTrackingPlanRef(userId).doc(workout.id).delete();
+  }
+
+  Future<void> updateWorkout(String userId, Workout workout) {
+    return _fitnessTrackingPlanRef(userId).doc(workout.id).update(workout.toEntity().toDocumentSnapshot());
+  }
+
+  Future<DocumentReference> addWorkout(String userId, Workout workout) {
+    return _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
   }
 }
