@@ -25,6 +25,17 @@ class FitnessTrackingView extends StatelessWidget {
     return BlocBuilder<FitnessTrackingViewCubit, FitnessTrackingWorkoutPage>(
       builder: (context, page) {
         return Scaffold(
+          appBar: AppBar(
+            title: Text('Fitness tracking'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.of(context).push(AddWorkoutView.route(context));
+                },
+              ),
+            ],
+          ),
           body: _body(page),
           bottomNavigationBar: FitnessTrackingViewSelector(),
         );

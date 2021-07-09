@@ -6,16 +6,21 @@ class AddWorkoutView extends StatelessWidget {
   const AddWorkoutView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(builder: (_) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => AddWorkoutViewCubit(),
-          )
-        ],
-        child: AddWorkoutView(),
-      );
-    });
+    return MaterialPageRoute(
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => AddWorkoutViewCubit(),
+            ),
+            BlocProvider(
+              create: (_) => AddWorkoutFormBloc(),
+            ),
+          ],
+          child: AddWorkoutView(),
+        );
+      },
+    );
   }
 
   @override
@@ -24,6 +29,7 @@ class AddWorkoutView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Add workout'),
       ),
+      body: WorkoutForm(),
     );
   }
 }

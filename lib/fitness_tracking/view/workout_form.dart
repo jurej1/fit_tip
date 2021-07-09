@@ -15,6 +15,7 @@ class WorkoutForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.all(12),
       children: [
         const _WorkoutGoalInput(),
         const _WorkoutTypeInput(),
@@ -37,7 +38,7 @@ class _WorkoutGoalInput extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Main goal:'),
+            Text('Main goal'),
             DropdownButton(
               value: state.goal.value,
               items: WorkoutGoal.values
@@ -69,7 +70,7 @@ class _WorkoutTypeInput extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Type: '),
+            Text('Type '),
             DropdownButton(
               value: state.type.value,
               items: WorkoutType.values
@@ -105,8 +106,8 @@ class _WorkoutDurationInput extends StatelessWidget {
           onChanged: (val) {
             BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormDurationUpdated(val));
           },
-          unit: 'min',
-          title: 'Avg workout duration',
+          unit: 'weeks',
+          title: 'Duration',
           keyboardType: TextInputType.number,
         );
       },
@@ -163,6 +164,7 @@ class _WorkoutStartDateInput extends StatelessWidget {
     return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text(
             'Start date:',
             style: TextStyle(
