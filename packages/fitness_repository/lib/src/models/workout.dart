@@ -10,6 +10,7 @@ class Workout extends Equatable {
   final int daysPerWeek;
   final int timePerWorkout;
   final DateTime startDate;
+  final List<WorkoutDay> workouts;
 
   const Workout({
     required this.id,
@@ -20,10 +21,21 @@ class Workout extends Equatable {
     required this.daysPerWeek,
     required this.timePerWorkout,
     required this.startDate,
+    this.workouts = const [],
   });
 
   List<Object> get props {
-    return [id, goal, type, level, duration, daysPerWeek, timePerWorkout, startDate];
+    return [
+      id,
+      goal,
+      type,
+      level,
+      duration,
+      daysPerWeek,
+      timePerWorkout,
+      startDate,
+      workouts,
+    ];
   }
 
   Workout copyWith({
@@ -35,6 +47,7 @@ class Workout extends Equatable {
     int? daysPerWeek,
     int? timePerWorkout,
     DateTime? startDate,
+    List<WorkoutDay>? workouts,
   }) {
     return Workout(
       id: id ?? this.id,
@@ -45,6 +58,7 @@ class Workout extends Equatable {
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       startDate: startDate ?? this.startDate,
+      workouts: workouts ?? this.workouts,
     );
   }
 }
