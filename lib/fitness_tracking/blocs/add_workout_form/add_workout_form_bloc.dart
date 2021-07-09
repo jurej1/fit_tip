@@ -18,7 +18,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   ) async* {
     if (event is AddWorkoutFormGoalUpdated) {
       yield* _mapGoalUpdatedToState(event);
-    } else if (event is AddWorkouFormTypeUpdated) {
+    } else if (event is AddWorkoutFormTypeUpdated) {
       yield* _mapTypeUpdatedToState(event);
     } else if (event is AddWorkoutFormDurationUpdated) {
       yield* _mapDurationUpdatedToState(event);
@@ -34,35 +34,39 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   }
 
   Stream<AddWorkoutFormState> _mapGoalUpdatedToState(AddWorkoutFormGoalUpdated event) async* {
-    final goal = WorkoutGoalFormz.dirty(event.value);
+    if (event.value != null) {
+      final goal = WorkoutGoalFormz.dirty(event.value!);
 
-    yield state.copyWith(
-      goal: goal,
-      status: Formz.validate([
-        goal,
-        state.daysPerWeek,
-        state.duration,
-        state.startDate,
-        state.timePerWorkout,
-        state.type,
-      ]),
-    );
+      yield state.copyWith(
+        goal: goal,
+        status: Formz.validate([
+          goal,
+          state.daysPerWeek,
+          state.duration,
+          state.startDate,
+          state.timePerWorkout,
+          state.type,
+        ]),
+      );
+    }
   }
 
-  Stream<AddWorkoutFormState> _mapTypeUpdatedToState(AddWorkouFormTypeUpdated event) async* {
-    final type = WorkoutTypeFormz.dirty(event.value);
+  Stream<AddWorkoutFormState> _mapTypeUpdatedToState(AddWorkoutFormTypeUpdated event) async* {
+    if (event.value != null) {
+      final type = WorkoutTypeFormz.dirty(event.value!);
 
-    yield state.copyWith(
-      type: type,
-      status: Formz.validate([
-        type,
-        state.daysPerWeek,
-        state.duration,
-        state.goal,
-        state.startDate,
-        state.timePerWorkout,
-      ]),
-    );
+      yield state.copyWith(
+        type: type,
+        status: Formz.validate([
+          type,
+          state.daysPerWeek,
+          state.duration,
+          state.goal,
+          state.startDate,
+          state.timePerWorkout,
+        ]),
+      );
+    }
   }
 
   Stream<AddWorkoutFormState> _mapDurationUpdatedToState(AddWorkoutFormDurationUpdated event) async* {

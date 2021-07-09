@@ -1,3 +1,4 @@
+import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +8,11 @@ class AddWorkoutView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(builder: (_) {
       return MultiBlocProvider(
-        providers: [],
+        providers: [
+          BlocProvider(
+            create: (_) => AddWorkoutViewCubit(),
+          )
+        ],
         child: AddWorkoutView(),
       );
     });

@@ -8,19 +8,19 @@ abstract class AddWorkoutFormEvent extends Equatable {
 }
 
 class AddWorkoutFormGoalUpdated extends AddWorkoutFormEvent {
-  final WorkoutGoal value;
+  final WorkoutGoal? value;
 
   const AddWorkoutFormGoalUpdated(this.value);
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
-class AddWorkouFormTypeUpdated extends AddWorkoutFormEvent {
-  final WorkoutType value;
+class AddWorkoutFormTypeUpdated extends AddWorkoutFormEvent {
+  final WorkoutType? value;
 
-  const AddWorkouFormTypeUpdated(this.value);
+  const AddWorkoutFormTypeUpdated(this.value);
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AddWorkoutFormDurationUpdated extends AddWorkoutFormEvent {
