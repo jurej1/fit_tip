@@ -8,4 +8,8 @@ class FitnessTrackingViewCubit extends Cubit<FitnessTrackingWorkoutPage> {
   void viewUpdated(int index) {
     emit(FitnessTrackingWorkoutPage.values.elementAt(index));
   }
+
+  int getActiveIndex() {
+    return FitnessTrackingWorkoutPage.values.indexOf(state);
+  }
 }
