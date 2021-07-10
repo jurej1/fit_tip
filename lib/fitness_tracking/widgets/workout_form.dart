@@ -24,6 +24,7 @@ class WorkoutForm extends StatelessWidget {
       },
       child: ListView(
         padding: const EdgeInsets.all(12),
+        physics: const BouncingScrollPhysics(),
         children: [
           const _WorkoutGoalInput(),
           const _WorkoutTypeInput(),
