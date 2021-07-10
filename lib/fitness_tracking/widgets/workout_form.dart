@@ -19,6 +19,7 @@ class WorkoutForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
+          BlocProvider.of<WorkoutsDaysListBloc>(context).add(WorkoutDaysListWorkoutsPerWeekUpdated(state.daysPerWeek.value));
         }
       },
       child: ListView(
