@@ -38,8 +38,17 @@ class AddWorkoutView extends StatelessWidget {
           return Column(
             children: [
               const _SelectedViewDisplayer(),
-              if (view == AddWorkoutFormView.workout) Expanded(child: WorkoutForm()),
-              if (view == AddWorkoutFormView.days) Expanded(child: WorkoutDaysForm()),
+              Expanded(
+                child: PageView(
+                  children: [
+                    const WorkoutForm(),
+                    const WorkoutDaysForm(),
+                  ],
+                  onPageChanged: (index) {
+                    BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
+                  },
+                ),
+              )
             ],
           );
         },

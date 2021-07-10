@@ -11,4 +11,8 @@ class AddWorkoutViewCubit extends Cubit<AddWorkoutFormView> {
   void viewUpdated(AddWorkoutFormView view) {
     emit(view);
   }
+
+  void viewIndexUpdated(int index) {
+    emit(AddWorkoutFormView.values.elementAt(index));
+  }
 }
