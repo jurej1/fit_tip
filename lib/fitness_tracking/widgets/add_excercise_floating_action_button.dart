@@ -13,14 +13,21 @@ class AddExcerciseFloatingActionButton extends StatefulWidget {
 
 class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingActionButton> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  late final Animation<double> _offfsetAnimation;
 
   @override
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      lowerBound: 80,
-      upperBound: 0,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _offfsetAnimation = Tween<double>(begin: 80, end: 0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.bounceOut,
+        reverseCurve: Curves.easeIn,
+      ),
     );
 
     super.initState();
@@ -36,7 +43,7 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
   Widget build(BuildContext context) {
     return BlocConsumer<AddWorkoutViewCubit, AddWorkoutFormView>(
       listener: (context, view) {
-        if (view == AddWorkoutFormView.workout) {
+        if (view == AddWorkoutFormView.days) {
           _controller.forward();
         } else {
           _controller.reverse();
@@ -44,10 +51,10 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
       },
       builder: (context, state) {
         return AnimatedBuilder(
-          animation: _controller,
+          animation: _offfsetAnimation,
           builder: (context, child) {
             return Transform.translate(
-              offset: Offset(0, _controller.value),
+              offset: Offset(0, _offfsetAnimation.value),
               child: child,
             );
           },
