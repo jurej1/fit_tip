@@ -16,6 +16,11 @@ class AddWorkoutView extends StatelessWidget {
             BlocProvider(
               create: (_) => AddWorkoutFormBloc(),
             ),
+            BlocProvider(
+              create: (context) => WorkoutsDaysListBloc(
+                addWorkoutFormBloc: BlocProvider.of<AddWorkoutFormBloc>(context),
+              ),
+            ),
           ],
           child: AddWorkoutView(),
         );
