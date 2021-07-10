@@ -10,15 +10,12 @@ class AddWorkoutViewAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddWorkoutViewCubit, AddWorkoutFormView>(
       builder: (context, view) {
-        final bool isWorkoutView = view == AddWorkoutFormView.workout;
-
         return AppBar(
           title: Text('Add workout'),
           actions: [
             IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
-                if (isWorkoutView) BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormSubmitted());
               },
               icon: const Icon(Icons.check),
             ),
