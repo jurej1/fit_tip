@@ -20,6 +20,8 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
+      lowerBound: 0,
+      upperBound: 1,
     );
 
     _offfsetAnimation = Tween<double>(begin: 80, end: 0).animate(
@@ -54,11 +56,16 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
         builder: (context, child) {
           return Transform.translate(
             offset: Offset(0, _offfsetAnimation.value),
-            child: child,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 1),
+              opacity: _controller.value,
+              child: child,
+            ),
           );
         },
         child: FloatingActionButton(
           child: const Icon(Icons.add),
+          elevation: 0,
           onPressed: () {
             Navigator.of(context).push(AddWorkoutDayView.route(context));
           },
