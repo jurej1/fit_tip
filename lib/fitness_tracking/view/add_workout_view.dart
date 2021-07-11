@@ -40,6 +40,7 @@ class AddWorkoutView extends StatelessWidget {
                 FocusScope.of(context).unfocus();
                 BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
               },
+              physics: const BouncingScrollPhysics(),
             ),
           )
         ],
