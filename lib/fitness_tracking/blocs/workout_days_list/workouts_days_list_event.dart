@@ -35,7 +35,7 @@ class WorkoutDaysListItemUpdated extends WorkoutsDaysListEvent {
 }
 
 class WorkoutDaysListWorkoutsPerWeekUpdated extends WorkoutsDaysListEvent {
-  final String workouts;
+  final int workouts;
 
   const WorkoutDaysListWorkoutsPerWeekUpdated(this.workouts);
 

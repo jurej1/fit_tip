@@ -14,9 +14,7 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
     required AddWorkoutFormBloc addWorkoutFormBloc,
   }) : super(
           WorkoutsDaysListState(
-            workoutDays: WorkoutDaysList.pure(
-              workoutsPerWeekend: int.tryParse(addWorkoutFormBloc.state.daysPerWeek.value) ?? 0,
-            ),
+            workoutDays: WorkoutDaysList.pure(workoutsPerWeekend: addWorkoutFormBloc.state.daysPerWeek.getIntValue()),
           ),
         );
 
@@ -79,7 +77,7 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
   }
 
   Stream<WorkoutsDaysListState> _mapWorkoutsPerWeekUpdatedToState(WorkoutDaysListWorkoutsPerWeekUpdated event) async* {
-    final int amount = int.parse(event.workouts);
+    final int amount = event.workouts;
     final int currentAmount = state.workoutDays.workoutsPerWeekend;
     int diff = (amount - currentAmount).abs();
     final List<WorkoutDay> currentWorkoutDays = state.workoutDays.value;
