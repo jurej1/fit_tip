@@ -90,9 +90,9 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
         newList = List.generate(diff, getPureWorkoutDay);
       } else {
         if (diff == 1) {
-          newList.insert(newList.length - 1, getPureWorkoutDay(newList.length));
+          newList.add(getPureWorkoutDay(newList.length));
         } else {
-          newList.insertAll(newList.length - 1, List.generate(diff, (index) => getPureWorkoutDay(index + newList.length)));
+          newList.addAll(List.generate(diff, (index) => getPureWorkoutDay(index + newList.length)));
         }
       }
 
@@ -104,9 +104,11 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
     } else if (amount < currentAmount) {
       newList = List.from(currentWorkoutDays);
 
-      for (int i = 0; i < diff; i++) {
-        newList.removeLast();
-      }
+      // for (int i = 0; i < diff; i++) {
+      //   newList.removeLast();
+      // }
+
+      newList.removeRange(newList.length - 1 - diff, newList.length - 1);
 
       final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);
       yield state.copyWith(

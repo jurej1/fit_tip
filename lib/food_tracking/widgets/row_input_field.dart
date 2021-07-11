@@ -8,6 +8,7 @@ class RowInputField extends StatelessWidget {
     required this.unit,
     required this.title,
     required this.keyboardType,
+    this.textDirection = TextDirection.rtl,
     this.errorText,
   }) : super(key: key);
 
@@ -17,6 +18,7 @@ class RowInputField extends StatelessWidget {
   final String title;
   final String? errorText;
   final TextInputType keyboardType;
+  final TextDirection textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class RowInputField extends StatelessWidget {
         Text(title),
         Expanded(
           child: TextFormField(
+            textDirection: TextDirection.rtl,
             key: key,
             initialValue: initialValue,
             textAlign: TextAlign.right,
