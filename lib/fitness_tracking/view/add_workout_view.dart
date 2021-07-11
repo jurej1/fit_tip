@@ -32,26 +32,22 @@ class AddWorkoutView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AddWorkoutViewAppBar(),
-      body: BlocBuilder<AddWorkoutViewCubit, AddWorkoutFormView>(
-        builder: (context, view) {
-          return Column(
-            children: [
-              const AddWorkoutFormSelectedViewDisplayer(),
-              Expanded(
-                child: PageView(
-                  children: [
-                    const WorkoutForm(),
-                    const WorkoutDaysForm(),
-                  ],
-                  onPageChanged: (index) {
-                    FocusScope.of(context).unfocus();
-                    BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
-                  },
-                ),
-              )
-            ],
-          );
-        },
+      body: Column(
+        children: [
+          const AddWorkoutFormSelectedViewDisplayer(),
+          Expanded(
+            child: PageView(
+              children: [
+                const WorkoutForm(),
+                const WorkoutDaysForm(),
+              ],
+              onPageChanged: (index) {
+                FocusScope.of(context).unfocus();
+                BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
+              },
+            ),
+          )
+        ],
       ),
       floatingActionButton: AddExcerciseFloatingActionButton(),
     );

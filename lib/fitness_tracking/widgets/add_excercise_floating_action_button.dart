@@ -41,31 +41,29 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AddWorkoutViewCubit, AddWorkoutFormView>(
-      listener: (context, view) {
-        if (view == AddWorkoutFormView.days) {
+    return BlocListener<AddWorkoutViewCubit, AddWorkoutFormViewState>(
+      listener: (context, state) {
+        if (state.view == AddWorkoutFormView.days) {
           _controller.forward();
         } else {
           _controller.reverse();
         }
       },
-      builder: (context, state) {
-        return AnimatedBuilder(
-          animation: _offfsetAnimation,
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(0, _offfsetAnimation.value),
-              child: child,
-            );
+      child: AnimatedBuilder(
+        animation: _offfsetAnimation,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(0, _offfsetAnimation.value),
+            child: child,
+          );
+        },
+        child: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).push(AddWorkoutDayView.route(context));
           },
-          child: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(AddWorkoutDayView.route(context));
-            },
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

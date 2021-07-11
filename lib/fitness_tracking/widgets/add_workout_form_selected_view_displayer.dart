@@ -31,9 +31,9 @@ class _AddWorkoutFormSelectedViewDisplayerState extends State<AddWorkoutFormSele
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddWorkoutViewCubit, AddWorkoutFormView>(
-      listener: (context, view) {
-        _controller.animateTo(AddWorkoutFormView.values.indexOf(view).toDouble());
+    return BlocListener<AddWorkoutViewCubit, AddWorkoutFormViewState>(
+      listener: (context, state) {
+        _controller.animateTo(AddWorkoutFormView.values.indexOf(state.view).toDouble());
       },
       child: Container(
         height: 30,

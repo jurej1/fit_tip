@@ -8,8 +8,8 @@ class AddWorkoutViewAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutViewCubit, AddWorkoutFormView>(
-      builder: (context, view) {
+    return BlocBuilder<AddWorkoutViewCubit, AddWorkoutFormViewState>(
+      builder: (context, state) {
         return AppBar(
           title: Text('Add workout'),
           actions: [
