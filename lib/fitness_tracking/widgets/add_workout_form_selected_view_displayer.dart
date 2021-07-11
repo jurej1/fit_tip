@@ -17,7 +17,7 @@ class _AddWorkoutFormSelectedViewDisplayerState extends State<AddWorkoutFormSele
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 300),
       upperBound: AddWorkoutFormView.values.length.toDouble(),
     );
     super.initState();

@@ -48,7 +48,6 @@ class AddWorkoutView extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: AddExcerciseFloatingActionButton(),
     );
   }
 }
