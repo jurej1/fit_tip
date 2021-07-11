@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -19,7 +21,7 @@ class WorkoutForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
-        }
+        } else if (state.status.isInvalid) {}
       },
       child: ListView(
         padding: const EdgeInsets.all(12),
@@ -69,33 +71,66 @@ class _WorkoutGoalInput extends StatelessWidget {
   }
 }
 
-class _WorkoutTypeInput extends StatelessWidget {
+class _WorkoutTypeInput extends StatefulWidget {
   const _WorkoutTypeInput({Key? key}) : super(key: key);
 
   @override
+  __WorkoutTypeInputState createState() => __WorkoutTypeInputState();
+}
+
+class __WorkoutTypeInputState extends State<_WorkoutTypeInput> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.type.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+        }
+      },
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Type '),
-            DropdownButton(
-              value: state.type.value,
-              items: WorkoutType.values
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(
-                        describeEnum(e),
+            ShakeAnimationBuilder(
+              controller: _controller,
+              child: DropdownButton(
+                value: state.type.value,
+                items: WorkoutType.values
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          describeEnum(e),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (WorkoutType? value) {
-                BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTypeUpdated(value));
-              },
-            ),
+                    )
+                    .toList(),
+                onChanged: (WorkoutType? value) {
+                  BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTypeUpdated(value));
+                },
+              ),
+            )
           ],
         );
       },
