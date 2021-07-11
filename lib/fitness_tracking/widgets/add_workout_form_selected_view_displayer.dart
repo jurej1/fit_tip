@@ -11,7 +11,7 @@ class AddWorkoutFormSelectedViewDisplayer extends StatefulWidget {
 }
 
 class _AddWorkoutFormSelectedViewDisplayerState extends State<AddWorkoutFormSelectedViewDisplayer> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  late final AnimationController _controller;
 
   @override
   void initState() {
