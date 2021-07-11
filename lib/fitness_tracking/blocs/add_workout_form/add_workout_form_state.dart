@@ -65,4 +65,5 @@ class AddWorkoutFormState extends Equatable {
 
   int get workoutDaysLenght => this.workoutDays.value.length;
   List<WorkoutDay> get workoutDaysItems => this.workoutDays.value;
+  bool get noDaysPerWeek => this.daysPerWeek.pure || this.daysPerWeek.invalid || this.daysPerWeek.getIntValue() == 0;
 }
