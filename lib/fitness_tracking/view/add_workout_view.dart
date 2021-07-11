@@ -17,7 +17,9 @@ class AddWorkoutView extends StatelessWidget {
               create: (_) => AddWorkoutFormBloc(),
             ),
             BlocProvider(
-              create: (context) => AddWorkoutFloatingActionButtonCubit(addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context)),
+              create: (context) => AddWorkoutFloatingActionButtonCubit(
+                addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context),
+              ),
             )
           ],
           child: AddWorkoutView(),
