@@ -9,6 +9,7 @@ class AddWorkoutFormState extends Equatable {
     this.daysPerWeek = const WorkoutIntFormz.pure(),
     this.timePerWorkout = const WorkoutIntFormz.pure(),
     required this.startDate,
+    this.workoutDays = const WorkoutDaysList.pure(),
   });
 
   final FormzStatus status;
@@ -18,6 +19,7 @@ class AddWorkoutFormState extends Equatable {
   final WorkoutIntFormz daysPerWeek;
   final WorkoutIntFormz timePerWorkout;
   final WorkoutDateFormz startDate;
+  final WorkoutDaysList workoutDays;
 
   factory AddWorkoutFormState.initial() {
     return AddWorkoutFormState(
@@ -35,6 +37,7 @@ class AddWorkoutFormState extends Equatable {
       daysPerWeek,
       timePerWorkout,
       startDate,
+      workoutDays,
     ];
   }
 
@@ -46,6 +49,7 @@ class AddWorkoutFormState extends Equatable {
     WorkoutIntFormz? daysPerWeek,
     WorkoutIntFormz? timePerWorkout,
     WorkoutDateFormz? startDate,
+    WorkoutDaysList? workoutDays,
   }) {
     return AddWorkoutFormState(
       status: status ?? this.status,
@@ -55,6 +59,10 @@ class AddWorkoutFormState extends Equatable {
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       startDate: startDate ?? this.startDate,
+      workoutDays: workoutDays ?? this.workoutDays,
     );
   }
+
+  int get workoutDaysLenght => this.workoutDays.value.length;
+  List<WorkoutDay> get workoutDaysItems => this.workoutDays.value;
 }

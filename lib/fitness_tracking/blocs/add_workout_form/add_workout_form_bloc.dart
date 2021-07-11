@@ -28,6 +28,12 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       yield* _mapTimePerWorkoutUpdatedToState(event);
     } else if (event is AddWorkoutFormStartDateUpdated) {
       yield* _mapStartDateUpdatedToState(event);
+    } else if (event is AddWorkoutFormListItemAdded) {
+      yield* _mapItemAddedToState(event);
+    } else if (event is AddWorkoutFormListItemRemoved) {
+      yield* _mapItemRemovedToState(event);
+    } else if (event is AddWorkoutFormListItemUpdated) {
+      yield* _mapItemUpdatedToState(event);
     } else if (event is AddWorkoutFormSubmitted) {
       yield* _mapFormSubmitToState();
     }
@@ -46,6 +52,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.startDate,
           state.timePerWorkout,
           state.type,
+          state.workoutDays,
         ]),
       );
     }
@@ -64,6 +71,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.goal,
           state.startDate,
           state.timePerWorkout,
+          state.workoutDays,
         ]),
       );
     }
@@ -80,24 +88,88 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.startDate,
         state.timePerWorkout,
         state.type,
+        state.workoutDays,
       ]),
     );
   }
 
   Stream<AddWorkoutFormState> _mapDaysPerWeekUpdatedToState(AddWorkoutFormDaysPerWeekUpdated event) async* {
-    final daysPerWeek = WorkoutIntFormz.dirty(event.value);
+    final int oldAmount = state.daysPerWeek.getIntValue();
 
-    yield state.copyWith(
-      daysPerWeek: daysPerWeek,
-      status: Formz.validate([
-        daysPerWeek,
-        state.duration,
-        state.goal,
-        state.startDate,
-        state.timePerWorkout,
-        state.type,
-      ]),
-    );
+    final daysPerWeek = WorkoutIntFormz.dirty(event.value);
+    final int eventAmount = daysPerWeek.getIntValue();
+
+    int diff = (oldAmount - eventAmount).abs();
+
+    final List<WorkoutDay> currentWorkoutDays = state.workoutDays.value;
+    List<WorkoutDay> newList = const [];
+
+    if (eventAmount == 0) {
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
+      yield state.copyWith(
+        workoutDays: workoutDays,
+        daysPerWeek: daysPerWeek,
+        status: Formz.validate([
+          workoutDays,
+          daysPerWeek,
+          state.duration,
+          state.goal,
+          state.startDate,
+          state.timePerWorkout,
+          state.type,
+        ]),
+      );
+    } else if (eventAmount > oldAmount) {
+      if (currentWorkoutDays.isEmpty) {
+        newList = List.generate(diff, getPureWorkoutDay);
+      } else {
+        if (diff == 1) {
+          newList.add(getPureWorkoutDay(newList.length));
+        } else {
+          newList.addAll(List.generate(diff, (index) => getPureWorkoutDay(index + newList.length)));
+        }
+      }
+
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
+      yield state.copyWith(
+        workoutDays: workoutDays,
+        daysPerWeek: daysPerWeek,
+        status: Formz.validate([
+          workoutDays,
+          daysPerWeek,
+          state.duration,
+          state.goal,
+          state.startDate,
+          state.timePerWorkout,
+          state.type,
+        ]),
+      );
+    } else if (oldAmount < eventAmount) {
+      newList = List.from(currentWorkoutDays);
+
+      for (int i = newList.length - 1; i > diff; i--) {
+        newList.removeAt(i);
+      }
+
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
+      yield state.copyWith(
+        daysPerWeek: daysPerWeek,
+        workoutDays: workoutDays,
+        status: Formz.validate([
+          workoutDays,
+          daysPerWeek,
+          state.duration,
+          state.goal,
+          state.startDate,
+          state.timePerWorkout,
+          state.type,
+        ]),
+      );
+    }
+  }
+
+  WorkoutDay getPureWorkoutDay(int index) {
+    return WorkoutDay(id: index.toString(), day: index);
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {
@@ -112,6 +184,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.goal,
         state.startDate,
         state.type,
+        state.workoutDays,
       ]),
     );
   }
@@ -130,10 +203,84 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
             state.goal,
             state.timePerWorkout,
             state.type,
+            state.workoutDays,
           ],
         ),
       );
     }
+  }
+
+  Stream<AddWorkoutFormState> _mapItemAddedToState(AddWorkoutFormListItemAdded event) async* {
+    final items = state.workoutDays.value;
+
+    items.add(event.value);
+    final workoutDays = WorkoutDaysList.dirty(value: items, workoutsPerWeekend: state.daysPerWeek.getIntValue());
+
+    yield state.copyWith(
+      workoutDays: workoutDays,
+      status: Formz.validate([
+        workoutDays,
+        state.daysPerWeek,
+        state.duration,
+        state.goal,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+      ]),
+    );
+  }
+
+  Stream<AddWorkoutFormState> _mapItemRemovedToState(AddWorkoutFormListItemRemoved event) async* {
+    List<WorkoutDay> items = state.workoutDays.value;
+
+    items.removeWhere((element) => element.id == event.value.id);
+
+    final workoutDaysList = WorkoutDaysList.dirty(
+      value: items,
+      workoutsPerWeekend: state.daysPerWeek.getIntValue(),
+    );
+
+    yield state.copyWith(
+      workoutDays: workoutDaysList,
+      status: Formz.validate([
+        workoutDaysList,
+        state.daysPerWeek,
+        state.duration,
+        state.goal,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+      ]),
+    );
+  }
+
+  Stream<AddWorkoutFormState> _mapItemUpdatedToState(AddWorkoutFormListItemUpdated event) async* {
+    List<WorkoutDay> items = state.workoutDays.value;
+
+    items = items.map((e) {
+      if (e.id == event.value.id) {
+        return event.value;
+      }
+      return e;
+    }).toList();
+
+    final workoutDays = WorkoutDaysList.dirty(
+      value: items,
+      workoutsPerWeekend: state.daysPerWeek.getIntValue(),
+    );
+
+    yield state.copyWith(
+      workoutDays: workoutDays,
+      status: Formz.validate([
+        workoutDays,
+        state.daysPerWeek,
+        state.duration,
+        state.goal,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+      ]),
+    );
   }
 
   Stream<AddWorkoutFormState> _mapFormSubmitToState() async* {
@@ -143,18 +290,29 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     final daysPerWeek = WorkoutIntFormz.dirty(state.daysPerWeek.value);
     final timePerWorkout = WorkoutIntFormz.dirty(state.daysPerWeek.value);
     final startDate = WorkoutDateFormz.dirty(state.startDate.value);
+    final workoutDays = WorkoutDaysList.dirty(value: state.workoutDays.value, workoutsPerWeekend: daysPerWeek.getIntValue());
 
     yield state.copyWith(
+      workoutDays: workoutDays,
       goal: goal,
       type: type,
       duration: duration,
       daysPerWeek: daysPerWeek,
       timePerWorkout: timePerWorkout,
       startDate: startDate,
-      status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate]),
+      status: Formz.validate([
+        goal,
+        type,
+        duration,
+        daysPerWeek,
+        timePerWorkout,
+        startDate,
+        workoutDays,
+      ]),
     );
 
     if (state.status.isValidated) {
+      //TODO
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     }
   }

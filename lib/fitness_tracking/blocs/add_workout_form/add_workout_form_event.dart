@@ -58,4 +58,31 @@ class AddWorkoutFormStartDateUpdated extends AddWorkoutFormEvent {
   List<Object?> get props => [value];
 }
 
+class AddWorkoutFormListItemAdded extends AddWorkoutFormEvent {
+  final WorkoutDay value;
+
+  const AddWorkoutFormListItemAdded(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class AddWorkoutFormListItemRemoved extends AddWorkoutFormEvent {
+  final WorkoutDay value;
+
+  const AddWorkoutFormListItemRemoved(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class AddWorkoutFormListItemUpdated extends AddWorkoutFormEvent {
+  final WorkoutDay value;
+
+  const AddWorkoutFormListItemUpdated(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class AddWorkoutFormSubmitted extends AddWorkoutFormEvent {}

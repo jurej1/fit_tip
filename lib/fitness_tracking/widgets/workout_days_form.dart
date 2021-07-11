@@ -8,7 +8,7 @@ class WorkoutDaysForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutsDaysListBloc, WorkoutsDaysListState>(
+    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
       builder: (context, state) {
         return ListView.separated(
           padding: const EdgeInsets.all(20),
@@ -23,7 +23,7 @@ class WorkoutDaysForm extends StatelessWidget {
               height: 15,
             );
           },
-          itemCount: state.itemsLength,
+          itemCount: state.workoutDaysLenght,
         );
       },
     );
