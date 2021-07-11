@@ -19,12 +19,9 @@ class WorkoutForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
-          BlocProvider.of<WorkoutsDaysListBloc>(context).add(WorkoutDaysListWorkoutsPerWeekUpdated(state.daysPerWeek.getIntValue()));
         }
 
-        if (state.daysPerWeek.valid) {
-          BlocProvider.of<WorkoutsDaysListBloc>(context).add(WorkoutDaysListWorkoutsPerWeekUpdated(state.daysPerWeek.getIntValue()));
-        }
+        BlocProvider.of<WorkoutsDaysListBloc>(context).add(WorkoutDaysListWorkoutsPerWeekUpdated(state.daysPerWeek.getIntValue()));
       },
       child: ListView(
         padding: const EdgeInsets.all(12),
@@ -52,7 +49,7 @@ class _WorkoutGoalInput extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Main goal'),
+            const Text('Main goal'),
             DropdownButton(
               value: state.goal.value,
               items: WorkoutGoal.values
