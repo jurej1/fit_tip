@@ -81,9 +81,15 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
     final int currentAmount = state.workoutDays.workoutsPerWeekend;
     int diff = (amount - currentAmount).abs();
     final List<WorkoutDay> currentWorkoutDays = state.workoutDays.value;
-
     List<WorkoutDay> newList = const [];
-    if (amount > currentAmount) {
+
+    if (amount == 0) {
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);
+      yield state.copyWith(
+        workoutDays: workoutDays,
+        status: Formz.validate([workoutDays]),
+      );
+    } else if (amount > currentAmount) {
       if (currentWorkoutDays.isEmpty) {
         newList = List.generate(diff, getPureWorkoutDay);
       } else {
@@ -102,11 +108,9 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
     } else if (amount < currentAmount) {
       newList = List.from(currentWorkoutDays);
 
-      // for (int i = 0; i < diff; i++) {
-      //   newList.removeLast();
-      // }
-
-      newList.removeRange(newList.length - 1 - diff, newList.length - 1);
+      for (int i = newList.length - 1; i > diff; i--) {
+        newList.removeAt(i);
+      }
 
       final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);
       yield state.copyWith(
