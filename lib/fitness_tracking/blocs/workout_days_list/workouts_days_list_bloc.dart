@@ -80,11 +80,39 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
 
   Stream<WorkoutsDaysListState> _mapWorkoutsPerWeekUpdatedToState(WorkoutDaysListWorkoutsPerWeekUpdated event) async* {
     final int amount = int.parse(event.workouts);
+    final int currentAmount = state.workoutDays.workoutsPerWeekend;
+    int diff = (amount - currentAmount).abs();
+    final List<WorkoutDay> currentWorkoutDays = state.workoutDays.value;
 
-    final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: state.workoutDays.value);
-    yield state.copyWith(
-      workoutDays: workoutDays,
-      status: Formz.validate([workoutDays]),
-    );
+    List<WorkoutDay> newList = const [];
+    if (amount > currentAmount) {
+      if (currentWorkoutDays.isEmpty) {
+        newList = List.generate(diff, getPureWorkoutDay);
+      } else {
+        newList.insertAll(newList.length, List.generate(diff, getPureWorkoutDay));
+      }
+
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);
+      yield state.copyWith(
+        workoutDays: workoutDays,
+        status: Formz.validate([workoutDays]),
+      );
+    } else if (amount < currentAmount) {
+      newList = List.from(currentWorkoutDays);
+
+      for (int i = 0; i < diff; i++) {
+        newList.removeLast();
+      }
+
+      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);
+      yield state.copyWith(
+        workoutDays: workoutDays,
+        status: Formz.validate([workoutDays]),
+      );
+    }
+  }
+
+  WorkoutDay getPureWorkoutDay(int index) {
+    return WorkoutDay(id: index.toString(), day: index);
   }
 }

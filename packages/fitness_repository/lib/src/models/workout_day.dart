@@ -16,10 +16,10 @@ class WorkoutDay extends Equatable {
     this.note,
     required this.day,
     this.musclesTargeted,
-    required this.numberOfExcercises,
+    int? numberOfExcercises,
     this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
-  });
+  }) : this.numberOfExcercises = numberOfExcercises ?? excercises.length;
 
   @override
   List<Object?> get props {
