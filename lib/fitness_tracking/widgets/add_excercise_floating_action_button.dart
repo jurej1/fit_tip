@@ -1,8 +1,8 @@
-import 'dart:math';
-
 import 'package:fit_tip/fitness_tracking/blocs/add_workout_view/add_workout_view_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../fitness_tracking.dart';
 
 class AddExcerciseFloatingActionButton extends StatefulWidget {
   const AddExcerciseFloatingActionButton({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
           child: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              //TODO
+              Navigator.of(context).push(AddWorkoutDayView.route(context));
             },
           ),
         );
