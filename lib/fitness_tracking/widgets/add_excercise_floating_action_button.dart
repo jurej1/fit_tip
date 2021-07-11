@@ -1,4 +1,3 @@
-import 'package:fit_tip/fitness_tracking/blocs/add_workout_view/add_workout_view_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,27 +44,37 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
   Widget build(BuildContext context) {
     return BlocListener<AddWorkoutViewCubit, AddWorkoutFormViewState>(
       listener: (context, state) {
-        if (state.view == AddWorkoutFormView.days) {
-          _controller.forward();
-        } else {
-          _controller.reverse();
-        }
+        BlocProvider.of<AddWorkoutFloatingActionButtonCubit>(context).pageUpdated(state.view);
       },
-      child: AnimatedBuilder(
-        animation: _offfsetAnimation,
-        builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(0, _offfsetAnimation.value),
-            child: child,
+      child: BlocConsumer<AddWorkoutFloatingActionButtonCubit, AddWorkoutFloatingActionButtonState>(
+        listener: (context, state) {
+          if (state == AddWorkoutFloatingActionButtonState.visible) {
+            _controller.forward();
+          } else {
+            _controller.reverse();
+          }
+        },
+        builder: (context, state) {
+          return Visibility(
+            visible: state == AddWorkoutFloatingActionButtonState.visible,
+            child: AnimatedBuilder(
+              animation: _offfsetAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _offfsetAnimation.value),
+                  child: child,
+                );
+              },
+              child: FloatingActionButton(
+                child: const Icon(Icons.add),
+                elevation: 0,
+                onPressed: () {
+                  Navigator.of(context).push(AddWorkoutDayView.route(context));
+                },
+              ),
+            ),
           );
         },
-        child: FloatingActionButton(
-          child: const Icon(Icons.add),
-          elevation: 0,
-          onPressed: () {
-            Navigator.of(context).push(AddWorkoutDayView.route(context));
-          },
-        ),
       ),
     );
   }
