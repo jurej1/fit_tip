@@ -56,11 +56,7 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
         builder: (context, child) {
           return Transform.translate(
             offset: Offset(0, _offfsetAnimation.value),
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 1),
-              opacity: _controller.value,
-              child: child,
-            ),
+            child: child,
           );
         },
         child: FloatingActionButton(
