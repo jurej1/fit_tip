@@ -44,6 +44,7 @@ class AddWorkoutView extends StatelessWidget {
                     const WorkoutDaysForm(),
                   ],
                   onPageChanged: (index) {
+                    FocusScope.of(context).unfocus();
                     BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
                   },
                 ),

@@ -15,7 +15,7 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
   }) : super(
           WorkoutsDaysListState(
             workoutDays: WorkoutDaysList.pure(
-              workoutsPerWeekend: int.parse(addWorkoutFormBloc.state.daysPerWeek.value),
+              workoutsPerWeekend: int.tryParse(addWorkoutFormBloc.state.daysPerWeek.value) ?? 0,
             ),
           ),
         );
@@ -89,7 +89,11 @@ class WorkoutsDaysListBloc extends Bloc<WorkoutsDaysListEvent, WorkoutsDaysListS
       if (currentWorkoutDays.isEmpty) {
         newList = List.generate(diff, getPureWorkoutDay);
       } else {
-        newList.insertAll(newList.length, List.generate(diff, getPureWorkoutDay));
+        if (diff == 1) {
+          newList.insert(newList.length - 1, getPureWorkoutDay(newList.length));
+        } else {
+          newList.insertAll(newList.length - 1, List.generate(diff, (index) => getPureWorkoutDay(index + newList.length)));
+        }
       }
 
       final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: amount, value: newList);

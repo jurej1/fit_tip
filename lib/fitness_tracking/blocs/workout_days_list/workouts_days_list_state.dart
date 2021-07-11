@@ -11,6 +11,9 @@ class WorkoutsDaysListState extends Equatable {
   @override
   List<Object> get props => [status, workoutDays];
 
+  int get itemsLength => workoutDays.value.length;
+  List<WorkoutDay> get items => workoutDays.value;
+
   WorkoutsDaysListState copyWith({
     FormzStatus? status,
     WorkoutDaysList? workoutDays,
