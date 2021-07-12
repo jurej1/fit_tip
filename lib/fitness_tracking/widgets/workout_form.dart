@@ -105,6 +105,11 @@ class __WorkoutTypeInputState extends State<_WorkoutTypeInput> with SingleTicker
       listener: (context, state) {
         if (state.type.invalid) {
           _controller.forward().then((value) => _controller.reset());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Invalid'),
+            ),
+          );
         }
       },
       builder: (context, state) {
