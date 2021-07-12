@@ -11,6 +11,7 @@ class WorkoutDaysForm extends StatelessWidget {
     return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
       builder: (context, state) {
         return ListView.separated(
+          physics: const ClampingScrollPhysics(),
           padding: const EdgeInsets.all(20),
           itemBuilder: (context, index) {
             final item = state.workoutDaysItems[index];
@@ -35,15 +36,19 @@ class WorkoutDaysForm extends StatelessWidget {
 }
 
 class WorkoutDayCard extends StatelessWidget {
-  const WorkoutDayCard({Key? key}) : super(key: key);
+  WorkoutDayCard({Key? key}) : super(key: key);
+
+  final BorderRadius _borderRadius = BorderRadius.circular(12);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WorkoutDayCardBloc, WorkoutDayCardState>(
       builder: (context, state) {
         return Material(
-          color: Colors.blue,
+          borderRadius: _borderRadius,
+          color: Colors.blue.shade100,
           child: InkWell(
+            borderRadius: _borderRadius,
             onTap: () {
               Navigator.of(context).push(AddWorkoutDayView.route(context));
             },
