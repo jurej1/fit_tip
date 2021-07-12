@@ -68,9 +68,7 @@ class _AddExcerciseFloatingActionButtonState extends State<AddExcerciseFloatingA
               child: FloatingActionButton(
                 child: const Icon(Icons.add),
                 elevation: 0,
-                onPressed: () {
-                  Navigator.of(context).push(AddWorkoutDayView.route(context));
-                },
+                onPressed: () {},
               ),
             ),
           );

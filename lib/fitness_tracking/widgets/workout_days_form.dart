@@ -50,7 +50,7 @@ class WorkoutDayCard extends StatelessWidget {
           child: InkWell(
             borderRadius: _borderRadius,
             onTap: () {
-              Navigator.of(context).push(AddWorkoutDayView.route(context));
+              Navigator.of(context).push(AddWorkoutDayView.route(context, workoutDay: state.workoutDay));
             },
             child: ListTile(
               dense: true,
