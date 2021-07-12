@@ -55,7 +55,7 @@ class _WorkoutGoalInput extends HookWidget {
       listener: (context, state) {
         if (state.goal.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('goal'));
         }
       },
       builder: (context, state) {
@@ -101,7 +101,7 @@ class _WorkoutTypeInput extends HookWidget {
       listener: (context, state) {
         if (state.type.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('type'));
         }
       },
       builder: (context, state) {
@@ -151,7 +151,7 @@ class _WorkoutDurationInput extends HookWidget {
       listener: (context, state) {
         if (state.duration.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('Duration'));
         }
       },
       builder: (context, state) {
@@ -187,7 +187,7 @@ class _WorkoutDaysPerWeekInput extends HookWidget {
       listener: (context, state) {
         if (state.daysPerWeek.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('days_per_week'));
         }
       },
       builder: (context, state) {
@@ -222,7 +222,7 @@ class _WorkoutTimePerWorkoutInput extends HookWidget {
       listener: (context, state) {
         if (state.timePerWorkout.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('time_per_workout'));
         }
       },
       builder: (context, state) {
@@ -257,7 +257,7 @@ class _WorkoutStartDateInput extends HookWidget {
       listener: (context, state) {
         if (state.startDate.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context);
+          showErrorSnackBar(context, ValueKey('start_date'));
         }
       },
       builder: (context, state) {
