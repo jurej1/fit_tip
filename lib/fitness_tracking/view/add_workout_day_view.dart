@@ -9,7 +9,7 @@ class AddWorkoutDayView extends StatelessWidget {
       builder: (_) {
         // return MultiBlocProvider(
         //   providers: [],
-        //   child: AddWorkoutDayView(),
+        //   child: AddkWorkoutDayView(),
         // );
 
         return const AddWorkoutDayView();
