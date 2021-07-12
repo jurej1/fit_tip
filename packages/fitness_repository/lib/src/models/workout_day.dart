@@ -66,6 +66,10 @@ class WorkoutDay extends Equatable {
     );
   }
 
+  String getDayText() {
+    return 'Day: $day';
+  }
+
   WorkoutDayEntity toEntity() {
     return WorkoutDayEntity(
       id: id,

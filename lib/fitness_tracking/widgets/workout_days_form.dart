@@ -49,7 +49,9 @@ class WorkoutDayCard extends StatelessWidget {
             },
             child: ListTile(
               dense: true,
-              title: Text(state.workoutDay.id),
+              title: Text(
+                state.workoutDay.getDayText(),
+              ),
             ),
           ),
         );
