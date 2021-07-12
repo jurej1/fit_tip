@@ -11,7 +11,7 @@ class AddWorkoutDayFormState extends Equatable {
   });
 
   final String id;
-  final int day;
+  final WorkoutDayDay day;
   final WorkoutNote note;
   final WorkoutMuscleGroupList muscleGroupList;
   final WorkoutExcercisesList workoutExcercisesList;
@@ -20,7 +20,7 @@ class AddWorkoutDayFormState extends Equatable {
   factory AddWorkoutDayFormState.initial(WorkoutDay workoutDay) {
     return AddWorkoutDayFormState(
       id: workoutDay.id,
-      day: workoutDay.day,
+      day: WorkoutDayDay.pure(workoutDay.day.toStringAsFixed(0)),
       muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.musclesTargeted),
       note: WorkoutNote.pure(workoutDay.note),
       workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
@@ -41,7 +41,7 @@ class AddWorkoutDayFormState extends Equatable {
 
   AddWorkoutDayFormState copyWith({
     String? id,
-    int? day,
+    WorkoutDayDay? day,
     WorkoutNote? note,
     WorkoutMuscleGroupList? muscleGroupList,
     WorkoutExcercisesList? workoutExcercisesList,

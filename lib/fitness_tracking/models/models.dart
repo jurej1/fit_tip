@@ -7,3 +7,4 @@ export 'workout_days_list.dart';
 export 'workout_note.dart';
 export 'workout_muscle_group_list.dart';
 export 'workout_excercises_list.dart';
+export 'workout_day_day.dart';
