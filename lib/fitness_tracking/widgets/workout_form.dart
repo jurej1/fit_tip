@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:formz/formz.dart';
 
@@ -39,30 +40,49 @@ class WorkoutForm extends StatelessWidget {
   }
 }
 
-class _WorkoutGoalInput extends StatelessWidget {
+class _WorkoutGoalInput extends HookWidget {
   const _WorkoutGoalInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
+    final _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.goal.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Invalid'),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Main goal'),
-            DropdownButton(
-              value: state.goal.value,
-              items: WorkoutGoal.values
-                  .map(
-                    (e) => DropdownMenuItem(
-                      child: Text(describeEnum(e)),
-                      value: e,
-                    ),
-                  )
-                  .toList(),
-              onChanged: (WorkoutGoal? goal) {
-                BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormGoalUpdated(goal));
-              },
+            ShakeAnimationBuilder(
+              controller: _controller,
+              child: DropdownButton(
+                value: state.goal.value,
+                items: WorkoutGoal.values
+                    .map(
+                      (e) => DropdownMenuItem(
+                        child: Text(describeEnum(e)),
+                        value: e,
+                      ),
+                    )
+                    .toList(),
+                onChanged: (WorkoutGoal? goal) {
+                  BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormGoalUpdated(goal));
+                },
+              ),
             ),
           ],
         );
@@ -71,36 +91,16 @@ class _WorkoutGoalInput extends StatelessWidget {
   }
 }
 
-class _WorkoutTypeInput extends StatefulWidget {
+class _WorkoutTypeInput extends HookWidget {
   const _WorkoutTypeInput({Key? key}) : super(key: key);
-
   @override
-  __WorkoutTypeInputState createState() => __WorkoutTypeInputState();
-}
-
-class __WorkoutTypeInputState extends State<_WorkoutTypeInput> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-      vsync: this,
+  Widget build(BuildContext context) {
+    final AnimationController _controller = useAnimationController(
       duration: const Duration(milliseconds: 300),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
 
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
       listener: (context, state) {
         if (state.type.invalid) {
@@ -118,6 +118,7 @@ class __WorkoutTypeInputState extends State<_WorkoutTypeInput> with SingleTicker
           children: [
             Text('Type '),
             ShakeAnimationBuilder(
+              key: ValueKey('type '),
               controller: _controller,
               child: DropdownButton(
                 value: state.type.value,
@@ -143,21 +144,41 @@ class __WorkoutTypeInputState extends State<_WorkoutTypeInput> with SingleTicker
   }
 }
 
-class _WorkoutDurationInput extends StatelessWidget {
+class _WorkoutDurationInput extends HookWidget {
   const _WorkoutDurationInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
+    final AnimationController _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.duration.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Invalid'),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
-        return RowInputField(
-          initialValue: state.duration.value,
-          onChanged: (val) {
-            BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormDurationUpdated(val));
-          },
-          unit: 'weeks',
-          title: 'Duration',
-          keyboardType: TextInputType.number,
+        return ShakeAnimationBuilder(
+          key: ValueKey('duration'),
+          controller: _controller,
+          child: RowInputField(
+            initialValue: state.duration.value,
+            onChanged: (val) {
+              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormDurationUpdated(val));
+            },
+            unit: 'weeks',
+            title: 'Duration',
+            keyboardType: TextInputType.number,
+          ),
         );
       },
     );
