@@ -55,11 +55,7 @@ class _WorkoutGoalInput extends HookWidget {
       listener: (context, state) {
         if (state.goal.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Invalid'),
-            ),
-          );
+          showErrorSnackBar(context);
         }
       },
       builder: (context, state) {
@@ -105,11 +101,7 @@ class _WorkoutTypeInput extends HookWidget {
       listener: (context, state) {
         if (state.type.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Invalid'),
-            ),
-          );
+          showErrorSnackBar(context);
         }
       },
       builder: (context, state) {
@@ -159,11 +151,7 @@ class _WorkoutDurationInput extends HookWidget {
       listener: (context, state) {
         if (state.duration.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Invalid'),
-            ),
-          );
+          showErrorSnackBar(context);
         }
       },
       builder: (context, state) {
@@ -185,53 +173,93 @@ class _WorkoutDurationInput extends HookWidget {
   }
 }
 
-class _WorkoutDaysPerWeekInput extends StatelessWidget {
+class _WorkoutDaysPerWeekInput extends HookWidget {
   const _WorkoutDaysPerWeekInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
+    final AnimationController _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.daysPerWeek.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          showErrorSnackBar(context);
+        }
+      },
       builder: (context, state) {
-        return RowInputField(
+        return ShakeAnimationBuilder(
+          controller: _controller,
+          child: RowInputField(
             initialValue: state.daysPerWeek.value,
             onChanged: (value) {
               BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormDaysPerWeekUpdated(value));
             },
             unit: 'x',
             title: 'Days per week',
-            keyboardType: TextInputType.number);
-      },
-    );
-  }
-}
-
-class _WorkoutTimePerWorkoutInput extends StatelessWidget {
-  const _WorkoutTimePerWorkoutInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
-      builder: (context, state) {
-        return RowInputField(
-          initialValue: state.timePerWorkout.value,
-          onChanged: (val) {
-            BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTimePerWorkoutUpdated(val));
-          },
-          unit: 'min',
-          title: 'Time per workout',
-          keyboardType: TextInputType.number,
+            keyboardType: TextInputType.number,
+          ),
         );
       },
     );
   }
 }
 
-class _WorkoutStartDateInput extends StatelessWidget {
+class _WorkoutTimePerWorkoutInput extends HookWidget {
+  const _WorkoutTimePerWorkoutInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AnimationController _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.timePerWorkout.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          showErrorSnackBar(context);
+        }
+      },
+      builder: (context, state) {
+        return ShakeAnimationBuilder(
+          controller: _controller,
+          child: RowInputField(
+            initialValue: state.timePerWorkout.value,
+            onChanged: (val) {
+              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTimePerWorkoutUpdated(val));
+            },
+            unit: 'min',
+            title: 'Time per workout',
+            keyboardType: TextInputType.number,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _WorkoutStartDateInput extends HookWidget {
   const _WorkoutStartDateInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
+    final AnimationController _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.startDate.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          showErrorSnackBar(context);
+        }
+      },
       builder: (context, state) {
         return ListTile(
           contentPadding: EdgeInsets.zero,
@@ -241,7 +269,12 @@ class _WorkoutStartDateInput extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          trailing: Text(DateFormat('dd.MMMM.yyy').format(state.startDate.value)),
+          trailing: ShakeAnimationBuilder(
+            controller: _controller,
+            child: Text(
+              DateFormat('dd.MMMM.yyy').format(state.startDate.value),
+            ),
+          ),
           onTap: () async {
             DateTime? date = await showDatePicker(
               context: context,
