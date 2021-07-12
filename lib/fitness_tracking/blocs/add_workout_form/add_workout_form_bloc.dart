@@ -169,7 +169,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   }
 
   WorkoutDay getPureWorkoutDay(int index) {
-    return WorkoutDay(id: index.toString(), day: index);
+    return WorkoutDay(id: (index + 1).toString(), day: index + 1);
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {

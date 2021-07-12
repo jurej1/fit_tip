@@ -13,9 +13,13 @@ class WorkoutDaysForm extends StatelessWidget {
         return ListView.separated(
           padding: const EdgeInsets.all(20),
           itemBuilder: (context, index) {
-            return Container(
-              height: 30,
-              color: Colors.blue,
+            final item = state.workoutDaysItems[index];
+            return BlocProvider(
+              key: ValueKey(item),
+              create: (context) => WorkoutDayCardBloc(
+                workoutDay: item,
+              ),
+              child: WorkoutDayCard(),
             );
           },
           separatorBuilder: (context, index) {
@@ -35,8 +39,21 @@ class WorkoutDayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    return BlocBuilder<WorkoutDayCardBloc, WorkoutDayCardState>(
+      builder: (context, state) {
+        return Material(
+          color: Colors.blue,
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(AddWorkoutDayView.route(context));
+            },
+            child: ListTile(
+              dense: true,
+              title: Text(state.workoutDay.id),
+            ),
+          ),
+        );
+      },
     );
   }
 }
