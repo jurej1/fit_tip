@@ -29,3 +29,14 @@ class WorkoutDaysForm extends StatelessWidget {
     );
   }
 }
+
+class WorkoutDayCard extends StatelessWidget {
+  const WorkoutDayCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: null,
+    );
+  }
+}
