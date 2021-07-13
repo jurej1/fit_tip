@@ -143,8 +143,9 @@ class _MuscleGroupsInput extends StatelessWidget {
             ),
             Wrap(
               direction: Axis.horizontal,
-              runAlignment: WrapAlignment.start,
-              runSpacing: 10,
+              alignment: WrapAlignment.start,
+              spacing: 10,
+              runSpacing: 20,
               children: state.getMuscleGroupList().map(
                 (e) {
                   return Chip(
