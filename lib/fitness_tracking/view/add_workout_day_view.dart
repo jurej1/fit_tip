@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddWorkoutDayView extends StatelessWidget {
-  const AddWorkoutDayView({Key? key}) : super(key: key);
+   AddWorkoutDayView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context, {required WorkoutDay workoutDay}) {
     return MaterialPageRoute(
@@ -17,7 +17,7 @@ class AddWorkoutDayView extends StatelessWidget {
               create: (context) => AddWorkoutDayFormBloc(workoutDay: workoutDay),
             ),
           ],
-          child: const AddWorkoutDayView(),
+          child:  AddWorkoutDayView(),
         );
       },
     );
@@ -33,9 +33,10 @@ class AddWorkoutDayView extends StatelessWidget {
         physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.all(10),
         children: [
-          const _DayInput(),
-          const _NoteInput(),
-          const _MuscleGroupsInput(),
+           _DayInput(),
+           _NoteInput(),
+             
+              _MuscleGroupsInput(),
         ],
       ),
     );
@@ -141,11 +142,13 @@ class _MuscleGroupsInput extends StatelessWidget {
               ],
             ),
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.start,
-              alignment: WrapAlignment.start,
+              direction: Axis.horizontal,
+              runAlignment: WrapAlignment.start,runSpacing: 10,
+
               children: state.getMuscleGroupList().map(
                 (e) {
                   return Chip(
+
                     key: ValueKey(e),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     label: Text(describeEnum(e)),

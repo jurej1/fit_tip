@@ -1,6 +1,6 @@
 part of 'add_workout_day_form_bloc.dart';
 
-class AddWorkoutDayFormState extends Equatable {
+class AddWorkoutDayFormState {
   const AddWorkoutDayFormState({
     required this.id,
     required this.day,
@@ -25,18 +25,6 @@ class AddWorkoutDayFormState extends Equatable {
       note: WorkoutNote.pure(workoutDay.note),
       workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
     );
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      id,
-      day,
-      note,
-      muscleGroupList,
-      workoutExcercisesList,
-      status,
-    ];
   }
 
   AddWorkoutDayFormState copyWith({
@@ -70,6 +58,6 @@ class AddWorkoutDayFormState extends Equatable {
 
     if (this.muscleGroupList.value == null) return allGroups;
 
-    return allGroups..removeWhere((element) => !this.muscleGroupList.value!.contains(element));
+    return allGroups..removeWhere((element) => this.muscleGroupList.value!.contains(element));
   }
 }
