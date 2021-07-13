@@ -69,12 +69,14 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapMuscleGroupAddedToState(AddWorkoutDayMuscleGroupAdded event) async* {
+    if (event.value == null) return;
+
     List<MuscleGroup>? muscleGroupList = state.muscleGroupList.value;
 
     if (muscleGroupList == null) {
-      muscleGroupList = [event.value];
+      muscleGroupList = [event.value!];
     } else {
-      muscleGroupList.add(event.value);
+      muscleGroupList.add(event.value!);
     }
 
     final list = WorkoutMuscleGroupList.dirty(muscleGroupList);

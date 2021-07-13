@@ -1,4 +1,5 @@
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fit_tip/fitness_tracking/widgets/widgets.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -111,13 +112,29 @@ class _MuscleGroupsInput extends StatelessWidget {
               children: [
                 Text('Muscle groups'),
                 IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (_) {
-                        return Container();
-                      },
+                  onPressed: () async {
+                    MuscleGroup? value = await showCustomModalBottomSheet<MuscleGroup?>(
+                      context,
+                      child: Expanded(
+                        child: ListView.builder(
+                          itemCount: state.muscleGroupList.availableMuscleGroups.length,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          itemBuilder: (context, index) {
+                            final item = state.muscleGroupList.availableMuscleGroups[index];
+                            return ListTile(
+                              title: Text(describeEnum(item)),
+                              dense: true,
+                              contentPadding: EdgeInsets.zero,
+                              onTap: () {
+                                Navigator.of(context).pop(item);
+                              },
+                            );
+                          },
+                        ),
+                      ),
                     );
+
+                    BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayMuscleGroupAdded(value));
                   },
                   icon: const Icon(Icons.add),
                   color: Theme.of(context).primaryColor,

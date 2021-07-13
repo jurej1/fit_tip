@@ -26,12 +26,12 @@ class AddWorkoutDayNoteChanged extends AddWorkoutDayFormEvent {
 }
 
 class AddWorkoutDayMuscleGroupAdded extends AddWorkoutDayFormEvent {
-  final MuscleGroup value;
+  final MuscleGroup? value;
 
   const AddWorkoutDayMuscleGroupAdded(this.value);
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AddWorkoutDayMuscleGroupRemoved extends AddWorkoutDayFormEvent {
