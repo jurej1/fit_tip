@@ -60,4 +60,8 @@ class AddWorkoutDayFormState {
 
     return allGroups..removeWhere((element) => this.muscleGroupList.value!.contains(element));
   }
+
+  List<WorkoutExcercise> getExcercisesList() {
+    return this.workoutExcercisesList.value;
+  }
 }

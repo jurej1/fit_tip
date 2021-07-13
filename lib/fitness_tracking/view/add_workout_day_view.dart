@@ -33,9 +33,10 @@ class AddWorkoutDayView extends StatelessWidget {
         physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.all(10),
         children: [
-          _DayInput(),
-          _NoteInput(),
-          _MuscleGroupsInput(),
+          const _DayInput(),
+          const _NoteInput(),
+          const _MuscleGroupsInput(),
+          const _WorkoutInput(),
         ],
       ),
     );
@@ -103,7 +104,16 @@ class _MuscleGroupsInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+    return BlocConsumer<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+      listener: (context, state) {
+        if (state.muscleGroupList.containsMoreThanTwoMuscleGroups) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('We recommend two muscle groups per workout'),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return Column(
           children: [
@@ -145,7 +155,6 @@ class _MuscleGroupsInput extends StatelessWidget {
               direction: Axis.horizontal,
               alignment: WrapAlignment.start,
               spacing: 10,
-              runSpacing: 20,
               children: state.getMuscleGroupList().map(
                 (e) {
                   return Chip(
@@ -159,6 +168,70 @@ class _MuscleGroupsInput extends StatelessWidget {
                 },
               ).toList(),
             ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _WorkoutInput extends StatelessWidget {
+  const _WorkoutInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Workouts'),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.add),
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+            // ListView.builder(
+            //   shrinkWrap: true,
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   itemCount: state.getExcercisesList().length,
+            //   itemBuilder: (context, index) {
+            //     final item = state.getExcercisesList()[index];
+            //     return ListTile(
+            //       dense: true,
+            //       title: Text(item.name),
+            //     );
+            //   },
+            // ),
+            if (state.getExcercisesList().isNotEmpty)
+              DataTable(
+                columns: [
+                  DataColumn(
+                    label: Text('Name'),
+                  ),
+                  DataColumn(
+                    label: Text('Sets'),
+                  ),
+                  DataColumn(
+                    label: Text('Reps'),
+                  )
+                ],
+                rows: state.getExcercisesList().map(
+                  (e) {
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(e.name)),
+                        DataCell(Text(e.sets.toStringAsFixed(0))),
+                        DataCell(Text('${e.reps} ${describeEnum(e.repUnit)}'))
+                      ],
+                    );
+                  },
+                ).toList(),
+              ),
           ],
         );
       },
