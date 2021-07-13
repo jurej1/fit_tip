@@ -117,10 +117,10 @@ class _MuscleGroupsInput extends StatelessWidget {
                       context,
                       child: Expanded(
                         child: ListView.builder(
-                          itemCount: state.muscleGroupList.availableMuscleGroups.length,
+                          itemCount: state.getAvailableMuscleGroups().length
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           itemBuilder: (context, index) {
-                            final item = state.muscleGroupList.availableMuscleGroups[index];
+                            final item = state.getAvailableMuscleGroups()[index];
                             return ListTile(
                               title: Text(describeEnum(item)),
                               dense: true,
@@ -131,8 +131,7 @@ class _MuscleGroupsInput extends StatelessWidget {
                             );
                           },
                         ),
-                      ),
-                    );
+                      ),                    );
 
                     BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayMuscleGroupAdded(value));
                   },
@@ -142,9 +141,12 @@ class _MuscleGroupsInput extends StatelessWidget {
               ],
             ),
             Wrap(
+              crossAxisAlignment: WrapCrossAlignment.start,
+              alignment: WrapAlignment.start,
               children: state.getMuscleGroupList().map(
                 (e) {
                   return Chip(
+                    key: ValueKey(e),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     label: Text(describeEnum(e)),
                     onDeleted: () {

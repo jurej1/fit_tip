@@ -7,17 +7,6 @@ class WorkoutMuscleGroupList extends FormzInput<List<MuscleGroup>?, WorkoutMuscl
   const WorkoutMuscleGroupList.dirty([List<MuscleGroup>? value]) : super.dirty(value);
   const WorkoutMuscleGroupList.pure([List<MuscleGroup>? value]) : super.pure(value);
 
-  List<MuscleGroup> get availableMuscleGroups {
-    return MuscleGroup.values
-      ..removeWhere(
-        (element) {
-          if (this.value == null) return false;
-          if (this.value!.contains(element)) return true;
-          return false;
-        },
-      );
-  }
-
   bool get containsMoreThanTwoMuscleGroups {
     if (this.value == null) {
       return false;

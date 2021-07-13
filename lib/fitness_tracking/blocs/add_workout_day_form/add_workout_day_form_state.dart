@@ -64,4 +64,12 @@ class AddWorkoutDayFormState extends Equatable {
   List<MuscleGroup> getMuscleGroupList() {
     return this.muscleGroupList.value ?? [];
   }
+
+  List<MuscleGroup> getAvailableMuscleGroups() {
+    List<MuscleGroup> allGroups = List.from(MuscleGroup.values);
+
+    if (this.muscleGroupList.value == null) return allGroups;
+
+    return allGroups..removeWhere((element) => !this.muscleGroupList.value!.contains(element));
+  }
 }
