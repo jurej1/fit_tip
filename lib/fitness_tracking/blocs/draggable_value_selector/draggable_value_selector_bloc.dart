@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:flutter/cupertino.dart';
 
 part 'draggable_value_selector_event.dart';

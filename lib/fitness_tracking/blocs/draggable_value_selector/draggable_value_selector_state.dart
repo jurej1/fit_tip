@@ -27,4 +27,10 @@ class DraggableValueSelectorState extends Equatable {
       offset: offset ?? this.offset,
     );
   }
+
+  double getAnimateToValue(double itemHeight, double margin) {
+    return (itemHeight + (2 * margin)) * focusedValue;
+  }
+
+  int get amountOfVisibibleItems => 3;
 }

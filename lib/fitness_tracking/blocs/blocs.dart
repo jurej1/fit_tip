@@ -5,3 +5,4 @@ export 'add_workout_floating_action_button/add_workout_floating_action_button_cu
 export 'workout_day_card/workout_day_card_bloc.dart';
 export 'add_workout_day_form/add_workout_day_form_bloc.dart';
 export 'add_workout_excercise_form/add_workout_excercise_form_bloc.dart';
+export 'draggable_value_selector/draggable_value_selector_bloc.dart';
