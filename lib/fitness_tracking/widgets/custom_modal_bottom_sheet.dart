@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future showCustomModalBottomSheet<T>(BuildContext context, {required Widget child}) {
+Future showCustomModalBottomSheet<T>(BuildContext context, Widget child) {
   final Size size = MediaQuery.of(context).size;
   return showModalBottomSheet<T>(
     context: context,

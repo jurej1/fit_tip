@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddWorkoutDayView extends StatelessWidget {
-   AddWorkoutDayView({Key? key}) : super(key: key);
+  AddWorkoutDayView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context, {required WorkoutDay workoutDay}) {
     return MaterialPageRoute(
@@ -17,7 +17,7 @@ class AddWorkoutDayView extends StatelessWidget {
               create: (context) => AddWorkoutDayFormBloc(workoutDay: workoutDay),
             ),
           ],
-          child:  AddWorkoutDayView(),
+          child: AddWorkoutDayView(),
         );
       },
     );
@@ -33,10 +33,9 @@ class AddWorkoutDayView extends StatelessWidget {
         physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.all(10),
         children: [
-           _DayInput(),
-           _NoteInput(),
-             
-              _MuscleGroupsInput(),
+          _DayInput(),
+          _NoteInput(),
+          _MuscleGroupsInput(),
         ],
       ),
     );
@@ -116,23 +115,24 @@ class _MuscleGroupsInput extends StatelessWidget {
                   onPressed: () async {
                     MuscleGroup? value = await showCustomModalBottomSheet<MuscleGroup?>(
                       context,
-                      child: Expanded(
+                      Expanded(
                         child: ListView.builder(
-                          itemCount: state.getAvailableMuscleGroups().length
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.all(10),
                           itemBuilder: (context, index) {
                             final item = state.getAvailableMuscleGroups()[index];
                             return ListTile(
-                              title: Text(describeEnum(item)),
-                              dense: true,
                               contentPadding: EdgeInsets.zero,
+                              dense: true,
+                              title: Text(describeEnum(item)),
                               onTap: () {
                                 Navigator.of(context).pop(item);
                               },
                             );
                           },
+                          itemCount: state.getAvailableMuscleGroups().length,
                         ),
-                      ),                    );
+                      ),
+                    );
 
                     BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayMuscleGroupAdded(value));
                   },
@@ -143,12 +143,11 @@ class _MuscleGroupsInput extends StatelessWidget {
             ),
             Wrap(
               direction: Axis.horizontal,
-              runAlignment: WrapAlignment.start,runSpacing: 10,
-
+              runAlignment: WrapAlignment.start,
+              runSpacing: 10,
               children: state.getMuscleGroupList().map(
                 (e) {
                   return Chip(
-
                     key: ValueKey(e),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     label: Text(describeEnum(e)),
