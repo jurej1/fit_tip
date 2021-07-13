@@ -2,23 +2,17 @@ import 'package:formz/formz.dart';
 
 enum WorkoutDayDayValidationError { invalid }
 
-class WorkoutDayDay extends FormzInput<String, WorkoutDayDayValidationError> {
-  const WorkoutDayDay.dirty([String value = '']) : super.dirty(value);
-  const WorkoutDayDay.pure([String value = '']) : super.pure(value);
+class WorkoutDayDay extends FormzInput<int, WorkoutDayDayValidationError> {
+  const WorkoutDayDay.dirty([int value = 0]) : super.dirty(value);
+  const WorkoutDayDay.pure([int value = 0]) : super.pure(value);
 
   @override
-  WorkoutDayDayValidationError? validator(String? value) {
+  WorkoutDayDayValidationError? validator(int? value) {
     if (value == null) {
       return WorkoutDayDayValidationError.invalid;
     }
 
-    final int? valueInt = int.tryParse(value);
-
-    if (valueInt == null) {
-      return WorkoutDayDayValidationError.invalid;
-    }
-
-    if (valueInt > 7) {
+    if (value > 7) {
       return WorkoutDayDayValidationError.invalid;
     }
 

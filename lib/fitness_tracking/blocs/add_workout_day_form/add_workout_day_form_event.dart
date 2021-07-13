@@ -4,16 +4,16 @@ abstract class AddWorkoutDayFormEvent extends Equatable {
   const AddWorkoutDayFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AddWorkoutDayDayChanged extends AddWorkoutDayFormEvent {
-  final String value;
+  final int? value;
 
   const AddWorkoutDayDayChanged(this.value);
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AddWorkoutDayNoteChanged extends AddWorkoutDayFormEvent {

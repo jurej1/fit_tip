@@ -20,7 +20,7 @@ class AddWorkoutDayFormState extends Equatable {
   factory AddWorkoutDayFormState.initial(WorkoutDay workoutDay) {
     return AddWorkoutDayFormState(
       id: workoutDay.id,
-      day: WorkoutDayDay.pure(workoutDay.day.toStringAsFixed(0)),
+      day: WorkoutDayDay.pure(workoutDay.day),
       muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.musclesTargeted),
       note: WorkoutNote.pure(workoutDay.note),
       workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
@@ -55,5 +55,13 @@ class AddWorkoutDayFormState extends Equatable {
       workoutExcercisesList: workoutExcercisesList ?? this.workoutExcercisesList,
       status: status ?? this.status,
     );
+  }
+
+  String mapDayToText(int index) {
+    return DateFormat('EEEE').format(DateTime(0, 0, index));
+  }
+
+  List<MuscleGroup> getMuscleGroupList() {
+    return this.muscleGroupList.value ?? [];
   }
 }

@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fit_tip/fitness_tracking/models/workout_muscle_group_list.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
+import 'package:intl/intl.dart';
 
 part 'add_workout_day_form_event.dart';
 part 'add_workout_day_form_state.dart';
@@ -40,17 +39,19 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapDayChangedToState(AddWorkoutDayDayChanged event) async* {
-    final day = WorkoutDayDay.dirty(event.value);
+    if (event.value != null) {
+      final day = WorkoutDayDay.dirty(event.value!);
 
-    yield state.copyWith(
-      day: day,
-      status: Formz.validate([
-        day,
-        state.muscleGroupList,
-        state.note,
-        state.workoutExcercisesList,
-      ]),
-    );
+      yield state.copyWith(
+        day: day,
+        status: Formz.validate([
+          day,
+          state.muscleGroupList,
+          state.note,
+          state.workoutExcercisesList,
+        ]),
+      );
+    }
   }
 
   Stream<AddWorkoutDayFormState> _mapNoteChangedToState(AddWorkoutDayNoteChanged event) async* {
