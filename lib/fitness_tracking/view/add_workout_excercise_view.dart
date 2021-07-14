@@ -52,19 +52,17 @@ class DraggableValueSelector extends HookWidget {
     return BlocConsumer<DraggableValueSelectorBloc, DraggableValueSelectorState>(
       listener: (context, state) {
         if (state.listState == DraggableValueSelectorListState.stop) {
-          print('animateTo: ${state.getAnimateToValue(itemHeight)}');
           _controller.animateTo(
             state.getAnimateToValue(itemHeight),
             duration: const Duration(milliseconds: 400),
-            curve: Curves.fastLinearToSlowEaseIn,
+            curve: Curves.easeInOutQuad,
           );
 
           BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorListSnapped());
         }
-
-        print('focusedValue: ${state.focusedValue}');
       },
       builder: (context, state) {
+        final listHeight = state.amountOfVisibibleItems * itemHeight;
         return Container(
           width: size.width,
           height: 100,
@@ -75,7 +73,7 @@ class DraggableValueSelector extends HookWidget {
               Container(
                 color: Colors.green,
                 width: 50,
-                height: itemHeight * state.amountOfVisibibleItems,
+                height: listHeight,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
                     if (notification is ScrollUpdateNotification) {
@@ -89,6 +87,7 @@ class DraggableValueSelector extends HookWidget {
                     return true;
                   },
                   child: ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: (listHeight - itemHeight) * 0.5),
                     controller: _controller,
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
