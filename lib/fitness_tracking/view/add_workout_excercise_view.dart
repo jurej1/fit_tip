@@ -71,7 +71,6 @@ class DraggableValueSelector extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                color: Colors.green,
                 width: 50,
                 height: listHeight,
                 child: NotificationListener<ScrollNotification>(
@@ -89,17 +88,19 @@ class DraggableValueSelector extends HookWidget {
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: (listHeight - itemHeight) * 0.5),
                     controller: _controller,
-                    physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: 21,
                     itemBuilder: (context, index) {
                       return Container(
                         alignment: Alignment.center,
-                        child: ColoredBox(
-                          color: Colors.blue,
-                          child: Text(
-                            '$index',
-                            style: TextStyle(fontSize: itemHeight, height: 1),
+                        height: itemHeight,
+                        child: Text(
+                          '$index',
+                          style: TextStyle(
+                            fontSize: state.getTextSize(index, itemHeight),
+                            height: 1,
+                            color: state.getTextColor(index),
                           ),
                         ),
                       );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 part 'draggable_value_selector_event.dart';
 part 'draggable_value_selector_state.dart';
@@ -44,8 +45,10 @@ class DraggableValueSelectorBloc extends Bloc<DraggableValueSelectorEvent, Dragg
 
     final value = offset / itemHeight;
 
+    final focusedValue = value.round();
+
     return state.copyWith(
-      focusedValue: value.round(),
+      focusedValue: focusedValue.isNegative ? 0 : focusedValue,
       offset: offset,
       listState: listState,
     );

@@ -33,4 +33,20 @@ class DraggableValueSelectorState extends Equatable {
   }
 
   int get amountOfVisibibleItems => 3;
+
+  double getTextSize(int index, double itemHeight) {
+    if (index == this.focusedValue) return itemHeight;
+
+    if (index + 1 == focusedValue || index - 1 == focusedValue) return itemHeight * 0.8;
+
+    return itemHeight * 0.6;
+  }
+
+  Color getTextColor(int index) {
+    if (index == focusedValue) {
+      return Colors.black;
+    }
+
+    return Colors.black45;
+  }
 }
