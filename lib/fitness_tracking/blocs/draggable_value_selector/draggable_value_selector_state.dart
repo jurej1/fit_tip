@@ -4,9 +4,9 @@ enum DraggableValueSelectorListState { initial, scrolling, stop, dirty }
 
 class DraggableValueSelectorState extends Equatable {
   const DraggableValueSelectorState({
-    this.focusedValue = 0,
+    required this.focusedValue,
     this.listState = DraggableValueSelectorListState.initial,
-    this.offset = 0,
+    required this.offset,
   });
 
   final int focusedValue;
@@ -28,8 +28,8 @@ class DraggableValueSelectorState extends Equatable {
     );
   }
 
-  double getAnimateToValue(double itemHeight, double margin) {
-    return (itemHeight + (2 * margin)) * focusedValue;
+  double getAnimateToValue(double itemHeight) {
+    return itemHeight * focusedValue;
   }
 
   int get amountOfVisibibleItems => 3;

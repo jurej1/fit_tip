@@ -8,7 +8,7 @@ part 'draggable_value_selector_event.dart';
 part 'draggable_value_selector_state.dart';
 
 class DraggableValueSelectorBloc extends Bloc<DraggableValueSelectorEvent, DraggableValueSelectorState> {
-  DraggableValueSelectorBloc() : super(DraggableValueSelectorState());
+  DraggableValueSelectorBloc() : super(DraggableValueSelectorState(focusedValue: 0, offset: 0));
 
   @override
   Stream<DraggableValueSelectorState> mapEventToState(
@@ -24,18 +24,22 @@ class DraggableValueSelectorBloc extends Bloc<DraggableValueSelectorEvent, Dragg
   }
 
   Stream<DraggableValueSelectorState> _mapScrollUpdateToState(DraggableValueSelectorScrollUpdate event) async* {
-    yield _calculateValues(event.scrollController, event.itemHeight);
-
-    yield state.copyWith(listState: DraggableValueSelectorListState.scrolling);
+    yield _calculateValues(
+      event.scrollController,
+      event.itemHeight,
+      DraggableValueSelectorListState.scrolling,
+    );
   }
 
   Stream<DraggableValueSelectorState> _mapScrollEndToState(DraggableValueSelectorScrollEnd event) async* {
-    yield _calculateValues(event.scrollController, event.itemHeight);
-
-    yield state.copyWith(listState: DraggableValueSelectorListState.stop);
+    yield _calculateValues(
+      event.scrollController,
+      event.itemHeight,
+      DraggableValueSelectorListState.stop,
+    );
   }
 
-  DraggableValueSelectorState _calculateValues(ScrollController controller, double itemHeight) {
+  DraggableValueSelectorState _calculateValues(ScrollController controller, double itemHeight, DraggableValueSelectorListState listState) {
     final offset = controller.offset;
 
     final value = offset / itemHeight;
@@ -43,6 +47,7 @@ class DraggableValueSelectorBloc extends Bloc<DraggableValueSelectorEvent, Dragg
     return state.copyWith(
       focusedValue: value.round(),
       offset: offset,
+      listState: listState,
     );
   }
 }

@@ -43,7 +43,6 @@ class DraggableValueSelector extends HookWidget {
   }
 
   final double itemHeight = 30;
-  final double margin = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +52,17 @@ class DraggableValueSelector extends HookWidget {
     return BlocConsumer<DraggableValueSelectorBloc, DraggableValueSelectorState>(
       listener: (context, state) {
         if (state.listState == DraggableValueSelectorListState.stop) {
+          print('animateTo: ${state.getAnimateToValue(itemHeight)}');
           _controller.animateTo(
-            state.getAnimateToValue(itemHeight, margin),
+            state.getAnimateToValue(itemHeight),
             duration: const Duration(milliseconds: 400),
             curve: Curves.fastLinearToSlowEaseIn,
           );
+
+          BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorListSnapped());
         }
+
+        print('focusedValue: ${state.focusedValue}');
       },
       builder: (context, state) {
         return Container(
@@ -96,10 +100,7 @@ class DraggableValueSelector extends HookWidget {
                           color: Colors.blue,
                           child: Text(
                             '$index',
-                            style: TextStyle(
-                              fontSize: itemHeight,
-                              height: 1.2,
-                            ),
+                            style: TextStyle(fontSize: itemHeight, height: 1),
                           ),
                         ),
                       );
