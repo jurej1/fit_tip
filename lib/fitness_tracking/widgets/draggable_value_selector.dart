@@ -11,16 +11,17 @@ class DraggableValueSelector extends HookWidget {
     this.backgroundColor,
     required this.itemCount,
     required this.onValueUpdated,
+    required this.height,
   })  : this.width = itemHeight * 1.5,
         super(key: key);
 
-  static Widget route({
-    Key? key,
-    required double itemHeight,
-    Color? backgroundColor,
-    required void Function(int) onValueUpdated,
-    required int itemCount,
-  }) {
+  static Widget route(
+      {Key? key,
+      required double itemHeight,
+      Color? backgroundColor,
+      required void Function(int) onValueUpdated,
+      required int itemCount,
+      required double height}) {
     return BlocProvider(
       create: (context) => DraggableValueSelectorBloc(),
       child: DraggableValueSelector._(
@@ -29,6 +30,7 @@ class DraggableValueSelector extends HookWidget {
         backgroundColor: backgroundColor,
         itemCount: itemCount,
         onValueUpdated: onValueUpdated,
+        height: height,
       ),
     );
   }
@@ -38,6 +40,7 @@ class DraggableValueSelector extends HookWidget {
   final int itemCount;
   final void Function(int) onValueUpdated;
   final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +59,13 @@ class DraggableValueSelector extends HookWidget {
         }
       },
       builder: (context, state) {
-        final listHeight = state.amountOfVisibibleItems * itemHeight;
         return Container(
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(10),
             color: backgroundColor,
           ),
           width: width,
-          height: listHeight,
+          height: height,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -91,7 +93,7 @@ class DraggableValueSelector extends HookWidget {
                   return true;
                 },
                 child: ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: (listHeight - itemHeight) * 0.5),
+                  padding: EdgeInsets.symmetric(vertical: (height - itemHeight) * 0.5),
                   controller: _controller,
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,

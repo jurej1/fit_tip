@@ -43,21 +43,25 @@ class _RepsInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          'Reps',
-          style: TextStyle(fontSize: 18),
-        ),
-        DraggableValueSelector.route(
-          itemHeight: 30,
-          itemCount: 60,
-          onValueUpdated: (value) {},
-        ),
-        RepUnitValueSelector.route(itemHeight: 20),
-      ],
+    return Container(
+      color: Colors.red,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Reps',
+            style: TextStyle(fontSize: 18),
+          ),
+          DraggableValueSelector.route(
+            itemHeight: 30,
+            itemCount: 60,
+            onValueUpdated: (value) {},
+            height: 150,
+          ),
+          RepUnitValueSelector.route(itemHeight: 20),
+        ],
+      ),
     );
   }
 }
@@ -76,6 +80,7 @@ class _SetsInput extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         ),
         DraggableValueSelector.route(
+          height: 150,
           itemHeight: 30,
           itemCount: 21,
           onValueUpdated: (value) {},

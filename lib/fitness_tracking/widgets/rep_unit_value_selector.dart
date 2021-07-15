@@ -18,7 +18,6 @@ class RepUnitValueSelector extends HookWidget {
     );
   }
 
-  final double itemHeight = 30;
   @override
   Widget build(BuildContext context) {
     final ScrollController _controller = useScrollController();
@@ -54,7 +53,7 @@ class RepUnitValueSelector extends HookWidget {
               controller: _controller,
               padding: EdgeInsets.symmetric(vertical: state.getVerticalPadding()),
               itemCount: RepUnit.values.length,
-              itemExtent: itemHeight,
+              itemExtent: state.itemHeight,
               itemBuilder: (context, index) {
                 final item = RepUnit.values[index];
                 return AnimatedDefaultTextStyle(
