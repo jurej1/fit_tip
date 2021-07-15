@@ -29,9 +29,10 @@ class AddWorkoutExcerciseView extends StatelessWidget {
         title: Text('Add Workout Excercise View'),
       ),
       body: ListView(
+        padding: EdgeInsets.all(20),
         children: [
-          const _RepsInput(),
           const _SetsInput(),
+          const _RepsInput(),
         ],
       ),
     );

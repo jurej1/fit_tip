@@ -81,7 +81,7 @@ class _RepUnitValueSelectorState extends State<RepUnitValueSelector> {
               return true;
             },
             child: ListView.builder(
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               controller: _controller,
               padding: EdgeInsets.symmetric(vertical: state.getVerticalPadding()),
               itemCount: RepUnit.values.length,
@@ -97,7 +97,7 @@ class _RepUnitValueSelectorState extends State<RepUnitValueSelector> {
                     height: 1,
                     fontSize: state.getFontSize(index),
                   ),
-                  duration: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 200),
                 );
               },
             ),
