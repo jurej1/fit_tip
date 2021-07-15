@@ -53,7 +53,7 @@ class _RepsInput extends StatelessWidget {
         ),
         DraggableValueSelector.route(
           itemHeight: 30,
-          itemCount: 21,
+          itemCount: 60,
           onValueUpdated: (value) {},
         ),
       ],

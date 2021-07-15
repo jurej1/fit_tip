@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 part 'rep_unit_value_selector_event.dart';
 part 'rep_unit_value_selector_state.dart';
@@ -43,6 +44,6 @@ class RepUnitValueSelectorBloc extends Bloc<RepUnitValueSelectorEvent, RepUnitVa
 
     final index = value.round();
 
-    return state.copyWith(focusedValue: RepUnit.values.elementAt(index), listState: listState);
+    return state.copyWith(focusedValue: index, listState: listState);
   }
 }
