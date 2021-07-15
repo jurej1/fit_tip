@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../fitness_tracking.dart';
 
-class DraggableValueSelector extends HookWidget {
+class DraggableValueSelector extends StatefulWidget {
   const DraggableValueSelector._({
     Key? key,
     this.itemHeight = 30,
@@ -45,14 +45,35 @@ class DraggableValueSelector extends HookWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) {
-    final _controller = useScrollController();
+  _DraggableValueSelectorState createState() => _DraggableValueSelectorState();
+}
 
+class _DraggableValueSelectorState extends State<DraggableValueSelector> {
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final dragBloc = BlocProvider.of<DraggableValueSelectorBloc>(context);
+    _controller = ScrollController(
+      initialScrollOffset: dragBloc.state.focusedValue != 0 ? dragBloc.state.getAnimateToValue(widget.itemHeight) : 0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<DraggableValueSelectorBloc, DraggableValueSelectorState>(
       listener: (context, state) {
         if (state.listState == DraggableValueSelectorListState.stop) {
           _controller.animateTo(
-            state.getAnimateToValue(itemHeight),
+            state.getAnimateToValue(widget.itemHeight),
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutQuad,
           );
@@ -64,10 +85,10 @@ class DraggableValueSelector extends HookWidget {
         return Container(
           decoration: BoxDecoration(
             // borderRadius: BorderRadius.circular(10),
-            color: backgroundColor,
+            color: widget.backgroundColor,
           ),
-          width: width,
-          height: height,
+          width: widget.width,
+          height: widget.height,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -85,22 +106,24 @@ class DraggableValueSelector extends HookWidget {
               NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   if (notification is ScrollUpdateNotification) {
-                    BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollUpdate(_controller, itemHeight));
+                    BlocProvider.of<DraggableValueSelectorBloc>(context)
+                        .add(DraggableValueSelectorScrollUpdate(_controller, widget.itemHeight));
                   }
 
                   if (notification is ScrollEndNotification) {
-                    BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollEnd(_controller, itemHeight));
+                    BlocProvider.of<DraggableValueSelectorBloc>(context)
+                        .add(DraggableValueSelectorScrollEnd(_controller, widget.itemHeight));
                   }
 
                   return true;
                 },
                 child: ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: (height - itemHeight) * 0.5),
+                  padding: EdgeInsets.symmetric(vertical: (widget.height - widget.itemHeight) * 0.5),
                   controller: _controller,
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemExtent: itemHeight,
-                  itemCount: itemCount,
+                  itemExtent: widget.itemHeight,
+                  itemCount: widget.itemCount,
                   itemBuilder: (context, index) {
                     return AnimatedDefaultTextStyle(
                       child: Text(
@@ -110,9 +133,9 @@ class DraggableValueSelector extends HookWidget {
                       textAlign: TextAlign.center,
                       curve: Curves.easeInOut,
                       style: TextStyle(
-                        fontSize: state.getTextSize(index, itemHeight),
+                        fontSize: state.getTextSize(index, widget.itemHeight),
                         color: state.getTextColor(index),
-                        height: itemHeight,
+                        height: widget.itemHeight,
                       ),
                       duration: const Duration(milliseconds: 300),
                     );
