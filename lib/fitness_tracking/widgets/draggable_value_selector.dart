@@ -15,15 +15,17 @@ class DraggableValueSelector extends HookWidget {
   })  : this.width = itemHeight * 1.5,
         super(key: key);
 
-  static Widget route(
-      {Key? key,
-      required double itemHeight,
-      Color? backgroundColor,
-      required void Function(int) onValueUpdated,
-      required int itemCount,
-      required double height}) {
+  static Widget route({
+    Key? key,
+    required double itemHeight,
+    Color? backgroundColor,
+    required void Function(int) onValueUpdated,
+    required int itemCount,
+    required double height,
+    int? focusedValue,
+  }) {
     return BlocProvider(
-      create: (context) => DraggableValueSelectorBloc(),
+      create: (context) => DraggableValueSelectorBloc(focusedValue: focusedValue),
       child: DraggableValueSelector._(
         key: key,
         itemHeight: itemHeight,

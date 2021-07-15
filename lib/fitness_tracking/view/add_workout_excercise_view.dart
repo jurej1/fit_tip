@@ -61,6 +61,7 @@ class _RepsInput extends StatelessWidget {
           RepUnitValueSelector.route(
             itemHeight: 20,
             height: 75,
+            onValueUpdated: (value) {},
           ),
         ],
       ),

@@ -9,7 +9,9 @@ part 'draggable_value_selector_event.dart';
 part 'draggable_value_selector_state.dart';
 
 class DraggableValueSelectorBloc extends Bloc<DraggableValueSelectorEvent, DraggableValueSelectorState> {
-  DraggableValueSelectorBloc() : super(DraggableValueSelectorState(focusedValue: 0, offset: 0));
+  DraggableValueSelectorBloc({
+    int? focusedValue,
+  }) : super(DraggableValueSelectorState(focusedValue: focusedValue ?? 0, offset: 0));
 
   @override
   Stream<DraggableValueSelectorState> mapEventToState(

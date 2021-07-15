@@ -13,10 +13,12 @@ class RepUnitValueSelectorBloc extends Bloc<RepUnitValueSelectorEvent, RepUnitVa
   RepUnitValueSelectorBloc({
     required double itemHeight,
     required double height,
+    RepUnit? initialValue,
   }) : super(
           RepUnitValueSelectorState(
             itemHeight: itemHeight,
             height: height,
+            focusedValue: initialValue != null ? RepUnit.values.indexOf(initialValue) : 0,
           ),
         );
 

@@ -9,17 +9,25 @@ import '../fitness_tracking.dart';
 class RepUnitValueSelector extends HookWidget {
   const RepUnitValueSelector({
     Key? key,
+    required this.onValueUpdated,
   }) : super(key: key);
 
-  static Widget route({required double itemHeight, required double height}) {
+  static Widget route({
+    required double itemHeight,
+    required double height,
+    RepUnit? initialValue,
+    required void Function(RepUnit) onValueUpdated,
+  }) {
     return BlocProvider(
       create: (context) => RepUnitValueSelectorBloc(
         itemHeight: itemHeight,
         height: height,
       ),
-      child: RepUnitValueSelector(),
+      child: RepUnitValueSelector(onValueUpdated: onValueUpdated),
     );
   }
+
+  final void Function(RepUnit) onValueUpdated;
 
   @override
   Widget build(BuildContext context) {
