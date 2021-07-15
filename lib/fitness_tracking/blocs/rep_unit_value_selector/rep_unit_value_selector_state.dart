@@ -55,7 +55,7 @@ class RepUnitValueSelectorState extends Equatable {
   }
 
   double width() {
-    return itemHeight * 1.5;
+    return itemHeight * 2;
   }
 
   double getVerticalPadding() {
