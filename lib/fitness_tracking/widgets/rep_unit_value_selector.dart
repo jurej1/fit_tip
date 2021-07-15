@@ -7,12 +7,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../fitness_tracking.dart';
 
 class RepUnitValueSelector extends HookWidget {
-  const RepUnitValueSelector({Key? key}) : super(key: key);
+  const RepUnitValueSelector({
+    Key? key,
+  }) : super(key: key);
 
-  static Widget route({required double itemHeight}) {
+  static Widget route({required double itemHeight, required double height}) {
     return BlocProvider(
       create: (context) => RepUnitValueSelectorBloc(
         itemHeight: itemHeight,
+        height: height,
       ),
       child: RepUnitValueSelector(),
     );
@@ -35,7 +38,7 @@ class RepUnitValueSelector extends HookWidget {
       },
       builder: (context, state) {
         return Container(
-          height: state.listSize(),
+          height: state.height,
           width: state.width(),
           child: NotificationListener<ScrollNotification>(
             onNotification: (notification) {

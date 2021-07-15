@@ -12,7 +12,13 @@ part 'rep_unit_value_selector_state.dart';
 class RepUnitValueSelectorBloc extends Bloc<RepUnitValueSelectorEvent, RepUnitValueSelectorState> {
   RepUnitValueSelectorBloc({
     required double itemHeight,
-  }) : super(RepUnitValueSelectorState(itemHeight: itemHeight));
+    required double height,
+  }) : super(
+          RepUnitValueSelectorState(
+            itemHeight: itemHeight,
+            height: height,
+          ),
+        );
 
   @override
   Stream<RepUnitValueSelectorState> mapEventToState(

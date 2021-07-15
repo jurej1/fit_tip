@@ -57,9 +57,12 @@ class _RepsInput extends StatelessWidget {
             itemHeight: 30,
             itemCount: 60,
             onValueUpdated: (value) {},
-            height: 150,
+            height: 75,
           ),
-          RepUnitValueSelector.route(itemHeight: 20),
+          RepUnitValueSelector.route(
+            itemHeight: 20,
+            height: 75,
+          ),
         ],
       ),
     );
@@ -80,7 +83,7 @@ class _SetsInput extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         ),
         DraggableValueSelector.route(
-          height: 150,
+          height: 75,
           itemHeight: 30,
           itemCount: 21,
           onValueUpdated: (value) {},
