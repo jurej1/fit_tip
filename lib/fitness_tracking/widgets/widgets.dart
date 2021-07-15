@@ -7,3 +7,4 @@ export 'add_workout_form_selected_view_displayer.dart';
 export 'shake_animation_builder.dart';
 export 'custom_modal_bottom_sheet.dart';
 export 'draggable_value_selector.dart';
+export 'rep_unit_value_selector.dart';

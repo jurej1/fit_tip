@@ -9,22 +9,20 @@ abstract class RepUnitValueSelectorEvent extends Equatable {
 
 class RepUnitValueSelectorListScrollUpdated extends RepUnitValueSelectorEvent {
   final ScrollController scrollController;
-  final double itemHeight;
 
-  const RepUnitValueSelectorListScrollUpdated(this.scrollController, this.itemHeight);
+  const RepUnitValueSelectorListScrollUpdated(this.scrollController);
 
   @override
-  List<Object> get props => [itemHeight, scrollController];
+  List<Object> get props => [scrollController];
 }
 
 class RepUnitValueSelectorListScrollEnd extends RepUnitValueSelectorEvent {
   final ScrollController scrollController;
-  final double itemHeight;
 
-  const RepUnitValueSelectorListScrollEnd(this.scrollController, this.itemHeight);
+  const RepUnitValueSelectorListScrollEnd(this.scrollController);
 
   @override
-  List<Object> get props => [itemHeight, scrollController];
+  List<Object> get props => [scrollController];
 }
 
 class RepUnitValueSelectorListSnapped extends RepUnitValueSelectorEvent {}

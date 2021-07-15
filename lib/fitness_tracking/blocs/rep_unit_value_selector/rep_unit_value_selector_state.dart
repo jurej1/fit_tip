@@ -6,31 +6,35 @@ class RepUnitValueSelectorState extends Equatable {
   const RepUnitValueSelectorState({
     this.focusedValue = 0,
     this.listState = RepUnitValueSelectorListState.initial,
+    required this.itemHeight,
   });
 
   final int focusedValue;
+  final double itemHeight;
   final RepUnitValueSelectorListState listState;
 
   @override
-  List<Object> get props => [focusedValue, listState];
+  List<Object> get props => [focusedValue, itemHeight, listState];
 
   RepUnitValueSelectorState copyWith({
     int? focusedValue,
+    double? itemHeight,
     RepUnitValueSelectorListState? listState,
   }) {
     return RepUnitValueSelectorState(
       focusedValue: focusedValue ?? this.focusedValue,
+      itemHeight: itemHeight ?? this.itemHeight,
       listState: listState ?? this.listState,
     );
   }
 
-  double getAnimateToValue(double itemHeight) {
+  double getAnimateToValue() {
     return focusedValue * itemHeight;
   }
 
   RepUnit get repUnit => RepUnit.values.elementAt(focusedValue);
 
-  double getFontSize(int index, double itemHeight) {
+  double getFontSize(int index) {
     if (index == focusedValue) {
       return itemHeight;
     }
@@ -44,5 +48,17 @@ class RepUnitValueSelectorState extends Equatable {
     }
 
     return Colors.black45;
+  }
+
+  double listSize() {
+    return itemHeight * 2;
+  }
+
+  double width() {
+    return listSize() * 1.5;
+  }
+
+  double getVerticalPadding() {
+    return (listSize() * 0.5) - itemHeight / 2;
   }
 }

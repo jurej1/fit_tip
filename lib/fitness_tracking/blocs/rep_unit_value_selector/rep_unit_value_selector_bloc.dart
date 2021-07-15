@@ -10,7 +10,9 @@ part 'rep_unit_value_selector_event.dart';
 part 'rep_unit_value_selector_state.dart';
 
 class RepUnitValueSelectorBloc extends Bloc<RepUnitValueSelectorEvent, RepUnitValueSelectorState> {
-  RepUnitValueSelectorBloc() : super(RepUnitValueSelectorState());
+  RepUnitValueSelectorBloc({
+    required double itemHeight,
+  }) : super(RepUnitValueSelectorState(itemHeight: itemHeight));
 
   @override
   Stream<RepUnitValueSelectorState> mapEventToState(
@@ -26,21 +28,20 @@ class RepUnitValueSelectorBloc extends Bloc<RepUnitValueSelectorEvent, RepUnitVa
   }
 
   Stream<RepUnitValueSelectorState> _mapScrollEndToState(RepUnitValueSelectorListScrollEnd event) async* {
-    yield _calculateValues(event.scrollController, event.itemHeight, RepUnitValueSelectorListState.stop);
+    yield _calculateValues(event.scrollController, RepUnitValueSelectorListState.stop);
   }
 
   Stream<RepUnitValueSelectorState> _mapScrollUpdatedToState(RepUnitValueSelectorListScrollUpdated event) async* {
-    yield _calculateValues(event.scrollController, event.itemHeight, RepUnitValueSelectorListState.stop);
+    yield _calculateValues(event.scrollController, RepUnitValueSelectorListState.scrolling);
   }
 
   RepUnitValueSelectorState _calculateValues(
     ScrollController controller,
-    double itemHeight,
     RepUnitValueSelectorListState listState,
   ) {
     final offset = controller.offset;
 
-    final value = offset / itemHeight;
+    final value = offset / state.itemHeight;
 
     final index = value.round();
 
