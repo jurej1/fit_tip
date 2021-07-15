@@ -43,28 +43,38 @@ class _RepsInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Reps',
-            style: TextStyle(fontSize: 18),
+    return BlocBuilder<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+      builder: (context, state) {
+        return Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Reps',
+                style: TextStyle(fontSize: 18),
+              ),
+              Spacer(),
+              DraggableValueSelector.route(
+                itemHeight: 30,
+                itemCount: 61,
+                focusedValue: state.reps.value,
+                onValueUpdated: (value) {
+                  BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseRepsUpdated(value));
+                },
+                height: 75,
+              ),
+              RepUnitValueSelector.route(
+                itemHeight: 20,
+                height: 75,
+                initialValue: state.repUnit.value,
+                onValueUpdated: (value) {
+                  BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseRepUnitUpdated(value));
+                },
+              ),
+            ],
           ),
-          Spacer(),
-          DraggableValueSelector.route(
-            itemHeight: 30,
-            itemCount: 61,
-            onValueUpdated: (value) {},
-            height: 75,
-          ),
-          RepUnitValueSelector.route(
-            itemHeight: 20,
-            height: 75,
-            onValueUpdated: (value) {},
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -74,21 +84,28 @@ class _SetsInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          'Sets',
-          style: TextStyle(fontSize: 18),
-        ),
-        DraggableValueSelector.route(
-          height: 75,
-          itemHeight: 30,
-          itemCount: 21,
-          onValueUpdated: (value) {},
-        ),
-      ],
+    return BlocBuilder<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Sets',
+              style: TextStyle(fontSize: 18),
+            ),
+            DraggableValueSelector.route(
+              height: 75,
+              itemHeight: 30,
+              itemCount: 21,
+              focusedValue: state.sets.value,
+              onValueUpdated: (value) {
+                BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseSetsUpdated(value));
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
