@@ -10,15 +10,27 @@ class DraggableValueSelector extends HookWidget {
     this.itemHeight = 30,
     this.backgroundColor,
     required this.itemCount,
+    required this.onValueUpdated,
+    required this.width,
   }) : super(key: key);
 
-  static Widget route({required double itemHeight, Color? backgroundColor, required int itemCount}) {
+  static Widget route({
+    Key? key,
+    required double itemHeight,
+    Color? backgroundColor,
+    required void Function(int) onValueUpdated,
+    required int itemCount,
+    required double width,
+  }) {
     return BlocProvider(
       create: (context) => DraggableValueSelectorBloc(),
       child: DraggableValueSelector._(
+        key: key,
         itemHeight: itemHeight,
         backgroundColor: backgroundColor,
         itemCount: itemCount,
+        onValueUpdated: onValueUpdated,
+        width: width,
       ),
     );
   }
@@ -26,6 +38,8 @@ class DraggableValueSelector extends HookWidget {
   final double itemHeight;
   final Color? backgroundColor;
   final int itemCount;
+  final void Function(int) onValueUpdated;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -46,39 +60,48 @@ class DraggableValueSelector extends HookWidget {
       builder: (context, state) {
         final listHeight = state.amountOfVisibibleItems * itemHeight;
         return Container(
-          color: backgroundColor,
+          decoration: BoxDecoration(
+            // borderRadius: BorderRadius.circular(10),
+            color: backgroundColor,
+          ),
+          width: itemHeight * 1.5,
           height: listHeight,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is ScrollUpdateNotification) {
-                BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollUpdate(_controller, itemHeight));
-              }
+          child: Stack(
+            children: [
+              NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (notification is ScrollUpdateNotification) {
+                    BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollUpdate(_controller, itemHeight));
+                  }
 
-              if (notification is ScrollEndNotification) {
-                BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollEnd(_controller, itemHeight));
-              }
+                  if (notification is ScrollEndNotification) {
+                    BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorScrollEnd(_controller, itemHeight));
+                  }
 
-              return true;
-            },
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: (listHeight - itemHeight) * 0.5),
-              controller: _controller,
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemExtent: itemHeight,
-              itemCount: itemCount,
-              itemBuilder: (context, index) {
-                return AnimatedDefaultTextStyle(
-                  child: Text('$index'),
-                  style: TextStyle(
-                    fontSize: state.getTextSize(index, itemHeight),
-                    height: 1,
-                    color: state.getTextColor(index),
-                  ),
-                  duration: const Duration(milliseconds: 300),
-                );
-              },
-            ),
+                  return true;
+                },
+                child: ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: (listHeight - itemHeight) * 0.5),
+                  controller: _controller,
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemExtent: itemHeight,
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    return AnimatedDefaultTextStyle(
+                      child: Text('$index'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: state.getTextSize(index, itemHeight),
+                        height: 1,
+                        color: state.getTextColor(index),
+                      ),
+                      duration: const Duration(milliseconds: 300),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },

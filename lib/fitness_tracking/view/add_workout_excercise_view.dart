@@ -28,11 +28,60 @@ class AddWorkoutExcerciseView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Add Workout Excercise View'),
       ),
-      body: DraggableValueSelector.route(
-        itemHeight: 30,
-        backgroundColor: Colors.green,
-        itemCount: 21,
+      body: ListView(
+        children: [
+          const _RepsInput(),
+          const _SetsInput(),
+        ],
       ),
+    );
+  }
+}
+
+class _RepsInput extends StatelessWidget {
+  const _RepsInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          'Reps',
+          style: TextStyle(fontSize: 18),
+        ),
+        DraggableValueSelector.route(
+          itemHeight: 30,
+          itemCount: 21,
+          onValueUpdated: (value) {},
+          width: 50,
+        ),
+      ],
+    );
+  }
+}
+
+class _SetsInput extends StatelessWidget {
+  const _SetsInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          'Sets',
+          style: TextStyle(fontSize: 18),
+        ),
+        DraggableValueSelector.route(
+          itemHeight: 30,
+          itemCount: 21,
+          onValueUpdated: (value) {},
+          width: 50,
+        ),
+      ],
     );
   }
 }
