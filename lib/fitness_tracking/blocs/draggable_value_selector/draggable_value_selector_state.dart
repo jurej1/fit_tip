@@ -37,9 +37,7 @@ class DraggableValueSelectorState extends Equatable {
   double getTextSize(int index, double itemHeight) {
     if (index == this.focusedValue) return itemHeight;
 
-    if (index + 1 == focusedValue || index - 1 == focusedValue) return itemHeight * 0.8;
-
-    return itemHeight * 0.6;
+    return itemHeight * 0.8;
   }
 
   Color getTextColor(int index) {
