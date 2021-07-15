@@ -44,18 +44,17 @@ class _RepsInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'Reps',
             style: TextStyle(fontSize: 18),
           ),
+          Spacer(),
           DraggableValueSelector.route(
             itemHeight: 30,
-            itemCount: 60,
+            itemCount: 61,
             onValueUpdated: (value) {},
             height: 75,
           ),
