@@ -55,7 +55,6 @@ class _RepsInput extends StatelessWidget {
           itemHeight: 30,
           itemCount: 21,
           onValueUpdated: (value) {},
-          width: 50,
         ),
       ],
     );
@@ -79,7 +78,6 @@ class _SetsInput extends StatelessWidget {
           itemHeight: 30,
           itemCount: 21,
           onValueUpdated: (value) {},
-          width: 50,
         ),
       ],
     );

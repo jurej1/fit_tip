@@ -11,8 +11,8 @@ class DraggableValueSelector extends HookWidget {
     this.backgroundColor,
     required this.itemCount,
     required this.onValueUpdated,
-    required this.width,
-  }) : super(key: key);
+  })  : this.width = itemHeight * 1.5,
+        super(key: key);
 
   static Widget route({
     Key? key,
@@ -20,7 +20,6 @@ class DraggableValueSelector extends HookWidget {
     Color? backgroundColor,
     required void Function(int) onValueUpdated,
     required int itemCount,
-    required double width,
   }) {
     return BlocProvider(
       create: (context) => DraggableValueSelectorBloc(),
@@ -30,7 +29,6 @@ class DraggableValueSelector extends HookWidget {
         backgroundColor: backgroundColor,
         itemCount: itemCount,
         onValueUpdated: onValueUpdated,
-        width: width,
       ),
     );
   }
@@ -64,10 +62,22 @@ class DraggableValueSelector extends HookWidget {
             // borderRadius: BorderRadius.circular(10),
             color: backgroundColor,
           ),
-          width: itemHeight * 1.5,
+          width: width,
           height: listHeight,
           child: Stack(
+            alignment: Alignment.center,
             children: [
+              // Positioned(
+              //   top: listHeight * 0.315,
+              //   child: Container(
+              //     height: itemHeight,
+              //     width: width,
+              //     decoration: BoxDecoration(
+              //       color: Colors.red,
+              //       borderRadius: BorderRadius.circular(20),
+              //     ),
+              //   ),
+              // ),
               NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   if (notification is ScrollUpdateNotification) {
@@ -89,12 +99,16 @@ class DraggableValueSelector extends HookWidget {
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     return AnimatedDefaultTextStyle(
-                      child: Text('$index'),
+                      child: Text(
+                        '$index',
+                        style: TextStyle(height: 1),
+                      ),
                       textAlign: TextAlign.center,
+                      curve: Curves.easeInOut,
                       style: TextStyle(
                         fontSize: state.getTextSize(index, itemHeight),
-                        height: 1,
                         color: state.getTextColor(index),
+                        height: itemHeight,
                       ),
                       duration: const Duration(milliseconds: 300),
                     );
