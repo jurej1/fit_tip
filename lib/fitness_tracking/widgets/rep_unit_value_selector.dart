@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../fitness_tracking.dart';
 
-class RepUnitValueSelector extends HookWidget {
+class RepUnitValueSelector extends StatefulWidget {
   const RepUnitValueSelector({
     Key? key,
     required this.onValueUpdated,
@@ -30,9 +30,30 @@ class RepUnitValueSelector extends HookWidget {
   final void Function(RepUnit) onValueUpdated;
 
   @override
-  Widget build(BuildContext context) {
-    final ScrollController _controller = useScrollController();
+  _RepUnitValueSelectorState createState() => _RepUnitValueSelectorState();
+}
 
+class _RepUnitValueSelectorState extends State<RepUnitValueSelector> {
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final repUnitBloc = BlocProvider.of<RepUnitValueSelectorBloc>(context);
+    _controller = ScrollController(
+      initialScrollOffset: repUnitBloc.state.focusedValue != 0 ? repUnitBloc.state.getAnimateToValue() : 0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<RepUnitValueSelectorBloc, RepUnitValueSelectorState>(
       listener: (context, state) {
         if (state.listState == RepUnitValueSelectorListState.stop) {
