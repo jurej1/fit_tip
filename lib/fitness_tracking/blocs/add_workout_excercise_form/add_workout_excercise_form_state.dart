@@ -26,6 +26,16 @@ class AddWorkoutExcerciseFormState extends Equatable {
     ];
   }
 
+  WorkoutExcercise get excercise {
+    return WorkoutExcercise(
+      id: name.value,
+      name: name.value,
+      repUnit: repUnit.value,
+      reps: reps.value,
+      sets: sets.value,
+    );
+  }
+
   AddWorkoutExcerciseFormState copyWith({
     WorkoutExcerciseName? name,
     WorkoutExcerciseIntFormz? sets,

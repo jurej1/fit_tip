@@ -1,7 +1,7 @@
-import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import '../fitness_tracking.dart';
 
@@ -9,6 +9,8 @@ class AddWorkoutExcerciseView extends StatelessWidget {
   const AddWorkoutExcerciseView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
+    final workoutdDayBloc = BlocProvider.of<AddWorkoutDayFormBloc>(context);
+
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -16,6 +18,7 @@ class AddWorkoutExcerciseView extends StatelessWidget {
             BlocProvider(
               create: (context) => AddWorkoutExcerciseFormBloc(),
             ),
+            BlocProvider.value(value: workoutdDayBloc),
           ],
           child: AddWorkoutExcerciseView(),
         );
@@ -25,21 +28,42 @@ class AddWorkoutExcerciseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Workout Excercise View'),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: ListView(
-          padding: EdgeInsets.all(20),
-          children: [
-            const _NameInput(),
-            const _SetsInput(),
-            const _RepsInput(),
+    return BlocListener<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayExcerciseAdded(state.excercise));
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Add Workout Excercise View'),
+          actions: [
+            const _SubmitButton(),
           ],
+        ),
+        body: BlocBuilder<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+          builder: (context, state) {
+            if (state.status.isSubmissionInProgress) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: ListView(
+                padding: EdgeInsets.all(20),
+                children: [
+                  const _NameInput(),
+                  const _SetsInput(),
+                  const _RepsInput(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -57,16 +81,10 @@ class _NameInput extends StatelessWidget {
           initialValue: state.name.value,
           decoration: InputDecoration(
             labelText: 'Name',
-            suffixIcon: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: ExcerciseNameSearchDelegate(),
-                );
-              },
-            ),
           ),
+          onChanged: (value) {
+            BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseNameUpdated(value));
+          },
         );
       },
     );
@@ -139,6 +157,24 @@ class _SetsInput extends StatelessWidget {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+      builder: (context, state) {
+        return IconButton(
+          icon: Icon(Icons.check),
+          onPressed: () {
+            BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseFormSubmitted());
+          },
         );
       },
     );
