@@ -1,3 +1,4 @@
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,13 +29,46 @@ class AddWorkoutExcerciseView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Add Workout Excercise View'),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(20),
-        children: [
-          const _SetsInput(),
-          const _RepsInput(),
-        ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: ListView(
+          padding: EdgeInsets.all(20),
+          children: [
+            const _NameInput(),
+            const _SetsInput(),
+            const _RepsInput(),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _NameInput extends StatelessWidget {
+  const _NameInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddWorkoutExcerciseFormBloc, AddWorkoutExcerciseFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.name.value,
+          decoration: InputDecoration(
+            labelText: 'Name',
+            suffixIcon: IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: ExcerciseNameSearchDelegate(),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

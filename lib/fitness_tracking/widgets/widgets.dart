@@ -8,3 +8,4 @@ export 'shake_animation_builder.dart';
 export 'custom_modal_bottom_sheet.dart';
 export 'draggable_value_selector.dart';
 export 'rep_unit_value_selector.dart';
+export 'excercise_name_search_delegate.dart';
