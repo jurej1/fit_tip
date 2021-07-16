@@ -293,11 +293,16 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
       builder: (context, state) {
-        return IconButton(
-          onPressed: () {
-            BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayFormSubmited());
-          },
-          icon: Icon(Icons.check),
+        final bool isVisible = !state.status.isPure;
+
+        return Visibility(
+          visible: isVisible,
+          child: IconButton(
+            onPressed: () {
+              BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayFormSubmited());
+            },
+            icon: Icon(Icons.check),
+          ),
         );
       },
     );
