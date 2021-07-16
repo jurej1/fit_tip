@@ -21,4 +21,6 @@ class WorkoutDayCardState extends Equatable {
       isExpanded: isExpanded ?? this.isExpanded,
     );
   }
+
+  double get iconSize => 18;
 }

@@ -29,7 +29,19 @@ class WorkoutDayCard extends StatelessWidget {
                 ListTile(
                   dense: true,
                   title: Text('Day: ${state.workoutDay.day}'),
-                  trailing: _ExpansionButton(),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormListItemRemoved(state.workoutDay));
+                        },
+                        icon: Icon(Icons.delete),
+                        iconSize: state.iconSize,
+                      ),
+                      _ExpansionButton(),
+                    ],
+                  ),
                 ),
                 _DataList(),
               ],
@@ -74,7 +86,7 @@ class _ExpansionButton extends HookWidget {
           child: IconButton(
             color: Colors.blue,
             icon: const Icon(Icons.arrow_back_ios_new),
-            iconSize: 18,
+            iconSize: state.iconSize,
             onPressed: () {
               BlocProvider.of<WorkoutDayCardBloc>(context).add(WorkoutDayCardExpandedButtonPressed());
             },

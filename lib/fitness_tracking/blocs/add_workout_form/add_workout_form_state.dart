@@ -1,6 +1,6 @@
 part of 'add_workout_form_bloc.dart';
 
-class AddWorkoutFormState extends Equatable {
+class AddWorkoutFormState {
   const AddWorkoutFormState({
     this.status = FormzStatus.pure,
     this.goal = const WorkoutGoalFormz.pure(),
@@ -25,20 +25,6 @@ class AddWorkoutFormState extends Equatable {
     return AddWorkoutFormState(
       startDate: WorkoutDateFormz.pure(),
     );
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      status,
-      goal,
-      type,
-      duration,
-      daysPerWeek,
-      timePerWorkout,
-      startDate,
-      workoutDays,
-    ];
   }
 
   AddWorkoutFormState copyWith({
