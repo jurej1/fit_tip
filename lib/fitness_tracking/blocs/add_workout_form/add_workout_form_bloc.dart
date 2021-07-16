@@ -240,11 +240,18 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       workoutsPerWeekend: state.daysPerWeek.getIntValue(),
     );
 
+    int workoutsPerWeek = state.daysPerWeek.getIntValue();
+
+    workoutsPerWeek -= 1;
+
+    final WorkoutIntFormz perWeek = WorkoutIntFormz.dirty(workoutsPerWeek.toStringAsFixed(0));
+
     yield state.copyWith(
       workoutDays: workoutDaysList,
+      daysPerWeek: perWeek,
       status: Formz.validate([
         workoutDaysList,
-        state.daysPerWeek,
+        perWeek,
         state.duration,
         state.goal,
         state.startDate,
