@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
@@ -10,7 +11,15 @@ part 'add_workout_form_event.dart';
 part 'add_workout_form_state.dart';
 
 class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> {
-  AddWorkoutFormBloc() : super(AddWorkoutFormState.initial());
+  AddWorkoutFormBloc({
+    required AuthenticationBloc authenticationBloc,
+    required FitnessRepository fitnessRepository,
+  })  : _authenticationBloc = authenticationBloc,
+        _fitnessRepository = fitnessRepository,
+        super(AddWorkoutFormState.initial());
+
+  final AuthenticationBloc _authenticationBloc;
+  final FitnessRepository _fitnessRepository;
 
   @override
   Stream<AddWorkoutFormState> mapEventToState(
@@ -319,8 +328,13 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     );
 
     if (state.status.isValidated) {
-      //TODO
-      yield state.copyWith(status: FormzStatus.submissionSuccess);
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+
+      try {
+        yield state.copyWith(status: FormzStatus.submissionSuccess);
+      } catch (e) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
     }
   }
 }

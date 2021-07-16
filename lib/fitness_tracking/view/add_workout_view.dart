@@ -1,4 +1,6 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +16,10 @@ class AddWorkoutView extends StatelessWidget {
               create: (_) => AddWorkoutViewCubit(),
             ),
             BlocProvider(
-              create: (_) => AddWorkoutFormBloc(),
+              create: (_) => AddWorkoutFormBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              ),
             ),
             BlocProvider(
               create: (context) => AddWorkoutFloatingActionButtonCubit(
