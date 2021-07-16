@@ -24,12 +24,6 @@ class WorkoutMuscleGroupList extends FormzInput<List<MuscleGroup>?, WorkoutMuscl
 
   @override
   WorkoutMuscleGroupValidationError? validator(List<MuscleGroup>? value) {
-    bool isAnyNot = value?.any((element) => element is MuscleGroup) ?? false;
-
-    if (isAnyNot) {
-      return WorkoutMuscleGroupValidationError.invalid;
-    }
-
     return null;
   }
 }

@@ -17,6 +17,16 @@ class AddWorkoutDayFormState {
   final WorkoutExcercisesList workoutExcercisesList;
   final FormzStatus status;
 
+  WorkoutDay get workoutDay {
+    return WorkoutDay(
+      id: id,
+      day: day.value,
+      excercises: getExcercisesList(),
+      musclesTargeted: getMuscleGroupList(),
+      note: note.value,
+    );
+  }
+
   factory AddWorkoutDayFormState.initial(WorkoutDay workoutDay) {
     return AddWorkoutDayFormState(
       id: workoutDay.id,

@@ -2,9 +2,7 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
-import 'package:fit_tip/fitness_tracking/widgets/widgets.dart';
+import 'package:formz/formz.dart';
 
 import '../fitness_tracking.dart';
 
@@ -12,6 +10,7 @@ class AddWorkoutDayView extends StatelessWidget {
   AddWorkoutDayView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context, {required WorkoutDay workoutDay}) {
+    final workoutBloc = BlocProvider.of<AddWorkoutFormBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -19,6 +18,7 @@ class AddWorkoutDayView extends StatelessWidget {
             BlocProvider(
               create: (context) => AddWorkoutDayFormBloc(workoutDay: workoutDay),
             ),
+            BlocProvider.value(value: workoutBloc),
           ],
           child: AddWorkoutDayView(),
         );
@@ -28,19 +28,30 @@ class AddWorkoutDayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add workout day'),
-      ),
-      body: ListView(
-        physics: const ClampingScrollPhysics(),
-        padding: const EdgeInsets.all(10),
-        children: [
-          const _DayInput(),
-          const _NoteInput(),
-          const _MuscleGroupsInput(),
-          _WorkoutInput(),
-        ],
+    return BlocListener<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormListItemUpdated(state.workoutDay));
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Add workout day'),
+          actions: [
+            const _SubmitButton(),
+          ],
+        ),
+        body: ListView(
+          physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.all(10),
+          children: [
+            const _DayInput(),
+            const _NoteInput(),
+            const _MuscleGroupsInput(),
+            _WorkoutInput(),
+          ],
+        ),
       ),
     );
   }
@@ -187,7 +198,6 @@ class _WorkoutInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
       builder: (context, state) {
         return Column(
@@ -272,6 +282,24 @@ class RowExcerciseData extends StatelessWidget {
         style: style,
         textAlign: TextAlign.center,
       ),
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+      builder: (context, state) {
+        return IconButton(
+          onPressed: () {
+            BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayFormSubmited());
+          },
+          icon: Icon(Icons.check),
+        );
+      },
     );
   }
 }
