@@ -10,4 +10,3 @@ dependencies:
   cloud_firestore: ^2.1.0
   equatable: ^2.0.0
   firebase_auth: ^1.1.4
-  nanoid: ^1.0.0

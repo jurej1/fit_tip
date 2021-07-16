@@ -299,6 +299,7 @@ class _SubmitButton extends StatelessWidget {
           visible: isVisible,
           child: IconButton(
             onPressed: () {
+              FocusScope.of(context).unfocus();
               BlocProvider.of<AddWorkoutDayFormBloc>(context).add(AddWorkoutDayFormSubmited());
             },
             icon: Icon(Icons.check),
