@@ -113,7 +113,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapExcerciseAddedToState(AddWorkoutDayExcerciseAdded event) async* {
-    List<WorkoutExcercise> excercises = state.workoutExcercisesList.value;
+    List<WorkoutExcercise> excercises = List.from(state.workoutExcercisesList.value);
 
     excercises.add(event.value);
 
@@ -131,7 +131,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapExcerciseRemovedToState(AddWorkoutDayExcerciseRemoved event) async* {
-    List<WorkoutExcercise> excercises = state.workoutExcercisesList.value;
+    List<WorkoutExcercise> excercises = List.from(state.workoutExcercisesList.value);
 
     excercises.remove(event.value);
 
@@ -149,7 +149,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapExcerciseUpdatedToState(AddWorkoutDayExcerciseUpdated event) async* {
-    List<WorkoutExcercise> excercises = state.workoutExcercisesList.value;
+    List<WorkoutExcercise> excercises = List.from(state.workoutExcercisesList.value);
 
     excercises = excercises.map((e) {
       if (e.id == event.value.id) return event.value;
