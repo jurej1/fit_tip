@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class WorkoutDay extends Equatable {
   final String id;
@@ -15,12 +16,13 @@ class WorkoutDay extends Equatable {
   WorkoutDay({
     String? id,
     this.note,
-    required this.day,
+    int? day,
     this.musclesTargeted,
     int? numberOfExcercises,
     this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
   })  : this.numberOfExcercises = numberOfExcercises ?? excercises.length,
+        this.day = day ?? 0,
         this.id = id ?? UniqueKey().toString();
   @override
   List<Object?> get props {
@@ -33,6 +35,12 @@ class WorkoutDay extends Equatable {
       excercises,
       haveExcercisesBeenFetched,
     ];
+  }
+
+  int get numberOfMusclesTargeted => this.musclesTargeted?.length ?? 0;
+
+  String get mapDayToText {
+    return DateFormat('EEEE').format(DateTime(0, 0, this.day));
   }
 
   WorkoutDay copyWith({

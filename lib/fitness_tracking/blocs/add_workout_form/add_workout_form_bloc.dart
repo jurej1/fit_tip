@@ -144,7 +144,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.type,
         ]),
       );
-    } else if (oldAmount < eventAmount) {
+    } else if (eventAmount < oldAmount) {
       newList = List.from(currentWorkoutDays);
 
       for (int i = newList.length - 1; i > diff; i--) {
@@ -169,8 +169,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   }
 
   WorkoutDay getPureWorkoutDay(int index) {
-    final value = index % 7;
-    return WorkoutDay(day: value);
+    return WorkoutDay(day: (index + 1) % 7);
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {
