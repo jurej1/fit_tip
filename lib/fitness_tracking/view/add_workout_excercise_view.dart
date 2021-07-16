@@ -172,6 +172,7 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         return IconButton(
           icon: Icon(Icons.check),
+          color: Colors.white,
           onPressed: () {
             BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseFormSubmitted());
           },
