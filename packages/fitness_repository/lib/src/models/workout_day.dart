@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nanoid/nanoid.dart';
 
 class WorkoutDay extends Equatable {
   final String id;
@@ -21,8 +22,7 @@ class WorkoutDay extends Equatable {
     this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
   })  : this.numberOfExcercises = numberOfExcercises ?? excercises.length,
-        this.id = id ?? UniqueKey().toString();
-
+        this.id = id ?? nanoid(10);
   @override
   List<Object?> get props {
     return [
