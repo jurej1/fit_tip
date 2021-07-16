@@ -24,41 +24,9 @@ class WorkoutDaysForm extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 15,
-            );
+            return const SizedBox(height: 15);
           },
           itemCount: state.workoutDaysLenght,
-        );
-      },
-    );
-  }
-}
-
-class WorkoutDayCard extends StatelessWidget {
-  WorkoutDayCard({Key? key}) : super(key: key);
-
-  final BorderRadius _borderRadius = BorderRadius.circular(12);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutDayCardBloc, WorkoutDayCardState>(
-      builder: (context, state) {
-        return Material(
-          borderRadius: _borderRadius,
-          color: Colors.blue.shade100,
-          child: InkWell(
-            borderRadius: _borderRadius,
-            onTap: () {
-              Navigator.of(context).push(AddWorkoutDayView.route(context, workoutDay: state.workoutDay));
-            },
-            child: ListTile(
-              dense: true,
-              title: Text(
-                state.workoutDay.getDayText(),
-              ),
-            ),
-          ),
         );
       },
     );
