@@ -1,9 +1,10 @@
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
-import 'package:fit_tip/fitness_tracking/widgets/widgets.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fit_tip/fitness_tracking/widgets/widgets.dart';
 
 import '../fitness_tracking.dart';
 
@@ -38,7 +39,7 @@ class AddWorkoutDayView extends StatelessWidget {
           const _DayInput(),
           const _NoteInput(),
           const _MuscleGroupsInput(),
-          const _WorkoutInput(),
+          _WorkoutInput(),
         ],
       ),
     );
@@ -178,10 +179,15 @@ class _MuscleGroupsInput extends StatelessWidget {
 }
 
 class _WorkoutInput extends StatelessWidget {
-  const _WorkoutInput({Key? key}) : super(key: key);
+  _WorkoutInput({Key? key}) : super(key: key);
+
+  final TextStyle columnTitleStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+  );
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
       builder: (context, state) {
         return Column(
@@ -199,46 +205,73 @@ class _WorkoutInput extends StatelessWidget {
                 ),
               ],
             ),
-            // ListView.builder(
-            //   shrinkWrap: true,
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   itemCount: state.getExcercisesList().length,
-            //   itemBuilder: (context, index) {
-            //     final item = state.getExcercisesList()[index];
-            //     return ListTile(
-            //       dense: true,
-            //       title: Text(item.name),
-            //     );
-            //   },
-            // ),
-            if (state.getExcercisesList().isNotEmpty)
-              DataTable(
-                columns: [
-                  DataColumn(
-                    label: Text('Name'),
+            Row(
+              children: [
+                RowExcerciseData(
+                  text: 'Name',
+                  style: columnTitleStyle,
+                ),
+                RowExcerciseData(
+                  text: 'Sets',
+                  style: columnTitleStyle,
+                ),
+                RowExcerciseData(
+                  text: 'Reps',
+                  style: columnTitleStyle,
+                ),
+              ],
+            ),
+            ListView.separated(
+              separatorBuilder: (context, index) {
+                return SizedBox(
+                  height: 1,
+                  child: ColoredBox(
+                    color: Colors.black26,
                   ),
-                  DataColumn(
-                    label: Text('Sets'),
+                );
+              },
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.getExcercisesList().length,
+              itemBuilder: (context, index) {
+                final item = state.getExcercisesList()[index];
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: [
+                      RowExcerciseData(text: '${item.name}'),
+                      RowExcerciseData(text: '${item.sets}'),
+                      RowExcerciseData(text: '${item.reps} ${describeEnum(item.repUnit)}'),
+                    ],
                   ),
-                  DataColumn(
-                    label: Text('Reps'),
-                  )
-                ],
-                rows: state.getExcercisesList().map(
-                  (e) {
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(e.name)),
-                        DataCell(Text(e.sets.toStringAsFixed(0))),
-                        DataCell(Text('${e.reps} ${describeEnum(e.repUnit)}'))
-                      ],
-                    );
-                  },
-                ).toList(),
-              ),
+                );
+              },
+            ),
           ],
         );
       },
+    );
+  }
+}
+
+class RowExcerciseData extends StatelessWidget {
+  const RowExcerciseData({
+    Key? key,
+    required this.text,
+    this.style,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Text(
+        text,
+        style: style,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
