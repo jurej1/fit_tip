@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 
 part 'add_workout_form_event.dart';
@@ -170,7 +171,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
 
   WorkoutDay getPureWorkoutDay(int index) {
     final value = index % 7;
-    return WorkoutDay(id: index.toString(), day: value);
+    return WorkoutDay(id: UniqueKey().toString(), day: value);
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {
