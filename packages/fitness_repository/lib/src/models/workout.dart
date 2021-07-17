@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
@@ -89,5 +90,9 @@ class Workout extends Equatable {
       startDate: startDate,
       workouts: workouts.map((e) => e.toEntity()).toList(),
     );
+  }
+
+  static List<Workout> fromQuerySnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((e) => Workout.fromEntity(WorkoutEntity.fromDocumentSnapshot(e))).toList();
   }
 }

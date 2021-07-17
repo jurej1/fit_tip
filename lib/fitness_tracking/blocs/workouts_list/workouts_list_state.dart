@@ -4,7 +4,7 @@ abstract class WorkoutsListState {
   const WorkoutsListState();
 }
 
-class WorkoutsListInitial extends WorkoutsListState {}
+class WorkoutsListLoading extends WorkoutsListState {}
 
 class WorkoutsListLoadSuccess extends WorkoutsListState {
   final List<Workout> workouts;
@@ -12,4 +12,4 @@ class WorkoutsListLoadSuccess extends WorkoutsListState {
   const WorkoutsListLoadSuccess(this.workouts);
 }
 
-class WorkoutListFail extends WorkoutsListState {}
+class WorkoutsListFail extends WorkoutsListState {}

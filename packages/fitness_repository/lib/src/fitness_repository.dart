@@ -91,4 +91,8 @@ class FitnessRepository {
   Future<DocumentReference> addWorkout(String userId, Workout workout) async {
     return _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
   }
+
+  Future<QuerySnapshot> getWorkouts(String userId) {
+    return _fitnessTrackingPlanRef(userId).get();
+  }
 }
