@@ -40,6 +40,8 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   }
 
   Stream<WorkoutsListState> _mapLoadRequestToState() async* {
+    if (!(state is WorkoutsListLoading)) return;
+
     if (!_isAuth) {
       yield WorkoutsListFail();
       return;
