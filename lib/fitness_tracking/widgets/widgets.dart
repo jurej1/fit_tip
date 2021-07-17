@@ -10,3 +10,4 @@ export 'draggable_value_selector.dart';
 export 'rep_unit_value_selector.dart';
 export 'excercise_name_search_delegate.dart';
 export 'workout_day_card.dart';
+export 'workouts_builder.dart';
