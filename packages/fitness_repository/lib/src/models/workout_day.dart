@@ -20,6 +20,7 @@ class WorkoutDay extends Equatable {
     this.excercises = const [],
   })  : this.day = day ?? 0,
         this.id = id ?? UniqueKey().toString();
+
   @override
   List<Object?> get props {
     return [

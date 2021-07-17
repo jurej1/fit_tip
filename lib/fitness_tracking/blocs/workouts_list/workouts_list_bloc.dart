@@ -56,7 +56,6 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
 
       yield WorkoutsListLoadSuccess(workouts);
     } catch (e) {
-      print('WorkoutsList error:');
       log(e.toString());
       yield WorkoutsListFail();
     }

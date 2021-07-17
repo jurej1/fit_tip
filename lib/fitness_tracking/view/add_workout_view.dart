@@ -9,6 +9,7 @@ class AddWorkoutView extends StatelessWidget {
   const AddWorkoutView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
+    final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -26,7 +27,8 @@ class AddWorkoutView extends StatelessWidget {
               create: (context) => AddWorkoutFloatingActionButtonCubit(
                 addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context),
               ),
-            )
+            ),
+            BlocProvider.value(value: workoutsListBloc),
           ],
           child: AddWorkoutView(),
         );
@@ -42,6 +44,8 @@ class AddWorkoutView extends StatelessWidget {
         listener: (context, state) {
           if (state.status.isSubmissionSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Workout added')));
+            BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemAdded(state.workout));
+            Navigator.of(context).pop();
           }
         },
         builder: (context, state) {
