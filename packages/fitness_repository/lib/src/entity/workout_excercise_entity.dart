@@ -74,6 +74,16 @@ class WorkoutExcerciseEntity extends Equatable {
     };
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      _DocKeys.id: this.id,
+      _DocKeys.name: this.name,
+      _DocKeys.reps: this.reps,
+      _DocKeys.sets: this.reps,
+      _DocKeys.repUnit: describeEnum(this.repUnit),
+    };
+  }
+
   static WorkoutExcerciseEntity fromMap(Map<String, dynamic> map) {
     return WorkoutExcerciseEntity(
       id: map[_DocKeys.id],
