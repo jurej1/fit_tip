@@ -1,4 +1,6 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +14,12 @@ class FitnessTrackingView extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (context) => FitnessTrackingViewCubit(),
+            ),
+            BlocProvider(
+              create: (context) => WorkoutsListBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              ),
             ),
           ],
           child: FitnessTrackingView(),
@@ -52,11 +60,7 @@ class FitnessTrackingView extends StatelessWidget {
       );
     }
     if (page == FitnessTrackingWorkoutPage.all) {
-      return Container(
-        child: Center(
-          child: Text('All'),
-        ),
-      );
+      return WorkoutsBuilder();
     }
 
     return Container();
