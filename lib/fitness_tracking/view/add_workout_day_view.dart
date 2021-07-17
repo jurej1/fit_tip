@@ -137,6 +137,8 @@ class _MuscleGroupsInput extends StatelessWidget {
                 Text('Muscle groups'),
                 IconButton(
                   onPressed: () async {
+                    FocusScope.of(context).unfocus();
+
                     MuscleGroup? value = await showCustomModalBottomSheet<MuscleGroup?>(
                       context,
                       Expanded(
@@ -208,6 +210,7 @@ class _WorkoutInput extends StatelessWidget {
                 Text('Workouts'),
                 IconButton(
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     Navigator.of(context).push(AddWorkoutExcerciseView.route(context));
                   },
                   icon: const Icon(Icons.add),
