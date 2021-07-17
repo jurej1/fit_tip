@@ -74,7 +74,7 @@ class _DayInput extends StatelessWidget {
                 7,
                 (index) {
                   return DropdownMenuItem(
-                    child: Text(state.mapDayToText(index + 1)),
+                    child: Text(WorkoutDay.mapListIndexToText(index)),
                     value: index,
                     key: ValueKey(index),
                   );

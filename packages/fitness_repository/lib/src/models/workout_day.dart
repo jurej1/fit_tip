@@ -41,6 +41,15 @@ class WorkoutDay extends Equatable {
     return DateFormat('EEEE').format(DateTime(2021, 3, this.day));
   }
 
+  static String mapListIndexToText(int index) {
+    final int day = _calculateDayFromIndex(index);
+    return DateFormat('EEEE').format(DateTime(2021, 3, day));
+  }
+
+  static int _calculateDayFromIndex(int index) {
+    return (index + 1) % 7;
+  }
+
   WorkoutDay copyWith({
     String? id,
     String? note,
@@ -87,6 +96,6 @@ class WorkoutDay extends Equatable {
   }
 
   static WorkoutDay fromListIndexToPure(int index) {
-    return WorkoutDay(day: (index + 1) % 7);
+    return WorkoutDay(day: _calculateDayFromIndex(index));
   }
 }
