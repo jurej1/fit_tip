@@ -25,7 +25,6 @@ class WorkoutEntity extends Equatable {
   final int timePerWorkout;
   final DateTime startDate;
   final List<WorkoutDayEntity> workouts;
-  final bool haveWorkoutsBeenFetched;
 
   const WorkoutEntity({
     required this.id,
@@ -36,7 +35,6 @@ class WorkoutEntity extends Equatable {
     required this.daysPerWeek,
     required this.timePerWorkout,
     required this.startDate,
-    this.haveWorkoutsBeenFetched = false,
     this.workouts = const [],
   });
 
@@ -52,7 +50,6 @@ class WorkoutEntity extends Equatable {
       timePerWorkout,
       startDate,
       workouts,
-      haveWorkoutsBeenFetched,
     ];
   }
 
@@ -66,7 +63,6 @@ class WorkoutEntity extends Equatable {
     int? timePerWorkout,
     DateTime? startDate,
     List<WorkoutDayEntity>? workouts,
-    bool? haveWorkoutsBeenFetched,
   }) {
     return WorkoutEntity(
       id: id ?? this.id,
@@ -78,7 +74,6 @@ class WorkoutEntity extends Equatable {
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
-      haveWorkoutsBeenFetched: haveWorkoutsBeenFetched ?? this.haveWorkoutsBeenFetched,
     );
   }
 
@@ -88,21 +83,21 @@ class WorkoutEntity extends Equatable {
     final date = data[_DocKeys.startDate] as Timestamp;
 
     return WorkoutEntity(
-      id: snapshot.id,
-      goal: WorkoutGoal.values.firstWhere(
-        (e) => describeEnum(e) == data[_DocKeys.goal],
-      ),
-      type: WorkoutType.values.firstWhere(
-        (e) => describeEnum(e) == data[_DocKeys.type],
-      ),
-      level: Level.values.firstWhere(
-        (e) => describeEnum(e) == data[_DocKeys.level],
-      ),
-      duration: data[_DocKeys.duration],
-      daysPerWeek: data[_DocKeys.daysPerWeek],
-      timePerWorkout: data[_DocKeys.timePerWorkout],
-      startDate: date.toDate(),
-    );
+        id: snapshot.id,
+        goal: WorkoutGoal.values.firstWhere(
+          (e) => describeEnum(e) == data[_DocKeys.goal],
+        ),
+        type: WorkoutType.values.firstWhere(
+          (e) => describeEnum(e) == data[_DocKeys.type],
+        ),
+        level: Level.values.firstWhere(
+          (e) => describeEnum(e) == data[_DocKeys.level],
+        ),
+        duration: data[_DocKeys.duration],
+        daysPerWeek: data[_DocKeys.daysPerWeek],
+        timePerWorkout: data[_DocKeys.timePerWorkout],
+        startDate: date.toDate(),
+        workouts: (data[_DocKeys.workouts] as List<Map<String, dynamic>>).map((e) => WorkoutDayEntity.fromMap(e)).toList());
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
@@ -114,6 +109,7 @@ class WorkoutEntity extends Equatable {
       _DocKeys.startDate: Timestamp.fromDate(startDate),
       _DocKeys.timePerWorkout: timePerWorkout,
       _DocKeys.type: describeEnum(type),
+      _DocKeys.workouts: workouts.map((e) => e.toDocumentSnapshot()).toList(),
     };
   }
 }

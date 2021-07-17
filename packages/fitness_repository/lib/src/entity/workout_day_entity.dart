@@ -11,6 +11,7 @@ class _DocKeys {
   static String day = 'day';
   static String musclesTargeted = 'musclesTargeted';
   static String excercises = 'excercises';
+  static String id = 'id';
 }
 
 class WorkoutDayEntity extends Equatable {
@@ -19,7 +20,6 @@ class WorkoutDayEntity extends Equatable {
   final int day;
   final List<MuscleGroup>? musclesTargeted;
   final List<WorkoutExcerciseEntity> excercises;
-  final bool haveExcercisesBeenFetched;
 
   const WorkoutDayEntity({
     required this.id,
@@ -27,7 +27,6 @@ class WorkoutDayEntity extends Equatable {
     required this.day,
     this.musclesTargeted,
     this.excercises = const [],
-    this.haveExcercisesBeenFetched = false,
   });
 
   int get numberOfExcercises => excercises.length;
@@ -40,7 +39,6 @@ class WorkoutDayEntity extends Equatable {
       day,
       musclesTargeted,
       excercises,
-      haveExcercisesBeenFetched,
     ];
   }
 
@@ -50,7 +48,6 @@ class WorkoutDayEntity extends Equatable {
     int? day,
     List<MuscleGroup>? musclesTargeted,
     List<WorkoutExcerciseEntity>? excercises,
-    bool? haveExcercisesBeenLoaded,
   }) {
     return WorkoutDayEntity(
       id: id ?? this.id,
@@ -58,7 +55,6 @@ class WorkoutDayEntity extends Equatable {
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
-      haveExcercisesBeenFetched: haveExcercisesBeenLoaded ?? this.haveExcercisesBeenFetched,
     );
   }
 
@@ -76,6 +72,18 @@ class WorkoutDayEntity extends Equatable {
             ),
           )
           .toList(),
+    );
+  }
+
+  static WorkoutDayEntity fromMap(Map<String, dynamic> map) {
+    return WorkoutDayEntity(
+      id: map[_DocKeys.id],
+      day: map[_DocKeys.day],
+      musclesTargeted: (map[_DocKeys.musclesTargeted] as List<String>).map((e) {
+        return MuscleGroup.values.firstWhere((element) => describeEnum(element) == e);
+      }).toList(),
+      excercises: (map[_DocKeys.excercises] as List<Map<String, dynamic>>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList(),
+      note: map[_DocKeys.note],
     );
   }
 

@@ -8,6 +8,7 @@ class _DocKeys {
   static String sets = 'sets';
   static String reps = 'reps';
   static String repUnit = 'unit';
+  static String id = 'id';
 }
 
 class WorkoutExcerciseEntity extends Equatable {
@@ -71,5 +72,15 @@ class WorkoutExcerciseEntity extends Equatable {
       _DocKeys.sets: this.reps,
       _DocKeys.repUnit: describeEnum(this.repUnit),
     };
+  }
+
+  static WorkoutExcerciseEntity fromMap(Map<String, dynamic> map) {
+    return WorkoutExcerciseEntity(
+      id: map[_DocKeys.id],
+      name: map[_DocKeys.name],
+      sets: map[_DocKeys.sets],
+      reps: map[_DocKeys.repUnit],
+      repUnit: RepUnit.values.firstWhere((element) => describeEnum(element) == map[_DocKeys.repUnit]),
+    );
   }
 }
