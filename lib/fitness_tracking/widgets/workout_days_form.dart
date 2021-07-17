@@ -17,9 +17,7 @@ class WorkoutDaysForm extends StatelessWidget {
             final item = state.workoutDaysItems[index];
             return BlocProvider(
               key: ValueKey(item),
-              create: (context) => WorkoutDayCardBloc(
-                workoutDay: item,
-              ),
+              create: (context) => WorkoutDayCardBloc(workoutDay: item),
               child: WorkoutDayCard(),
             );
           },

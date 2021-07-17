@@ -40,7 +40,7 @@ class WorkoutDay extends Equatable {
   int get numberOfMusclesTargeted => this.musclesTargeted?.length ?? 0;
 
   String get mapDayToText {
-    return DateFormat('EEEE').format(DateTime(0, 0, this.day));
+    return DateFormat('EEEE').format(DateTime(2021, 3, this.day));
   }
 
   WorkoutDay copyWith({
