@@ -119,6 +119,7 @@ class _MuscleGroupsInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddWorkoutDayFormBloc, AddWorkoutDayFormState>(
+      listenWhen: (p, c) => p.muscleGroupList.value?.length != c.muscleGroupList.value?.length,
       listener: (context, state) {
         if (state.muscleGroupList.containsMoreThanTwoMuscleGroups) {
           ScaffoldMessenger.of(context).showSnackBar(
