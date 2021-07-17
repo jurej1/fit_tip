@@ -130,12 +130,12 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       );
     } else if (eventAmount > oldAmount) {
       if (currentWorkoutDays.isEmpty) {
-        newList = List.generate(diff, getPureWorkoutDay);
+        newList = List.generate(diff, WorkoutDay.fromListIndexToPure);
       } else {
         if (diff == 1) {
-          newList.add(getPureWorkoutDay(newList.length));
+          newList.add(WorkoutDay.fromListIndexToPure(newList.length));
         } else {
-          newList.addAll(List.generate(diff, (index) => getPureWorkoutDay(index + newList.length)));
+          newList.addAll(List.generate(diff, (index) => WorkoutDay.fromListIndexToPure(index + newList.length)));
         }
       }
 
@@ -175,10 +175,6 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         ]),
       );
     }
-  }
-
-  WorkoutDay getPureWorkoutDay(int index) {
-    return WorkoutDay(day: (index + 1) % 7);
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {
