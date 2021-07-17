@@ -85,4 +85,8 @@ class WorkoutDay extends Equatable {
       note: note,
     );
   }
+
+  static WorkoutDay fromListIndexToPure(int index) {
+    return WorkoutDay(day: (index + 1) % 7);
+  }
 }
