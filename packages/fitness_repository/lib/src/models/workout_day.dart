@@ -9,7 +9,6 @@ class WorkoutDay extends Equatable {
   final String? note;
   final int day;
   final List<MuscleGroup>? musclesTargeted;
-  final int numberOfExcercises;
   final List<WorkoutExcercise> excercises;
   final bool haveExcercisesBeenFetched;
 
@@ -21,8 +20,7 @@ class WorkoutDay extends Equatable {
     int? numberOfExcercises,
     this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
-  })  : this.numberOfExcercises = numberOfExcercises ?? excercises.length,
-        this.day = day ?? 0,
+  })  : this.day = day ?? 0,
         this.id = id ?? UniqueKey().toString();
   @override
   List<Object?> get props {
@@ -31,13 +29,13 @@ class WorkoutDay extends Equatable {
       note,
       day,
       musclesTargeted,
-      numberOfExcercises,
       excercises,
       haveExcercisesBeenFetched,
     ];
   }
 
   int get numberOfMusclesTargeted => this.musclesTargeted?.length ?? 0;
+  int get numberOfExcercises => this.excercises.length;
 
   String get mapDayToText {
     return DateFormat('EEEE').format(DateTime(2021, 3, this.day));
@@ -48,7 +46,6 @@ class WorkoutDay extends Equatable {
     String? note,
     int? day,
     List<MuscleGroup>? musclesTargeted,
-    int? numberOfExcercises,
     List<WorkoutExcercise>? excercises,
     bool? haveExcercisesBeenFetched,
   }) {
@@ -57,7 +54,6 @@ class WorkoutDay extends Equatable {
       note: note ?? this.note,
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
-      numberOfExcercises: numberOfExcercises ?? this.numberOfExcercises,
       excercises: excercises ?? this.excercises,
       haveExcercisesBeenFetched: haveExcercisesBeenFetched ?? this.haveExcercisesBeenFetched,
     );
