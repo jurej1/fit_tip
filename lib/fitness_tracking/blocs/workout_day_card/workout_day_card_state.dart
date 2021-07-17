@@ -23,4 +23,5 @@ class WorkoutDayCardState extends Equatable {
   }
 
   double get iconSize => 18;
+  BorderRadius get borderRadius => BorderRadius.circular(12);
 }

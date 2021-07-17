@@ -10,17 +10,15 @@ import '../fitness_tracking.dart';
 class WorkoutDayCard extends StatelessWidget {
   WorkoutDayCard({Key? key}) : super(key: key);
 
-  final BorderRadius _borderRadius = BorderRadius.circular(12);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WorkoutDayCardBloc, WorkoutDayCardState>(
       builder: (context, state) {
         return Material(
-          borderRadius: _borderRadius,
+          borderRadius: state.borderRadius,
           color: Colors.blue.shade100,
           child: InkWell(
-            borderRadius: _borderRadius,
+            borderRadius: state.borderRadius,
             onTap: () {
               Navigator.of(context).push(AddWorkoutDayView.route(context, workoutDay: state.workoutDay));
             },
@@ -104,28 +102,37 @@ class _DataList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WorkoutDayCardBloc, WorkoutDayCardState>(
       builder: (context, state) {
-        return AnimatedContainer(
-          height: state.isExpanded ? 60 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: ListView(
-            physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            children: [
-              Text(
-                'Number of excercises: ${state.workoutDay.numberOfExcercises}',
-                style: TextStyle(height: 1),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                'Targeted Muscles: ${state.workoutDay.numberOfMusclesTargeted}',
-                style: TextStyle(height: 1),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                'Day of the week: ${state.workoutDay.mapDayToText}',
-                style: TextStyle(height: 1),
-              ),
-            ],
+        return ClipRRect(
+          borderRadius: state.borderRadius,
+          child: AnimatedContainer(
+            height: state.isExpanded ? 80 : 0,
+            duration: const Duration(milliseconds: 300),
+            child: ListView(
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              children: [
+                Text(
+                  'Number of excercises: ${state.workoutDay.numberOfExcercises}',
+                  style: TextStyle(height: 1),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Day of the week: ${state.workoutDay.mapDayToText}',
+                  style: TextStyle(height: 1),
+                ),
+                const SizedBox(height: 3),
+                Wrap(
+                  children: state.workoutDay.musclesTargeted?.map(
+                        (e) {
+                          return Chip(
+                            label: Text(describeEnum(e)),
+                          );
+                        },
+                      ).toList() ??
+                      [],
+                ),
+              ],
+            ),
           ),
         );
       },
