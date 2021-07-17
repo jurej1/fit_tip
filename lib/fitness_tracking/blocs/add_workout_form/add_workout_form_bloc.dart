@@ -317,7 +317,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
 
       try {
         DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
+        yield state.copyWith(status: FormzStatus.submissionSuccess, id: ref.id);
       } catch (e) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }

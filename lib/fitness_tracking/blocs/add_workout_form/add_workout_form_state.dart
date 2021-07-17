@@ -2,6 +2,7 @@ part of 'add_workout_form_bloc.dart';
 
 class AddWorkoutFormState {
   const AddWorkoutFormState({
+    this.id,
     this.status = FormzStatus.pure,
     this.goal = const WorkoutGoalFormz.pure(),
     this.type = const WorkoutTypeFormz.pure(),
@@ -12,6 +13,7 @@ class AddWorkoutFormState {
     this.workoutDays = const WorkoutDaysList.pure(),
   });
 
+  final String? id;
   final FormzStatus status;
   final WorkoutGoalFormz goal;
   final WorkoutTypeFormz type;
@@ -28,6 +30,7 @@ class AddWorkoutFormState {
   }
 
   AddWorkoutFormState copyWith({
+    String? id,
     FormzStatus? status,
     WorkoutGoalFormz? goal,
     WorkoutTypeFormz? type,
@@ -38,6 +41,7 @@ class AddWorkoutFormState {
     WorkoutDaysList? workoutDays,
   }) {
     return AddWorkoutFormState(
+      id: id ?? this.id,
       status: status ?? this.status,
       goal: goal ?? this.goal,
       type: type ?? this.type,
@@ -51,7 +55,7 @@ class AddWorkoutFormState {
 
   Workout get workout {
     return Workout(
-      id: '',
+      id: id ?? '',
       goal: this.goal.value,
       type: this.type.value,
       level: Level.intermediate,
