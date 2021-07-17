@@ -105,7 +105,7 @@ class _DataList extends StatelessWidget {
         return ClipRRect(
           borderRadius: state.borderRadius,
           child: AnimatedContainer(
-            height: state.isExpanded ? (state.areMuscleChipsVisible ? 80 : 45) : 0,
+            height: state.isExpanded ? (state.areMuscleChipsVisible ? 85 : 45) : 0,
             duration: const Duration(milliseconds: 300),
             child: ListView(
               physics: const ClampingScrollPhysics(),
@@ -122,6 +122,7 @@ class _DataList extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Wrap(
+                  spacing: 8,
                   children: state.workoutDay.musclesTargeted?.map(
                         (e) {
                           return Chip(
