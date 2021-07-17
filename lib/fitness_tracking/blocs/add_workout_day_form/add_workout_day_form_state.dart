@@ -56,7 +56,7 @@ class AddWorkoutDayFormState {
   }
 
   String mapDayToText(int index) {
-    return DateFormat('EEEE').format(DateTime(0, 0, index));
+    return DateFormat('EEEE').format(DateTime(2021, 3, index));
   }
 
   List<MuscleGroup> getMuscleGroupList() {
