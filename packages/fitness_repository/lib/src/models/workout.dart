@@ -8,7 +8,6 @@ class Workout extends Equatable {
   final String id;
   final WorkoutGoal goal;
   final WorkoutType type;
-  final Level level;
   final int duration;
   final int daysPerWeek;
   final int timePerWorkout;
@@ -19,7 +18,6 @@ class Workout extends Equatable {
     String? id,
     required this.goal,
     required this.type,
-    required this.level,
     required this.duration,
     required this.daysPerWeek,
     required this.timePerWorkout,
@@ -32,7 +30,6 @@ class Workout extends Equatable {
       id,
       goal,
       type,
-      level,
       duration,
       daysPerWeek,
       timePerWorkout,
@@ -45,7 +42,6 @@ class Workout extends Equatable {
     String? id,
     WorkoutGoal? goal,
     WorkoutType? type,
-    Level? level,
     int? duration,
     int? daysPerWeek,
     int? timePerWorkout,
@@ -56,7 +52,6 @@ class Workout extends Equatable {
       id: id ?? this.id,
       goal: goal ?? this.goal,
       type: type ?? this.type,
-      level: level ?? this.level,
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
@@ -71,7 +66,6 @@ class Workout extends Equatable {
       duration: entity.duration,
       goal: entity.goal,
       id: entity.id,
-      level: entity.level,
       startDate: entity.startDate,
       timePerWorkout: entity.timePerWorkout,
       type: entity.type,
@@ -84,7 +78,6 @@ class Workout extends Equatable {
       id: id,
       goal: goal,
       type: type,
-      level: level,
       duration: duration,
       daysPerWeek: daysPerWeek,
       timePerWorkout: timePerWorkout,

@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 class _DocKeys {
   static String goal = 'goal';
   static String type = 'type';
-  static String level = 'level';
   static String duration = 'duration';
   static String daysPerWeek = 'daysPerWeek';
   static String timePerWorkout = 'timePerWorkout';
@@ -19,7 +18,6 @@ class WorkoutEntity extends Equatable {
   final String id;
   final WorkoutGoal goal;
   final WorkoutType type;
-  final Level level;
   final int duration;
   final int daysPerWeek;
   final int timePerWorkout;
@@ -30,7 +28,6 @@ class WorkoutEntity extends Equatable {
     required this.id,
     required this.goal,
     required this.type,
-    required this.level,
     required this.duration,
     required this.daysPerWeek,
     required this.timePerWorkout,
@@ -44,7 +41,6 @@ class WorkoutEntity extends Equatable {
       id,
       goal,
       type,
-      level,
       duration,
       daysPerWeek,
       timePerWorkout,
@@ -57,7 +53,6 @@ class WorkoutEntity extends Equatable {
     String? id,
     WorkoutGoal? goal,
     WorkoutType? type,
-    Level? level,
     int? duration,
     int? daysPerWeek,
     int? timePerWorkout,
@@ -68,7 +63,6 @@ class WorkoutEntity extends Equatable {
       id: id ?? this.id,
       goal: goal ?? this.goal,
       type: type ?? this.type,
-      level: level ?? this.level,
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
@@ -90,9 +84,6 @@ class WorkoutEntity extends Equatable {
         type: WorkoutType.values.firstWhere(
           (e) => describeEnum(e) == data[_DocKeys.type],
         ),
-        level: Level.values.firstWhere(
-          (e) => describeEnum(e) == data[_DocKeys.level],
-        ),
         duration: data[_DocKeys.duration],
         daysPerWeek: data[_DocKeys.daysPerWeek],
         timePerWorkout: data[_DocKeys.timePerWorkout],
@@ -105,7 +96,6 @@ class WorkoutEntity extends Equatable {
       _DocKeys.daysPerWeek: daysPerWeek,
       _DocKeys.duration: duration,
       _DocKeys.goal: describeEnum(goal),
-      _DocKeys.level: describeEnum(level),
       _DocKeys.startDate: Timestamp.fromDate(startDate),
       _DocKeys.timePerWorkout: timePerWorkout,
       _DocKeys.type: describeEnum(type),
