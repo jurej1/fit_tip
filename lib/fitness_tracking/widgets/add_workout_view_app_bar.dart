@@ -16,6 +16,7 @@ class AddWorkoutViewAppBar extends StatelessWidget with PreferredSizeWidget {
             IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
+                BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormSubmitted());
               },
               icon: const Icon(Icons.check),
             ),

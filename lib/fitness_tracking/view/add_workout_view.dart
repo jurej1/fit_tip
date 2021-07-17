@@ -37,33 +37,39 @@ class AddWorkoutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AddWorkoutViewAppBar(),
-        body: BlocBuilder<AddWorkoutFormBloc, AddWorkoutFormState>(
-          builder: (context, state) {
-            if (state.status.isSubmissionInProgress) {
-              return const Center(
-                child: const CircularProgressIndicator(),
-              );
-            }
-            return Column(
-              children: [
-                const AddWorkoutFormSelectedViewDisplayer(),
-                Expanded(
-                  child: PageView(
-                    children: [
-                      const WorkoutForm(),
-                      const WorkoutDaysForm(),
-                    ],
-                    onPageChanged: (index) {
-                      FocusScope.of(context).unfocus();
-                      BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
-                    },
-                    physics: const BouncingScrollPhysics(),
-                  ),
-                )
-              ],
+      appBar: AddWorkoutViewAppBar(),
+      body: BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Workout added')));
+          }
+        },
+        builder: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            return const Center(
+              child: const CircularProgressIndicator(),
             );
-          },
-        ));
+          }
+          return Column(
+            children: [
+              const AddWorkoutFormSelectedViewDisplayer(),
+              Expanded(
+                child: PageView(
+                  children: [
+                    const WorkoutForm(),
+                    const WorkoutDaysForm(),
+                  ],
+                  onPageChanged: (index) {
+                    FocusScope.of(context).unfocus();
+                    BlocProvider.of<AddWorkoutViewCubit>(context).viewIndexUpdated(index);
+                  },
+                  physics: const BouncingScrollPhysics(),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
   }
 }
