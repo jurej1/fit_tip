@@ -5,7 +5,6 @@ import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fit_tip/fitness_tracking/models/workout_muscle_group_list.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
-import 'package:intl/intl.dart';
 
 part 'add_workout_day_form_event.dart';
 part 'add_workout_day_form_state.dart';

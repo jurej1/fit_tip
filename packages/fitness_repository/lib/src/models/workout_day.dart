@@ -10,7 +10,6 @@ class WorkoutDay extends Equatable {
   final int day;
   final List<MuscleGroup>? musclesTargeted;
   final List<WorkoutExcercise> excercises;
-  final bool haveExcercisesBeenFetched;
 
   WorkoutDay({
     String? id,
@@ -18,7 +17,6 @@ class WorkoutDay extends Equatable {
     int? day,
     this.musclesTargeted,
     int? numberOfExcercises,
-    this.haveExcercisesBeenFetched = false,
     this.excercises = const [],
   })  : this.day = day ?? 0,
         this.id = id ?? UniqueKey().toString();
@@ -30,7 +28,6 @@ class WorkoutDay extends Equatable {
       day,
       musclesTargeted,
       excercises,
-      haveExcercisesBeenFetched,
     ];
   }
 
@@ -56,7 +53,6 @@ class WorkoutDay extends Equatable {
     int? day,
     List<MuscleGroup>? musclesTargeted,
     List<WorkoutExcercise>? excercises,
-    bool? haveExcercisesBeenFetched,
   }) {
     return WorkoutDay(
       id: id ?? this.id,
@@ -64,7 +60,6 @@ class WorkoutDay extends Equatable {
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
-      haveExcercisesBeenFetched: haveExcercisesBeenFetched ?? this.haveExcercisesBeenFetched,
     );
   }
 
@@ -74,7 +69,6 @@ class WorkoutDay extends Equatable {
       id: entity.id,
       numberOfExcercises: entity.numberOfExcercises,
       excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
-      haveExcercisesBeenFetched: entity.haveExcercisesBeenFetched,
       musclesTargeted: entity.musclesTargeted,
       note: entity.note,
     );
@@ -89,7 +83,6 @@ class WorkoutDay extends Equatable {
       id: id,
       day: day,
       excercises: excercises.map((e) => e.toEntity()).toList(),
-      haveExcercisesBeenFetched: haveExcercisesBeenFetched,
       musclesTargeted: musclesTargeted,
       note: note,
     );

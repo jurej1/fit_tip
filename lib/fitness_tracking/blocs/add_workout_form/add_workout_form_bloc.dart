@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
@@ -20,6 +22,9 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
 
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
+
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get _user => _authenticationBloc.state.user;
 
   @override
   Stream<AddWorkoutFormState> mapEventToState(
@@ -307,10 +312,11 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       ]),
     );
 
-    if (state.status.isValidated) {
+    if (state.status.isValidated && _isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
+        DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } catch (e) {
         yield state.copyWith(status: FormzStatus.submissionFailure);

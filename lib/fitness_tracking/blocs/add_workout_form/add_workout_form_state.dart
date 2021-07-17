@@ -49,6 +49,19 @@ class AddWorkoutFormState {
     );
   }
 
+  Workout get workout {
+    return Workout(
+      id: '',
+      goal: this.goal.value,
+      type: this.type.value,
+      level: Level.intermediate,
+      duration: this.duration.getIntValue(),
+      daysPerWeek: this.daysPerWeek.getIntValue(),
+      timePerWorkout: this.timePerWorkout.getIntValue(),
+      startDate: this.startDate.value,
+    );
+  }
+
   int get workoutDaysLenght => this.workoutDays.value.length;
   List<WorkoutDay> get workoutDaysItems => this.workoutDays.value;
   bool get noDaysPerWeek => this.daysPerWeek.pure || this.daysPerWeek.invalid || this.daysPerWeek.getIntValue() == 0;
