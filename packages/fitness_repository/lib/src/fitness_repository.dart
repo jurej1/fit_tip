@@ -88,7 +88,22 @@ class FitnessRepository {
     return _fitnessTrackingPlanRef(userId).doc(workout.id).update(workout.toEntity().toDocumentSnapshot());
   }
 
-  Future<DocumentReference> addWorkout(String userId, Workout workout) {
-    return _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+  Future<DocumentReference> addWorkout(String userId, Workout workout) async {
+    DocumentReference ref = await _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+
+    for (int i = 0; i < workout.workouts.length; i++) {
+      DocumentReference docRef =
+          await _fitnessTrackingPlanRef(userId).doc(ref.id).collection('workouts').add(workout.workouts[i].toEntity().toDocumentSnapshot());
+      for (int j = 0; i < workout.workouts[i].excercises.length; j++) {
+        _fitnessTrackingPlanRef(userId)
+            .doc(ref.id)
+            .collection('workouts')
+            .doc(docRef.id)
+            .collection('excercises')
+            .add(workout.workouts[i].excercises[j].toEntity().toDocumentSnapshot());
+      }
+    }
+
+    return ref;
   }
 }
