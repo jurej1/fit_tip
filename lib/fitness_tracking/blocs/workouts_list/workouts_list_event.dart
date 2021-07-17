@@ -7,22 +7,22 @@ abstract class WorkoutsListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WorkoutListLoadRequested extends WorkoutsListEvent {}
+class WorkoutsListLoadRequested extends WorkoutsListEvent {}
 
-class WorkoutListItemAdded extends WorkoutsListEvent {
+class WorkoutsListItemAdded extends WorkoutsListEvent {
   final Workout workout;
 
-  const WorkoutListItemAdded(this.workout);
+  const WorkoutsListItemAdded(this.workout);
 }
 
-class WorkoutListItemRemoved extends WorkoutsListEvent {
+class WorkoutsListItemRemoved extends WorkoutsListEvent {
   final Workout workout;
 
-  const WorkoutListItemRemoved(this.workout);
+  const WorkoutsListItemRemoved(this.workout);
 }
 
-class WorkoutListItemUpdated extends WorkoutsListEvent {
+class WorkoutsListItemUpdated extends WorkoutsListEvent {
   final Workout workout;
 
-  const WorkoutListItemUpdated(this.workout);
+  const WorkoutsListItemUpdated(this.workout);
 }

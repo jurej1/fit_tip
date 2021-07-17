@@ -28,8 +28,14 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   Stream<WorkoutsListState> mapEventToState(
     WorkoutsListEvent event,
   ) async* {
-    if (event is WorkoutListLoadRequested) {
+    if (event is WorkoutsListLoadRequested) {
       yield* _mapLoadRequestToState();
+    } else if (event is WorkoutsListItemAdded) {
+      yield* _mapItemAddedToState(event);
+    } else if (event is WorkoutsListItemRemoved) {
+      yield* _mapItemRemovedToState(event);
+    } else if (event is WorkoutsListItemUpdated) {
+      yield* _mapItemUpdatedToState(event);
     }
   }
 
@@ -48,6 +54,48 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       yield WorkoutsListLoadSuccess(workouts);
     } catch (e) {
       yield WorkoutsListFail();
+    }
+  }
+
+  Stream<WorkoutsListState> _mapItemAddedToState(WorkoutsListItemAdded event) async* {
+    if (state is WorkoutsListLoadSuccess && _isAuth) {
+      final currentState = state as WorkoutsListLoadSuccess;
+
+      List<Workout> workouts = List.from(currentState.workouts);
+
+      workouts.add(event.workout);
+
+      yield WorkoutsListLoadSuccess(workouts);
+    }
+  }
+
+  Stream<WorkoutsListState> _mapItemRemovedToState(WorkoutsListItemRemoved event) async* {
+    if (state is WorkoutsListLoadSuccess) {
+      final currentState = state as WorkoutsListLoadSuccess;
+
+      List<Workout> workouts = List.from(currentState.workouts);
+
+      workouts.remove(event.workout);
+
+      yield WorkoutsListLoadSuccess(workouts);
+    }
+  }
+
+  Stream<WorkoutsListState> _mapItemUpdatedToState(WorkoutsListItemUpdated event) async* {
+    if (state is WorkoutsListLoadSuccess) {
+      final currentState = state as WorkoutsListLoadSuccess;
+
+      List<Workout> workouts = List.from(currentState.workouts);
+
+      workouts = workouts.map((e) {
+        if (e.id == event.workout.id) {
+          return event.workout;
+        }
+
+        return e;
+      }).toList();
+
+      yield WorkoutsListLoadSuccess(workouts);
     }
   }
 }
