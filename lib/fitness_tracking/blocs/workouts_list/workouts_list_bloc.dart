@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -55,6 +56,8 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
 
       yield WorkoutsListLoadSuccess(workouts);
     } catch (e) {
+      print('WorkoutsList error:');
+      log(e.toString());
       yield WorkoutsListFail();
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
@@ -89,6 +91,7 @@ class WorkoutDayEntity extends Equatable {
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
+      _DocKeys.id: this.id,
       _DocKeys.day: this.day,
       if (this.musclesTargeted != null) _DocKeys.musclesTargeted: this.musclesTargeted?.map((e) => describeEnum(e)).toList(),
       if (this.note != null) _DocKeys.note: this.note,
