@@ -55,7 +55,7 @@ class AddWorkoutFormState {
 
   Workout get workout {
     return Workout(
-      id: id ?? '',
+      id: id ?? UniqueKey().toString(),
       goal: this.goal.value,
       type: this.type.value,
       level: Level.intermediate,
