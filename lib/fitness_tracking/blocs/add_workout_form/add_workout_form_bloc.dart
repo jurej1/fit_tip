@@ -138,43 +138,27 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           newList.addAll(List.generate(diff, (index) => WorkoutDay.fromListIndexToPure(index + newList.length)));
         }
       }
-
-      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
-      yield state.copyWith(
-        workoutDays: workoutDays,
-        daysPerWeek: daysPerWeek,
-        status: Formz.validate([
-          workoutDays,
-          daysPerWeek,
-          state.duration,
-          state.goal,
-          state.startDate,
-          state.timePerWorkout,
-          state.type,
-        ]),
-      );
     } else if (eventAmount < oldAmount) {
       newList = List.from(currentWorkoutDays);
 
       for (int i = newList.length - 1; i > diff; i--) {
         newList.removeAt(i);
       }
-
-      final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
-      yield state.copyWith(
-        daysPerWeek: daysPerWeek,
-        workoutDays: workoutDays,
-        status: Formz.validate([
-          workoutDays,
-          daysPerWeek,
-          state.duration,
-          state.goal,
-          state.startDate,
-          state.timePerWorkout,
-          state.type,
-        ]),
-      );
     }
+    final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
+    yield state.copyWith(
+      daysPerWeek: daysPerWeek,
+      workoutDays: workoutDays,
+      status: Formz.validate([
+        workoutDays,
+        daysPerWeek,
+        state.duration,
+        state.goal,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+      ]),
+    );
   }
 
   Stream<AddWorkoutFormState> _mapTimePerWorkoutUpdatedToState(AddWorkoutFormTimePerWorkoutUpdated event) async* {
