@@ -105,7 +105,7 @@ class _DataList extends StatelessWidget {
         return ClipRRect(
           borderRadius: state.borderRadius,
           child: AnimatedContainer(
-            height: state.isExpanded ? 80 : 0,
+            height: state.isExpanded ? (state.areMuscleChipsVisible ? 80 : 45) : 0,
             duration: const Duration(milliseconds: 300),
             child: ListView(
               physics: const ClampingScrollPhysics(),
