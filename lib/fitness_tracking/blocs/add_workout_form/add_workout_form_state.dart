@@ -58,7 +58,6 @@ class AddWorkoutFormState {
       id: id ?? UniqueKey().toString(),
       goal: this.goal.value,
       type: this.type.value,
-      level: Level.intermediate,
       duration: this.duration.getIntValue(),
       daysPerWeek: this.daysPerWeek.getIntValue(),
       timePerWorkout: this.timePerWorkout.getIntValue(),
