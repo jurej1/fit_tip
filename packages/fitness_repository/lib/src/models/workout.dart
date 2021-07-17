@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
+import 'package:flutter/cupertino.dart';
 
 class Workout extends Equatable {
   final String id;
@@ -14,8 +15,8 @@ class Workout extends Equatable {
   final DateTime startDate;
   final List<WorkoutDay> workouts;
 
-  const Workout({
-    required this.id,
+  Workout({
+    String? id,
     required this.goal,
     required this.type,
     required this.level,
@@ -24,7 +25,7 @@ class Workout extends Equatable {
     required this.timePerWorkout,
     required this.startDate,
     this.workouts = const [],
-  });
+  }) : this.id = id ?? UniqueKey().toString();
 
   List<Object> get props {
     return [
