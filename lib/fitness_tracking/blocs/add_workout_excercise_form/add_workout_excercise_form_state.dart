@@ -8,6 +8,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
     this.repUnit = const WorkoutRepUnit.pure(),
     this.status = FormzStatus.pure,
     String? id,
+    this.formMode = FormMode.add,
   }) : this.id = id ?? UniqueKey().toString();
 
   final WorkoutExcerciseName name;
@@ -16,6 +17,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
   final WorkoutRepUnit repUnit;
   final FormzStatus status;
   final String id;
+  final FormMode formMode;
 
   @override
   List<Object> get props {
@@ -26,6 +28,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
       repUnit,
       status,
       id,
+      formMode,
     ];
   }
 
@@ -40,6 +43,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
       repUnit: WorkoutRepUnit.dirty(excercise.repUnit),
       reps: WorkoutExcerciseIntFormz.dirty(excercise.reps),
       sets: WorkoutExcerciseIntFormz.dirty(excercise.sets),
+      formMode: FormMode.edit,
     );
   }
 
@@ -60,6 +64,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
     WorkoutRepUnit? repUnit,
     FormzStatus? status,
     String? id,
+    FormMode? formMode,
   }) {
     return AddWorkoutExcerciseFormState(
       name: name ?? this.name,
@@ -68,6 +73,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
       repUnit: repUnit ?? this.repUnit,
       status: status ?? this.status,
       id: id ?? this.id,
+      formMode: formMode ?? this.formMode,
     );
   }
 }
