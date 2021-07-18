@@ -79,9 +79,11 @@ class WorkoutDayEntity extends Equatable {
     return WorkoutDayEntity(
       id: map[_DocKeys.id],
       day: map[_DocKeys.day],
-      musclesTargeted: (map[_DocKeys.musclesTargeted] as List<dynamic>).map((e) {
-        return MuscleGroup.values.firstWhere((element) => describeEnum(element) == e);
-      }).toList(),
+      musclesTargeted: map.containsKey(_DocKeys.musclesTargeted)
+          ? (map[_DocKeys.musclesTargeted] as List<dynamic>).map((e) {
+              return MuscleGroup.values.firstWhere((element) => describeEnum(element) == e);
+            }).toList()
+          : [],
       excercises: (map[_DocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList(),
       note: map[_DocKeys.note],
     );
