@@ -8,7 +8,7 @@ import 'package:formz/formz.dart';
 class AddWorkoutView extends StatelessWidget {
   const AddWorkoutView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(BuildContext context) {
+  static MaterialPageRoute route(BuildContext context, {Workout? workout}) {
     final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
@@ -21,6 +21,7 @@ class AddWorkoutView extends StatelessWidget {
               create: (_) => AddWorkoutFormBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+                workout: workout,
               ),
             ),
             BlocProvider(

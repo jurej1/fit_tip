@@ -51,27 +51,31 @@ class _OptionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<WorkoutsListCardOptions>(
-      icon: const Icon(Icons.more_vert),
-      iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
-      itemBuilder: (context) {
-        return WorkoutsListCardOptions.values.map((e) {
-          return PopupMenuItem(
-            child: Text(
-              mapWorkoutsListCardOptionsToString(e),
-            ),
-            value: e,
-          );
-        }).toList();
-      },
-      onSelected: (option) {
-        if (option == WorkoutsListCardOptions.delete) {
-          //TODO
-        } else if (option == WorkoutsListCardOptions.edit) {
-          //TODO
-        } else if (option == WorkoutsListCardOptions.setAsActive) {
-          //TODO
-        }
+    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
+      builder: (context, state) {
+        return PopupMenuButton<WorkoutsListCardOptions>(
+          icon: const Icon(Icons.more_vert),
+          iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
+          itemBuilder: (context) {
+            return WorkoutsListCardOptions.values.map((e) {
+              return PopupMenuItem(
+                child: Text(
+                  mapWorkoutsListCardOptionsToString(e),
+                ),
+                value: e,
+              );
+            }).toList();
+          },
+          onSelected: (option) {
+            if (option == WorkoutsListCardOptions.delete) {
+              //TODO
+            } else if (option == WorkoutsListCardOptions.edit) {
+              Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+            } else if (option == WorkoutsListCardOptions.setAsActive) {
+              //TODO
+            }
+          },
+        );
       },
     );
   }
