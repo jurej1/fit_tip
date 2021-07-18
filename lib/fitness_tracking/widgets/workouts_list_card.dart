@@ -21,7 +21,7 @@ class WorkoutsListCard extends StatelessWidget {
           child: InkWell(
             borderRadius: state.borderRadius,
             onTap: () {
-              //GO to detail page
+              Navigator.of(context).push(WorkoutDetailView.route(context));
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
