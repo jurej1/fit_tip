@@ -22,9 +22,9 @@ class WorkoutsListCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(state.workout.note),
+                  Spacer(),
                   const _OptionsButton(),
                 ],
               ),
@@ -62,6 +62,17 @@ class _OptionsButton extends StatelessWidget {
           //TODO
         }
       },
+    );
+  }
+}
+
+class _ExpandableIconButton extends StatelessWidget {
+  const _ExpandableIconButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: null,
     );
   }
 }

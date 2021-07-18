@@ -1,9 +1,10 @@
 part of 'workouts_list_card_bloc.dart';
 
 abstract class WorkoutsListCardState extends Equatable {
-  const WorkoutsListCardState(this.workout);
+  const WorkoutsListCardState(this.workout, this.isExpanded);
 
   final Workout workout;
+  final bool isExpanded;
 
   Color get backgroundColor => Colors.blue.shade100;
   BorderRadius get borderRadius => BorderRadius.circular(12);
@@ -13,17 +14,17 @@ abstract class WorkoutsListCardState extends Equatable {
 }
 
 class WorkoutsListCardInitial extends WorkoutsListCardState {
-  const WorkoutsListCardInitial(Workout workout) : super(workout);
+  WorkoutsListCardInitial(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardLoading extends WorkoutsListCardState {
-  const WorkoutsListCardLoading(Workout workout) : super(workout);
+  WorkoutsListCardLoading(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardDeleteSuccess extends WorkoutsListCardState {
-  const WorkoutsListCardDeleteSuccess(Workout workout) : super(workout);
+  WorkoutsListCardDeleteSuccess(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardFail extends WorkoutsListCardState {
-  const WorkoutsListCardFail(Workout workout) : super(workout);
+  WorkoutsListCardFail(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }

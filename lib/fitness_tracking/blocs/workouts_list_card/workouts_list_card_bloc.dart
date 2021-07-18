@@ -17,7 +17,7 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(WorkoutsListCardInitial(workout));
+        super(WorkoutsListCardInitial(workout, false));
 
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
@@ -36,14 +36,14 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
 
   Stream<WorkoutsListCardState> _mapDeleteRequestedToState(WorkoutsListCardDeleteRequested event) async* {
     if (_isAuth) {
-      yield WorkoutsListCardLoading(state.workout);
+      yield WorkoutsListCardLoading(state.workout, state.isExpanded);
 
       try {
         await _fitnessRepository.deleteWorkout(_user!.id!, state.workout);
 
-        yield WorkoutsListCardDeleteSuccess(state.workout);
+        yield WorkoutsListCardDeleteSuccess(state.workout, state.isExpanded);
       } catch (e) {
-        yield WorkoutsListCardFail(state.workout);
+        yield WorkoutsListCardFail(state.workout, state.isExpanded);
       }
     }
   }
