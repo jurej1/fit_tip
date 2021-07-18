@@ -68,6 +68,7 @@ class AddWorkoutFormState {
       timePerWorkout: this.timePerWorkout.getIntValue(),
       startDate: this.startDate.value,
       workouts: this.workoutDays.value,
+      created: DateTime.now(),
     );
   }
 

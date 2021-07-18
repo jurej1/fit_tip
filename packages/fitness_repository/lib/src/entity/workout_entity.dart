@@ -14,6 +14,7 @@ class _DocKeys {
   static String workouts = 'workouts';
   static String note = 'note';
   static String isActive = 'isActive';
+  static String created = 'created';
 }
 
 class WorkoutEntity extends Equatable {
@@ -27,8 +28,9 @@ class WorkoutEntity extends Equatable {
   final DateTime startDate;
   final List<WorkoutDayEntity> workouts;
   final bool isActive;
+  final DateTime created;
 
-  const WorkoutEntity({
+  WorkoutEntity({
     required this.note,
     required this.id,
     required this.goal,
@@ -38,9 +40,9 @@ class WorkoutEntity extends Equatable {
     required this.timePerWorkout,
     this.isActive = false,
     required this.startDate,
+    DateTime? created,
     this.workouts = const [],
-  });
-
+  }) : this.created = created ?? DateTime.now();
   @override
   List<Object> get props {
     return [
@@ -54,6 +56,7 @@ class WorkoutEntity extends Equatable {
       startDate,
       workouts,
       isActive,
+      created,
     ];
   }
 
@@ -68,6 +71,7 @@ class WorkoutEntity extends Equatable {
     DateTime? startDate,
     List<WorkoutDayEntity>? workouts,
     bool? isActive,
+    DateTime? created,
   }) {
     return WorkoutEntity(
       id: id ?? this.id,
@@ -80,6 +84,7 @@ class WorkoutEntity extends Equatable {
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
       isActive: isActive ?? this.isActive,
+      created: created ?? this.created,
     );
   }
 
@@ -99,6 +104,7 @@ class WorkoutEntity extends Equatable {
       startDate: date.toDate(),
       workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
       isActive: data[_DocKeys.isActive] ?? false,
+      created: data[_DocKeys.created] ?? DateTime.now(),
     );
   }
 
@@ -113,6 +119,7 @@ class WorkoutEntity extends Equatable {
       _DocKeys.type: describeEnum(type),
       _DocKeys.workouts: workouts.map((e) => e.toDocumentSnapshot()).toList(),
       _DocKeys.isActive: this.isActive,
+      _DocKeys.created: Timestamp.fromDate(this.created)
     };
   }
 }

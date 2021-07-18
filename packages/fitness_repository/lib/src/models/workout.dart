@@ -16,6 +16,7 @@ class Workout extends Equatable {
   final List<WorkoutDay> workouts;
   final String note;
   final bool isActive;
+  final DateTime created;
 
   Workout({
     String? id,
@@ -28,7 +29,9 @@ class Workout extends Equatable {
     required this.startDate,
     this.isActive = false,
     this.workouts = const [],
-  }) : this.id = id ?? UniqueKey().toString();
+    DateTime? created,
+  })  : this.id = id ?? UniqueKey().toString(),
+        this.created = created ?? DateTime.now();
 
   List<Object> get props {
     return [
@@ -42,6 +45,7 @@ class Workout extends Equatable {
       workouts,
       note,
       isActive,
+      created,
     ];
   }
 
@@ -55,6 +59,8 @@ class Workout extends Equatable {
     DateTime? startDate,
     List<WorkoutDay>? workouts,
     String? note,
+    bool? isActive,
+    DateTime? created,
   }) {
     return Workout(
       id: id ?? this.id,
@@ -66,6 +72,8 @@ class Workout extends Equatable {
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
       note: note ?? this.note,
+      isActive: isActive ?? this.isActive,
+      created: created ?? this.created,
     );
   }
 
@@ -80,6 +88,7 @@ class Workout extends Equatable {
       timePerWorkout: entity.timePerWorkout,
       type: entity.type,
       workouts: entity.workouts.map((e) => WorkoutDay.fromEntity(e)).toList(),
+      created: entity.created,
       isActive: entity.isActive,
     );
   }
@@ -96,6 +105,7 @@ class Workout extends Equatable {
       startDate: startDate,
       workouts: workouts.map((e) => e.toEntity()).toList(),
       isActive: isActive,
+      created: created,
     );
   }
 
