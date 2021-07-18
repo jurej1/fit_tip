@@ -24,12 +24,20 @@ class WorkoutsListCard extends StatelessWidget {
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Row(
+              child: Column(
                 children: [
-                  Text(state.workout.note),
-                  Spacer(),
-                  const _ExpandableIconButton(),
-                  const _OptionsButton(),
+                  Row(
+                    children: [
+                      Text(state.workout.note),
+                      Spacer(),
+                      const _ExpandableIconButton(),
+                      const _OptionsButton(),
+                    ],
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: state.isExpanded ? 60 : 0,
+                  ),
                 ],
               ),
             ),
