@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:flutter/material.dart';
 
 part 'workouts_list_card_event.dart';
 part 'workouts_list_card_state.dart';

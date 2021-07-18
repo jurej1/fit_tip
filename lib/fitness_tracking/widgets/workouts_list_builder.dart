@@ -22,7 +22,9 @@ class WorkoutsListBuilder extends StatelessWidget {
           );
         } else if (state is WorkoutsListLoadSuccess) {
           return ListView.separated(
+            padding: const EdgeInsets.all(5),
             itemCount: state.workouts.length,
+            physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               final item = state.workouts[index];
 

@@ -5,6 +5,8 @@ abstract class WorkoutsListCardState extends Equatable {
 
   final Workout workout;
 
+  Color get backgroundColor => Colors.blue.shade100;
+
   @override
   List<Object> get props => [workout];
 }
