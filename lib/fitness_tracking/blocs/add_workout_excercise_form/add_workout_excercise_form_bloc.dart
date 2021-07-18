@@ -11,7 +11,7 @@ part 'add_workout_excercise_form_event.dart';
 part 'add_workout_excercise_form_state.dart';
 
 class AddWorkoutExcerciseFormBloc extends Bloc<AddWorkoutExcerciseFormEvent, AddWorkoutExcerciseFormState> {
-  AddWorkoutExcerciseFormBloc() : super(AddWorkoutExcerciseFormState());
+  AddWorkoutExcerciseFormBloc({WorkoutExcercise? workoutExcercis}) : super(AddWorkoutExcerciseFormState.initial(workoutExcercis));
 
   @override
   Stream<AddWorkoutExcerciseFormState> mapEventToState(

@@ -1,4 +1,5 @@
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -8,7 +9,7 @@ import '../fitness_tracking.dart';
 class AddWorkoutExcerciseView extends StatelessWidget {
   const AddWorkoutExcerciseView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(BuildContext context) {
+  static MaterialPageRoute route(BuildContext context, {WorkoutExcercise? excercise}) {
     final workoutdDayBloc = BlocProvider.of<AddWorkoutDayFormBloc>(context);
 
     return MaterialPageRoute(
@@ -16,7 +17,7 @@ class AddWorkoutExcerciseView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => AddWorkoutExcerciseFormBloc(),
+              create: (context) => AddWorkoutExcerciseFormBloc(workoutExcercis: excercise),
             ),
             BlocProvider.value(value: workoutdDayBloc),
           ],
