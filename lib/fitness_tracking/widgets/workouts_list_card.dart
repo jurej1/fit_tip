@@ -58,7 +58,7 @@ class _OptionsButton extends StatelessWidget {
         return WorkoutsListCardOptions.values.map((e) {
           return PopupMenuItem(
             child: Text(
-              describeEnum(e),
+              mapWorkoutsListCardOptionsToString(e),
             ),
             value: e,
           );
