@@ -1,1 +1,1 @@
-export 'workout_list_card_options.dart';
+export 'workouts_list_card_options.dart';
