@@ -60,7 +60,7 @@ class FitnessTrackingView extends StatelessWidget {
       );
     }
     if (page == FitnessTrackingWorkoutPage.all) {
-      return WorkoutsBuilder();
+      return WorkoutsListBuilder();
     }
 
     return Container();
