@@ -5,7 +5,6 @@ import 'package:weight_repository/enums/enums.dart';
 import 'package:weight_repository/models/models.dart';
 
 class _DocKeys {
-  static String get id => 'id';
   static String get targetWeight => 'target_weight';
   static String get beginDate => 'begin_date';
   static String get targetDate => 'target_date';

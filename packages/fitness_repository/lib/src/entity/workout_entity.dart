@@ -83,7 +83,7 @@ class WorkoutEntity extends Equatable {
     final date = data[_DocKeys.startDate] as Timestamp;
 
     return WorkoutEntity(
-      note: data.containsKey(_DocKeys.note) ? data[_DocKeys.note] : '',
+      note: data.containsKey(_DocKeys.note) ? data[_DocKeys.note] : 'test', // TODO test can be deleted to ''
       id: snapshot.id,
       goal: WorkoutGoal.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.goal]),
       type: WorkoutType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
