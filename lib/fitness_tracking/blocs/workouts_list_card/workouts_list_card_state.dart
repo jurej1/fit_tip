@@ -8,6 +8,7 @@ abstract class WorkoutsListCardState extends Equatable {
 
   Color get backgroundColor => Colors.blue.shade100;
   BorderRadius get borderRadius => BorderRadius.circular(12);
+  double get iconSize => 20;
 
   @override
   List<Object> get props => [workout, isExpanded];

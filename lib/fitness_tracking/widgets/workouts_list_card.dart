@@ -23,7 +23,7 @@ class WorkoutsListCard extends StatelessWidget {
               //GO to detail page
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               child: Column(
                 children: [
                   Row(
@@ -55,6 +55,7 @@ class _OptionsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<WorkoutsListCardOptions>(
       icon: const Icon(Icons.more_vert),
+      iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
       itemBuilder: (context) {
         return WorkoutsListCardOptions.values.map((e) {
           return PopupMenuItem(
@@ -108,6 +109,7 @@ class _ExpandableIconButton extends HookWidget {
           },
           child: IconButton(
             icon: Icon(Icons.arrow_back_ios_new),
+            iconSize: state.iconSize,
             onPressed: () {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardExpandedButtonPressed());
             },
