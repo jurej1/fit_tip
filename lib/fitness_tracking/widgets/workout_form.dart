@@ -28,6 +28,7 @@ class WorkoutForm extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         physics: const BouncingScrollPhysics(),
         children: [
+          const _WorkoutNoteInput(),
           const _WorkoutGoalInput(),
           const _WorkoutTypeInput(),
           const _WorkoutDurationInput(),
@@ -36,6 +37,43 @@ class WorkoutForm extends StatelessWidget {
           const _WorkoutStartDateInput(),
         ],
       ),
+    );
+  }
+}
+
+class _WorkoutNoteInput extends HookWidget {
+  const _WorkoutNoteInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.note != c.note,
+      listener: (context, state) {
+        if (state.note.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          showErrorSnackBar(context, ValueKey('goal'));
+        }
+      },
+      builder: (context, state) {
+        return ShakeAnimationBuilder(
+          controller: _controller,
+          child: TextFormField(
+            initialValue: state.note.value,
+            decoration: InputDecoration(
+              errorText: state.note.invalid ? 'Invalid' : null,
+              labelText: 'Note',
+            ),
+            onChanged: (value) {
+              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormNoteUpdated(value));
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -52,6 +90,7 @@ class _WorkoutGoalInput extends HookWidget {
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.goal != c.goal,
       listener: (context, state) {
         if (state.goal.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -98,6 +137,7 @@ class _WorkoutTypeInput extends HookWidget {
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.type != c.type,
       listener: (context, state) {
         if (state.type.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -148,6 +188,7 @@ class _WorkoutDurationInput extends HookWidget {
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.duration != c.duration,
       listener: (context, state) {
         if (state.duration.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -184,6 +225,7 @@ class _WorkoutDaysPerWeekInput extends HookWidget {
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.daysPerWeek != c.daysPerWeek,
       listener: (context, state) {
         if (state.daysPerWeek.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -219,6 +261,7 @@ class _WorkoutTimePerWorkoutInput extends HookWidget {
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.timePerWorkout != c.timePerWorkout,
       listener: (context, state) {
         if (state.timePerWorkout.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -254,6 +297,7 @@ class _WorkoutStartDateInput extends HookWidget {
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.startDate != c.startDate,
       listener: (context, state) {
         if (state.startDate.invalid) {
           _controller.forward().then((value) => _controller.reset());
