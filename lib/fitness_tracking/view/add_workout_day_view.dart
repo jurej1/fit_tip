@@ -32,7 +32,7 @@ class AddWorkoutDayView extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormListItemUpdated(state.workoutDay));
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
       },
       child: Scaffold(
