@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class _DocKeys {
@@ -18,13 +19,14 @@ class WorkoutExcerciseEntity extends Equatable {
   final int reps;
   final RepUnit repUnit;
 
-  const WorkoutExcerciseEntity({
-    required this.id,
+  WorkoutExcerciseEntity({
+    String? id,
     required this.name,
     required this.sets,
     required this.reps,
     required this.repUnit,
-  });
+  }) : this.id = id ?? UniqueKey().toString();
+
   @override
   List<Object> get props {
     return [
