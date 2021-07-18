@@ -11,11 +11,24 @@ class WorkoutsListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
       builder: (context, state) {
-        return Container(
+        return Material(
           color: state.backgroundColor,
-          child: ListTile(
-            title: Text(state.workout.note),
-            trailing: const _OptionsButton(),
+          borderRadius: state.borderRadius,
+          child: InkWell(
+            borderRadius: state.borderRadius,
+            onTap: () {
+              //GO to detail page
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(state.workout.note),
+                  const _OptionsButton(),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -28,33 +41,26 @@ class _OptionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
-      builder: (context, state) {
-        return Material(
-          color: state.backgroundColor,
-          child: PopupMenuButton<WorkoutsListCardOptions>(
-            icon: const Icon(Icons.more_vert),
-            itemBuilder: (context) {
-              return WorkoutsListCardOptions.values.map((e) {
-                return PopupMenuItem(
-                  child: Text(
-                    describeEnum(e),
-                  ),
-                  value: e,
-                );
-              }).toList();
-            },
-            onSelected: (option) {
-              if (option == WorkoutsListCardOptions.delete) {
-                //TODO
-              } else if (option == WorkoutsListCardOptions.edit) {
-                //TODO
-              } else if (option == WorkoutsListCardOptions.setAsActive) {
-                //TODO
-              }
-            },
-          ),
-        );
+    return PopupMenuButton<WorkoutsListCardOptions>(
+      icon: const Icon(Icons.more_vert),
+      itemBuilder: (context) {
+        return WorkoutsListCardOptions.values.map((e) {
+          return PopupMenuItem(
+            child: Text(
+              describeEnum(e),
+            ),
+            value: e,
+          );
+        }).toList();
+      },
+      onSelected: (option) {
+        if (option == WorkoutsListCardOptions.delete) {
+          //TODO
+        } else if (option == WorkoutsListCardOptions.edit) {
+          //TODO
+        } else if (option == WorkoutsListCardOptions.setAsActive) {
+          //TODO
+        }
       },
     );
   }

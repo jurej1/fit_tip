@@ -38,7 +38,7 @@ class WorkoutsListBuilder extends StatelessWidget {
               );
             },
             separatorBuilder: (context, index) {
-              return const SizedBox(height: 5);
+              return const SizedBox(height: 10);
             },
           );
         }
