@@ -5,6 +5,7 @@ import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class WorkoutsListCard extends StatelessWidget {
@@ -34,10 +35,7 @@ class WorkoutsListCard extends StatelessWidget {
                       const _OptionsButton(),
                     ],
                   ),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    height: state.isExpanded ? 60 : 0,
-                  ),
+                  const _DataContainer(),
                 ],
               ),
             ),
@@ -113,6 +111,29 @@ class _ExpandableIconButton extends HookWidget {
             onPressed: () {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardExpandedButtonPressed());
             },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DataContainer extends StatelessWidget {
+  const _DataContainer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
+      builder: (context, state) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: state.isExpanded ? 60 : 0,
+          child: ListView(
+            children: [
+              Text(state.workout.mapDaysPerWeekToText),
+              Text('Estimate program duration: ${state.workout.mapDurationToText}'),
+              Text('Goal: $mapWorkoutGoalToText(state.workout.goal)')
+            ],
           ),
         );
       },

@@ -101,4 +101,17 @@ class Workout extends Equatable {
   static List<Workout> fromQuerySnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((e) => Workout.fromEntity(WorkoutEntity.fromDocumentSnapshot(e))).toList();
   }
+
+  String get mapDaysPerWeekToText {
+    if (daysPerWeek == 1) {
+      return '$daysPerWeek day per week';
+    }
+
+    return '$daysPerWeek days per week';
+  }
+
+  String get mapDurationToText {
+    if (duration == 1) return '$duration week';
+    return '$duration weeks';
+  }
 }
