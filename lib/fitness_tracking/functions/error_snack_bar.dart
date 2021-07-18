@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void showErrorSnackBar(BuildContext context, Key key, {String? text}) {
-  ScaffoldMessenger.of(context)
+ScaffoldMessengerState showErrorSnackBar(BuildContext context, Key key, {String? text}) {
+  return ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
