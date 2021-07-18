@@ -6,6 +6,7 @@ ScaffoldMessengerState showErrorSnackBar(BuildContext context, Key key, {String?
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
+        duration: const Duration(seconds: 2),
         key: key,
         content: Text(text ?? 'Invalid'),
         backgroundColor: Colors.red,
