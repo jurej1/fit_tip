@@ -17,7 +17,6 @@ class _DocKeys {
   static get measurmentSystem => 'measurmentSystem';
   static get introduction => 'introduction';
   static get location => 'location';
-  static get id => 'id';
 }
 
 class UserEntity extends Equatable {
