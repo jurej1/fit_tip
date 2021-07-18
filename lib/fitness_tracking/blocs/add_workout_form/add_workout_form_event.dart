@@ -49,6 +49,14 @@ class AddWorkoutFormTimePerWorkoutUpdated extends AddWorkoutFormEvent {
   List<Object> get props => [value];
 }
 
+class AddWorkoutFormNoteUpdated extends AddWorkoutFormEvent {
+  final String value;
+
+  const AddWorkoutFormNoteUpdated(this.value);
+  @override
+  List<Object> get props => [value];
+}
+
 class AddWorkoutFormStartDateUpdated extends AddWorkoutFormEvent {
   final DateTime? value;
 

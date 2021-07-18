@@ -54,7 +54,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
   }
 
   Stream<AddWorkoutDayFormState> _mapNoteChangedToState(AddWorkoutDayNoteChanged event) async* {
-    final note = WorkoutNote.dirty(event.value);
+    final note = WorkoutDayNote.dirty(event.value);
 
     yield state.copyWith(
       note: note,
@@ -170,7 +170,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
 
   Stream<AddWorkoutDayFormState> _mapFormSubmitedToState(AddWorkoutDayFormSubmited event) async* {
     final day = WorkoutDayDay.dirty(state.day.value);
-    final note = WorkoutNote.dirty(state.note.value);
+    final note = WorkoutDayNote.dirty(state.note.value);
     final muscleGroupList = WorkoutMuscleGroupList.dirty(state.muscleGroupList.value);
     final workoutExcerciseList = WorkoutExcercisesList.dirty(state.workoutExcercisesList.value);
 

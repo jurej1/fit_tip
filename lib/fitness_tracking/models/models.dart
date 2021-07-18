@@ -11,3 +11,4 @@ export 'workout_day_day.dart';
 export 'workout_excercise_name.dart';
 export 'workout_excercise_int_formz.dart';
 export 'workout_rep_unit.dart';
+export 'workoutd_day_note.dart';

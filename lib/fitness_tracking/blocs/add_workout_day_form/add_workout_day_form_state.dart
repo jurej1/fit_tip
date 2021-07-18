@@ -4,7 +4,7 @@ class AddWorkoutDayFormState {
   const AddWorkoutDayFormState({
     required this.id,
     required this.day,
-    this.note = const WorkoutNote.pure(),
+    this.note = const WorkoutDayNote.pure(),
     this.muscleGroupList = const WorkoutMuscleGroupList.pure(),
     this.workoutExcercisesList = const WorkoutExcercisesList.pure(),
     this.status = FormzStatus.pure,
@@ -12,7 +12,7 @@ class AddWorkoutDayFormState {
 
   final String id;
   final WorkoutDayDay day;
-  final WorkoutNote note;
+  final WorkoutDayNote note;
   final WorkoutMuscleGroupList muscleGroupList;
   final WorkoutExcercisesList workoutExcercisesList;
   final FormzStatus status;
@@ -32,7 +32,7 @@ class AddWorkoutDayFormState {
       id: workoutDay.id,
       day: WorkoutDayDay.pure(workoutDay.day),
       muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.musclesTargeted),
-      note: WorkoutNote.pure(workoutDay.note),
+      note: WorkoutDayNote.pure(workoutDay.note),
       workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
     );
   }
@@ -40,7 +40,7 @@ class AddWorkoutDayFormState {
   AddWorkoutDayFormState copyWith({
     String? id,
     WorkoutDayDay? day,
-    WorkoutNote? note,
+    WorkoutDayNote? note,
     WorkoutMuscleGroupList? muscleGroupList,
     WorkoutExcercisesList? workoutExcercisesList,
     FormzStatus? status,

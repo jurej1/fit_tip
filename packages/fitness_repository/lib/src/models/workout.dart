@@ -13,9 +13,11 @@ class Workout extends Equatable {
   final int timePerWorkout;
   final DateTime startDate;
   final List<WorkoutDay> workouts;
+  final String note;
 
   Workout({
     String? id,
+    required this.note,
     required this.goal,
     required this.type,
     required this.duration,
@@ -35,6 +37,7 @@ class Workout extends Equatable {
       timePerWorkout,
       startDate,
       workouts,
+      note,
     ];
   }
 
@@ -47,6 +50,7 @@ class Workout extends Equatable {
     int? timePerWorkout,
     DateTime? startDate,
     List<WorkoutDay>? workouts,
+    String? note,
   }) {
     return Workout(
       id: id ?? this.id,
@@ -57,11 +61,13 @@ class Workout extends Equatable {
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
+      note: note ?? this.note,
     );
   }
 
   static Workout fromEntity(WorkoutEntity entity) {
     return Workout(
+      note: entity.note,
       daysPerWeek: entity.daysPerWeek,
       duration: entity.duration,
       goal: entity.goal,
@@ -75,6 +81,7 @@ class Workout extends Equatable {
 
   WorkoutEntity toEntity() {
     return WorkoutEntity(
+      note: note,
       id: id,
       goal: goal,
       type: type,

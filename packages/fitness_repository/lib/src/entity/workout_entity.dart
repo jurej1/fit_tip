@@ -12,6 +12,7 @@ class _DocKeys {
   static String timePerWorkout = 'timePerWorkout';
   static String startDate = 'startDate';
   static String workouts = 'workouts';
+  static String note = 'note';
 }
 
 class WorkoutEntity extends Equatable {
@@ -21,10 +22,12 @@ class WorkoutEntity extends Equatable {
   final int duration;
   final int daysPerWeek;
   final int timePerWorkout;
+  final String note;
   final DateTime startDate;
   final List<WorkoutDayEntity> workouts;
 
   const WorkoutEntity({
+    required this.note,
     required this.id,
     required this.goal,
     required this.type,
@@ -44,6 +47,7 @@ class WorkoutEntity extends Equatable {
       duration,
       daysPerWeek,
       timePerWorkout,
+      note,
       startDate,
       workouts,
     ];
@@ -56,6 +60,7 @@ class WorkoutEntity extends Equatable {
     int? duration,
     int? daysPerWeek,
     int? timePerWorkout,
+    String? note,
     DateTime? startDate,
     List<WorkoutDayEntity>? workouts,
   }) {
@@ -66,6 +71,7 @@ class WorkoutEntity extends Equatable {
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
+      note: note ?? this.note,
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
     );
@@ -77,6 +83,7 @@ class WorkoutEntity extends Equatable {
     final date = data[_DocKeys.startDate] as Timestamp;
 
     return WorkoutEntity(
+      note: data[_DocKeys.note],
       id: snapshot.id,
       goal: WorkoutGoal.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.goal]),
       type: WorkoutType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
@@ -90,6 +97,7 @@ class WorkoutEntity extends Equatable {
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
+      _DocKeys.note: note,
       _DocKeys.daysPerWeek: daysPerWeek,
       _DocKeys.duration: duration,
       _DocKeys.goal: describeEnum(goal),

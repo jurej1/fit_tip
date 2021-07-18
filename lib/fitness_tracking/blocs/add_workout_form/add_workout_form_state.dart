@@ -10,10 +10,12 @@ class AddWorkoutFormState {
     this.daysPerWeek = const WorkoutIntFormz.pure(),
     this.timePerWorkout = const WorkoutIntFormz.pure(),
     required this.startDate,
+    this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
   });
 
   final String? id;
+  final WorkoutNote note;
   final FormzStatus status;
   final WorkoutGoalFormz goal;
   final WorkoutTypeFormz type;
@@ -31,6 +33,7 @@ class AddWorkoutFormState {
 
   AddWorkoutFormState copyWith({
     String? id,
+    WorkoutNote? note,
     FormzStatus? status,
     WorkoutGoalFormz? goal,
     WorkoutTypeFormz? type,
@@ -42,6 +45,7 @@ class AddWorkoutFormState {
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
+      note: note ?? this.note,
       status: status ?? this.status,
       goal: goal ?? this.goal,
       type: type ?? this.type,
@@ -55,6 +59,7 @@ class AddWorkoutFormState {
 
   Workout get workout {
     return Workout(
+      note: this.note.value,
       id: id ?? UniqueKey().toString(),
       goal: this.goal.value,
       type: this.type.value,
