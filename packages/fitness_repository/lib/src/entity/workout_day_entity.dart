@@ -93,7 +93,7 @@ class WorkoutDayEntity extends Equatable {
       _DocKeys.day: this.day,
       if (this.musclesTargeted != null) _DocKeys.musclesTargeted: this.musclesTargeted?.map((e) => describeEnum(e)).toList(),
       if (this.note != null) _DocKeys.note: this.note,
-      _DocKeys.excercises: this.excercises.map((e) => e.toMap()).toList(),
+      _DocKeys.excercises: excercises.isEmpty ? [] : this.excercises.map((e) => e.toMap()).toList(),
     };
   }
 }

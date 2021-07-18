@@ -10,7 +10,9 @@ class WorkoutsListCard extends StatelessWidget {
     return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
       builder: (context, state) {
         return Container(
-          child: ListTile(),
+          child: ListTile(
+            title: Text(state.workout.note),
+          ),
         );
       },
     );

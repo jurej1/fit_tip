@@ -91,9 +91,7 @@ class WorkoutEntity extends Equatable {
       daysPerWeek: data[_DocKeys.daysPerWeek],
       timePerWorkout: data[_DocKeys.timePerWorkout],
       startDate: date.toDate(),
-      workouts: data.containsKey(_DocKeys.workouts)
-          ? (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList()
-          : [],
+      workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
     );
   }
 
