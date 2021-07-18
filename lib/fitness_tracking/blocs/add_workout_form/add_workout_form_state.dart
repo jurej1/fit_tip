@@ -12,6 +12,8 @@ class AddWorkoutFormState {
     required this.startDate,
     this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
+    required this.created,
+    this.formMode = FormMode.add,
   });
 
   final String? id;
@@ -24,10 +26,34 @@ class AddWorkoutFormState {
   final WorkoutIntFormz timePerWorkout;
   final WorkoutDateFormz startDate;
   final WorkoutDaysList workoutDays;
+  final DateTime created;
+  final FormMode formMode;
 
-  factory AddWorkoutFormState.initial() {
+  factory AddWorkoutFormState.initial(Workout? workout) {
+    if (workout == null) {
+      return AddWorkoutFormState(
+        startDate: WorkoutDateFormz.pure(),
+        created: DateTime.now(),
+      );
+    }
+
+    final daysPerWeek = WorkoutIntFormz.pure(workout.daysPerWeek.toStringAsFixed(0));
+
     return AddWorkoutFormState(
-      startDate: WorkoutDateFormz.pure(),
+      startDate: WorkoutDateFormz.pure(workout.startDate),
+      created: workout.created,
+      daysPerWeek: daysPerWeek,
+      duration: WorkoutIntFormz.pure(workout.duration.toStringAsFixed(0)),
+      goal: WorkoutGoalFormz.pure(workout.goal),
+      id: workout.id,
+      note: WorkoutNote.pure(workout.note),
+      timePerWorkout: WorkoutIntFormz.pure(workout.timePerWorkout.toStringAsFixed(0)),
+      type: WorkoutTypeFormz.pure(workout.type),
+      workoutDays: WorkoutDaysList.dirty(
+        value: workout.workouts,
+        workoutsPerWeekend: daysPerWeek.getIntValue(),
+      ),
+      formMode: FormMode.edit,
     );
   }
 
@@ -42,6 +68,7 @@ class AddWorkoutFormState {
     WorkoutIntFormz? timePerWorkout,
     WorkoutDateFormz? startDate,
     WorkoutDaysList? workoutDays,
+    DateTime? created,
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
@@ -54,6 +81,7 @@ class AddWorkoutFormState {
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       startDate: startDate ?? this.startDate,
       workoutDays: workoutDays ?? this.workoutDays,
+      created: created ?? this.created,
     );
   }
 
@@ -68,7 +96,7 @@ class AddWorkoutFormState {
       timePerWorkout: this.timePerWorkout.getIntValue(),
       startDate: this.startDate.value,
       workouts: this.workoutDays.value,
-      created: DateTime.now(),
+      created: created,
     );
   }
 

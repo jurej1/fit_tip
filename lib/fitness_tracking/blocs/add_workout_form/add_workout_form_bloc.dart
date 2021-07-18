@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
@@ -17,9 +18,10 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   AddWorkoutFormBloc({
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
+    Workout? workout,
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
-        super(AddWorkoutFormState.initial());
+        super(AddWorkoutFormState.initial(workout));
 
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
@@ -350,8 +352,13 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
-        DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
-        yield state.copyWith(status: FormzStatus.submissionSuccess, id: ref.id);
+        if (state.formMode == FormMode.add) {
+          DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
+          yield state.copyWith(status: FormzStatus.submissionSuccess, id: ref.id);
+        } else {
+          await _fitnessRepository.updateWorkout(_user!.id!, state.workout);
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
+        }
       } catch (e) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
