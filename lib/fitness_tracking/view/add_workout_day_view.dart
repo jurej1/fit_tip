@@ -249,14 +249,21 @@ class _WorkoutInput extends StatelessWidget {
               itemCount: state.getExcercisesList().length,
               itemBuilder: (context, index) {
                 final item = state.getExcercisesList()[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    children: [
-                      RowExcerciseData(text: '${item.name}'),
-                      RowExcerciseData(text: '${item.sets}'),
-                      RowExcerciseData(text: '${item.reps} ${describeEnum(item.repUnit)}'),
-                    ],
+                return Material(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(AddWorkoutExcerciseView.route(context, excercise: item));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          RowExcerciseData(text: '${item.name}'),
+                          RowExcerciseData(text: '${item.sets}'),
+                          RowExcerciseData(text: '${item.reps} ${describeEnum(item.repUnit)}'),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
