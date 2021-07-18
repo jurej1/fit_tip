@@ -14,6 +14,7 @@ class Workout extends Equatable {
   final DateTime startDate;
   final List<WorkoutDay> workouts;
   final String note;
+  final bool isActive;
 
   Workout({
     String? id,
@@ -24,6 +25,7 @@ class Workout extends Equatable {
     required this.daysPerWeek,
     required this.timePerWorkout,
     required this.startDate,
+    this.isActive = false,
     this.workouts = const [],
   }) : this.id = id ?? UniqueKey().toString();
 
@@ -38,6 +40,7 @@ class Workout extends Equatable {
       startDate,
       workouts,
       note,
+      isActive,
     ];
   }
 
@@ -76,6 +79,7 @@ class Workout extends Equatable {
       timePerWorkout: entity.timePerWorkout,
       type: entity.type,
       workouts: entity.workouts.map((e) => WorkoutDay.fromEntity(e)).toList(),
+      isActive: entity.isActive,
     );
   }
 
@@ -90,14 +94,11 @@ class Workout extends Equatable {
       timePerWorkout: timePerWorkout,
       startDate: startDate,
       workouts: workouts.map((e) => e.toEntity()).toList(),
+      isActive: isActive,
     );
   }
 
   static List<Workout> fromQuerySnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs
-        .map(
-          (e) => Workout.fromEntity(WorkoutEntity.fromDocumentSnapshot(e)),
-        )
-        .toList();
+    return snapshot.docs.map((e) => Workout.fromEntity(WorkoutEntity.fromDocumentSnapshot(e))).toList();
   }
 }

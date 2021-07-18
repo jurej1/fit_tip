@@ -13,6 +13,7 @@ class _DocKeys {
   static String startDate = 'startDate';
   static String workouts = 'workouts';
   static String note = 'note';
+  static String isActive = 'isActive';
 }
 
 class WorkoutEntity extends Equatable {
@@ -25,6 +26,7 @@ class WorkoutEntity extends Equatable {
   final String note;
   final DateTime startDate;
   final List<WorkoutDayEntity> workouts;
+  final bool isActive;
 
   const WorkoutEntity({
     required this.note,
@@ -34,6 +36,7 @@ class WorkoutEntity extends Equatable {
     required this.duration,
     required this.daysPerWeek,
     required this.timePerWorkout,
+    this.isActive = false,
     required this.startDate,
     this.workouts = const [],
   });
@@ -50,6 +53,7 @@ class WorkoutEntity extends Equatable {
       note,
       startDate,
       workouts,
+      isActive,
     ];
   }
 
@@ -63,6 +67,7 @@ class WorkoutEntity extends Equatable {
     String? note,
     DateTime? startDate,
     List<WorkoutDayEntity>? workouts,
+    bool? isActive,
   }) {
     return WorkoutEntity(
       id: id ?? this.id,
@@ -74,6 +79,7 @@ class WorkoutEntity extends Equatable {
       note: note ?? this.note,
       startDate: startDate ?? this.startDate,
       workouts: workouts ?? this.workouts,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -92,6 +98,7 @@ class WorkoutEntity extends Equatable {
       timePerWorkout: data[_DocKeys.timePerWorkout],
       startDate: date.toDate(),
       workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
+      isActive: data[_DocKeys.isActive] ?? false,
     );
   }
 
@@ -105,6 +112,7 @@ class WorkoutEntity extends Equatable {
       _DocKeys.timePerWorkout: timePerWorkout,
       _DocKeys.type: describeEnum(type),
       _DocKeys.workouts: workouts.map((e) => e.toDocumentSnapshot()).toList(),
+      _DocKeys.isActive: this.isActive,
     };
   }
 }
