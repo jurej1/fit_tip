@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 import '../../fitness_tracking.dart';
 import 'package:equatable/equatable.dart';

@@ -89,7 +89,7 @@ class WorkoutExcerciseEntity extends Equatable {
       id: map[_DocKeys.id],
       name: map[_DocKeys.name],
       sets: map[_DocKeys.sets],
-      reps: map[_DocKeys.repUnit],
+      reps: map[_DocKeys.reps],
       repUnit: RepUnit.values.firstWhere((element) => describeEnum(element) == map[_DocKeys.repUnit]),
     );
   }

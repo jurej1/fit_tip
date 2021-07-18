@@ -28,7 +28,7 @@ class AddWorkoutExcerciseFormState extends Equatable {
 
   WorkoutExcercise get excercise {
     return WorkoutExcercise(
-      id: name.value,
+      id: UniqueKey().toString(),
       name: name.value,
       repUnit: repUnit.value,
       reps: reps.value,

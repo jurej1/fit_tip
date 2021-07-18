@@ -77,18 +77,15 @@ class WorkoutEntity extends Equatable {
     final date = data[_DocKeys.startDate] as Timestamp;
 
     return WorkoutEntity(
-        id: snapshot.id,
-        goal: WorkoutGoal.values.firstWhere(
-          (e) => describeEnum(e) == data[_DocKeys.goal],
-        ),
-        type: WorkoutType.values.firstWhere(
-          (e) => describeEnum(e) == data[_DocKeys.type],
-        ),
-        duration: data[_DocKeys.duration],
-        daysPerWeek: data[_DocKeys.daysPerWeek],
-        timePerWorkout: data[_DocKeys.timePerWorkout],
-        startDate: date.toDate(),
-        workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList());
+      id: snapshot.id,
+      goal: WorkoutGoal.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.goal]),
+      type: WorkoutType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
+      duration: data[_DocKeys.duration],
+      daysPerWeek: data[_DocKeys.daysPerWeek],
+      timePerWorkout: data[_DocKeys.timePerWorkout],
+      startDate: date.toDate(),
+      workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
+    );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
