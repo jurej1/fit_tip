@@ -127,12 +127,14 @@ class _DataContainer extends StatelessWidget {
       builder: (context, state) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: state.isExpanded ? 60 : 0,
+          height: state.isExpanded ? 75 : 0,
           child: ListView(
+            physics: const ClampingScrollPhysics(),
             children: [
               Text(state.workout.mapDaysPerWeekToText),
               Text('Estimate program duration: ${state.workout.mapDurationToText}'),
-              Text('Goal: $mapWorkoutGoalToText(state.workout.goal)')
+              Text('Goal: ${mapWorkoutGoalToText(state.workout.goal)}'),
+              Text('Start date ${state.workout.mapStartDateToText}'),
             ],
           ),
         );

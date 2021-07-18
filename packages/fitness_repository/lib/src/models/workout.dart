@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class Workout extends Equatable {
   final String id;
@@ -113,5 +114,9 @@ class Workout extends Equatable {
   String get mapDurationToText {
     if (duration == 1) return '$duration week';
     return '$duration weeks';
+  }
+
+  String get mapStartDateToText {
+    return DateFormat('EEE, MMM d, ' 'yy').format(startDate);
   }
 }
