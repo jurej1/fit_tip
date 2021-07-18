@@ -12,6 +12,12 @@ class WorkoutsListCard extends StatelessWidget {
         return Container(
           child: ListTile(
             title: Text(state.workout.note),
+            trailing: PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (context) {
+                return [];
+              },
+            ),
           ),
         );
       },
