@@ -10,7 +10,7 @@ abstract class WorkoutsListCardState extends Equatable {
   BorderRadius get borderRadius => BorderRadius.circular(12);
 
   @override
-  List<Object> get props => [workout];
+  List<Object> get props => [workout, isExpanded];
 }
 
 class WorkoutsListCardInitial extends WorkoutsListCardState {

@@ -31,6 +31,8 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
   ) async* {
     if (event is WorkoutsListCardDeleteRequested) {
       yield* _mapDeleteRequestedToState(event);
+    } else if (event is WorkoutsListCardExpandedButtonPressed) {
+      yield* _mapExpandedButtonPressedToState();
     }
   }
 
@@ -46,5 +48,9 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
         yield WorkoutsListCardFail(state.workout, state.isExpanded);
       }
     }
+  }
+
+  Stream<WorkoutsListCardState> _mapExpandedButtonPressedToState() async* {
+    yield WorkoutsListCardInitial(state.workout, !state.isExpanded);
   }
 }

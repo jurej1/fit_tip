@@ -8,3 +8,5 @@ abstract class WorkoutsListCardEvent extends Equatable {
 }
 
 class WorkoutsListCardDeleteRequested extends WorkoutsListCardEvent {}
+
+class WorkoutsListCardExpandedButtonPressed extends WorkoutsListCardEvent {}
