@@ -71,6 +71,14 @@ class _OptionsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
       builder: (context, state) {
+        if (state is WorkoutsListCardLoading) {
+          return const SizedBox(
+            height: 30,
+            width: 30,
+            child: const CircularProgressIndicator(),
+          );
+        }
+
         return PopupMenuButton<WorkoutsListCardOptions>(
           icon: const Icon(Icons.more_vert),
           iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
@@ -86,7 +94,7 @@ class _OptionsButton extends StatelessWidget {
           },
           onSelected: (option) {
             if (option == WorkoutsListCardOptions.delete) {
-              //TODO
+              BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardDeleteRequested());
             } else if (option == WorkoutsListCardOptions.edit) {
               Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
             } else if (option == WorkoutsListCardOptions.setAsActive) {
