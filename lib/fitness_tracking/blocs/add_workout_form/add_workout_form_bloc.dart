@@ -31,12 +31,6 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   User? get _user => _authenticationBloc.state.user;
 
   @override
-  void onTransition(Transition<AddWorkoutFormEvent, AddWorkoutFormState> transition) {
-    log(state.formMode.toString());
-    super.onTransition(transition);
-  }
-
-  @override
   Stream<AddWorkoutFormState> mapEventToState(
     AddWorkoutFormEvent event,
   ) async* {
