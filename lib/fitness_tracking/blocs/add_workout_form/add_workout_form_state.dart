@@ -49,10 +49,7 @@ class AddWorkoutFormState {
       note: WorkoutNote.pure(workout.note),
       timePerWorkout: WorkoutIntFormz.pure(workout.timePerWorkout.toStringAsFixed(0)),
       type: WorkoutTypeFormz.pure(workout.type),
-      workoutDays: WorkoutDaysList.dirty(
-        value: workout.workouts,
-        workoutsPerWeekend: daysPerWeek.getIntValue(),
-      ),
+      workoutDays: WorkoutDaysList.dirty(value: workout.workouts, workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
     );
   }
