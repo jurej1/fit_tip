@@ -28,14 +28,7 @@ class WorkoutsListBuilder extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = state.workouts[index];
 
-              return BlocProvider(
-                create: (context) => WorkoutsListCardBloc(
-                  authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                  fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-                  workout: item,
-                ),
-                child: WorkoutsListCard(),
-              );
+              return WorkoutsListCard.route(context, item);
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: 10);

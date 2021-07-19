@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +11,18 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class WorkoutsListCard extends StatelessWidget {
   const WorkoutsListCard({Key? key}) : super(key: key);
+
+  static Widget route(BuildContext context, Workout item) {
+    return BlocProvider(
+      key: ValueKey(item),
+      create: (context) => WorkoutsListCardBloc(
+        authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+        fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+        workout: item,
+      ),
+      child: WorkoutsListCard(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
