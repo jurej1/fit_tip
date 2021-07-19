@@ -187,8 +187,6 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
       ]),
     );
 
-    print('status: ${muscleGroupList.valid}');
-
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     }

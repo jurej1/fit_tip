@@ -47,11 +47,12 @@ class AddWorkoutView extends StatelessWidget {
           if (state.status.isSubmissionSuccess && state.formMode == FormMode.add) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Workout added')));
             BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemAdded(state.workout));
+            Navigator.of(context).pop();
           }
           if (state.status.isSubmissionSuccess && state.formMode == FormMode.edit) {
             BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout));
+            Navigator.of(context).pop();
           }
-          Navigator.of(context).pop();
         },
         builder: (context, state) {
           if (state.status.isSubmissionInProgress) {
