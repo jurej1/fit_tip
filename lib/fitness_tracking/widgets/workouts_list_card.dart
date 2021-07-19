@@ -26,7 +26,12 @@ class WorkoutsListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
+    return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
+      listener: (context, state) {
+        if (state is WorkoutsListCardDeleteSuccess) {
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.workout));
+        }
+      },
       builder: (context, state) {
         return Material(
           color: state.backgroundColor,
