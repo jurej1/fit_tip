@@ -92,6 +92,7 @@ class WorkoutEntity extends Equatable {
     final data = snapshot.data() as Map<String, dynamic>;
 
     final date = data[_DocKeys.startDate] as Timestamp;
+    final created = data[_DocKeys.created] as Timestamp?;
 
     return WorkoutEntity(
       note: data.containsKey(_DocKeys.note) ? data[_DocKeys.note] : 'test', // TODO test can be deleted to ''
@@ -104,7 +105,7 @@ class WorkoutEntity extends Equatable {
       startDate: date.toDate(),
       workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
       isActive: data[_DocKeys.isActive] ?? false,
-      created: data[_DocKeys.created] ?? DateTime.now(),
+      created: created?.toDate() ?? DateTime.now(),
     );
   }
 

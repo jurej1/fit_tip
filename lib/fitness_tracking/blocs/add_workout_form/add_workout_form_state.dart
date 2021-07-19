@@ -13,7 +13,7 @@ class AddWorkoutFormState {
     this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
     required this.created,
-    this.formMode = FormMode.add,
+    required this.formMode,
   });
 
   final String? id;
@@ -34,6 +34,7 @@ class AddWorkoutFormState {
       return AddWorkoutFormState(
         startDate: WorkoutDateFormz.pure(),
         created: DateTime.now(),
+        formMode: FormMode.add,
       );
     }
 
@@ -66,6 +67,7 @@ class AddWorkoutFormState {
     WorkoutDateFormz? startDate,
     WorkoutDaysList? workoutDays,
     DateTime? created,
+    FormMode? formMode,
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
@@ -79,6 +81,7 @@ class AddWorkoutFormState {
       startDate: startDate ?? this.startDate,
       workoutDays: workoutDays ?? this.workoutDays,
       created: created ?? this.created,
+      formMode: formMode ?? this.formMode,
     );
   }
 

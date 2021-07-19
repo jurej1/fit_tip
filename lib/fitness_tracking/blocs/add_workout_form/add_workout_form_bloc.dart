@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -28,6 +29,12 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;
+
+  @override
+  void onTransition(Transition<AddWorkoutFormEvent, AddWorkoutFormState> transition) {
+    log(state.formMode.toString());
+    super.onTransition(transition);
+  }
 
   @override
   Stream<AddWorkoutFormState> mapEventToState(
