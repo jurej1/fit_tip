@@ -32,7 +32,7 @@ class WorkoutsListCard extends StatelessWidget {
           BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.workout));
         }
         if (state is WorkoutsListCardSetAsActiveSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemSetAsActive(state.workout));
         }
       },
       builder: (context, state) {

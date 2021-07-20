@@ -37,6 +37,8 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       yield* _mapItemRemovedToState(event);
     } else if (event is WorkoutsListItemUpdated) {
       yield* _mapItemUpdatedToState(event);
+    } else if (event is WorkoutsListItemSetAsActive) {
+      yield* _mapItemSetAsActive(event);
     }
   }
 
@@ -96,6 +98,22 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
           return event.workout;
         }
 
+        return e;
+      }).toList();
+
+      yield WorkoutsListLoadSuccess(workouts);
+    }
+  }
+
+  Stream<WorkoutsListState> _mapItemSetAsActive(WorkoutsListItemSetAsActive event) async* {
+    if (state is WorkoutsListLoadSuccess) {
+      final currentState = state as WorkoutsListLoadSuccess;
+
+      List<Workout> workouts = List.from(currentState.workouts);
+
+      workouts = workouts.map((e) {
+        if (e.id == event.workout.id) return event.workout;
+        if (e.isActive) return e.copyWith(isActive: false);
         return e;
       }).toList();
 
