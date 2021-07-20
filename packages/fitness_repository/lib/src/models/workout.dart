@@ -14,13 +14,15 @@ class Workout extends Equatable {
   final int timePerWorkout;
   final DateTime startDate;
   final List<WorkoutDay> workouts;
-  final String note;
+  final String? note;
   final bool isActive;
   final DateTime created;
+  final String title;
 
   Workout({
     String? id,
-    required this.note,
+    required this.title,
+    this.note,
     required this.goal,
     required this.type,
     required this.duration,
@@ -33,7 +35,7 @@ class Workout extends Equatable {
   })  : this.id = id ?? UniqueKey().toString(),
         this.created = created ?? DateTime.now();
 
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       goal,
@@ -61,6 +63,7 @@ class Workout extends Equatable {
     String? note,
     bool? isActive,
     DateTime? created,
+    String? title,
   }) {
     return Workout(
       id: id ?? this.id,
@@ -74,6 +77,7 @@ class Workout extends Equatable {
       note: note ?? this.note,
       isActive: isActive ?? this.isActive,
       created: created ?? this.created,
+      title: title ?? this.title,
     );
   }
 
@@ -90,6 +94,7 @@ class Workout extends Equatable {
       workouts: entity.workouts.map((e) => WorkoutDay.fromEntity(e)).toList(),
       created: entity.created,
       isActive: entity.isActive,
+      title: entity.title,
     );
   }
 
@@ -106,6 +111,7 @@ class Workout extends Equatable {
       workouts: workouts.map((e) => e.toEntity()).toList(),
       isActive: isActive,
       created: created,
+      title: title,
     );
   }
 

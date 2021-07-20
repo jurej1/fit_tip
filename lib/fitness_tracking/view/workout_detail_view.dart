@@ -39,17 +39,16 @@ class WorkoutDetailView extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           body: CustomScrollView(
+            physics: const ClampingScrollPhysics(),
             slivers: [
               SliverAppBar(
-                shape: RoundedRectangleBorder(
-                  borderRadius: state.appBarBorderRadius,
-                ),
+                shape: RoundedRectangleBorder(borderRadius: state.appBarBorderRadius),
                 centerTitle: true,
                 backgroundColor: Colors.green,
                 title: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
                   buildWhen: (p, c) => p.workout.note != c.workout.note,
                   builder: (context, state) {
-                    return Text(state.workout.note);
+                    return Text(state.workout.title);
                   },
                 ),
                 flexibleSpace: Container(
@@ -64,13 +63,16 @@ class WorkoutDetailView extends StatelessWidget {
                 expandedHeight: 200,
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return ListTile(
-                      tileColor: Colors.red.shade100,
-                    );
-                  },
-                  childCount: 20,
+                delegate: SliverChildListDelegate(
+                  [
+                    // Text('Info'),
+                    // Text(state.workout.note),
+                    ...state.workout.workouts.map((e) {
+                      return ListTile(
+                        title: Text(e.note ?? ''),
+                      );
+                    }).toList(),
+                  ],
                 ),
               ),
             ],

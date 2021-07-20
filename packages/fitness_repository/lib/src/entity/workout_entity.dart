@@ -15,6 +15,7 @@ class _DocKeys {
   static String note = 'note';
   static String isActive = 'isActive';
   static String created = 'created';
+  static String title = 'title';
 }
 
 class WorkoutEntity extends Equatable {
@@ -24,14 +25,16 @@ class WorkoutEntity extends Equatable {
   final int duration;
   final int daysPerWeek;
   final int timePerWorkout;
-  final String note;
+  final String? note;
   final DateTime startDate;
   final List<WorkoutDayEntity> workouts;
   final bool isActive;
   final DateTime created;
+  final String title;
 
   WorkoutEntity({
-    required this.note,
+    this.note,
+    required this.title,
     required this.id,
     required this.goal,
     required this.type,
@@ -43,8 +46,9 @@ class WorkoutEntity extends Equatable {
     DateTime? created,
     this.workouts = const [],
   }) : this.created = created ?? DateTime.now();
+
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       goal,
@@ -57,6 +61,7 @@ class WorkoutEntity extends Equatable {
       workouts,
       isActive,
       created,
+      title,
     ];
   }
 
@@ -72,6 +77,7 @@ class WorkoutEntity extends Equatable {
     List<WorkoutDayEntity>? workouts,
     bool? isActive,
     DateTime? created,
+    String? title,
   }) {
     return WorkoutEntity(
       id: id ?? this.id,
@@ -85,6 +91,7 @@ class WorkoutEntity extends Equatable {
       workouts: workouts ?? this.workouts,
       isActive: isActive ?? this.isActive,
       created: created ?? this.created,
+      title: title ?? this.title,
     );
   }
 
@@ -95,7 +102,7 @@ class WorkoutEntity extends Equatable {
     final created = data[_DocKeys.created] as Timestamp?;
 
     return WorkoutEntity(
-      note: data.containsKey(_DocKeys.note) ? data[_DocKeys.note] : 'test', // TODO test can be deleted to ''
+      note: data[_DocKeys.note],
       id: snapshot.id,
       goal: WorkoutGoal.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.goal]),
       type: WorkoutType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
@@ -106,6 +113,7 @@ class WorkoutEntity extends Equatable {
       workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
       isActive: data[_DocKeys.isActive] ?? false,
       created: created?.toDate() ?? DateTime.now(),
+      title: data.containsKey(_DocKeys.title) ? data[_DocKeys.title] : 'Test title',
     );
   }
 
@@ -120,7 +128,8 @@ class WorkoutEntity extends Equatable {
       _DocKeys.type: describeEnum(type),
       _DocKeys.workouts: workouts.map((e) => e.toDocumentSnapshot()).toList(),
       _DocKeys.isActive: this.isActive,
-      _DocKeys.created: Timestamp.fromDate(this.created)
+      _DocKeys.created: Timestamp.fromDate(this.created),
+      _DocKeys.title: this.title,
     };
   }
 }
