@@ -6,7 +6,11 @@ abstract class WorkoutsListCardState extends Equatable {
   final Workout workout;
   final bool isExpanded;
 
-  Color get backgroundColor => Colors.blue.shade100;
+  Color get backgroundColor {
+    if (workout.isActive) return Colors.lightBlueAccent.shade100;
+    return Colors.blue.shade100;
+  }
+
   BorderRadius get borderRadius => BorderRadius.circular(12);
   double get iconSize => 20;
 
@@ -15,17 +19,21 @@ abstract class WorkoutsListCardState extends Equatable {
 }
 
 class WorkoutsListCardInitial extends WorkoutsListCardState {
-  WorkoutsListCardInitial(Workout workout, bool isExpanded) : super(workout, isExpanded);
+  const WorkoutsListCardInitial(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardLoading extends WorkoutsListCardState {
-  WorkoutsListCardLoading(Workout workout, bool isExpanded) : super(workout, isExpanded);
+  const WorkoutsListCardLoading(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardDeleteSuccess extends WorkoutsListCardState {
-  WorkoutsListCardDeleteSuccess(Workout workout, bool isExpanded) : super(workout, isExpanded);
+  const WorkoutsListCardDeleteSuccess(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }
 
 class WorkoutsListCardFail extends WorkoutsListCardState {
-  WorkoutsListCardFail(Workout workout, bool isExpanded) : super(workout, isExpanded);
+  const WorkoutsListCardFail(Workout workout, bool isExpanded) : super(workout, isExpanded);
+}
+
+class WorkoutsListCardSetAsActiveSuccess extends WorkoutsListCardState {
+  const WorkoutsListCardSetAsActiveSuccess(Workout workout, bool isExpanded) : super(workout, isExpanded);
 }

@@ -33,6 +33,8 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
       yield* _mapDeleteRequestedToState(event);
     } else if (event is WorkoutsListCardExpandedButtonPressed) {
       yield* _mapExpandedButtonPressedToState();
+    } else if (event is WorkoutsListCardSetAsActiveRequested) {
+      yield* _mapSetAsActiveRequested();
     }
   }
 
@@ -52,5 +54,21 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
 
   Stream<WorkoutsListCardState> _mapExpandedButtonPressedToState() async* {
     yield WorkoutsListCardInitial(state.workout, !state.isExpanded);
+  }
+
+  Stream<WorkoutsListCardState> _mapSetAsActiveRequested() async* {
+    if (state.workout.isActive) return;
+
+    if (_isAuth) {
+      yield WorkoutsListCardLoading(state.workout, state.isExpanded);
+
+      try {
+        Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_user!.id!, state.workout);
+
+        yield WorkoutsListCardSetAsActiveSuccess(newWorkout, state.isExpanded);
+      } catch (e) {
+        yield WorkoutsListCardFail(state.workout, state.isExpanded);
+      }
+    }
   }
 }

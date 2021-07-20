@@ -98,7 +98,7 @@ class _OptionsButton extends StatelessWidget {
             } else if (option == WorkoutsListCardOptions.edit) {
               Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
             } else if (option == WorkoutsListCardOptions.setAsActive) {
-              //TODO
+              BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
             }
           },
         );
