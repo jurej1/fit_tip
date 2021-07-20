@@ -1,6 +1,8 @@
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 
 class WorkoutInfoRow extends StatelessWidget {
   const WorkoutInfoRow({Key? key}) : super(key: key);
@@ -23,51 +25,45 @@ class WorkoutInfoRow extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add),
-                        const SizedBox(height: 5),
-                        Text('Created'),
-                        const SizedBox(height: 5),
-                        Text(state.workout.mapCreatedToState),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add),
-                        const SizedBox(height: 5),
-                        Text('Days Per Week'),
-                        const SizedBox(height: 5),
-                        Text(state.workout.daysPerWeek.toStringAsFixed(0)),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add),
-                        const SizedBox(height: 5),
-                        Text('Created'),
-                        const SizedBox(height: 5),
-                        Text(state.workout.mapCreatedToState),
-                      ],
-                    ),
-                  ),
+                  _RowItem(title: 'Created', text: state.workout.mapCreatedToText, icon: const Icon(Icons.calendar_today)),
+                  _RowItem(title: 'Days per week', text: state.workout.daysPerWeek.toStringAsFixed(0), icon: const Icon(Icons.add)),
+                  _RowItem(title: 'Goal', text: mapWorkoutGoalToText(state.workout.goal), icon: const Icon(Icons.transgender_outlined)),
                 ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _RowItem extends StatelessWidget {
+  const _RowItem({
+    Key? key,
+    required this.title,
+    required this.text,
+    required this.icon,
+  }) : super(key: key);
+
+  final String title;
+  final String text;
+  final Icon icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const SizedBox(height: 5),
+          Text(title),
+          const SizedBox(height: 5),
+          Text(text),
+        ],
+      ),
     );
   }
 }

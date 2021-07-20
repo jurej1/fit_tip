@@ -33,8 +33,6 @@ class WorkoutDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
       buildWhen: (p, c) => false,
       builder: (context, state) {

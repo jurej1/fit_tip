@@ -134,7 +134,7 @@ class Workout extends Equatable {
     return _formatDate(startDate);
   }
 
-  String get mapCreatedToState {
+  String get mapCreatedToText {
     return _formatDate(created);
   }
 }
