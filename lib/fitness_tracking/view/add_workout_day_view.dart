@@ -221,15 +221,15 @@ class _WorkoutInput extends StatelessWidget {
             ),
             Row(
               children: [
-                RowExcerciseData(
+                WorkoutExcerciseRowData(
                   text: 'Name',
                   style: columnTitleStyle,
                 ),
-                RowExcerciseData(
+                WorkoutExcerciseRowData(
                   text: 'Sets',
                   style: columnTitleStyle,
                 ),
-                RowExcerciseData(
+                WorkoutExcerciseRowData(
                   text: 'Reps',
                   style: columnTitleStyle,
                 ),
@@ -258,9 +258,9 @@ class _WorkoutInput extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       child: Row(
                         children: [
-                          RowExcerciseData(text: '${item.name}'),
-                          RowExcerciseData(text: '${item.sets}'),
-                          RowExcerciseData(text: '${item.reps} ${describeEnum(item.repUnit)}'),
+                          WorkoutExcerciseRowData(text: '${item.name}'),
+                          WorkoutExcerciseRowData(text: '${item.sets}'),
+                          WorkoutExcerciseRowData(text: '${item.reps} ${describeEnum(item.repUnit)}'),
                         ],
                       ),
                     ),
@@ -271,28 +271,6 @@ class _WorkoutInput extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class RowExcerciseData extends StatelessWidget {
-  const RowExcerciseData({
-    Key? key,
-    required this.text,
-    this.style,
-  }) : super(key: key);
-
-  final String text;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Text(
-        text,
-        style: style,
-        textAlign: TextAlign.center,
-      ),
     );
   }
 }
