@@ -28,6 +28,7 @@ class WorkoutForm extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         physics: const BouncingScrollPhysics(),
         children: [
+          const _WorkoutTitleInput(),
           const _WorkoutNoteInput(),
           const _WorkoutGoalInput(),
           const _WorkoutTypeInput(),
@@ -37,6 +38,42 @@ class WorkoutForm extends StatelessWidget {
           const _WorkoutStartDateInput(),
         ],
       ),
+    );
+  }
+}
+
+class _WorkoutTitleInput extends HookWidget {
+  const _WorkoutTitleInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AnimationController _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: 2 * pi,
+    );
+    return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listener: (context, state) {
+        if (state.title.invalid) {
+          _controller.forward().then((value) => _controller.reset());
+          showErrorSnackBar(context, ValueKey('goal'));
+        }
+      },
+      listenWhen: (p, c) => p.title != c.title,
+      builder: (context, state) {
+        return ShakeAnimationBuilder(
+          controller: _controller,
+          child: TextFormField(
+            decoration: InputDecoration(
+              errorText: state.title.invalid ? 'Invalid' : null,
+              labelText: 'Title',
+            ),
+            onChanged: (value) {
+              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTimePerWorkoutUpdated(value));
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -56,7 +93,7 @@ class _WorkoutNoteInput extends HookWidget {
       listener: (context, state) {
         if (state.note.invalid) {
           _controller.forward().then((value) => _controller.reset());
-          showErrorSnackBar(context, ValueKey('goal'));
+          showErrorSnackBar(context, ValueKey('note'));
         }
       },
       builder: (context, state) {
@@ -66,7 +103,7 @@ class _WorkoutNoteInput extends HookWidget {
             initialValue: state.note.value,
             decoration: InputDecoration(
               errorText: state.note.invalid ? 'Invalid' : null,
-              labelText: 'Note',
+              labelText: 'Note (Optional)',
             ),
             onChanged: (value) {
               BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormNoteUpdated(value));
