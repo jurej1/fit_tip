@@ -47,7 +47,7 @@ class WorkoutsListCard extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(WorkoutDetailView.route(context));
+                  Navigator.of(context).push(WorkoutDetailView.route(context, workout: state.workout));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),

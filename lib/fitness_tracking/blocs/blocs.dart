@@ -9,3 +9,4 @@ export 'draggable_value_selector/draggable_value_selector_bloc.dart';
 export 'rep_unit_value_selector/rep_unit_value_selector_bloc.dart';
 export 'workouts_list/workouts_list_bloc.dart';
 export 'workouts_list_card/workouts_list_card_bloc.dart';
+export 'workout_detail_view/workout_detail_view_bloc.dart';
