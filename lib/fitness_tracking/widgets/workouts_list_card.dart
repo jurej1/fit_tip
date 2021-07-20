@@ -169,6 +169,7 @@ class _DataContainer extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           height: state.isExpanded ? 75 : 0,
           child: ListView(
+            shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             children: [
               Text(state.workout.mapDaysPerWeekToText),

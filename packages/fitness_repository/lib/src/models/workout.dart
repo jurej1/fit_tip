@@ -126,7 +126,15 @@ class Workout extends Equatable {
     return '$duration weeks';
   }
 
+  String _formatDate(DateTime date) {
+    return DateFormat('EEE, MMM d, ' 'yy').format(date);
+  }
+
   String get mapStartDateToText {
-    return DateFormat('EEE, MMM d, ' 'yy').format(startDate);
+    return _formatDate(startDate);
+  }
+
+  String get mapCreatedToState {
+    return _formatDate(created);
   }
 }
