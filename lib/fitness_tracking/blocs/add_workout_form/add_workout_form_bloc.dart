@@ -55,6 +55,8 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       yield* _mapNoteUpdatedToState(event);
     } else if (event is AddWorkoutFormSubmitted) {
       yield* _mapFormSubmitToState();
+    } else if (event is AddWorkoutFormTitleUpdated) {
+      yield* _mapTitleUpdatedToState(event);
     }
   }
 
@@ -313,6 +315,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.timePerWorkout,
         state.type,
         state.workoutDays,
+        state.title,
       ]),
     );
   }
@@ -326,9 +329,11 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     final startDate = WorkoutDateFormz.dirty(state.startDate.value);
     final workoutDays = WorkoutDaysList.dirty(value: state.workoutDays.value, workoutsPerWeekend: daysPerWeek.getIntValue());
     final note = WorkoutNote.dirty(state.note.value);
+    final title = WorkoutTitle.dirty(state.title.value);
 
     yield state.copyWith(
       workoutDays: workoutDays,
+      title: title,
       goal: goal,
       note: note,
       type: type,
@@ -336,16 +341,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       daysPerWeek: daysPerWeek,
       timePerWorkout: timePerWorkout,
       startDate: startDate,
-      status: Formz.validate([
-        goal,
-        type,
-        duration,
-        daysPerWeek,
-        timePerWorkout,
-        startDate,
-        workoutDays,
-        note,
-      ]),
+      status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate, workoutDays, note, title]),
     );
 
     if (state.status.isValidated && _isAuth) {
@@ -363,5 +359,24 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }
+  }
+
+  Stream<AddWorkoutFormState> _mapTitleUpdatedToState(AddWorkoutFormTitleUpdated event) async* {
+    final title = WorkoutTitle.dirty(event.value);
+
+    yield state.copyWith(
+      title: title,
+      status: Formz.validate([
+        title,
+        state.daysPerWeek,
+        state.duration,
+        state.goal,
+        state.note,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+        state.workoutDays,
+      ]),
+    );
   }
 }

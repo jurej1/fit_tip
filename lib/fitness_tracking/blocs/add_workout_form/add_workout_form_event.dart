@@ -93,4 +93,13 @@ class AddWorkoutFormListItemUpdated extends AddWorkoutFormEvent {
   List<Object?> get props => [value];
 }
 
+class AddWorkoutFormTitleUpdated extends AddWorkoutFormEvent {
+  final String value;
+
+  const AddWorkoutFormTitleUpdated(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class AddWorkoutFormSubmitted extends AddWorkoutFormEvent {}

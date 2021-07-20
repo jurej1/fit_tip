@@ -55,7 +55,7 @@ class WorkoutsListCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(state.workout.note),
+                          Text(state.workout.title),
                           Spacer(),
                           const _ExpandableIconButton(),
                           const _OptionsButton(),

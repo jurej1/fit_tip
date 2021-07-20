@@ -14,6 +14,7 @@ class AddWorkoutFormState {
     this.workoutDays = const WorkoutDaysList.pure(),
     required this.created,
     required this.formMode,
+    this.title = const WorkoutTitle.pure(),
   });
 
   final String? id;
@@ -28,6 +29,7 @@ class AddWorkoutFormState {
   final WorkoutDaysList workoutDays;
   final DateTime created;
   final FormMode formMode;
+  final WorkoutTitle title;
 
   factory AddWorkoutFormState.initial(Workout? workout) {
     if (workout == null) {
@@ -52,6 +54,7 @@ class AddWorkoutFormState {
       type: WorkoutTypeFormz.pure(workout.type),
       workoutDays: WorkoutDaysList.dirty(value: workout.workouts, workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
+      title: WorkoutTitle.pure(workout.title),
     );
   }
 
@@ -68,6 +71,7 @@ class AddWorkoutFormState {
     WorkoutDaysList? workoutDays,
     DateTime? created,
     FormMode? formMode,
+    WorkoutTitle? title,
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
@@ -82,6 +86,7 @@ class AddWorkoutFormState {
       workoutDays: workoutDays ?? this.workoutDays,
       created: created ?? this.created,
       formMode: formMode ?? this.formMode,
+      title: title ?? this.title,
     );
   }
 
@@ -97,6 +102,7 @@ class AddWorkoutFormState {
       startDate: this.startDate.value,
       workouts: this.workoutDays.value,
       created: created,
+      title: title.value,
     );
   }
 
