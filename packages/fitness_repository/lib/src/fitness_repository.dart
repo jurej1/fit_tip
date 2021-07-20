@@ -95,4 +95,16 @@ class FitnessRepository {
   Future<QuerySnapshot> getWorkouts(String userId) {
     return _fitnessTrackingPlanRef(userId).get();
   }
+
+  Future<void> setWorkoutAsActive(String userId, Workout workout) async {
+    QuerySnapshot snapshot = await _fitnessTrackingPlanRef(userId).where('isActive', isEqualTo: true).get();
+
+    List<Workout> workouts = Workout.fromQuerySnapshot(snapshot);
+
+    workouts.forEach((element) {
+      _fitnessTrackingPlanRef(userId).doc(element.id).update({'isActive': false});
+    });
+
+    await _fitnessTrackingPlanRef(userId).doc(workout.id).update({'isActive': true});
+  }
 }
