@@ -75,6 +75,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.type,
           state.workoutDays,
           state.note,
+          state.title,
         ]),
       );
     }
@@ -95,6 +96,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.timePerWorkout,
           state.workoutDays,
           state.note,
+          state.title,
         ]),
       );
     }
@@ -113,6 +115,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.workoutDays,
         state.note,
+        state.title,
       ]),
     );
   }
@@ -142,6 +145,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.timePerWorkout,
           state.type,
           state.note,
+          state.title,
         ]),
       );
     } else if (eventAmount > oldAmount) {
@@ -174,6 +178,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.timePerWorkout,
         state.type,
         state.note,
+        state.title,
       ]),
     );
   }
@@ -192,6 +197,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.workoutDays,
         state.note,
+        state.title,
       ]),
     );
   }
@@ -212,6 +218,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
             state.type,
             state.workoutDays,
             state.note,
+            state.title,
           ],
         ),
       );
@@ -235,6 +242,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.timePerWorkout,
         state.type,
         state.note,
+        state.title,
       ]),
     );
   }
@@ -267,6 +275,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.timePerWorkout,
         state.type,
         state.note,
+        state.title,
       ]),
     );
   }
@@ -297,6 +306,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.timePerWorkout,
         state.type,
         state.note,
+        state.title,
       ]),
     );
   }
