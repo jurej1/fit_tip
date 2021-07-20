@@ -26,8 +26,8 @@ class WorkoutInfoRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _RowItem(title: 'Created', text: state.workout.mapCreatedToText, icon: const Icon(Icons.calendar_today)),
-                  _RowItem(title: 'Days per week', text: state.workout.daysPerWeek.toStringAsFixed(0), icon: const Icon(Icons.add)),
-                  _RowItem(title: 'Goal', text: mapWorkoutGoalToText(state.workout.goal), icon: const Icon(Icons.transgender_outlined)),
+                  _RowItem(title: 'Days per week', text: state.workout.daysPerWeek.toStringAsFixed(0), icon: const Icon(Icons.sports)),
+                  _RowItem(title: 'Goal', text: mapWorkoutGoalToText(state.workout.goal), icon: const Icon(Icons.pin_drop)),
                 ],
               ),
             ),
@@ -59,7 +59,12 @@ class _RowItem extends StatelessWidget {
         children: [
           icon,
           const SizedBox(height: 5),
-          Text(title),
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 5),
           Text(text),
         ],
