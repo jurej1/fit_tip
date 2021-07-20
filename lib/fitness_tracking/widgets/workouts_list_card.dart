@@ -36,28 +36,35 @@ class WorkoutsListCard extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Material(
-          color: state.backgroundColor,
+        return ClipRRect(
           borderRadius: state.borderRadius,
-          child: InkWell(
-            borderRadius: state.borderRadius,
-            onTap: () {
-              Navigator.of(context).push(WorkoutDetailView.route(context));
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-              child: Column(
-                children: [
-                  Row(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: BoxDecoration(
+              color: state.backgroundColor,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(WorkoutDetailView.route(context));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  child: Column(
                     children: [
-                      Text(state.workout.note),
-                      Spacer(),
-                      const _ExpandableIconButton(),
-                      const _OptionsButton(),
+                      Row(
+                        children: [
+                          Text(state.workout.note),
+                          Spacer(),
+                          const _ExpandableIconButton(),
+                          const _OptionsButton(),
+                        ],
+                      ),
+                      const _DataContainer(),
                     ],
                   ),
-                  const _DataContainer(),
-                ],
+                ),
               ),
             ),
           ),
