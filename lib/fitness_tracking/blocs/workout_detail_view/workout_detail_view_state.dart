@@ -7,6 +7,18 @@ abstract class WorkoutDetailViewState extends Equatable {
 
   final Workout workout;
 
+  BorderRadius get appBarBorderRadius => BorderRadius.only(
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
+      );
+
+  LinearGradient get appBarLinearGradient => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xff2D56D0), Color(0xff79C1FE)],
+        stops: [0.3, 0.8],
+      );
+
   @override
   List<Object> get props => [workout];
 }

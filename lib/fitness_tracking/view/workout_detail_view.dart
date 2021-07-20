@@ -32,33 +32,51 @@ class WorkoutDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            title: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
-              builder: (context, state) {
-                return Text(state.workout.note);
-              },
-            ),
-            flexibleSpace: WorkoutInfoRow(),
-            expandedHeight: 250,
+
+    return BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
+      buildWhen: (p, c) => false,
+      builder: (context, state) {
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                shape: RoundedRectangleBorder(
+                  borderRadius: state.appBarBorderRadius,
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.green,
+                title: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
+                  buildWhen: (p, c) => p.workout.note != c.workout.note,
+                  builder: (context, state) {
+                    return Text(state.workout.note);
+                  },
+                ),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: state.appBarLinearGradient,
+                    borderRadius: state.appBarBorderRadius,
+                  ),
+                  child: FlexibleSpaceBar(
+                    background: WorkoutInfoRow(),
+                  ),
+                ),
+                expandedHeight: 200,
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return ListTile(
+                      tileColor: Colors.red.shade100,
+                    );
+                  },
+                  childCount: 20,
+                ),
+              ),
+            ],
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ListTile(
-                  tileColor: Colors.red.shade100,
-                );
-              },
-              childCount: 20,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -73,32 +91,56 @@ class WorkoutInfoRow extends StatelessWidget {
       builder: (context, state) {
         return Container(
           width: size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xff2D56D0), Color(0xff79C1FE)],
-              stops: [0.3, 0.8],
-            ),
-          ),
-          child: Center(
+          child: Align(
+            alignment: Alignment(0, 0.5),
             child: Container(
-              width: size.width * 0.6,
-              color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              padding: const EdgeInsets.all(5),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Column(
-                  //   mainAxisSize: MainAxisSize.min,
-                  //   children: [
-                  //     Icon(Icons.add),
-                  //     Text('Created'),
-                  //     Text(state.workout.mapCreatedToText),
-                  //   ],
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add),
+                        const SizedBox(height: 5),
+                        Text('Created'),
+                        const SizedBox(height: 5),
+                        Text(state.workout.mapCreatedToState),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add),
+                        const SizedBox(height: 5),
+                        Text('Days Per Week'),
+                        const SizedBox(height: 5),
+                        Text(state.workout.daysPerWeek.toStringAsFixed(0)),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add),
+                        const SizedBox(height: 5),
+                        Text('Created'),
+                        const SizedBox(height: 5),
+                        Text(state.workout.mapCreatedToState),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
