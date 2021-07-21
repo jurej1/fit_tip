@@ -30,7 +30,7 @@ class AddWorkoutView {
             ),
             BlocProvider.value(value: workoutsListBloc),
           ],
-          child: _FormListenerNormal(),
+          child: _FormBuilder(),
         );
       },
     );
@@ -61,15 +61,15 @@ class AddWorkoutView {
             BlocProvider.value(value: workoutsListBloc),
             BlocProvider.value(value: workoutDetailViewBloc),
           ],
-          child: const _FormListenerFromDetailPage(),
+          child: const _FormFromDetailPageBuilder(),
         );
       },
     );
   }
 }
 
-class _FormListenerNormal extends StatelessWidget {
-  const _FormListenerNormal({Key? key}) : super(key: key);
+class _FormBuilder extends StatelessWidget {
+  const _FormBuilder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +90,8 @@ class _FormListenerNormal extends StatelessWidget {
   }
 }
 
-class _FormListenerFromDetailPage extends StatelessWidget {
-  const _FormListenerFromDetailPage({Key? key}) : super(key: key);
+class _FormFromDetailPageBuilder extends StatelessWidget {
+  const _FormFromDetailPageBuilder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
