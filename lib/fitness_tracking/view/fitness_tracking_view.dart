@@ -21,6 +21,11 @@ class FitnessTrackingView extends StatelessWidget {
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
               )..add(WorkoutsListLoadRequested()),
             ),
+            BlocProvider(
+              create: (context) => ActiveWorkoutBloc(
+                workoutsListBloc: BlocProvider.of<WorkoutsListBloc>(context),
+              ),
+            ),
           ],
           child: FitnessTrackingView(),
         );
@@ -53,11 +58,7 @@ class FitnessTrackingView extends StatelessWidget {
 
   Widget _body(FitnessTrackingWorkoutPage page) {
     if (page == FitnessTrackingWorkoutPage.active) {
-      return Container(
-        child: Center(
-          child: Text('Active'),
-        ),
-      );
+      return ActiveWorkoutBuilder();
     }
     if (page == FitnessTrackingWorkoutPage.all) {
       return WorkoutsListBuilder();

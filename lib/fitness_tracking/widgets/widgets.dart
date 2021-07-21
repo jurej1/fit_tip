@@ -15,3 +15,4 @@ export 'workouts_list_card.dart';
 export 'workout_sliver_app_bar_info_row.dart';
 export 'workout_excercise_row_data.dart';
 export 'workout_detail_item.dart';
+export 'active_workout_builder.dart';
