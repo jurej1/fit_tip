@@ -64,6 +64,7 @@ class _WorkoutTitleInput extends HookWidget {
         return ShakeAnimationBuilder(
           controller: _controller,
           child: TextFormField(
+            initialValue: state.title.value,
             decoration: InputDecoration(
               errorText: state.title.invalid ? 'Invalid' : null,
               labelText: 'Title',

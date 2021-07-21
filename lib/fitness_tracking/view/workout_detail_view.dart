@@ -81,8 +81,7 @@ class WorkoutDetailView extends StatelessWidget {
                       } else if (option == WorkoutsListCardOptions.setAsActive) {
                         BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
                       } else if (option == WorkoutsListCardOptions.edit) {
-                        Navigator.of(context)
-                            .push(AddWorkoutView.route(context, workout: state.workout)); // TODO figure out [BlocProvider's]
+                        Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
                       }
                     },
                   ),
