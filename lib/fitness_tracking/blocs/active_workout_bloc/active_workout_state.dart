@@ -19,3 +19,5 @@ class ActiveWorkoutLoadSuccess extends ActiveWorkoutState {
 }
 
 class ActiveWorkoutFail extends ActiveWorkoutState {}
+
+class ActiveWorkoutNone extends ActiveWorkoutState {}

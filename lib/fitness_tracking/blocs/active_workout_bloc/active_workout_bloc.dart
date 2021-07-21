@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -21,13 +22,15 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
       add(_ActiveWorkoutFailureRquested());
     }
 
-    _streamSubscription = _workoutsListBloc.stream.listen((listState) {
-      if (listState is WorkoutsListLoadSuccess) {
-        add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
-      } else if (listState is WorkoutsListFail) {
-        add(_ActiveWorkoutFailureRquested());
-      }
-    });
+    _streamSubscription = _workoutsListBloc.stream.listen(
+      (listState) {
+        if (listState is WorkoutsListLoadSuccess) {
+          add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
+        } else if (listState is WorkoutsListFail) {
+          add(_ActiveWorkoutFailureRquested());
+        }
+      },
+    );
   }
 
   late final StreamSubscription _streamSubscription;
@@ -40,7 +43,23 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     if (event is _ActiveWorkoutFailureRquested) {
       yield ActiveWorkoutFail();
     } else if (event is _ActiveWorkoutListUpdated) {
-      yield ActiveWorkoutLoadSuccess(event.workouts.firstWhere((element) => element.isActive));
+      yield* _mapWorkoutsUpdatedToState(event);
+    }
+  }
+
+  Stream<ActiveWorkoutState> _mapWorkoutsUpdatedToState(_ActiveWorkoutListUpdated event) async* {
+    if (event.workouts.isEmpty) {
+      yield ActiveWorkoutNone();
+      return;
+    }
+
+    final pureWorkout = Workout.pure();
+    final Workout activeWorkout = event.workouts.firstWhere((element) => element.isActive, orElse: () => pureWorkout);
+
+    if (activeWorkout != pureWorkout) {
+      yield ActiveWorkoutLoadSuccess(activeWorkout);
+    } else {
+      yield ActiveWorkoutNone();
     }
   }
 

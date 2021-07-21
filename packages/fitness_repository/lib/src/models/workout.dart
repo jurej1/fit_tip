@@ -51,6 +51,18 @@ class Workout extends Equatable {
     ];
   }
 
+  factory Workout.pure() {
+    return Workout(
+      title: '',
+      goal: WorkoutGoal.buildMuscle,
+      type: WorkoutType.split,
+      duration: 0,
+      daysPerWeek: 0,
+      timePerWorkout: 0,
+      startDate: DateTime.now(),
+    );
+  }
+
   Workout copyWith({
     String? id,
     WorkoutGoal? goal,
