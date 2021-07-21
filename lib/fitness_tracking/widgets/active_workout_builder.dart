@@ -18,6 +18,10 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           return Center(
             child: Text('Success'),
           );
+        } else if (state is ActiveWorkoutNone) {
+          return Center(
+            child: Text('You don not have any active workout'),
+          );
         }
 
         return Container();
