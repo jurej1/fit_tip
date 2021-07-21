@@ -1,3 +1,4 @@
+import 'package:fit_tip/fitness_tracking/widgets/calendar_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,8 +16,14 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             child: const CircularProgressIndicator(),
           );
         } else if (state is ActiveWorkoutLoadSuccess) {
-          return Center(
-            child: Text('Success'),
+          return PageView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              Center(
+                child: Text('Page 1'),
+              ),
+              Page2(),
+            ],
           );
         } else if (state is ActiveWorkoutNone) {
           return Center(
@@ -26,6 +33,21 @@ class ActiveWorkoutBuilder extends StatelessWidget {
 
         return Container();
       },
+    );
+  }
+}
+
+class Page2 extends StatelessWidget {
+  const Page2({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListView(
+        children: [
+          CalendarBuilder.route(context),
+        ],
+      ),
     );
   }
 }

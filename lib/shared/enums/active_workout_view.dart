@@ -1,0 +1,1 @@
+enum ActiveWorkoutView { workout, calendar }
