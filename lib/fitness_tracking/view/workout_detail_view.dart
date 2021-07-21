@@ -62,6 +62,31 @@ class WorkoutDetailView extends StatelessWidget {
                   ),
                 ),
                 expandedHeight: 200,
+                actions: [
+                  PopupMenuButton<WorkoutsListCardOptions>(
+                    icon: const Icon(Icons.more_vert),
+                    itemBuilder: (context) {
+                      return WorkoutsListCardOptions.values.map((e) {
+                        return PopupMenuItem(
+                          child: Text(
+                            mapWorkoutsListCardOptionsToString(e),
+                          ),
+                          value: e,
+                        );
+                      }).toList();
+                    },
+                    onSelected: (option) {
+                      if (option == WorkoutsListCardOptions.delete) {
+                        BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
+                      } else if (option == WorkoutsListCardOptions.setAsActive) {
+                        BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
+                      } else if (option == WorkoutsListCardOptions.edit) {
+                        Navigator.of(context)
+                            .push(AddWorkoutView.route(context, workout: state.workout)); // TODO figure out [BlocProvider's]
+                      }
+                    },
+                  ),
+                ],
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(10),
