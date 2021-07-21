@@ -33,6 +33,8 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       yield* _mapDeleteRequestedToState(event);
     } else if (event is WorkoutDetailViewSetAsActiveRequested) {
       yield* _mapSetAsActiveRequestedToState(event);
+    } else if (event is WorkoutDetailViewWorkoutUpdated) {
+      yield* _mapWorkoutUpdatedToState(event);
     }
   }
 
@@ -61,5 +63,9 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
         yield WorkoutDetailViewFail(state.workout);
       }
     }
+  }
+
+  Stream<WorkoutDetailViewState> _mapWorkoutUpdatedToState(WorkoutDetailViewWorkoutUpdated event) async* {
+    if (_isAuth) yield WorkoutDetailViewInitial(event.workout);
   }
 }

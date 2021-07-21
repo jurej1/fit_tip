@@ -10,3 +10,11 @@ abstract class WorkoutDetailViewEvent extends Equatable {
 class WorkoutDetailViewDeleteRequested extends WorkoutDetailViewEvent {}
 
 class WorkoutDetailViewSetAsActiveRequested extends WorkoutDetailViewEvent {}
+
+class WorkoutDetailViewWorkoutUpdated extends WorkoutDetailViewEvent {
+  final Workout workout;
+
+  const WorkoutDetailViewWorkoutUpdated(this.workout);
+  @override
+  List<Object> get props => [workout];
+}

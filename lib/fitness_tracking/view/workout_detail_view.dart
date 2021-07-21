@@ -34,7 +34,14 @@ class WorkoutDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
+    return BlocConsumer<WorkoutDetailViewBloc, WorkoutDetailViewState>(
+      listener: (context, state) {
+        if (state is WorkoutDetailViewDeleteSuccess) {
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.workout));
+        } else if (state is WorkoutDetailViewSetAsActiveSuccess) {
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemSetAsActive(state.workout));
+        }
+      },
       buildWhen: (p, c) => false,
       builder: (context, state) {
         return Scaffold(
@@ -81,7 +88,7 @@ class WorkoutDetailView extends StatelessWidget {
                       } else if (option == WorkoutsListCardOptions.setAsActive) {
                         BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
                       } else if (option == WorkoutsListCardOptions.edit) {
-                        Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+                        Navigator.of(context).push(AddWorkoutView.routeFromWorkoutDetailView(context, workout: state.workout));
                       }
                     },
                   ),
