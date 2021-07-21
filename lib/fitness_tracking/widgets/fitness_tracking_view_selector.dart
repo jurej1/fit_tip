@@ -7,12 +7,7 @@ class FitnessTrackingViewSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FitnessTrackingViewCubit, FitnessTrackingWorkoutPage>(
-      listener: (context, state) {
-        if (state == FitnessTrackingWorkoutPage.all) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListLoadRequested());
-        }
-      },
+    return BlocBuilder<FitnessTrackingViewCubit, FitnessTrackingWorkoutPage>(
       builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: FitnessTrackingWorkoutPage.values.indexOf(state),
