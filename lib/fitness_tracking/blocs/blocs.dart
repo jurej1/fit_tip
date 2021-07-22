@@ -12,3 +12,4 @@ export 'workouts_list_card/workouts_list_card_bloc.dart';
 export 'workout_detail_view/workout_detail_view_bloc.dart';
 export 'active_workout_bloc/active_workout_bloc.dart';
 export 'calendar/calendar_bloc.dart';
+export 'calendar_day/calendar_day_bloc.dart';

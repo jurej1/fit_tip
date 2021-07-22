@@ -1,4 +1,3 @@
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,26 +36,58 @@ class CalendarBuilder extends HookWidget {
               duration: const Duration(milliseconds: 300),
               color: Colors.red,
               width: size.width,
-              child: PageView.builder(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: state.itemCountWeeks,
+                itemCount: state.durationDaysDifference,
                 itemBuilder: (context, index) {
-                  final width = size.width / 7;
-                  return Container(
-                    width: width,
-                    color: Colors.blue,
-                    padding: EdgeInsets.all(2),
-                    child: Center(
-                      child: Text('$index'),
-                    ),
+                  return CalendarDayItem.route(
+                    index,
+                    key: ValueKey(index),
                   );
-                },
-                onPageChanged: (value) {
-                  BlocProvider.of<CalendarBloc>(context).add(CalendarPageChanged(value));
                 },
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class CalendarDayItem extends StatelessWidget {
+  const CalendarDayItem({Key? key}) : super(key: key);
+
+  static Widget route(
+    int index, {
+    Key? key,
+  }) {
+    return BlocProvider(
+      key: key,
+      create: (context) => CalendarDayBloc(
+        calendarBloc: BlocProvider.of<CalendarBloc>(context),
+        index: index,
+      ),
+      child: CalendarDayItem(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final width = size.width / 7;
+
+    return BlocBuilder<CalendarDayBloc, CalendarDayState>(
+      builder: (context, state) {
+        return Container(
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.red,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            '${state.day.day}',
+            textAlign: TextAlign.center,
+          ),
         );
       },
     );

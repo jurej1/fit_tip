@@ -1,10 +1,6 @@
 part of 'calendar_bloc.dart';
 
-enum CalendarMode {
-  week,
-  twoWeeks,
-  month,
-}
+enum CalendarMode { week, twoWeeks, month }
 
 class CalendarState extends Equatable {
   const CalendarState({
@@ -25,9 +21,7 @@ class CalendarState extends Equatable {
       focusedDate: DateTime.now(),
       mode: CalendarMode.week,
       firstDay: firstDay,
-      lastDay: firstDay.add(
-        Duration(days: duration * 7),
-      ),
+      lastDay: firstDay.add(Duration(days: duration * 7)),
     );
   }
 
@@ -57,15 +51,10 @@ class CalendarState extends Equatable {
     return oneLineHeight;
   }
 
-  int get _durationDaysDifference => this.lastDay.difference(firstDay).inDays;
+  int get durationDaysDifference => lastDay.difference(firstDay).inDays;
 
   int get itemCountWeeks {
-    double value = _durationDaysDifference / 7;
-    return value.round();
-  }
-
-  int get _itemCountMonths {
-    double value = _durationDaysDifference / 30;
+    double value = durationDaysDifference / 7;
     return value.round();
   }
 }
