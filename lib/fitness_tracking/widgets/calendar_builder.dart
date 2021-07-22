@@ -32,7 +32,7 @@ class CalendarBuilder extends HookWidget {
         if (state.listStatus == CalendarListStatus.scrollEnd) {
           _controller.animateTo(
             state.getAnimateToValue(),
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(seconds: 2),
             curve: Curves.fastLinearToSlowEaseIn,
           );
         }
