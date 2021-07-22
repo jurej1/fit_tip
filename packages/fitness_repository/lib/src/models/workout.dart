@@ -155,4 +155,8 @@ class Workout extends Equatable {
   String get mapCreatedToText {
     return _formatDate(created);
   }
+
+  DateTime get lastDay {
+    return created.add(Duration(days: (this.duration * 7)));
+  }
 }

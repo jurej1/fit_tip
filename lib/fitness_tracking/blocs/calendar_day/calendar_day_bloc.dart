@@ -11,7 +11,12 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   CalendarDayBloc({
     required CalendarBloc calendarBloc,
     required int index,
-  }) : super(CalendarDayState.calculateFromIndex(calendarBloc.state.firstDay, index: index));
+  }) : super(
+          CalendarDayState.calculateFromIndex(
+            calendarBloc.state.firstDay,
+            index: index,
+          ),
+        );
 
   @override
   Stream<CalendarDayState> mapEventToState(

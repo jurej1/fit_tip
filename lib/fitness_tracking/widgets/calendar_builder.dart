@@ -14,15 +14,29 @@ class CalendarBuilder extends HookWidget {
     required Workout workout,
   }) {
     return BlocProvider(
-      create: (context) => CalendarBloc(workout: workout),
+      create: (_) => CalendarBloc(
+        workout: workout,
+        size: MediaQuery.of(context).size,
+      ),
       child: CalendarBuilder(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final _controller = useScrollController();
+
     final Size size = MediaQuery.of(context).size;
-    return BlocBuilder<CalendarBloc, CalendarState>(
+    return BlocConsumer<CalendarBloc, CalendarState>(
+      listener: (contex, state) {
+        if (state.listStatus == CalendarListStatus.scrollEnd) {
+          _controller.animateTo(
+            state.getAnimateToValue(),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInQuad,
+          );
+        }
+      },
       builder: (context, state) {
         return Column(
           children: [
@@ -34,17 +48,30 @@ class CalendarBuilder extends HookWidget {
             AnimatedContainer(
               height: state.height,
               duration: const Duration(milliseconds: 300),
-              color: Colors.red,
               width: size.width,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: state.durationDaysDifference,
-                itemBuilder: (context, index) {
-                  return CalendarDayItem.route(
-                    index,
-                    key: ValueKey(index),
-                  );
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (notification) {
+                  if (notification is ScrollEndNotification) {
+                    BlocProvider.of<CalendarBloc>(context).add(CalendarScrollEndNotification(notification));
+                  }
+                  if (notification is ScrollUpdateNotification) {
+                    BlocProvider.of<CalendarBloc>(context).add(CalendarScrollUpdateNotification(notification));
+                  }
+
+                  return false;
                 },
+                child: ListView.builder(
+                  controller: _controller,
+                  physics: const ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.durationDaysDifference,
+                  itemBuilder: (context, index) {
+                    return CalendarDayItem.route(
+                      index,
+                      key: ValueKey(index),
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -73,20 +100,22 @@ class CalendarDayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final width = size.width / 7;
-
-    return BlocBuilder<CalendarDayBloc, CalendarDayState>(
+    return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (context, state) {
         return Container(
-          width: width,
+          width: state.itemWidth,
           decoration: BoxDecoration(
-            color: Colors.red,
+            border: Border(
+              right: BorderSide(color: Colors.black38),
+              top: BorderSide(color: Colors.black38),
+              bottom: BorderSide(color: Colors.black38),
+            ),
           ),
           alignment: Alignment.center,
-          child: Text(
-            '${state.day.day}',
-            textAlign: TextAlign.center,
+          child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
+            builder: (context, state) {
+              return Text('${state.day.day}');
+            },
           ),
         );
       },

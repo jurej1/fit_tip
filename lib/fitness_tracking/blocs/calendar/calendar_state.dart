@@ -1,6 +1,7 @@
 part of 'calendar_bloc.dart';
 
 enum CalendarMode { week, twoWeeks, month }
+enum CalendarListStatus { initial, scrollEnd, dirty, scrolling }
 
 class CalendarState extends Equatable {
   const CalendarState({
@@ -8,37 +9,68 @@ class CalendarState extends Equatable {
     required this.mode,
     required this.firstDay,
     required this.lastDay,
+    required this.size,
+    this.pageIndex = 0,
+    this.listStatus = CalendarListStatus.initial,
+    this.offset = 0,
   });
 
   final DateTime focusedDate;
   final CalendarMode mode;
-  final int focusedPage = 1;
   final DateTime firstDay;
   final DateTime lastDay;
+  final Size size;
+  final int pageIndex;
+  final double offset;
+  final CalendarListStatus listStatus;
 
-  factory CalendarState.pure({required DateTime firstDay, required int duration}) {
+  factory CalendarState.pure({
+    required DateTime firstDay,
+    required DateTime lastDay,
+    required Size size,
+  }) {
     return CalendarState(
       focusedDate: DateTime.now(),
       mode: CalendarMode.week,
       firstDay: firstDay,
-      lastDay: firstDay.add(Duration(days: duration * 7)),
+      lastDay: lastDay,
+      size: size,
     );
   }
 
   @override
-  List<Object> get props => [focusedDate, mode, firstDay, lastDay];
+  List<Object> get props {
+    return [
+      focusedDate,
+      mode,
+      firstDay,
+      lastDay,
+      size,
+      pageIndex,
+      offset,
+      listStatus,
+    ];
+  }
 
   CalendarState copyWith({
     DateTime? focusedDate,
     CalendarMode? mode,
     DateTime? firstDay,
     DateTime? lastDay,
+    Size? size,
+    int? pageIndex,
+    double? offset,
+    CalendarListStatus? listStatus,
   }) {
     return CalendarState(
       focusedDate: focusedDate ?? this.focusedDate,
       mode: mode ?? this.mode,
       firstDay: firstDay ?? this.firstDay,
       lastDay: lastDay ?? this.lastDay,
+      size: size ?? this.size,
+      pageIndex: pageIndex ?? this.pageIndex,
+      offset: offset ?? this.offset,
+      listStatus: listStatus ?? this.listStatus,
     );
   }
 
@@ -51,10 +83,20 @@ class CalendarState extends Equatable {
     return oneLineHeight;
   }
 
-  int get durationDaysDifference => lastDay.difference(firstDay).inDays;
+  int get durationDaysDifference {
+    return lastDay.difference(firstDay).inDays;
+  }
 
   int get itemCountWeeks {
     double value = durationDaysDifference / 7;
     return value.round();
+  }
+
+  double get itemWidth => size.width / 7;
+
+  double getAnimateToValue() {
+    int animateToIndex = pageIndex * 7;
+
+    return animateToIndex * itemWidth;
   }
 }
