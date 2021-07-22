@@ -8,3 +8,11 @@ abstract class CalendarEvent extends Equatable {
 }
 
 class CalendarModeButtonPressed extends CalendarEvent {}
+
+class CalendarPageChanged extends CalendarEvent {
+  final int value;
+
+  const CalendarPageChanged(this.value);
+  @override
+  List<Object> get props => [value];
+}

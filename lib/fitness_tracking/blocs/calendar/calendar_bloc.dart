@@ -2,12 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
-  CalendarBloc() : super(CalendarState.pure());
+  CalendarBloc({
+    required Workout workout,
+  }) : super(
+          CalendarState.pure(
+            duration: workout.duration,
+            firstDay: workout.created,
+          ),
+        );
 
   @override
   Stream<CalendarState> mapEventToState(
@@ -15,7 +23,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   ) async* {
     if (event is CalendarModeButtonPressed) {
       yield* _mapModeButtonPressedToState();
-    }
+    } else if (event is CalendarPageChanged) {}
   }
 
   Stream<CalendarState> _mapModeButtonPressedToState() async* {

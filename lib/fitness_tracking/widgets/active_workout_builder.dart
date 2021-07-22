@@ -42,12 +42,19 @@ class Page2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: [
-          CalendarBuilder.route(context),
-        ],
-      ),
+    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+      builder: (context, state) {
+        if (state is ActiveWorkoutLoadSuccess) {
+          return Container(
+            child: ListView(
+              children: [
+                CalendarBuilder.route(context, workout: state.workout),
+              ],
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }
