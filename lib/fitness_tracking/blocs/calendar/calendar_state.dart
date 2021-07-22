@@ -1,7 +1,7 @@
 part of 'calendar_bloc.dart';
 
 enum CalendarMode { week, twoWeeks, month }
-enum CalendarListStatus { initial, scrollEnd, dirty, scrolling }
+enum CalendarListStatus { initial, scrollEnd, scrolling }
 
 class CalendarState extends Equatable {
   const CalendarState({

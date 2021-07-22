@@ -25,5 +25,3 @@ class CalendarScrollUpdateNotification extends CalendarEvent {
   @override
   List<Object> get props => [notification];
 }
-
-class CalendarListSnapped extends CalendarEvent {}

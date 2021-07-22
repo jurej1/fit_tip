@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -29,8 +28,6 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       yield* _mapModeButtonPressedToState();
     } else if (event is CalendarScrollEndNotification) {
       yield* _mapScrollEndNotificationToState(event);
-    } else if (event is CalendarListSnapped) {
-      yield state.copyWith(listStatus: CalendarListStatus.dirty);
     } else if (event is CalendarScrollUpdateNotification) {
       yield* _mapScrollUpdateToState(event);
     }

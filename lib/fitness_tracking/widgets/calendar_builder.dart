@@ -33,7 +33,7 @@ class CalendarBuilder extends HookWidget {
           _controller.animateTo(
             state.getAnimateToValue(),
             duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInQuad,
+            curve: Curves.fastLinearToSlowEaseIn,
           );
         }
       },
@@ -102,20 +102,25 @@ class CalendarDayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (context, state) {
-        return Container(
-          width: state.itemWidth,
-          decoration: BoxDecoration(
-            border: Border(
-              right: BorderSide(color: Colors.black38),
-              top: BorderSide(color: Colors.black38),
-              bottom: BorderSide(color: Colors.black38),
+        return Material(
+          child: InkWell(
+            onTap: () {},
+            child: Container(
+              width: state.itemWidth,
+              decoration: BoxDecoration(
+                border: Border(
+                  right: BorderSide(color: Colors.black38),
+                  top: BorderSide(color: Colors.black38),
+                  bottom: BorderSide(color: Colors.black38),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
+                builder: (context, state) {
+                  return Text('${state.day.day}');
+                },
+              ),
             ),
-          ),
-          alignment: Alignment.center,
-          child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
-            builder: (context, state) {
-              return Text('${state.day.day}');
-            },
           ),
         );
       },
