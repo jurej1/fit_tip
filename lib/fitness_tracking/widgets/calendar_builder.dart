@@ -42,17 +42,22 @@ class CalendarBuilder extends HookWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
-                },
-                child: Text('Change Mode'),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
+                      },
+                      child: Text('Change Mode'),
+                    ),
+                  ],
                 ),
               ),
               Row(
