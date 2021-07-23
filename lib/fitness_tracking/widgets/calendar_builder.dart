@@ -68,6 +68,7 @@ class CalendarBuilder extends HookWidget {
                             Duration(days: index),
                           ),
                         ),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     );
                   },
