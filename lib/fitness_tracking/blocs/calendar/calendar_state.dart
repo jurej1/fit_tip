@@ -77,7 +77,7 @@ class CalendarState extends Equatable {
   }
 
   int get calenderWeekModeItemCount {
-    return lastCalendarDayWeekMode.difference(firstCalendarDayWeekMode).inDays;
+    return lastCalendarDayWeekMode.difference(firstCalendarDayWeekMode).inDays ~/ 7;
   }
 
   int get calendarMonthModeItemCount {
