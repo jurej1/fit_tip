@@ -26,10 +26,6 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   ) async* {
     if (event is CalendarModeButtonPressed) {
       yield* _mapModeButtonPressedToState();
-    } else if (event is CalendarScrollEndNotification) {
-      yield* _mapScrollEndNotificationToState(event);
-    } else if (event is CalendarScrollUpdateNotification) {
-      yield* _mapScrollUpdateToState(event);
     }
   }
 
@@ -41,29 +37,5 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     } else {
       yield state.copyWith(mode: CalendarMode.values.elementAt(currentIndex + 1));
     }
-  }
-
-  Stream<CalendarState> _mapScrollEndNotificationToState(CalendarScrollEndNotification event) async* {
-    final double fullWidth = state.size.width;
-    final double pixels = event.notification.metrics.pixels;
-
-    final int pageIndex = (pixels / fullWidth).round();
-
-    yield state.copyWith(
-      pageIndex: pageIndex,
-      listStatus: CalendarListStatus.scrollEnd,
-    );
-  }
-
-  Stream<CalendarState> _mapScrollUpdateToState(CalendarScrollUpdateNotification event) async* {
-    final double fullWidth = state.size.width;
-    final double pixels = event.notification.metrics.pixels;
-
-    final int pageIndex = (pixels / fullWidth).round();
-
-    yield state.copyWith(
-      pageIndex: pageIndex,
-      listStatus: CalendarListStatus.scrolling,
-    );
   }
 }
