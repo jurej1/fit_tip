@@ -7,7 +7,7 @@ import '../fitness_tracking.dart';
 class CalendarDayItem extends StatelessWidget {
   CalendarDayItem._({Key? key}) : super(key: key);
 
-  static Widget constructor(
+  static Widget widget(
     int index, {
     Key? key,
   }) {
@@ -50,19 +50,19 @@ class CalendarDayItem extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Text(
-                      '${state.day.day}',
-                      style: TextStyle(
-                        color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
+                    Container(
+                      height: state.itemWidth * 0.6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: state.isSelected ? _selectedColor : Colors.transparent,
                       ),
                     ),
-                    Positioned(
-                      top: 0,
-                      child: Text(
-                        DateFormat('E').format(state.day),
-                        style: TextStyle(
-                          color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
-                        ),
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 300),
+                      child: Text('${state.day.day}'),
+                      style: TextStyle(
+                        color: state.isUnimported ? _unimportantColor : (state.isSelected ? Colors.white : _unselectedColor),
+                        fontSize: state.isSelected ? 16 : 14,
                       ),
                     ),
                   ],

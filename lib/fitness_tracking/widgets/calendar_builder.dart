@@ -55,6 +55,24 @@ class CalendarBuilder extends HookWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
               ),
+              Row(
+                children: List.generate(
+                  7,
+                  (index) {
+                    return Container(
+                      width: state.itemWidth,
+                      alignment: Alignment.center,
+                      child: Text(
+                        DateFormat('E').format(
+                          state.firstCalendarDayWeekMode.add(
+                            Duration(days: index),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               AnimatedContainer(
                 height: state.height,
                 duration: const Duration(milliseconds: 300),
