@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../fitness_tracking.dart';
 
 class CalendarDayItem extends StatelessWidget {
-  const CalendarDayItem._({Key? key}) : super(key: key);
+  CalendarDayItem._({Key? key}) : super(key: key);
 
   static Widget route(
     int index, {
@@ -21,6 +21,10 @@ class CalendarDayItem extends StatelessWidget {
       child: CalendarDayItem._(),
     );
   }
+
+  final BorderSide _borderSide = const BorderSide(color: Colors.black38);
+  final Color _selectedColor = Colors.blue;
+  final Color _unselectedColor =  Colors.grey.shade400;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +46,7 @@ class CalendarDayItem extends StatelessWidget {
               child: Container(
                 width: state.itemWidth,
                 decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: Colors.black38),
-                    top: BorderSide(color: Colors.black38),
-                    bottom: BorderSide(color: Colors.black38),
-                  ),
+                  border: Border(right: _borderSide, top: _borderSide, bottom: _borderSide),
                 ),
                 child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
                   builder: (context, state) {
@@ -56,7 +56,7 @@ class CalendarDayItem extends StatelessWidget {
                         Text(
                           '${state.day.day}',
                           style: TextStyle(
-                            color: state.isSelected ? Colors.blue : Colors.grey.shade400,
+                            color: state.isSelected ? _selectedColor : _unselectedColor,
                           ),
                         ),
                         Positioned(
@@ -64,7 +64,7 @@ class CalendarDayItem extends StatelessWidget {
                           child: Text(
                             DateFormat('E').format(state.day),
                             style: TextStyle(
-                              color: state.isSelected ? Colors.blue : Colors.grey.shade400,
+                              color: state.isSelected ? _selectedColor : _unselectedColor,
                             ),
                           ),
                         ),
