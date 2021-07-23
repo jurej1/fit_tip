@@ -11,9 +11,11 @@ class CalendarMonthView extends StatelessWidget {
     return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (context, state) {
         return PageView.builder(
+          physics: const ClampingScrollPhysics(),
           itemCount: state.calendarMonthModeItemCount,
           itemBuilder: (context, pageIndex) {
             return GridView.builder(
+              physics: const ClampingScrollPhysics(),
               itemCount: 7 * 5,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
