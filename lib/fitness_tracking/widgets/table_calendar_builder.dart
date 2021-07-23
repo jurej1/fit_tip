@@ -19,21 +19,29 @@ class TableCalendarBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TableCalendarBloc, TableCalendarState>(
-      builder: (context, state) {
-        return TableCalendar(
-          calendarFormat: state.format,
-          onFormatChanged: (newFormat) {
-            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFormatUpdated(newFormat));
-          },
-          currentDay: state.focusedDay,
-          focusedDay: state.focusedDay,
-          firstDay: state.firstDay,
-          lastDay: state.lastDay,
-          onDaySelected: (selectedDay, focusedDay) {
-            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
-          },
-        );
+    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+      builder: (context, activeState) {
+        if (activeState is ActiveWorkoutLoadSuccess) {
+          return BlocBuilder<TableCalendarBloc, TableCalendarState>(
+            builder: (context, calendarState) {
+              return TableCalendar(
+                eventLoader: activeState.getEvents,
+                calendarFormat: calendarState.format,
+                onFormatChanged: (newFormat) {
+                  BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFormatUpdated(newFormat));
+                },
+                currentDay: calendarState.focusedDay,
+                focusedDay: calendarState.focusedDay,
+                firstDay: calendarState.firstDay,
+                lastDay: calendarState.lastDay,
+                onDaySelected: (selectedDay, focusedDay) {
+                  BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
+                },
+              );
+            },
+          );
+        }
+        return Container();
       },
     );
   }

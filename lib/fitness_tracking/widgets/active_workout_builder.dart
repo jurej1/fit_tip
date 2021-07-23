@@ -19,8 +19,8 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           return PageView(
             physics: const ClampingScrollPhysics(),
             children: [
-              Page1(),
-              Page2(),
+              const Page1(),
+              const Page2(),
             ],
             onPageChanged: (index) {
               BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
