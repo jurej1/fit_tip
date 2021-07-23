@@ -1,7 +1,6 @@
 part of 'calendar_bloc.dart';
 
 enum CalendarMode { week, month }
-enum CalendarListStatus { initial, scrollEnd, scrolling }
 
 class CalendarState extends Equatable {
   const CalendarState({
@@ -9,18 +8,12 @@ class CalendarState extends Equatable {
     required this.firstDay,
     required this.lastDay,
     required this.size,
-    this.pageIndex = 0,
-    this.listStatus = CalendarListStatus.initial,
-    this.offset = 0,
   });
 
   final CalendarMode mode;
   final DateTime firstDay;
   final DateTime lastDay;
   final Size size;
-  final int pageIndex;
-  final double offset;
-  final CalendarListStatus listStatus;
 
   factory CalendarState.pure({
     required DateTime firstDay,
@@ -42,9 +35,6 @@ class CalendarState extends Equatable {
       firstDay,
       lastDay,
       size,
-      pageIndex,
-      offset,
-      listStatus,
     ];
   }
 
@@ -53,18 +43,12 @@ class CalendarState extends Equatable {
     DateTime? firstDay,
     DateTime? lastDay,
     Size? size,
-    int? pageIndex,
-    double? offset,
-    CalendarListStatus? listStatus,
   }) {
     return CalendarState(
       mode: mode ?? this.mode,
       firstDay: firstDay ?? this.firstDay,
       lastDay: lastDay ?? this.lastDay,
       size: size ?? this.size,
-      pageIndex: pageIndex ?? this.pageIndex,
-      offset: offset ?? this.offset,
-      listStatus: listStatus ?? this.listStatus,
     );
   }
 
@@ -85,17 +69,6 @@ class CalendarState extends Equatable {
   }
 
   double get itemWidth => size.width / 7;
-
-  double getAnimateToValue() {
-    int animateToIndex = pageIndex * 7;
-    return animateToIndex * itemWidth;
-  }
-
-  int get pageFirstIndex => pageIndex * 7;
-  int get pageLastIndex => pageFirstIndex + 7;
-
-  DateTime get pageFirstIndexDate => firstDay.add(Duration(days: pageFirstIndex));
-  DateTime get pageLastIndexDate => pageFirstIndexDate.add(Duration(days: 7));
 
   DateTime get firstCalendarDayWeekMode {
     DateTime firstDayPure = DateTime(firstDay.year, firstDay.month, firstDay.day);

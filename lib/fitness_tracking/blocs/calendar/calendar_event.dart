@@ -8,20 +8,3 @@ abstract class CalendarEvent extends Equatable {
 }
 
 class CalendarModeButtonPressed extends CalendarEvent {}
-
-class CalendarScrollEndNotification extends CalendarEvent {
-  final ScrollEndNotification notification;
-
-  const CalendarScrollEndNotification(this.notification);
-
-  @override
-  List<Object> get props => [notification];
-}
-
-class CalendarScrollUpdateNotification extends CalendarEvent {
-  final ScrollUpdateNotification notification;
-
-  const CalendarScrollUpdateNotification(this.notification);
-  @override
-  List<Object> get props => [notification];
-}

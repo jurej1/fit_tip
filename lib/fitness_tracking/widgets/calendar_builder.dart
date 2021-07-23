@@ -48,13 +48,13 @@ class CalendarBuilder extends HookWidget {
                 },
                 child: Text('ChangeMode'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  DateFormat('MMMM yy').format(state.pageFirstIndexDate),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
+              //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              //   ),
+              // ),
               Row(
                 children: List.generate(
                   7,
