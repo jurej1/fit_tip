@@ -35,23 +35,13 @@ class CalendarBuilder extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = useScrollController();
-
     final Size size = MediaQuery.of(context).size;
+
     return BlocListener<CalendarFocusedDayBloc, DateTime>(
       listener: (context, state) {
-        //TODO when date changeds
+        //TODO when date changes the list on the page should also update
       },
-      child: BlocConsumer<CalendarBloc, CalendarState>(
-        listener: (contex, state) {
-          if (state.listStatus == CalendarListStatus.scrollEnd) {
-            _controller.animateTo(
-              state.getAnimateToValue(),
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
-            );
-          }
-        },
+      child: BlocBuilder<CalendarBloc, CalendarState>(
         builder: (context, state) {
           return Column(
             children: [
@@ -76,35 +66,71 @@ class CalendarBuilder extends HookWidget {
                 height: state.height,
                 duration: const Duration(milliseconds: 300),
                 width: size.width,
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    if (notification is ScrollEndNotification) {
-                      BlocProvider.of<CalendarBloc>(context).add(CalendarScrollEndNotification(notification));
-                    }
-                    if (notification is ScrollUpdateNotification) {
-                      BlocProvider.of<CalendarBloc>(context).add(CalendarScrollUpdateNotification(notification));
-                    }
-
-                    return false;
-                  },
-                  child: ListView.builder(
-                    controller: _controller,
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: state.durationDaysDifference,
-                    itemBuilder: (context, index) {
-                      return CalendarDayItem.route(
-                        index,
-                        key: ValueKey(index),
-                      );
-                    },
-                  ),
-                ),
+                child: _buildCalenderBasedOnMode(state.mode),
               ),
             ],
           );
         },
       ),
+    );
+  }
+
+  Widget _buildCalenderBasedOnMode(CalendarMode mode) {
+    if (mode == CalendarMode.week) {
+      return _CalendarWeekView();
+    } else if (mode == CalendarMode.twoWeeks) {
+      return Container(
+        color: Colors.red,
+      );
+    } else {
+      return Container(color: Colors.green);
+    }
+  }
+}
+
+class _CalendarWeekView extends HookWidget {
+  const _CalendarWeekView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = useScrollController();
+
+    return BlocConsumer<CalendarBloc, CalendarState>(
+      listener: (contex, state) {
+        if (state.listStatus == CalendarListStatus.scrollEnd) {
+          _controller.animateTo(
+            state.getAnimateToValue(),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeIn,
+          );
+        }
+      },
+      builder: (context, state) {
+        return NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollEndNotification) {
+              BlocProvider.of<CalendarBloc>(context).add(CalendarScrollEndNotification(notification));
+            }
+            if (notification is ScrollUpdateNotification) {
+              BlocProvider.of<CalendarBloc>(context).add(CalendarScrollUpdateNotification(notification));
+            }
+
+            return false;
+          },
+          child: ListView.builder(
+            controller: _controller,
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.durationDaysDifference,
+            itemBuilder: (context, index) {
+              return CalendarDayItem.route(
+                index,
+                key: ValueKey(index),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -24,7 +24,7 @@ class CalendarDayItem extends StatelessWidget {
 
   final BorderSide _borderSide = const BorderSide(color: Colors.black38);
   final Color _selectedColor = Colors.blue;
-  final Color _unselectedColor =  Colors.grey.shade400;
+  final Color _unselectedColor = Colors.grey.shade400;
 
   @override
   Widget build(BuildContext context) {
