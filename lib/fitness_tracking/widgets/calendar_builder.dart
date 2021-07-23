@@ -92,7 +92,7 @@ class CalendarMonthView extends StatelessWidget {
       },
       builder: (context, state) {
         return PageView.builder(
-          itemCount: 3,
+          itemCount: state.calendarMonthModeItemCount,
           itemBuilder: (context, pageIndex) {
             return GridView.builder(
               itemCount: 7 * 5,

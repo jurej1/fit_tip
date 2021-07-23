@@ -81,6 +81,10 @@ class CalendarState extends Equatable {
     return lastCalendarDayWeekMode.difference(firstCalendarDayWeekMode).inDays;
   }
 
+  int get calendarMonthModeItemCount {
+    return lastCalenderDayMonthMode.difference(firstCalenderDayMonthMode).inDays ~/ 30;
+  }
+
   double get itemWidth => size.width / 7;
 
   double getAnimateToValue() {

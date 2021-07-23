@@ -16,24 +16,35 @@ class CalendarDayState extends Equatable {
   final double itemWidth;
 
   factory CalendarDayState.pure(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
-    final DateTime day = calendarBloc.state.firstCalendarDayWeekMode.add(Duration(days: index));
-    final DateTime dayPure = DateTime(day.year, day.month, day.day);
-    final DateTime firstDay = calendarBloc.state.firstDay;
-    final DateTime lastDay = calendarBloc.state.lastDay;
-
     final DateTime focusedDay = focusedDayBloc.state;
     final DateTime focusedDayPure = DateTime(focusedDay.year, focusedDay.month, focusedDay.day);
 
-    DateTime startDatePure = DateTime(firstDay.year, firstDay.month, firstDay.day);
-    DateTime lastDayPure = DateTime(lastDay.year, lastDay.month, lastDay.day);
+    final DateTime firstDay = calendarBloc.state.firstDay;
+    final DateTime lastDay = calendarBloc.state.lastDay;
+    final DateTime startDatePure = DateTime(firstDay.year, firstDay.month, firstDay.day);
+    final DateTime lastDayPure = DateTime(lastDay.year, lastDay.month, lastDay.day);
 
-    return CalendarDayState(
-      day: dayPure,
-      index: index,
-      isSelected: focusedDayPure == dayPure,
-      isUnimported: dayPure.isBefore(startDatePure) || dayPure.isAfter(lastDayPure),
-      itemWidth: calendarBloc.state.itemWidth,
-    );
+    if (calendarBloc.state.mode == CalendarMode.week) {
+      final DateTime day = calendarBloc.state.firstCalendarDayWeekMode.add(Duration(days: index));
+      final DateTime dayPure = DateTime(day.year, day.month, day.day);
+      return CalendarDayState(
+        day: dayPure,
+        index: index,
+        isSelected: focusedDayPure == dayPure,
+        isUnimported: dayPure.isBefore(startDatePure) || dayPure.isAfter(lastDayPure),
+        itemWidth: calendarBloc.state.itemWidth,
+      );
+    } else {
+      final DateTime day = calendarBloc.state.firstCalenderDayMonthMode.add(Duration(days: index));
+      final DateTime dayPure = DateTime(day.year, day.month, day.day);
+      return CalendarDayState(
+        day: dayPure,
+        index: index,
+        isSelected: focusedDayPure == dayPure,
+        isUnimported: dayPure.isBefore(startDatePure) || dayPure.isAfter(lastDayPure),
+        itemWidth: calendarBloc.state.itemWidth,
+      );
+    }
   }
 
   @override
