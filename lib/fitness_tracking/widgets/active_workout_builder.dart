@@ -45,7 +45,6 @@ class Page2 extends StatelessWidget {
           return Container(
             child: ListView(
               children: [
-                // CalendarBuilder.route(context, workout: state.workout),
                 TableCalendarBuilder.route(context, workout: state.workout),
               ],
             ),
