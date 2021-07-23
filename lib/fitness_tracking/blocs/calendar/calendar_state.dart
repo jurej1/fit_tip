@@ -77,18 +77,8 @@ class CalendarState extends Equatable {
     return oneLineHeight;
   }
 
-  int get durationDaysDifference {
-    return lastDay.difference(firstMonday).inDays;
-  }
-
-  int get durationMonthDifference {
-    final months = lastDay.difference(firstDay).inDays / 30;
-    return months.round();
-  }
-
-  int get itemCountWeeks {
-    double value = durationDaysDifference / 7;
-    return value.round();
+  int get calendarItemsCount {
+    return lastSunday.difference(firstMonday).inDays;
   }
 
   double get itemWidth => size.width / 7;
@@ -110,5 +100,12 @@ class CalendarState extends Equatable {
 
     if (firstDayPure.weekday == DateTime.monday) return firstDayPure;
     return DateTime(firstDayPure.year, firstDayPure.month, ((firstDay.day - firstDay.weekday) + 1));
+  }
+
+  DateTime get lastSunday {
+    DateTime lastDayPure = DateTime(lastDay.year, lastDay.month, lastDay.day);
+
+    if (lastDayPure.weekday == DateTime.sunday) return lastDayPure;
+    return DateTime(lastDayPure.year, lastDayPure.month, ((lastDayPure.day - lastDayPure.weekday) + 8));
   }
 }

@@ -115,7 +115,7 @@ class _CalendarWeekView extends HookWidget {
             controller: _controller,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemCount: state.durationDaysDifference,
+            itemCount: state.calendarItemsCount,
             itemBuilder: (context, index) {
               return CalendarDayItem.weekCalendarItem(
                 index,
