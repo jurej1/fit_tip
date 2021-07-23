@@ -49,7 +49,10 @@ class FitnessTrackingView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Fitness tracking'),
-                _AppBarPageDisplayer(),
+                Visibility(
+                  visible: page == FitnessTrackingWorkoutPage.active,
+                  child: _AppBarPageDisplayer(),
+                ),
               ],
             ),
             actions: [
