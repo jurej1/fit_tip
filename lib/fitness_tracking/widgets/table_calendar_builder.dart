@@ -23,6 +23,10 @@ class TableCalendarBuilder extends StatelessWidget {
           focusedDay: state.focusedDay,
           firstDay: state.firstDay,
           lastDay: state.lastDay,
+          calendarFormat: CalendarFormat.week,
+          onDaySelected: (selectedDay, focusedDay) {
+            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(selectedDay));
+          },
         );
       },
     );

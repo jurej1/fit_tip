@@ -14,6 +14,8 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
   Stream<TableCalendarState> mapEventToState(
     TableCalendarEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is TableCalendarFocusedDayUpdated) {
+      yield state.copyWith(focusedDay: event.value);
+    }
   }
 }
