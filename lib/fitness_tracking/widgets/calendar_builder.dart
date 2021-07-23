@@ -42,6 +42,12 @@ class CalendarBuilder extends HookWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
+                },
+                child: Text('ChangeMode'),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -64,58 +70,42 @@ class CalendarBuilder extends HookWidget {
 
   Widget _buildCalenderBasedOnMode(CalendarMode mode) {
     if (mode == CalendarMode.week) {
-      return _CalendarWeekView();
+      return CalendarWeekView();
     } else if (mode == CalendarMode.twoWeeks) {
       return Container(
         color: Colors.red,
       );
     } else {
-      return Container();
+      return CalendarMonthView();
     }
   }
 }
 
-class _CalendarWeekView extends HookWidget {
-  const _CalendarWeekView({Key? key}) : super(key: key);
+class CalendarMonthView extends StatelessWidget {
+  const CalendarMonthView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _controller = useScrollController();
-
     return BlocConsumer<CalendarBloc, CalendarState>(
-      listener: (contex, state) {
-        if (state.listStatus == CalendarListStatus.scrollEnd) {
-          _controller.animateTo(
-            state.getAnimateToValue(),
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeIn,
-          );
-        }
+      listener: (context, state) {
+        // TODO: implement listener
       },
       builder: (context, state) {
-        return NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            if (notification is ScrollEndNotification) {
-              BlocProvider.of<CalendarBloc>(context).add(CalendarScrollEndNotification(notification));
-            }
-            if (notification is ScrollUpdateNotification) {
-              BlocProvider.of<CalendarBloc>(context).add(CalendarScrollUpdateNotification(notification));
-            }
-
-            return false;
+        return PageView.builder(
+          itemCount: 3,
+          itemBuilder: (context, pageIndex) {
+            return GridView.builder(
+              itemCount: 7 * 5,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                childAspectRatio: 1 / 0.68,
+              ),
+              itemBuilder: (context, index) {
+                final calculatedIndex = index + (pageIndex == 0 ? 0 : pageIndex * (7 * 5));
+                return CalendarDayItem.weekCalendarItem(calculatedIndex);
+              },
+            );
           },
-          child: ListView.builder(
-            controller: _controller,
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: state.calendarItemsCount,
-            itemBuilder: (context, index) {
-              return CalendarDayItem.weekCalendarItem(
-                index,
-                key: ValueKey(index),
-              );
-            },
-          ),
         );
       },
     );

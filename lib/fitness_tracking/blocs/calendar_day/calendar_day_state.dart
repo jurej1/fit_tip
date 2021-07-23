@@ -15,12 +15,12 @@ class CalendarDayState extends Equatable {
   final bool isUnimported;
   final double itemWidth;
 
-  factory CalendarDayState.calculateFromIndex(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
-    final DateTime day = calendarBloc.state.firstMonday.add(Duration(days: index));
+  factory CalendarDayState.pure(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
+    final DateTime day = calendarBloc.state.firstCalendarDayWeekMode.add(Duration(days: index));
+    final DateTime dayPure = DateTime(day.year, day.month, day.day);
     final DateTime firstDay = calendarBloc.state.firstDay;
     final DateTime lastDay = calendarBloc.state.lastDay;
 
-    final DateTime dayPure = DateTime(day.year, day.month, day.day);
     final DateTime focusedDay = focusedDayBloc.state;
     final DateTime focusedDayPure = DateTime(focusedDay.year, focusedDay.month, focusedDay.day);
 

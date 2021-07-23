@@ -17,3 +17,4 @@ export 'workout_excercise_row_data.dart';
 export 'workout_detail_item.dart';
 export 'active_workout_builder.dart';
 export 'calendar_day_item.dart';
+export 'calendar_week_view.dart';

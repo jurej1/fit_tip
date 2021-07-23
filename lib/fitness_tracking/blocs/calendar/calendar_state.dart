@@ -77,15 +77,14 @@ class CalendarState extends Equatable {
     return oneLineHeight;
   }
 
-  int get calendarItemsCount {
-    return lastCalendarDay.difference(firstCalendarDay).inDays;
+  int get calenderWeekModeItemCount {
+    return lastCalendarDayWeekMode.difference(firstCalendarDayWeekMode).inDays;
   }
 
   double get itemWidth => size.width / 7;
 
   double getAnimateToValue() {
     int animateToIndex = pageIndex * 7;
-
     return animateToIndex * itemWidth;
   }
 
@@ -95,17 +94,37 @@ class CalendarState extends Equatable {
   DateTime get pageFirstIndexDate => firstDay.add(Duration(days: pageFirstIndex));
   DateTime get pageLastIndexDate => pageFirstIndexDate.add(Duration(days: 7));
 
-  DateTime get firstCalendarDay {
+  DateTime get firstCalendarDayWeekMode {
     DateTime firstDayPure = DateTime(firstDay.year, firstDay.month, firstDay.day);
 
     if (firstDayPure.weekday == DateTime.monday) return firstDayPure;
     return DateTime(firstDayPure.year, firstDayPure.month, ((firstDay.day - firstDay.weekday) + 1));
   }
 
-  DateTime get lastCalendarDay {
+  DateTime get lastCalendarDayWeekMode {
     DateTime lastDayPure = DateTime(lastDay.year, lastDay.month, lastDay.day);
 
     if (lastDayPure.weekday == DateTime.sunday) return lastDayPure;
     return DateTime(lastDayPure.year, lastDayPure.month, ((lastDayPure.day - lastDayPure.weekday) + 8));
+  }
+
+  DateTime get firstCalenderDayMonthMode {
+    DateTime firstDayPure = DateTime(firstDay.year, firstDay.month, firstDay.day);
+
+    if (firstDayPure.day == 1 && firstDayPure.weekday == DateTime.monday) return firstDayPure;
+
+    DateTime firstDayOfTheMonth = DateTime(firstDayPure.year, firstDay.month, 1);
+
+    return firstDayOfTheMonth.subtract(Duration(days: firstDayOfTheMonth.weekday - 1));
+  }
+
+  DateTime get lastCalenderDayMonthMode {
+    DateTime lastDayPure = DateTime(lastDay.year, lastDay.month, lastDay.day);
+    final lastDayOfTheMonth = DateTime(lastDay.year, lastDay.month + 1, 0);
+
+    if (lastDayOfTheMonth.weekday == DateTime.sunday) return lastDayOfTheMonth;
+    if (lastDayPure == lastDayOfTheMonth && lastDayPure.weekday == DateTime.sunday) return lastDayPure;
+
+    return lastDayOfTheMonth.add(Duration(days: (7 - lastDay.weekday)));
   }
 }

@@ -13,7 +13,7 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
     required CalendarFocusedDayBloc focusedDayBloc,
     required int index,
   }) : super(
-          CalendarDayState.calculateFromIndex(
+          CalendarDayState.pure(
             calendarBloc,
             focusedDayBloc,
             index: index,
