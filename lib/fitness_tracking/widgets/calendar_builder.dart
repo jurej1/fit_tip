@@ -80,34 +80,3 @@ class CalendarBuilder extends HookWidget {
     }
   }
 }
-
-class CalendarMonthView extends StatelessWidget {
-  const CalendarMonthView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<CalendarBloc, CalendarState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-      builder: (context, state) {
-        return PageView.builder(
-          itemCount: state.calendarMonthModeItemCount,
-          itemBuilder: (context, pageIndex) {
-            return GridView.builder(
-              itemCount: 7 * 5,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                childAspectRatio: 1 / 0.68,
-              ),
-              itemBuilder: (context, index) {
-                final calculatedIndex = index + (pageIndex == 0 ? 0 : pageIndex * (7 * 5));
-                return CalendarDayItem.weekCalendarItem(calculatedIndex);
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-}

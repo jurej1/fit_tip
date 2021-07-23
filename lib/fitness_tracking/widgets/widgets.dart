@@ -18,3 +18,4 @@ export 'workout_detail_item.dart';
 export 'active_workout_builder.dart';
 export 'calendar_day_item.dart';
 export 'calendar_week_view.dart';
+export 'calender_month_view.dart';
