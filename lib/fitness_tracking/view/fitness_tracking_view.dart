@@ -58,7 +58,7 @@ class FitnessTrackingView extends StatelessWidget {
 
   Widget _body(FitnessTrackingWorkoutPage page) {
     if (page == FitnessTrackingWorkoutPage.active) {
-      return ActiveWorkoutBuilder();
+      return ActiveWorkoutBuilder.builder();
     }
     if (page == FitnessTrackingWorkoutPage.all) {
       return WorkoutsListBuilder();

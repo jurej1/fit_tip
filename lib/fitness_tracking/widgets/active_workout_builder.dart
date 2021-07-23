@@ -5,7 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../fitness_tracking.dart';
 
 class ActiveWorkoutBuilder extends StatelessWidget {
-  const ActiveWorkoutBuilder({Key? key}) : super(key: key);
+  const ActiveWorkoutBuilder._({Key? key}) : super(key: key);
+
+  static Widget builder({Key? key}) {
+    return BlocProvider(
+      create: (context) => ActiveWorkoutViewSelectorCubit(),
+      child: ActiveWorkoutBuilder._(key: key),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
