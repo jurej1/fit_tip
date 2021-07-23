@@ -19,9 +19,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           return PageView(
             physics: const ClampingScrollPhysics(),
             children: [
-              Center(
-                child: Text('Page 1'),
-              ),
+              Page1(),
               Page2(),
             ],
           );
@@ -51,6 +49,24 @@ class Page2 extends StatelessWidget {
                 CalendarBuilder.route(context, workout: state.workout),
               ],
             ),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class Page1 extends StatelessWidget {
+  const Page1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+      builder: (context, state) {
+        if (state is ActiveWorkoutLoadSuccess) {
+          return Center(
+            child: Text('${state.workout.id}s'),
           );
         }
         return Container();
