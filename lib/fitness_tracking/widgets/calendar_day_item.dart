@@ -36,13 +36,15 @@ class CalendarDayItem extends StatelessWidget {
         builder: (context, state) {
           return Material(
             child: InkWell(
-              onTap: () {
-                BlocProvider.of<CalendarFocusedDayBloc>(context).add(
-                  CalendarFocusedDayUpdated(
-                    BlocProvider.of<CalendarDayBloc>(context).state.day,
-                  ),
-                );
-              },
+              onTap: state.isUnimported
+                  ? null
+                  : () {
+                      BlocProvider.of<CalendarFocusedDayBloc>(context).add(
+                        CalendarFocusedDayUpdated(
+                          BlocProvider.of<CalendarDayBloc>(context).state.day,
+                        ),
+                      );
+                    },
               child: Container(
                 width: state.itemWidth,
                 child: Stack(
