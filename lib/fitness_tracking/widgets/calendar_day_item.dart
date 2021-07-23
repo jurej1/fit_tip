@@ -49,7 +49,6 @@ class CalendarDayItem extends StatelessWidget {
               },
               child: Container(
                 width: state.itemWidth,
-                decoration: BoxDecoration(border: _buildBorderBasedOnMode()),
                 child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
                   builder: (context, state) {
                     return Stack(

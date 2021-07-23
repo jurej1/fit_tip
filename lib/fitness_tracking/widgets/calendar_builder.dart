@@ -45,12 +45,6 @@ class CalendarBuilder extends HookWidget {
         builder: (context, state) {
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
-                },
-                child: Text('Change mode'),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
