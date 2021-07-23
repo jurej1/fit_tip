@@ -5,6 +5,7 @@ class CalendarDayState extends Equatable {
     required this.day,
     required this.index,
     required this.isSelected,
+    required this.itemWidth,
     required this.isUnimported,
   });
 
@@ -12,6 +13,7 @@ class CalendarDayState extends Equatable {
   final int index;
   final bool isSelected;
   final bool isUnimported;
+  final double itemWidth;
 
   factory CalendarDayState.calculateFromIndex(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
     final DateTime day = calendarBloc.state.firstMonday.add(Duration(days: index));
@@ -30,23 +32,34 @@ class CalendarDayState extends Equatable {
       index: index,
       isSelected: focusedDayPure == dayPure,
       isUnimported: dayPure.isBefore(startDatePure) || dayPure.isAfter(lastDayPure),
+      itemWidth: calendarBloc.state.itemWidth,
     );
   }
 
   @override
-  List<Object> get props => [day, index, isSelected, isUnimported];
+  List<Object> get props {
+    return [
+      day,
+      index,
+      isSelected,
+      isUnimported,
+      itemWidth,
+    ];
+  }
 
   CalendarDayState copyWith({
     DateTime? day,
     int? index,
     bool? isSelected,
-    bool? isDayBeforeStartDay,
+    bool? isUnimported,
+    double? itemWidth,
   }) {
     return CalendarDayState(
       day: day ?? this.day,
       index: index ?? this.index,
       isSelected: isSelected ?? this.isSelected,
-      isUnimported: isDayBeforeStartDay ?? this.isUnimported,
+      isUnimported: isUnimported ?? this.isUnimported,
+      itemWidth: itemWidth ?? this.itemWidth,
     );
   }
 

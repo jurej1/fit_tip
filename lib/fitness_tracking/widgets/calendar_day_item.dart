@@ -32,7 +32,7 @@ class CalendarDayItem extends StatelessWidget {
       listener: (context, state) {
         BlocProvider.of<CalendarDayBloc>(context).add(CalendarDaySelectedDayUpdated(state));
       },
-      child: BlocBuilder<CalendarBloc, CalendarState>(
+      child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
         builder: (context, state) {
           return Material(
             child: InkWell(
@@ -45,29 +45,25 @@ class CalendarDayItem extends StatelessWidget {
               },
               child: Container(
                 width: state.itemWidth,
-                child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
-                  builder: (context, state) {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Text(
-                          '${state.day.day}',
-                          style: TextStyle(
-                            color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
-                          ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      '${state.day.day}',
+                      style: TextStyle(
+                        color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      child: Text(
+                        DateFormat('E').format(state.day),
+                        style: TextStyle(
+                          color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
                         ),
-                        Positioned(
-                          top: 0,
-                          child: Text(
-                            DateFormat('E').format(state.day),
-                            style: TextStyle(
-                              color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
