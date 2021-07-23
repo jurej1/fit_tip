@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FitTipBlocObserver extends BlocObserver {
@@ -8,7 +10,7 @@ class FitTipBlocObserver extends BlocObserver {
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    print(transition.toString());
+    log(transition.toString());
     super.onTransition(bloc, transition);
   }
 }
