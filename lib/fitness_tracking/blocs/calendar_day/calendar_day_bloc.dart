@@ -10,12 +10,10 @@ part 'calendar_day_state.dart';
 class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   CalendarDayBloc({
     required CalendarBloc calendarBloc,
-    required CalendarFocusedDayBloc focusedDayBloc,
     required int index,
   }) : super(
           CalendarDayState.pure(
             calendarBloc,
-            focusedDayBloc,
             index: index,
           ),
         );

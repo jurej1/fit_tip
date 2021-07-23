@@ -26,6 +26,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   ) async* {
     if (event is CalendarModeButtonPressed) {
       yield* _mapModeButtonPressedToState();
+    } else if (event is CalendarFocusedDateUpdated) {
+      yield* _mapDateUpdatedToState(event);
     }
   }
 
@@ -37,5 +39,9 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     } else {
       yield state.copyWith(mode: CalendarMode.values.elementAt(currentIndex + 1));
     }
+  }
+
+  Stream<CalendarState> _mapDateUpdatedToState(CalendarFocusedDateUpdated event) async* {
+    yield state.copyWith(focusedDay: event.dateTime);
   }
 }

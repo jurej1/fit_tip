@@ -15,8 +15,8 @@ class CalendarDayState extends Equatable {
   final bool isUnimported;
   final double itemWidth;
 
-  factory CalendarDayState.pure(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
-    final DateTime focusedDay = focusedDayBloc.state;
+  factory CalendarDayState.pure(CalendarBloc calendarBloc, {required int index}) {
+    final DateTime focusedDay = calendarBloc.state.focusedDay;
     final DateTime focusedDayPure = DateTime(focusedDay.year, focusedDay.month, focusedDay.day);
 
     final DateTime firstDay = calendarBloc.state.firstDay;

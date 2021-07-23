@@ -8,3 +8,11 @@ abstract class CalendarEvent extends Equatable {
 }
 
 class CalendarModeButtonPressed extends CalendarEvent {}
+
+class CalendarFocusedDateUpdated extends CalendarEvent {
+  final DateTime dateTime;
+
+  const CalendarFocusedDateUpdated(this.dateTime);
+  @override
+  List<Object> get props => [dateTime];
+}

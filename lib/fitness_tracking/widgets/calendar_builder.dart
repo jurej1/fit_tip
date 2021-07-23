@@ -21,9 +21,6 @@ class CalendarBuilder extends HookWidget {
             size: MediaQuery.of(context).size,
           ),
         ),
-        BlocProvider(
-          create: (context) => CalendarFocusedDayBloc(),
-        )
       ],
       child: CalendarBuilder(),
     );
@@ -33,62 +30,57 @@ class CalendarBuilder extends HookWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocListener<CalendarFocusedDayBloc, DateTime>(
-      listener: (context, state) {
-        //TODO when date changes the list on the page should also update
-      },
-      child: BlocBuilder<CalendarBloc, CalendarState>(
-        builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
-                      },
-                      child: Text('Change Mode'),
-                    ),
-                  ],
-                ),
+    return BlocBuilder<CalendarBloc, CalendarState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
+                    },
+                    child: Text('Change Mode'),
+                  ),
+                ],
               ),
-              Row(
-                children: List.generate(
-                  7,
-                  (index) {
-                    return Container(
-                      width: state.itemWidth,
-                      alignment: Alignment.center,
-                      child: Text(
-                        DateFormat('E').format(
-                          state.firstCalendarDayWeekMode.add(
-                            Duration(days: index),
-                          ),
+            ),
+            Row(
+              children: List.generate(
+                7,
+                (index) {
+                  return Container(
+                    width: state.itemWidth,
+                    alignment: Alignment.center,
+                    child: Text(
+                      DateFormat('E').format(
+                        state.firstCalendarDayWeekMode.add(
+                          Duration(days: index),
                         ),
-                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
-                    );
-                  },
-                ),
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  );
+                },
               ),
-              AnimatedContainer(
-                height: state.height,
-                duration: const Duration(milliseconds: 300),
-                width: size.width,
-                child: _buildCalenderBasedOnMode(state.mode),
-              ),
-            ],
-          );
-        },
-      ),
+            ),
+            AnimatedContainer(
+              height: state.height,
+              duration: const Duration(milliseconds: 300),
+              width: size.width,
+              child: _buildCalenderBasedOnMode(state.mode),
+            ),
+          ],
+        );
+      },
     );
   }
 

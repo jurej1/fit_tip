@@ -15,7 +15,6 @@ class CalendarDayItem extends StatelessWidget {
       key: key,
       create: (context) => CalendarDayBloc(
         calendarBloc: BlocProvider.of<CalendarBloc>(context),
-        focusedDayBloc: BlocProvider.of<CalendarFocusedDayBloc>(context),
         index: index,
       ),
       child: CalendarDayItem._(),
@@ -28,9 +27,9 @@ class CalendarDayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CalendarFocusedDayBloc, DateTime>(
+    return BlocListener<CalendarBloc, CalendarState>(
       listener: (context, state) {
-        BlocProvider.of<CalendarDayBloc>(context).add(CalendarDaySelectedDayUpdated(state));
+        BlocProvider.of<CalendarDayBloc>(context).add(CalendarDaySelectedDayUpdated(state.focusedDay));
       },
       child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
         builder: (context, state) {
@@ -39,8 +38,8 @@ class CalendarDayItem extends StatelessWidget {
               onTap: state.isUnimported
                   ? null
                   : () {
-                      BlocProvider.of<CalendarFocusedDayBloc>(context).add(
-                        CalendarFocusedDayUpdated(
+                      BlocProvider.of<CalendarBloc>(context).add(
+                        CalendarFocusedDateUpdated(
                           BlocProvider.of<CalendarDayBloc>(context).state.day,
                         ),
                       );

@@ -8,11 +8,13 @@ class CalendarState extends Equatable {
     required this.firstDay,
     required this.lastDay,
     required this.size,
+    required this.focusedDay,
   });
 
   final CalendarMode mode;
   final DateTime firstDay;
   final DateTime lastDay;
+  final DateTime focusedDay;
   final Size size;
 
   factory CalendarState.pure({
@@ -23,6 +25,7 @@ class CalendarState extends Equatable {
     return CalendarState(
       mode: CalendarMode.week,
       firstDay: firstDay,
+      focusedDay: DateTime.now(),
       lastDay: lastDay,
       size: size,
     );
@@ -34,6 +37,7 @@ class CalendarState extends Equatable {
       mode,
       firstDay,
       lastDay,
+      focusedDay,
       size,
     ];
   }
@@ -42,12 +46,14 @@ class CalendarState extends Equatable {
     CalendarMode? mode,
     DateTime? firstDay,
     DateTime? lastDay,
+    DateTime? focusedDay,
     Size? size,
   }) {
     return CalendarState(
       mode: mode ?? this.mode,
       firstDay: firstDay ?? this.firstDay,
       lastDay: lastDay ?? this.lastDay,
+      focusedDay: focusedDay ?? this.focusedDay,
       size: size ?? this.size,
     );
   }
@@ -66,6 +72,10 @@ class CalendarState extends Equatable {
 
   int get calendarMonthModeItemCount {
     return lastCalenderDayMonthMode.difference(firstCalenderDayMonthMode).inDays ~/ 30;
+  }
+
+  int get focusedDayPageIndexWeekMode {
+    return firstCalendarDayWeekMode.difference(focusedDay).inDays ~/ 7;
   }
 
   double get itemWidth => size.width / 7;
