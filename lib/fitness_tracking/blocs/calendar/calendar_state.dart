@@ -1,6 +1,6 @@
 part of 'calendar_bloc.dart';
 
-enum CalendarMode { week, twoWeeks, month }
+enum CalendarMode { week, month }
 enum CalendarListStatus { initial, scrollEnd, scrolling }
 
 class CalendarState extends Equatable {
@@ -73,7 +73,6 @@ class CalendarState extends Equatable {
 
     if (mode == CalendarMode.week) return oneLineHeight;
     if (mode == CalendarMode.month) return oneLineHeight * 4;
-    if (mode == CalendarMode.twoWeeks) return oneLineHeight * 2;
     return oneLineHeight;
   }
 

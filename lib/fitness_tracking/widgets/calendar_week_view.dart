@@ -39,7 +39,7 @@ class CalendarWeekView extends HookWidget {
             scrollDirection: Axis.horizontal,
             itemCount: state.calenderWeekModeItemCount,
             itemBuilder: (context, index) {
-              return CalendarDayItem.weekCalendarItem(
+              return CalendarDayItem.constructor(
                 index,
                 key: ValueKey(index),
               );

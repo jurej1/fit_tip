@@ -21,7 +21,7 @@ class CalendarMonthView extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final calculatedIndex = index + (pageIndex == 0 ? 0 : pageIndex * (7 * 5));
-                return CalendarDayItem.weekCalendarItem(calculatedIndex, key: ValueKey(calculatedIndex));
+                return CalendarDayItem.constructor(calculatedIndex, key: ValueKey(calculatedIndex));
               },
             );
           },

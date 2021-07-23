@@ -7,7 +7,7 @@ import '../fitness_tracking.dart';
 class CalendarDayItem extends StatelessWidget {
   CalendarDayItem._({Key? key}) : super(key: key);
 
-  static Widget weekCalendarItem(
+  static Widget constructor(
     int index, {
     Key? key,
   }) {

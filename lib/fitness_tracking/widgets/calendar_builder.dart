@@ -71,10 +71,6 @@ class CalendarBuilder extends HookWidget {
   Widget _buildCalenderBasedOnMode(CalendarMode mode) {
     if (mode == CalendarMode.week) {
       return CalendarWeekView();
-    } else if (mode == CalendarMode.twoWeeks) {
-      return Container(
-        color: Colors.red,
-      );
     } else {
       return CalendarMonthView();
     }
