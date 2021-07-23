@@ -41,7 +41,7 @@ class CalendarBuilder extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
+                    DateFormat('MMMM yy').format(state.focusedDay),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   ElevatedButton(
