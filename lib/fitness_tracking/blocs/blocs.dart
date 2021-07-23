@@ -13,3 +13,4 @@ export 'workout_detail_view/workout_detail_view_bloc.dart';
 export 'active_workout_bloc/active_workout_bloc.dart';
 export 'table_calendar/table_calendar_bloc.dart';
 export 'active_workout_view_selector/active_workout_view_selector_cubit.dart';
+export 'active_workout_focused_workout_day/active_workout_focused_workout_day_bloc.dart';
