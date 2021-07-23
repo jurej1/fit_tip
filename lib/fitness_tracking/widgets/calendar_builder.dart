@@ -77,7 +77,7 @@ class CalendarBuilder extends HookWidget {
         color: Colors.red,
       );
     } else {
-      return _CalendarMonthView();
+      return Container();
     }
   }
 }
@@ -123,39 +123,6 @@ class _CalendarWeekView extends HookWidget {
               );
             },
           ),
-        );
-      },
-    );
-  }
-}
-
-class _CalendarMonthView extends StatelessWidget {
-  const _CalendarMonthView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<CalendarBloc, CalendarState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-      builder: (context, state) {
-        return PageView.builder(
-          physics: const ClampingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemCount: state.durationMonthDifference,
-          itemBuilder: (context, pageIndex) {
-            return GridView.builder(
-              physics: const ClampingScrollPhysics(),
-              itemCount: 7 * 5,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                childAspectRatio: 1 / 0.68,
-              ),
-              itemBuilder: (context, index) {
-                return Text(DateFormat('d').format(DateTime(state.firstDay.year, state.firstDay.month + pageIndex, 0 + index)));
-              },
-            );
-          },
         );
       },
     );

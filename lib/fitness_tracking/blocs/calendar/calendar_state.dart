@@ -78,7 +78,7 @@ class CalendarState extends Equatable {
   }
 
   int get durationDaysDifference {
-    return lastDay.difference(firstDay).inDays;
+    return lastDay.difference(firstMonday).inDays;
   }
 
   int get durationMonthDifference {
@@ -104,4 +104,11 @@ class CalendarState extends Equatable {
 
   DateTime get pageFirstIndexDate => firstDay.add(Duration(days: pageFirstIndex));
   DateTime get pageLastIndexDate => pageFirstIndexDate.add(Duration(days: 7));
+
+  DateTime get firstMonday {
+    DateTime firstDayPure = DateTime(firstDay.year, firstDay.month, firstDay.day);
+
+    if (firstDayPure.weekday == DateTime.monday) return firstDayPure;
+    return DateTime(firstDayPure.year, firstDayPure.month, ((firstDay.day - firstDay.weekday) + 1));
+  }
 }

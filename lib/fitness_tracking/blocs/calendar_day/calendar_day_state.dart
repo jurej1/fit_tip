@@ -12,7 +12,7 @@ class CalendarDayState extends Equatable {
   final bool isSelected;
 
   factory CalendarDayState.calculateFromIndex(CalendarBloc calendarBloc, CalendarFocusedDayBloc focusedDayBloc, {required int index}) {
-    final DateTime day = calendarBloc.state.firstDay.add(Duration(days: index));
+    final DateTime day = calendarBloc.state.firstMonday.add(Duration(days: index));
 
     final DateTime dayPure = DateTime(day.year, day.month, day.day);
     final DateTime focusedDay = focusedDayBloc.state;
