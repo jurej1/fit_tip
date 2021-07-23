@@ -83,7 +83,7 @@ class CalendarBuilder extends HookWidget {
         color: Colors.red,
       );
     } else {
-      return Container(color: Colors.green);
+      return _CalendarMonthView();
     }
   }
 }
@@ -129,6 +129,32 @@ class _CalendarWeekView extends HookWidget {
               );
             },
           ),
+        );
+      },
+    );
+  }
+}
+
+class _CalendarMonthView extends StatelessWidget {
+  const _CalendarMonthView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CalendarBloc, CalendarState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        return PageView.builder(
+          physics: const ClampingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: state.durationMonthDifference,
+          itemBuilder: (context, index) {
+            return Container(
+              color: Colors.blue,
+              child: Text('$index'),
+            );
+          },
         );
       },
     );

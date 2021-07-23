@@ -81,6 +81,11 @@ class CalendarState extends Equatable {
     return lastDay.difference(firstDay).inDays;
   }
 
+  int get durationMonthDifference {
+    final months = lastDay.difference(firstDay).inDays / 30;
+    return months.round();
+  }
+
   int get itemCountWeeks {
     double value = durationDaysDifference / 7;
     return value.round();
