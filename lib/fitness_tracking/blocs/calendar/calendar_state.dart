@@ -75,11 +75,11 @@ class CalendarState extends Equatable {
   }
 
   int get focusedDayPageIndexWeekMode {
-    return firstCalendarDayWeekMode.difference(focusedDay).inDays ~/ 7;
+    return (firstCalendarDayWeekMode.difference(focusedDay).inDays ~/ 7) * -1;
   }
 
   int get focusedDayPageIndexMonthMode {
-    return firstCalendarDayWeekMode.difference(focusedDay).inDays ~/ 30;
+    return (firstCalendarDayWeekMode.difference(focusedDay).inDays ~/ 30) * -1;
   }
 
   double get itemWidth => size.width / 7;
