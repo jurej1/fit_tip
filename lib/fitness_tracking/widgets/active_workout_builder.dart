@@ -90,7 +90,12 @@ class Page1 extends StatelessWidget {
               },
               ...state.workout.workouts
                   .map(
-                    (e) => WorkoutDetailItem(workout: e),
+                    (e) => Column(
+                      children: [
+                        WorkoutDetailItem(workout: e),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   )
                   .toList(),
             ],
