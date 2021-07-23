@@ -17,6 +17,8 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
   ) async* {
     if (event is TableCalendarFocusedDayUpdated) {
       yield state.copyWith(focusedDay: event.value);
+    } else if (event is TableCalendarFormatUpdated) {
+      yield state.copyWith(format: event.value);
     }
   }
 }
