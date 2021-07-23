@@ -22,11 +22,14 @@ class TableCalendarBuilder extends StatelessWidget {
     return BlocBuilder<TableCalendarBloc, TableCalendarState>(
       builder: (context, state) {
         return TableCalendar(
+          calendarFormat: CalendarFormat.twoWeeks,
+          onFormatChanged: (newFormat) {},
+          currentDay: state.focusedDay,
           focusedDay: state.focusedDay,
           firstDay: state.firstDay,
           lastDay: state.lastDay,
           onDaySelected: (selectedDay, focusedDay) {
-            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(selectedDay));
+            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
           },
         );
       },

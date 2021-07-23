@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 part 'table_calendar_event.dart';
 part 'table_calendar_state.dart';

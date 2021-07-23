@@ -14,3 +14,12 @@ class TableCalendarFocusedDayUpdated extends TableCalendarEvent {
   @override
   List<Object> get props => [value];
 }
+
+class TableCalendarFormatUpdated extends TableCalendarEvent {
+  final CalendarFormat value;
+
+  const TableCalendarFormatUpdated(this.value);
+
+  @override
+  List<Object> get props => [value];
+}
