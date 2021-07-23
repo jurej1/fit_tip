@@ -76,19 +76,11 @@ class CalendarBuilder extends HookWidget {
               height: state.height,
               duration: const Duration(milliseconds: 300),
               width: size.width,
-              child: _buildCalenderBasedOnMode(state.mode),
+              child: state.mode == CalendarMode.week ? CalendarWeekView() : CalendarMonthView(),
             ),
           ],
         );
       },
     );
-  }
-
-  Widget _buildCalenderBasedOnMode(CalendarMode mode) {
-    if (mode == CalendarMode.week) {
-      return CalendarWeekView();
-    } else {
-      return CalendarMonthView();
-    }
   }
 }
