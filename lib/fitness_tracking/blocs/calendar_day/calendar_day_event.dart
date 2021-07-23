@@ -6,3 +6,11 @@ abstract class CalendarDayEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class CalendarDaySelectedDayUpdated extends CalendarDayEvent {
+  final DateTime date;
+
+  const CalendarDaySelectedDayUpdated(this.date);
+  @override
+  List<Object> get props => [date];
+}

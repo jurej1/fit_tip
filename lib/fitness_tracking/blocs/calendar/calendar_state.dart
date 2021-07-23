@@ -5,7 +5,6 @@ enum CalendarListStatus { initial, scrollEnd, scrolling }
 
 class CalendarState extends Equatable {
   const CalendarState({
-    required this.focusedDate,
     required this.mode,
     required this.firstDay,
     required this.lastDay,
@@ -15,7 +14,6 @@ class CalendarState extends Equatable {
     this.offset = 0,
   });
 
-  final DateTime focusedDate;
   final CalendarMode mode;
   final DateTime firstDay;
   final DateTime lastDay;
@@ -30,7 +28,6 @@ class CalendarState extends Equatable {
     required Size size,
   }) {
     return CalendarState(
-      focusedDate: DateTime.now(),
       mode: CalendarMode.week,
       firstDay: firstDay,
       lastDay: lastDay,
@@ -41,7 +38,6 @@ class CalendarState extends Equatable {
   @override
   List<Object> get props {
     return [
-      focusedDate,
       mode,
       firstDay,
       lastDay,
@@ -53,7 +49,6 @@ class CalendarState extends Equatable {
   }
 
   CalendarState copyWith({
-    DateTime? focusedDate,
     CalendarMode? mode,
     DateTime? firstDay,
     DateTime? lastDay,
@@ -63,7 +58,6 @@ class CalendarState extends Equatable {
     CalendarListStatus? listStatus,
   }) {
     return CalendarState(
-      focusedDate: focusedDate ?? this.focusedDate,
       mode: mode ?? this.mode,
       firstDay: firstDay ?? this.firstDay,
       lastDay: lastDay ?? this.lastDay,
@@ -99,4 +93,10 @@ class CalendarState extends Equatable {
 
     return animateToIndex * itemWidth;
   }
+
+  int get pageFirstIndex => pageIndex * 7;
+  int get pageLastIndex => pageFirstIndex + 7;
+
+  DateTime get pageFirstIndexDate => firstDay.add(Duration(days: pageFirstIndex));
+  DateTime get pageLastIndexDate => pageFirstIndexDate.add(Duration(days: 7));
 }

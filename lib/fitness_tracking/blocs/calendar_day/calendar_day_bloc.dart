@@ -10,10 +10,12 @@ part 'calendar_day_state.dart';
 class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   CalendarDayBloc({
     required CalendarBloc calendarBloc,
+    required CalendarFocusedDayBloc focusedDayBloc,
     required int index,
   }) : super(
           CalendarDayState.calculateFromIndex(
-            calendarBloc.state.firstDay,
+            calendarBloc,
+            focusedDayBloc,
             index: index,
           ),
         );
@@ -22,6 +24,16 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   Stream<CalendarDayState> mapEventToState(
     CalendarDayEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is CalendarDaySelectedDayUpdated) {
+      yield* _mapSelectedDayUpdatedToState(event);
+    }
+  }
+
+  Stream<CalendarDayState> _mapSelectedDayUpdatedToState(CalendarDaySelectedDayUpdated event) async* {
+    if (this.state.isDaySelected(event.date)) {
+      yield state.copyWith(isSelected: true);
+    } else {
+      yield state.copyWith(isSelected: false);
+    }
   }
 }

@@ -45,7 +45,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       try {
         await _fitnessRepository.deleteWorkout(_user!.id!, state.workout);
         yield WorkoutDetailViewDeleteSuccess(state.workout);
-      } on Exception catch (e) {
+      } on Exception catch (_) {
         yield WorkoutDetailViewFail(state.workout);
       }
     }
