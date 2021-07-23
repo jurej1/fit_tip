@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +27,7 @@ class TableCalendarBuilder extends StatelessWidget {
           lastDay: state.lastDay,
           calendarFormat: CalendarFormat.week,
           onDaySelected: (selectedDay, focusedDay) {
-            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(selectedDay));
+            BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
           },
         );
       },

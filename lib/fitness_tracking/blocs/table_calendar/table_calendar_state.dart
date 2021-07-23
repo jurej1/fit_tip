@@ -1,6 +1,6 @@
 part of 'table_calendar_bloc.dart';
 
-class TableCalendarState extends Equatable {
+class TableCalendarState {
   const TableCalendarState({
     required this.focusedDay,
     required this.firstDay,
@@ -14,9 +14,6 @@ class TableCalendarState extends Equatable {
   factory TableCalendarState.pure(Workout workout) {
     return TableCalendarState(focusedDay: DateTime.now(), firstDay: workout.created, lastDay: workout.lastDay);
   }
-
-  @override
-  List<Object> get props => [focusedDay, firstDay, lastDay];
 
   TableCalendarState copyWith({
     DateTime? focusedDay,
