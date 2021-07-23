@@ -1,39 +1,40 @@
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 
 class WorkoutInfoRow extends StatelessWidget {
-  const WorkoutInfoRow({Key? key}) : super(key: key);
+  const WorkoutInfoRow({
+    Key? key,
+    required this.created,
+    required this.daysPerWeek,
+    required this.goal,
+  }) : super(key: key);
+
+  final String created;
+  final String daysPerWeek;
+  final String goal;
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
-      builder: (context, state) {
-        return Container(
-          width: size.width,
-          child: Align(
-            alignment: Alignment(0, 0.5),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-              ),
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _RowItem(title: 'Created', text: state.workout.mapCreatedToText, icon: const Icon(Icons.calendar_today)),
-                  _RowItem(title: 'Days per week', text: state.workout.daysPerWeek.toStringAsFixed(0), icon: const Icon(Icons.sports)),
-                  _RowItem(title: 'Goal', text: mapWorkoutGoalToText(state.workout.goal), icon: const Icon(Icons.pin_drop)),
-                ],
-              ),
-            ),
+    return Container(
+      width: size.width,
+      child: Align(
+        alignment: Alignment(0, 0.5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
           ),
-        );
-      },
+          padding: const EdgeInsets.all(5),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _RowItem(title: 'Created', text: created, icon: const Icon(Icons.calendar_today)),
+              _RowItem(title: 'Days per week', text: daysPerWeek, icon: const Icon(Icons.sports)),
+              _RowItem(title: 'Goal', text: goal, icon: const Icon(Icons.pin_drop)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

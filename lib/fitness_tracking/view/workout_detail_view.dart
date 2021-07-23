@@ -65,7 +65,11 @@ class WorkoutDetailView extends StatelessWidget {
                     borderRadius: state.appBarBorderRadius,
                   ),
                   child: FlexibleSpaceBar(
-                    background: WorkoutInfoRow(),
+                    background: WorkoutInfoRow(
+                      created: state.workout.mapCreatedToText,
+                      daysPerWeek: state.workout.daysPerWeek.toStringAsFixed(0),
+                      goal: mapWorkoutGoalToText(state.workout.goal),
+                    ),
                   ),
                 ),
                 expandedHeight: 200,
