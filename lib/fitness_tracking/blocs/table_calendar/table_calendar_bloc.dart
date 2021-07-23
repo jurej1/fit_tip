@@ -1,0 +1,19 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/fitness_repository.dart';
+
+part 'table_calendar_event.dart';
+part 'table_calendar_state.dart';
+
+class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
+  TableCalendarBloc({required Workout workout}) : super(TableCalendarState.pure(workout));
+
+  @override
+  Stream<TableCalendarState> mapEventToState(
+    TableCalendarEvent event,
+  ) async* {
+    // TODO: implement mapEventToState
+  }
+}
