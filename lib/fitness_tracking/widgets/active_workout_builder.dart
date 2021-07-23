@@ -5,14 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../fitness_tracking.dart';
 
 class ActiveWorkoutBuilder extends StatelessWidget {
-  const ActiveWorkoutBuilder._({Key? key}) : super(key: key);
-
-  static Widget builder({Key? key}) {
-    return BlocProvider(
-      create: (context) => ActiveWorkoutViewSelectorCubit(),
-      child: ActiveWorkoutBuilder._(key: key),
-    );
-  }
+  const ActiveWorkoutBuilder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +22,9 @@ class ActiveWorkoutBuilder extends StatelessWidget {
               Page1(),
               Page2(),
             ],
+            onPageChanged: (index) {
+              BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
+            },
           );
         } else if (state is ActiveWorkoutNone) {
           return Center(
