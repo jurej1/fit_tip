@@ -40,16 +40,13 @@ class CalendarBuilder extends HookWidget {
       child: BlocBuilder<CalendarBloc, CalendarState>(
         builder: (context, state) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(DateFormat('MMMM').format(state.pageFirstIndexDate)),
-                    if (state.pageLastIndexDate.month != state.pageFirstIndexDate.month)
-                      Text(DateFormat('MMMM').format(state.pageLastIndexDate)),
-                  ],
+                child: Text(
+                  DateFormat('MMMM yy').format(state.pageFirstIndexDate),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
               ),
               AnimatedContainer(
