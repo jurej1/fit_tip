@@ -123,7 +123,7 @@ class _CalendarWeekView extends HookWidget {
             scrollDirection: Axis.horizontal,
             itemCount: state.durationDaysDifference,
             itemBuilder: (context, index) {
-              return CalendarDayItem.route(
+              return CalendarDayItem.weekCalendarItem(
                 index,
                 key: ValueKey(index),
               );
@@ -149,10 +149,17 @@ class _CalendarMonthView extends StatelessWidget {
           physics: const ClampingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: state.durationMonthDifference,
-          itemBuilder: (context, index) {
-            return Container(
-              color: Colors.blue,
-              child: Text('$index'),
+          itemBuilder: (context, pageIndex) {
+            return GridView.builder(
+              physics: const ClampingScrollPhysics(),
+              itemCount: 7 * 5,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                childAspectRatio: 1 / 0.68,
+              ),
+              itemBuilder: (context, index) {
+                return Text(DateFormat('d').format(DateTime(state.firstDay.year, state.firstDay.month + pageIndex, 0 + index)));
+              },
             );
           },
         );

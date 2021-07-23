@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 
 import '../fitness_tracking.dart';
 
-class CalendarDayItem extends StatelessWidget {
-  CalendarDayItem._({Key? key}) : super(key: key);
+enum _CalendarDayItemMode { week, twoWeeks, month }
 
-  static Widget route(
+class CalendarDayItem extends StatelessWidget {
+  CalendarDayItem._({Key? key, required this.mode}) : super(key: key);
+
+  static Widget weekCalendarItem(
     int index, {
     Key? key,
   }) {
@@ -18,9 +20,11 @@ class CalendarDayItem extends StatelessWidget {
         focusedDayBloc: BlocProvider.of<CalendarFocusedDayBloc>(context),
         index: index,
       ),
-      child: CalendarDayItem._(),
+      child: CalendarDayItem._(mode: _CalendarDayItemMode.week),
     );
   }
+
+  final _CalendarDayItemMode mode;
 
   final BorderSide _borderSide = const BorderSide(color: Colors.black38);
   final Color _selectedColor = Colors.blue;
@@ -45,9 +49,7 @@ class CalendarDayItem extends StatelessWidget {
               },
               child: Container(
                 width: state.itemWidth,
-                decoration: BoxDecoration(
-                  border: Border(right: _borderSide, top: _borderSide, bottom: _borderSide),
-                ),
+                decoration: BoxDecoration(border: _buildBorderBasedOnMode()),
                 child: BlocBuilder<CalendarDayBloc, CalendarDayState>(
                   builder: (context, state) {
                     return Stack(
@@ -78,5 +80,10 @@ class CalendarDayItem extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Border _buildBorderBasedOnMode() {
+    if (mode == _CalendarDayItemMode.week) return Border(right: _borderSide, top: _borderSide, bottom: _borderSide);
+    return Border();
   }
 }
