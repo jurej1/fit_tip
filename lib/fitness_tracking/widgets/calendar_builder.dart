@@ -46,15 +46,15 @@ class CalendarBuilder extends HookWidget {
                 onPressed: () {
                   BlocProvider.of<CalendarBloc>(context).add(CalendarModeButtonPressed());
                 },
-                child: Text('ChangeMode'),
+                child: Text('Change Mode'),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Text(
-              //     DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
-              //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  DateFormat('MMMM yy').format(state.firstCalendarDayWeekMode),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+              ),
               Row(
                 children: List.generate(
                   7,
