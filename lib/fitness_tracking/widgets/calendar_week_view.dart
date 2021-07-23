@@ -9,9 +9,11 @@ class CalendarWeekView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = usePageController(initialPage: BlocProvider.of<CalendarBloc>(context).state.focusedDayPageIndexWeekMode);
+    final _controller = usePageController();
     return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (context, state) {
+        _controller.jumpToPage(state.focusedDayPageIndexWeekMode);
+
         return PageView.builder(
           controller: _controller,
           itemCount: state.calenderWeekModeItemCount,
