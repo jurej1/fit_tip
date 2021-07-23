@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../fitness_tracking.dart';
 
@@ -26,7 +23,6 @@ class CalendarBuilder extends HookWidget {
         ),
         BlocProvider(
           create: (context) => CalendarFocusedDayBloc(),
-          child: Container(),
         )
       ],
       child: CalendarBuilder(),

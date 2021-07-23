@@ -4,10 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../fitness_tracking.dart';
 
-enum _CalendarDayItemMode { week, twoWeeks, month }
-
 class CalendarDayItem extends StatelessWidget {
-  CalendarDayItem._({Key? key, required this.mode}) : super(key: key);
+  CalendarDayItem._({Key? key}) : super(key: key);
 
   static Widget weekCalendarItem(
     int index, {
@@ -20,15 +18,13 @@ class CalendarDayItem extends StatelessWidget {
         focusedDayBloc: BlocProvider.of<CalendarFocusedDayBloc>(context),
         index: index,
       ),
-      child: CalendarDayItem._(mode: _CalendarDayItemMode.week),
+      child: CalendarDayItem._(),
     );
   }
 
-  final _CalendarDayItemMode mode;
-
-  final BorderSide _borderSide = const BorderSide(color: Colors.black38);
   final Color _selectedColor = Colors.blue;
-  final Color _unselectedColor = Colors.grey.shade400;
+  final Color _unimportantColor = Colors.grey.shade400;
+  final Color _unselectedColor = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +53,7 @@ class CalendarDayItem extends StatelessWidget {
                         Text(
                           '${state.day.day}',
                           style: TextStyle(
-                            color: state.isSelected ? _selectedColor : _unselectedColor,
+                            color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
                           ),
                         ),
                         Positioned(
@@ -65,7 +61,7 @@ class CalendarDayItem extends StatelessWidget {
                           child: Text(
                             DateFormat('E').format(state.day),
                             style: TextStyle(
-                              color: state.isSelected ? _selectedColor : _unselectedColor,
+                              color: state.isUnimported ? _unimportantColor : (state.isSelected ? _selectedColor : _unselectedColor),
                             ),
                           ),
                         ),
@@ -79,10 +75,5 @@ class CalendarDayItem extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Border _buildBorderBasedOnMode() {
-    if (mode == _CalendarDayItemMode.week) return Border(right: _borderSide, top: _borderSide, bottom: _borderSide);
-    return Border();
   }
 }
