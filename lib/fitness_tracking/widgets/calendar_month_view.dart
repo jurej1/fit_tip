@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../fitness_tracking.dart';
 
-class CalendarMonthView extends StatelessWidget {
+class CalendarMonthView extends HookWidget {
   const CalendarMonthView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _controller = usePageController(initialPage: BlocProvider.of<CalendarBloc>(context).state.focusedDayPageIndexMonthMode);
     return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (context, state) {
         return PageView.builder(
+          controller: _controller,
           physics: const ClampingScrollPhysics(),
           itemCount: state.calendarMonthModeItemCount,
           itemBuilder: (context, pageIndex) {
