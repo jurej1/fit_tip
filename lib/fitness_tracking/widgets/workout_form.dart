@@ -48,17 +48,19 @@ class _WorkoutTitleInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationController _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.title != c.title,
       listener: (context, state) {
         if (state.title.invalid) {
           _controller.forward().then((value) => _controller.reset());
         }
       },
       builder: (context, state) {
+        _controller.forward();
         return ShakeAnimationBuilder(
           controller: _controller,
           child: TextFormField(
@@ -83,11 +85,12 @@ class _WorkoutNoteInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.note != c.note,
       listener: (context, state) {
         if (state.note.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -118,12 +121,13 @@ class _WorkoutGoalInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.goal != c.goal,
       listener: (context, state) {
         if (state.goal.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -163,12 +167,13 @@ class _WorkoutTypeInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationController _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.type != c.type,
       listener: (context, state) {
         if (state.type.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -212,12 +217,13 @@ class _WorkoutDurationInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationController _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
 
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.duration != c.duration,
       listener: (context, state) {
         if (state.duration.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -248,11 +254,12 @@ class _WorkoutDaysPerWeekInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationController _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.daysPerWeek != c.daysPerWeek,
       listener: (context, state) {
         if (state.daysPerWeek.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -282,11 +289,12 @@ class _WorkoutTimePerWorkoutInput extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final AnimationController _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 600),
       lowerBound: 0,
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.timePerWorkout != c.timePerWorkout,
       listener: (context, state) {
         if (state.timePerWorkout.invalid) {
           _controller.forward().then((value) => _controller.reset());
@@ -321,6 +329,7 @@ class _WorkoutStartDateInput extends HookWidget {
       upperBound: 2 * pi,
     );
     return BlocConsumer<AddWorkoutFormBloc, AddWorkoutFormState>(
+      listenWhen: (p, c) => p.startDate != c.startDate,
       listener: (context, state) {
         if (state.startDate.invalid) {
           _controller.forward().then((value) => _controller.reset());
