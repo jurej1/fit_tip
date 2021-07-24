@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:formz/formz.dart';
 
 import '../fitness_tracking.dart';
 
@@ -18,26 +17,19 @@ class WorkoutForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddWorkoutFormBloc, AddWorkoutFormState>(
-      listener: (context, state) {
-        if (state.status.isSubmissionSuccess) {
-          BlocProvider.of<AddWorkoutViewCubit>(context).viewUpdated(AddWorkoutFormView.days);
-        } else if (state.status.isInvalid) {}
-      },
-      child: ListView(
-        padding: const EdgeInsets.all(12),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          const _WorkoutTitleInput(),
-          const _WorkoutNoteInput(),
-          const _WorkoutGoalInput(),
-          const _WorkoutTypeInput(),
-          const _WorkoutDurationInput(),
-          const _WorkoutDaysPerWeekInput(),
-          const _WorkoutTimePerWorkoutInput(),
-          const _WorkoutStartDateInput(),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(12),
+      physics: const BouncingScrollPhysics(),
+      children: [
+        const _WorkoutTitleInput(),
+        const _WorkoutNoteInput(),
+        const _WorkoutGoalInput(),
+        const _WorkoutTypeInput(),
+        const _WorkoutDurationInput(),
+        const _WorkoutDaysPerWeekInput(),
+        const _WorkoutTimePerWorkoutInput(),
+        const _WorkoutStartDateInput(),
+      ],
     );
   }
 }
