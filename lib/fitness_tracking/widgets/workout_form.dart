@@ -60,7 +60,6 @@ class _WorkoutTitleInput extends HookWidget {
         }
       },
       builder: (context, state) {
-        _controller.forward();
         return ShakeAnimationBuilder(
           controller: _controller,
           child: TextFormField(
@@ -70,7 +69,7 @@ class _WorkoutTitleInput extends HookWidget {
               labelText: 'Title',
             ),
             onChanged: (value) {
-              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTimePerWorkoutUpdated(value));
+              BlocProvider.of<AddWorkoutFormBloc>(context).add(AddWorkoutFormTitleUpdated(value));
             },
           ),
         );
