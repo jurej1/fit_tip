@@ -47,14 +47,13 @@ class Page2 extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => TableCalendarBloc(workout: workout),
-          child: TableCalendarBuilder(),
         ),
         BlocProvider(
           create: (context) => FocusedWorkoutDayBloc(
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
-          )..add(FocusedWorkoutDayDateUpdated(BlocProvider.of(context))),
+          )..add(FocusedWorkoutDayDateUpdated(BlocProvider.of<TableCalendarBloc>(context).state.focusedDay)),
         ),
       ],
       child: Page2(),
