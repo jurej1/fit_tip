@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
@@ -31,6 +32,9 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   final ActiveWorkoutBloc _activeWorkoutBloc;
 
   late final StreamSubscription _streamSubscription;
+
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get _user => _authenticationBloc.state.user;
 
   @override
   Stream<FocusedWorkoutDayState> mapEventToState(

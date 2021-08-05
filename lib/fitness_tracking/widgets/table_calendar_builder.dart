@@ -22,7 +22,7 @@ class TableCalendarBuilder extends StatelessWidget {
         if (activeState is ActiveWorkoutLoadSuccess) {
           return BlocConsumer<TableCalendarBloc, TableCalendarState>(
             listener: (context, state) {
-              //TODO when the focused day update
+              BlocProvider.of<FocusedWorkoutDayBloc>(context).add(FocusedWorkoutDayDateUpdated(state.focusedDay));
             },
             builder: (context, calendarState) {
               return TableCalendar(
