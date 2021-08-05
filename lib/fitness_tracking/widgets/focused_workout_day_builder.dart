@@ -21,7 +21,14 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
 
           if (day == null) {
             return Container(
-              child: Text('No workout'),
+              child: Text(
+                'No workout',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                ),
+              ),
             );
           }
           return Text(day.id);
