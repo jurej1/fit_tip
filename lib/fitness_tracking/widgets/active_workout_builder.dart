@@ -51,10 +51,7 @@ class Page2 extends StatelessWidget {
               children: [
                 TableCalendarBuilder.route(context, workout: state.workout),
                 const SizedBox(height: 10),
-                Container(
-                  height: 200,
-                  color: Colors.red,
-                ),
+                FocusedWorkoutDayBuilder(),
               ],
             ),
           );
