@@ -8,6 +8,7 @@ class WorkoutExcercise extends Equatable {
   final int sets;
   final int reps;
   final RepUnit repUnit;
+  final List<int>? repsAcomplishedForEachSet;
 
   const WorkoutExcercise({
     required this.id,
@@ -15,11 +16,19 @@ class WorkoutExcercise extends Equatable {
     required this.sets,
     required this.reps,
     required this.repUnit,
+    this.repsAcomplishedForEachSet,
   });
 
   @override
-  List<Object> get props {
-    return [id, name, sets, reps, repUnit];
+  List<Object?> get props {
+    return [
+      id,
+      name,
+      sets,
+      reps,
+      repUnit,
+      repsAcomplishedForEachSet,
+    ];
   }
 
   WorkoutExcercise copyWith({
@@ -27,14 +36,16 @@ class WorkoutExcercise extends Equatable {
     String? name,
     int? sets,
     int? reps,
-    RepUnit? unit,
+    RepUnit? repUnit,
+    List<int>? repsAcomplishedForEachSet,
   }) {
     return WorkoutExcercise(
       id: id ?? this.id,
       name: name ?? this.name,
       sets: sets ?? this.sets,
       reps: reps ?? this.reps,
-      repUnit: unit ?? this.repUnit,
+      repUnit: repUnit ?? this.repUnit,
+      repsAcomplishedForEachSet: repsAcomplishedForEachSet ?? this.repsAcomplishedForEachSet,
     );
   }
 
