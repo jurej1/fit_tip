@@ -8,13 +8,6 @@ import '../fitness_tracking.dart';
 class TableCalendarBuilder extends StatelessWidget {
   const TableCalendarBuilder({Key? key}) : super(key: key);
 
-  static Widget route(BuildContext context, {Key? key, required Workout workout}) {
-    return BlocProvider(
-      create: (context) => TableCalendarBloc(workout: workout),
-      child: TableCalendarBuilder(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(

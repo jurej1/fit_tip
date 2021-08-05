@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             children: [
               const Page1(),
-              const Page2(),
+              Page2.route(context, state.workout),
             ],
             onPageChanged: (index) {
               BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
@@ -41,6 +42,25 @@ class ActiveWorkoutBuilder extends StatelessWidget {
 class Page2 extends StatelessWidget {
   const Page2({Key? key}) : super(key: key);
 
+  static Widget route(BuildContext context, Workout workout) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TableCalendarBloc(workout: workout),
+          child: TableCalendarBuilder(),
+        ),
+        BlocProvider(
+          create: (context) => FocusedWorkoutDayBloc(
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
+          )..add(FocusedWorkoutDayDateUpdated(BlocProvider.of(context))),
+        ),
+      ],
+      child: Page2(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
@@ -49,7 +69,7 @@ class Page2 extends StatelessWidget {
           return Container(
             child: ListView(
               children: [
-                TableCalendarBuilder.route(context, workout: state.workout),
+                TableCalendarBuilder(),
                 const SizedBox(height: 10),
                 FocusedWorkoutDayBuilder(),
               ],
