@@ -31,7 +31,14 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
               ),
             );
           }
-          return Text(day.id);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(day.id),
+              Text(day.mapDayToText),
+              Text(day.numberOfExcercises.toStringAsFixed(0)),
+            ],
+          );
         } else if (state is FocusedWorkoutDayFail) {
           return Container(
             child: Text('Sorry there was an error'),
