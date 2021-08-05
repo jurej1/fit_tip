@@ -31,6 +31,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   final ActiveWorkoutBloc _activeWorkoutBloc;
 
   late final StreamSubscription _streamSubscription;
+
   @override
   Stream<FocusedWorkoutDayState> mapEventToState(
     FocusedWorkoutDayEvent event,
