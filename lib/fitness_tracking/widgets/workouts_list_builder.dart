@@ -25,7 +25,6 @@ class WorkoutsListBuilder extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
               final item = state.workouts[index];
-
               return WorkoutsListCard.route(context, item);
             },
             separatorBuilder: (context, index) {

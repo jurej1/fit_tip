@@ -48,6 +48,7 @@ class Workout extends Equatable {
       note,
       isActive,
       created,
+      title,
     ];
   }
 

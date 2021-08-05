@@ -20,7 +20,9 @@ class WorkoutsListCard extends StatelessWidget {
         fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
         workout: item,
       ),
-      child: WorkoutsListCard(),
+      child: WorkoutsListCard(
+        key: ValueKey(item),
+      ),
     );
   }
 
