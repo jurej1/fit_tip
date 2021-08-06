@@ -54,6 +54,10 @@ class ActiveWorkoutBuilder extends StatelessWidget {
       ),
       body: _bodyBuilder(),
       bottomNavigationBar: FitnessTrackingViewSelector(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: Text('Start Workout'),
+      ),
     );
   }
 
