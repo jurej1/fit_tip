@@ -21,7 +21,7 @@ class TableCalendarLoadSuccess extends TableCalendarState {
     required this.firstDay,
     required this.lastDay,
     this.format = CalendarFormat.twoWeeks,
-    this.workouts = const [],
+    required this.workouts,
   });
 
   @override
@@ -44,15 +44,12 @@ class TableCalendarLoadSuccess extends TableCalendarState {
   }
 
   List<int> getEvents(DateTime day) {
-    final int length = this.workouts.fold<int>(
-      0,
-      (previousValue, element) {
-        if (element.day == day.weekday) {
-          return previousValue + 1;
-        }
-        return previousValue;
-      },
-    );
+    final int length = this.workouts.fold<int>(0, (previousValue, element) {
+      if (element.day == day.weekday) {
+        return previousValue + 1;
+      }
+      return previousValue;
+    });
 
     return List<int>.generate(length, (index) => index);
   }
