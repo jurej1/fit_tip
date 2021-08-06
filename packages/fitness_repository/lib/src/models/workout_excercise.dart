@@ -8,7 +8,7 @@ class WorkoutExcercise extends Equatable {
   final int sets;
   final int reps;
   final RepUnit repUnit;
-  final List<int>? repsAcomplishedForEachSet;
+  final List<int>? repCount;
 
   const WorkoutExcercise({
     required this.id,
@@ -16,7 +16,7 @@ class WorkoutExcercise extends Equatable {
     required this.sets,
     required this.reps,
     required this.repUnit,
-    this.repsAcomplishedForEachSet,
+    this.repCount,
   });
 
   @override
@@ -27,7 +27,7 @@ class WorkoutExcercise extends Equatable {
       sets,
       reps,
       repUnit,
-      repsAcomplishedForEachSet,
+      repCount,
     ];
   }
 
@@ -45,7 +45,7 @@ class WorkoutExcercise extends Equatable {
       sets: sets ?? this.sets,
       reps: reps ?? this.reps,
       repUnit: repUnit ?? this.repUnit,
-      repsAcomplishedForEachSet: repsAcomplishedForEachSet ?? this.repsAcomplishedForEachSet,
+      repCount: repsAcomplishedForEachSet ?? this.repCount,
     );
   }
 
