@@ -9,12 +9,7 @@ class TableCalendarBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TableCalendarBloc, TableCalendarState>(
-      listener: (context, state) {
-        if (state is TableCalendarLoadSuccess) {
-          BlocProvider.of<FocusedWorkoutDayBloc>(context).add(FocusedWorkoutDayDateUpdated(state.focusedDay));
-        }
-      },
+    return BlocBuilder<TableCalendarBloc, TableCalendarState>(
       builder: (context, state) {
         if (state is TableCalendarLoadSuccess) {
           return TableCalendar(

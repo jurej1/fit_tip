@@ -5,6 +5,7 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../fitness_tracking.dart';
 
@@ -34,41 +35,59 @@ class ActiveWorkoutBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Fitness tracking'),
-            _AppBarPageDisplayer(),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ActiveWorkoutBloc, ActiveWorkoutState>(
+          listener: (context, state) {
+            if (state is ActiveWorkoutLoadSuccess) {
+              BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarWorkoutUpdated(state.workout));
+            }
+          },
+        ),
+        BlocListener<TableCalendarBloc, TableCalendarState>(
+          listener: (context, state) {
+            if (state is TableCalendarLoadSuccess) {
+              BlocProvider.of<FocusedWorkoutDayBloc>(context).add(FocusedWorkoutDayDateUpdated(state.focusedDay));
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Fitness tracking'),
+              _AppBarPageDisplayer(),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).push(AddWorkoutView.route(context));
+              },
+            ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(AddWorkoutView.route(context));
-            },
-          ),
-        ],
-      ),
-      body: _bodyBuilder(),
-      bottomNavigationBar: FitnessTrackingViewSelector(),
-      floatingActionButton: BlocBuilder<FocusedWorkoutDayBloc, FocusedWorkoutDayState>(
-        builder: (context, state) {
-          return FloatingActionButton.extended(
-            onPressed: () {
-              if (state is FocusedWorkoutDayLoadSuccess) {
-                if (state.workoutDay == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
-                } else {}
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
-              }
-            },
-            label: Text('Start Workout'),
-          );
-        },
+        body: _bodyBuilder(),
+        bottomNavigationBar: FitnessTrackingViewSelector(),
+        floatingActionButton: BlocBuilder<FocusedWorkoutDayBloc, FocusedWorkoutDayState>(
+          builder: (context, state) {
+            return FloatingActionButton.extended(
+              onPressed: () {
+                if (state is FocusedWorkoutDayLoadSuccess) {
+                  if (state.workoutDay == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
+                  } else {}
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
+                }
+              },
+              label: Text('Start Workout'),
+            );
+          },
+        ),
       ),
     );
   }
