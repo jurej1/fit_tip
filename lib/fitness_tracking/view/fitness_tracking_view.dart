@@ -66,6 +66,13 @@ class FitnessTrackingView extends StatelessWidget {
           ),
           body: _body(page),
           bottomNavigationBar: FitnessTrackingViewSelector(),
+          floatingActionButton: Visibility(
+            visible: page == FitnessTrackingWorkoutPage.active,
+            child: FloatingActionButton.extended(
+              onPressed: () {},
+              label: Text('Start Workout'),
+            ),
+          ),
         );
       },
     );
