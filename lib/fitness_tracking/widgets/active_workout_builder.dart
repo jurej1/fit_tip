@@ -1,15 +1,63 @@
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:fit_tip/food_tracking/widgets/widgets.dart';
+import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../fitness_tracking.dart';
 
 class ActiveWorkoutBuilder extends StatelessWidget {
   const ActiveWorkoutBuilder({Key? key}) : super(key: key);
 
+  static Widget route() {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TableCalendarBloc(
+            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => FocusedWorkoutDayBloc(
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
+            tableCalendarBloc: BlocProvider.of<TableCalendarBloc>(context),
+          ),
+        ),
+      ],
+      child: ActiveWorkoutBuilder(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Fitness tracking'),
+            _AppBarPageDisplayer(),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(AddWorkoutView.route(context));
+            },
+          ),
+        ],
+      ),
+      body: _bodyBuilder(),
+      bottomNavigationBar: FitnessTrackingViewSelector(),
+    );
+  }
+
+  Widget _bodyBuilder() {
     return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
       builder: (context, state) {
         if (state is ActiveWorkoutLoading) {
@@ -21,7 +69,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             children: [
               const Page1(),
-              Page2.route(context, state.workout),
+              const Page2(),
             ],
             onPageChanged: (index) {
               BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
@@ -41,24 +89,6 @@ class ActiveWorkoutBuilder extends StatelessWidget {
 
 class Page2 extends StatelessWidget {
   const Page2({Key? key}) : super(key: key);
-
-  static Widget route(BuildContext context, Workout workout) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => TableCalendarBloc(workout: workout),
-        ),
-        BlocProvider(
-          create: (context) => FocusedWorkoutDayBloc(
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
-          )..add(FocusedWorkoutDayDateUpdated(BlocProvider.of<TableCalendarBloc>(context).state.focusedDay)),
-        ),
-      ],
-      child: Page2(),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +154,32 @@ class Page1 extends StatelessWidget {
         }
         return Container();
       },
+    );
+  }
+}
+
+class _AppBarPageDisplayer extends HookWidget {
+  const _AppBarPageDisplayer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = useAnimationController(
+      duration: const Duration(milliseconds: 300),
+      lowerBound: 0,
+      upperBound: ActiveWorkoutView.values.length.toDouble(),
+    );
+    return BlocListener<ActiveWorkoutViewSelectorCubit, ActiveWorkoutView>(
+      listener: (context, state) {
+        _controller.animateTo(ActiveWorkoutView.values.indexOf(state).toDouble());
+      },
+      child: SelectedViewDisplayer(
+        unselectedColor: Colors.grey,
+        width: 30,
+        dotSize: 10,
+        length: ActiveWorkoutView.values.length,
+        controller: _controller,
+        selectedColor: Colors.white,
+      ),
     );
   }
 }

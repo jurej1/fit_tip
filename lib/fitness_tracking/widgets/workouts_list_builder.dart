@@ -8,6 +8,29 @@ class WorkoutsListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Fitness tracking'),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(AddWorkoutView.route(context));
+            },
+          ),
+        ],
+      ),
+      body: _bodyBuilder(),
+      bottomNavigationBar: FitnessTrackingViewSelector(),
+    );
+  }
+
+  Widget _bodyBuilder() {
     return BlocBuilder<WorkoutsListBloc, WorkoutsListState>(
       builder: (context, state) {
         if (state is WorkoutsListLoading) {

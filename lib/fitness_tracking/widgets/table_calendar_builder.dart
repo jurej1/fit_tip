@@ -1,4 +1,3 @@
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -10,28 +9,26 @@ class TableCalendarBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
-      builder: (context, activeState) {
-        if (activeState is ActiveWorkoutLoadSuccess) {
-          return BlocConsumer<TableCalendarBloc, TableCalendarState>(
-            listener: (context, state) {
-              BlocProvider.of<FocusedWorkoutDayBloc>(context).add(FocusedWorkoutDayDateUpdated(state.focusedDay));
+    return BlocConsumer<TableCalendarBloc, TableCalendarState>(
+      listener: (context, state) {
+        if (state is TableCalendarLoadSuccess) {
+          BlocProvider.of<FocusedWorkoutDayBloc>(context).add(FocusedWorkoutDayDateUpdated(state.focusedDay));
+        }
+      },
+      builder: (context, state) {
+        if (state is TableCalendarLoadSuccess) {
+          return TableCalendar(
+            eventLoader: state.getEvents,
+            calendarFormat: state.format,
+            onFormatChanged: (newFormat) {
+              BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFormatUpdated(newFormat));
             },
-            builder: (context, calendarState) {
-              return TableCalendar(
-                eventLoader: activeState.getEvents,
-                calendarFormat: calendarState.format,
-                onFormatChanged: (newFormat) {
-                  BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFormatUpdated(newFormat));
-                },
-                currentDay: calendarState.focusedDay,
-                focusedDay: calendarState.focusedDay,
-                firstDay: calendarState.firstDay,
-                lastDay: calendarState.lastDay,
-                onDaySelected: (selectedDay, focusedDay) {
-                  BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
-                },
-              );
+            currentDay: state.focusedDay,
+            focusedDay: state.focusedDay,
+            firstDay: state.firstDay,
+            lastDay: state.lastDay,
+            onDaySelected: (selectedDay, focusedDay) {
+              BlocProvider.of<TableCalendarBloc>(context).add(TableCalendarFocusedDayUpdated(focusedDay));
             },
           );
         }

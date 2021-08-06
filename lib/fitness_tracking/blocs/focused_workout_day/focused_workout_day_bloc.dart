@@ -17,10 +17,15 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
     required ActiveWorkoutBloc activeWorkoutBloc,
+    required TableCalendarBloc tableCalendarBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         _activeWorkoutBloc = activeWorkoutBloc,
         super(FocusedWorkoutDayLoading()) {
+    if (tableCalendarBloc.state is TableCalendarLoadSuccess) {
+      add(FocusedWorkoutDayDateUpdated((tableCalendarBloc.state as TableCalendarLoadSuccess).focusedDay));
+    }
+
     _streamSubscription = activeWorkoutBloc.stream.listen((activeState) {
       if (activeState is ActiveWorkoutFail) {
         add(_FocusedWorkoutDayFailRequested());

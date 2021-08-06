@@ -23,3 +23,11 @@ class TableCalendarFormatUpdated extends TableCalendarEvent {
   @override
   List<Object> get props => [value];
 }
+
+class TableCalendarWorkoutUpdated extends TableCalendarEvent {
+  final Workout value;
+
+  const TableCalendarWorkoutUpdated(this.value);
+  @override
+  List<Object> get props => [value];
+}
