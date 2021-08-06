@@ -54,9 +54,21 @@ class ActiveWorkoutBuilder extends StatelessWidget {
       ),
       body: _bodyBuilder(),
       bottomNavigationBar: FitnessTrackingViewSelector(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text('Start Workout'),
+      floatingActionButton: BlocBuilder<FocusedWorkoutDayBloc, FocusedWorkoutDayState>(
+        builder: (context, state) {
+          return FloatingActionButton.extended(
+            onPressed: () {
+              if (state is FocusedWorkoutDayLoadSuccess) {
+                if (state.workoutDay == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
+                } else {}
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
+              }
+            },
+            label: Text('Start Workout'),
+          );
+        },
       ),
     );
   }
