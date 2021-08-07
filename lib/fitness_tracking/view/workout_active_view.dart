@@ -29,6 +29,9 @@ class WorkoutActiveView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Workout active view'),
       ),
+      body: PageView(
+        children: [],
+      ),
     );
   }
 }
