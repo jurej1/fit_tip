@@ -3,4 +3,3 @@ export 'add_workout_view.dart';
 export 'add_workout_day_view.dart';
 export 'add_workout_excercise_view.dart';
 export 'workout_detail_view.dart';
-export 'workout_active_view.dart';
