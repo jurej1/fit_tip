@@ -111,7 +111,7 @@ class FitnessRepository {
   }
 
   Future<void> addWorkoutLog(String userId, Workout workout, DateTime dateLogged) async {
-    _fitnessTrackingPlanRef(userId)
+    return _fitnessTrackingPlanRef(userId)
         .doc(workout.id)
         .collection('workouts')
         .doc(
@@ -120,5 +120,15 @@ class FitnessRepository {
         .set(
           workout.toWorkoutLogMap(dateLogged.weekday),
         );
+  }
+
+  Future<Workout> getWorkoutLogData(String userId, Workout workout, DateTime date) async {
+    DocumentSnapshot snap =
+        await _fitnessTrackingPlanRef(userId).doc(workout.id).collection('workouts').doc(Workout.dateTimeToWorkoutLogId(date)).get();
+
+    if (!snap.exists)
+      return workout;
+    else
+      return Workout.fromEntity(workout.toEntity().fromWorkoutLogSnapshot(snap));
   }
 }
