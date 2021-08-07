@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 class RunningWorkoutDayView extends StatelessWidget {
   const RunningWorkoutDayView({Key? key}) : super(key: key);
@@ -16,7 +20,7 @@ class RunningWorkoutDayView extends StatelessWidget {
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
             workoutDay: workoutDay,
           ),
-          child: Container(),
+          child: RunningWorkoutDayView(),
         );
       },
     );
@@ -28,6 +32,62 @@ class RunningWorkoutDayView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Running workout view'),
       ),
+      body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              _SelectedPageDisplayer(),
+              Expanded(
+                child: PageView.builder(
+                  itemCount: state.workoutDay.excercises.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Container(
+                        child: Text('Overview page'),
+                      );
+                    }
+                    return Container(
+                      child: Center(
+                        child: Text('$index'),
+                      ),
+                    );
+                  },
+                  onPageChanged: (index) {
+                    BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SelectedPageDisplayer extends HookWidget {
+  const _SelectedPageDisplayer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = useAnimationController(
+      upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
+      duration: const Duration(milliseconds: 300),
+    );
+    return BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+      listener: (context, state) {
+        log('animating');
+        _controller.animateTo(state.pageViewIndex.toDouble());
+      },
+      builder: (context, state) {
+        return SelectedViewDisplayer(
+          dotSize: 10,
+          length: state.pageViewLength,
+          controller: _controller,
+          width: 30,
+          selectedColor: Colors.blue,
+        );
+      },
     );
   }
 }

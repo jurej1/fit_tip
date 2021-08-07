@@ -6,3 +6,12 @@ abstract class RunningWorkoutDayEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class RunningWorkoutDayPageIndexUpdated extends RunningWorkoutDayEvent {
+  final int value;
+
+  const RunningWorkoutDayPageIndexUpdated(this.value);
+
+  @override
+  List<Object> get props => [value];
+}

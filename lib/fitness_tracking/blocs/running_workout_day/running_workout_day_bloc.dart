@@ -24,6 +24,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   Stream<RunningWorkoutDayState> mapEventToState(
     RunningWorkoutDayEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is RunningWorkoutDayPageIndexUpdated) {
+      yield state.copyWith(pageViewIndex: event.value);
+    }
   }
 }

@@ -78,7 +78,9 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                 if (state is FocusedWorkoutDayLoadSuccess) {
                   if (state.workoutDay == null) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
-                  } else {}
+                  } else {
+                    Navigator.of(context).push(RunningWorkoutDayView.route(state.workoutDay!));
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
                 }
