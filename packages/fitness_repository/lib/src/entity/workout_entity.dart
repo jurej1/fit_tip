@@ -21,6 +21,7 @@ class _DocKeys {
   static String excercises = 'excercises';
   static String excerciseId = 'excerciseId';
   static String repsCount = 'repsCount';
+  static String weightCount = 'weightCount';
 }
 
 class WorkoutEntity extends Equatable {
@@ -152,6 +153,7 @@ class WorkoutEntity extends Equatable {
           return {
             _DocKeys.excerciseId: e.id,
             _DocKeys.repsCount: e.repCount,
+            _DocKeys.weightCount: e.weightCount,
           };
         },
       ).toList(),
@@ -184,7 +186,10 @@ class WorkoutEntity extends Equatable {
           return id == element.id;
         });
 
-        return element.copyWith(repCount: idFoundItem[_DocKeys.repsCount]);
+        return element.copyWith(
+          repCount: idFoundItem[_DocKeys.repsCount],
+          weightCount: idFoundItem[_DocKeys.weightCount],
+        );
       }).toList();
 
     return this.copyWith(

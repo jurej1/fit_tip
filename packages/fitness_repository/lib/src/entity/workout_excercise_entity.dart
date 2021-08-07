@@ -20,8 +20,10 @@ class WorkoutExcerciseEntity extends Equatable {
   final int reps;
   final RepUnit repUnit;
   final List<int>? repCount;
+  final List<double>? weightCount;
 
   WorkoutExcerciseEntity({
+    this.weightCount,
     String? id,
     required this.name,
     required this.sets,
@@ -39,6 +41,7 @@ class WorkoutExcerciseEntity extends Equatable {
       reps,
       repUnit,
       repCount,
+      weightCount,
     ];
   }
 
@@ -49,6 +52,7 @@ class WorkoutExcerciseEntity extends Equatable {
     int? reps,
     RepUnit? repUnit,
     List<int>? repCount,
+    List<double>? weightCount,
   }) {
     return WorkoutExcerciseEntity(
       id: id ?? this.id,
@@ -57,6 +61,7 @@ class WorkoutExcerciseEntity extends Equatable {
       reps: reps ?? this.reps,
       repUnit: repUnit ?? this.repUnit,
       repCount: repCount ?? this.repCount,
+      weightCount: weightCount ?? this.weightCount,
     );
   }
 
