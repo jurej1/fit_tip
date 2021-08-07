@@ -5,7 +5,6 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../fitness_tracking.dart';
 
@@ -79,7 +78,9 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                 if (state is FocusedWorkoutDayLoadSuccess) {
                   if (state.workoutDay == null) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
-                  } else {}
+                  } else {
+                    Navigator.of(context).push(WorkoutActiveView.route(state.workoutDay!));
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
                 }
