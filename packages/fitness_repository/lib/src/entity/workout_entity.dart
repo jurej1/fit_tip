@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class _DocKeys {
   static String goal = 'goal';
@@ -16,6 +17,10 @@ class _DocKeys {
   static String isActive = 'isActive';
   static String created = 'created';
   static String title = 'title';
+  static String workoutId = 'workoutId';
+  static String excercises = 'excercises';
+  static String excerciseId = 'excerciseId';
+  static String repsCount = 'repsCount';
 }
 
 class WorkoutEntity extends Equatable {
@@ -135,8 +140,8 @@ class WorkoutEntity extends Equatable {
 
   Map<String, dynamic> toWorkoutLogMap(int weekday) {
     return {
-      'workoutId': this.id,
-      'excercises': this
+      _DocKeys.workoutId: this.id,
+      _DocKeys.excercises: this
           .workouts
           .firstWhere(
             (element) => element.day == weekday,
@@ -145,11 +150,48 @@ class WorkoutEntity extends Equatable {
           .map(
         (e) {
           return {
-            'excerciseId': e.id,
-            'repsCountPerSet': e.repCount,
+            _DocKeys.excerciseId: e.id,
+            _DocKeys.repsCount: e.repCount,
           };
         },
       ).toList(),
     };
+  }
+
+  WorkoutEntity fromWorkoutLogSnapshot(DocumentSnapshot snapshot) {
+    final String id = snapshot.id;
+    final int indexOfFirstLine = id.indexOf('-');
+    final int indexOfLastLine = id.lastIndexOf('-');
+
+    final String day = id.substring(0, indexOfFirstLine - 1);
+    final String month = id.substring(indexOfFirstLine, indexOfLastLine - 1);
+    final String year = id.substring(indexOfLastLine);
+    final date = DateTime(int.parse(year), int.parse(month), int.parse(day));
+
+    int weekday = date.weekday;
+
+    final data = snapshot.data() as Map<String, dynamic>;
+    final String workoutId = data[_DocKeys.workoutId];
+
+    WorkoutDayEntity editedWorkout = this.workouts.firstWhere((element) => element.day == weekday && workoutId == element.id);
+
+    List<dynamic> listData = data[_DocKeys.excercises] as List<Map<String, dynamic>>;
+
+    editedWorkout = editedWorkout
+      ..excercises.map((element) {
+        final Map<String, dynamic> idFoundItem = listData.firstWhere((listElement) {
+          final String id = (listElement as Map)[_DocKeys.workoutId];
+          return id == element.id;
+        });
+
+        return element.copyWith(repCount: idFoundItem[_DocKeys.repsCount]);
+      }).toList();
+
+    return this.copyWith(
+      workouts: this.workouts.map((e) {
+        if (e.id == editedWorkout.id) return editedWorkout;
+        return e;
+      }).toList(),
+    );
   }
 }
