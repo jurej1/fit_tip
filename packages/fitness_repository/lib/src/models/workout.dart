@@ -160,4 +160,12 @@ class Workout extends Equatable {
   DateTime get lastDay {
     return created.add(Duration(days: (this.duration * 7)));
   }
+
+  static String dateTimeToWorkoutLogId(DateTime dateTime) {
+    return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
+  }
+
+  Map<String, dynamic> toWorkoutLogMap(int weekday) {
+    return this.toEntity().toWorkoutLogMap(weekday);
+  }
 }

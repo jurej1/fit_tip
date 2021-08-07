@@ -10,6 +10,7 @@ class _DocKeys {
   static String reps = 'reps';
   static String repUnit = 'unit';
   static String id = 'id';
+  static String repCount = 'repCount';
 }
 
 class WorkoutExcerciseEntity extends Equatable {
@@ -18,6 +19,7 @@ class WorkoutExcerciseEntity extends Equatable {
   final int sets;
   final int reps;
   final RepUnit repUnit;
+  final List<int>? repCount;
 
   WorkoutExcerciseEntity({
     String? id,
@@ -25,16 +27,18 @@ class WorkoutExcerciseEntity extends Equatable {
     required this.sets,
     required this.reps,
     required this.repUnit,
+    this.repCount,
   }) : this.id = id ?? UniqueKey().toString();
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,
       sets,
       reps,
       repUnit,
+      repCount,
     ];
   }
 
@@ -43,14 +47,16 @@ class WorkoutExcerciseEntity extends Equatable {
     String? name,
     int? sets,
     int? reps,
-    RepUnit? unit,
+    RepUnit? repUnit,
+    List<int>? repCount,
   }) {
     return WorkoutExcerciseEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       sets: sets ?? this.sets,
       reps: reps ?? this.reps,
-      repUnit: unit ?? this.repUnit,
+      repUnit: repUnit ?? this.repUnit,
+      repCount: repCount ?? this.repCount,
     );
   }
 

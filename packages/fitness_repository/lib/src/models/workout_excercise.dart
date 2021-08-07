@@ -50,11 +50,12 @@ class WorkoutExcercise extends Equatable {
   }
 
   static WorkoutExcercise fromEntity(WorkoutExcerciseEntity entity) {
-    return WorkoutExcercise(id: entity.id, name: entity.name, sets: entity.sets, reps: entity.reps, repUnit: entity.repUnit);
+    return WorkoutExcercise(
+        id: entity.id, name: entity.name, sets: entity.sets, reps: entity.reps, repUnit: entity.repUnit, repCount: entity.repCount);
   }
 
   WorkoutExcerciseEntity toEntity() {
-    return WorkoutExcerciseEntity(id: id, name: name, sets: sets, reps: reps, repUnit: repUnit);
+    return WorkoutExcerciseEntity(id: id, name: name, sets: sets, reps: reps, repUnit: repUnit, repCount: repCount);
   }
 
   String get repsString => reps.toStringAsFixed(0);

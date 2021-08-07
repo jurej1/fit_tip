@@ -109,4 +109,16 @@ class FitnessRepository {
 
     return workout.copyWith(isActive: true);
   }
+
+  Future<void> addWorkoutLog(String userId, Workout workout, DateTime dateLogged) async {
+    _fitnessTrackingPlanRef(userId)
+        .doc(workout.id)
+        .collection('workouts')
+        .doc(
+          Workout.dateTimeToWorkoutLogId(dateLogged),
+        )
+        .set(
+          workout.toWorkoutLogMap(dateLogged.weekday),
+        );
+  }
 }

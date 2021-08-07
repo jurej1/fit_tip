@@ -132,4 +132,24 @@ class WorkoutEntity extends Equatable {
       _DocKeys.title: this.title,
     };
   }
+
+  Map<String, dynamic> toWorkoutLogMap(int weekday) {
+    return {
+      'workoutId': this.id,
+      'excercises': this
+          .workouts
+          .firstWhere(
+            (element) => element.day == weekday,
+          )
+          .excercises
+          .map(
+        (e) {
+          return {
+            'excerciseId': e.id,
+            'repsCountPerSet': e.repCount,
+          };
+        },
+      ).toList(),
+    };
+  }
 }
