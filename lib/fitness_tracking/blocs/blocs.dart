@@ -15,3 +15,4 @@ export 'table_calendar/table_calendar_bloc.dart';
 export 'active_workout_view_selector/active_workout_view_selector_cubit.dart';
 export 'focused_workout_day/focused_workout_day_bloc.dart';
 export 'today_excercise/today_excercise_bloc.dart';
+export 'running_workout_day/running_workout_day_bloc.dart';
