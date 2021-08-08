@@ -19,3 +19,4 @@ export 'active_workout_builder.dart';
 export 'table_calendar_builder.dart';
 export 'focused_workout_day_builder.dart';
 export 'excercise_page_card.dart';
+export 'set_displayer.dart';

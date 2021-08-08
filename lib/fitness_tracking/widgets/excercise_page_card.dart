@@ -2,7 +2,6 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 
@@ -58,7 +57,7 @@ class ExcercisePageCard extends StatelessWidget {
                       '     Set ${index + 1}',
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    _SetDisplayer.provider(index),
+                    SetDisplayer.provider(index),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -89,91 +88,6 @@ class _GoalRowDisplayer extends StatelessWidget {
         Text(title),
         Text(value),
       ],
-    );
-  }
-}
-
-class _SetDisplayer extends StatelessWidget {
-  const _SetDisplayer({
-    Key? key,
-  }) : super(key: key);
-
-  static Widget provider(int setIndex) {
-    return BlocProvider(
-      create: (context) => SetDisplayerCubit(setIndex: setIndex),
-      child: Container(),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final double containerSize = 120;
-
-    return BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
-      builder: (context, state) {
-        return Row(
-          children: [
-            Container(
-              height: containerSize,
-              width: size.width * 0.5,
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text('Rep Count'),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ScrollableHorizontalValueSelector(
-                      onValueUpdated: (value) {
-                        BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
-                      },
-                      width: size.width * 0.5,
-                      initialIndex: state.repAmount,
-                      itemsLength: 40,
-                      textBuilder: (value) {
-                        return Text('$value');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: containerSize,
-              width: size.width * 0.5,
-              // color: Colors.blue,
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text('Weight'),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ScrollableHorizontalValueSelector(
-                      onValueUpdated: (value) {
-                        BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
-                      },
-                      width: size.width * 0.5,
-                      initialIndex: state.weightAmount.toInt(),
-                      itemsLength: 300,
-                      textBuilder: (value) {
-                        return Text('$value kg');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
