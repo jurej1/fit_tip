@@ -164,7 +164,7 @@ class _TextDisplayer extends StatelessWidget {
             color: state.status == DurationSelectorStatus.scrolling ? Colors.blue.shade100 : Colors.grey.shade200,
           ),
           child: Text(
-            state.mapIndexToText(),
+            state.mode == DurationSelectorValueMode.minutes ? state.mapIndexToText() : state.focusedIndex.toStringAsFixed(0),
           ),
         );
       },
