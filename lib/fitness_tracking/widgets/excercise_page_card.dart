@@ -77,6 +77,7 @@ class _GoalRowDisplayer extends StatelessWidget {
     required this.title,
     required this.value,
   }) : super(key: key);
+
   final String title;
   final String value;
 

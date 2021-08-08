@@ -106,8 +106,9 @@ class _AppBarTextDisplayer extends StatelessWidget {
       builder: (context, state) {
         if (state.pageViewIndex == 0) return Text('Overview');
 
-        final item = state.workoutDay.excercises[state.pageViewIndex - 1];
-        return Text(item.name);
+        final int index = state.pageViewIndex - 1;
+        final item = state.workoutDay.excercises[index];
+        return Text('${index + 1}. ${item.name}');
       },
     );
   }
