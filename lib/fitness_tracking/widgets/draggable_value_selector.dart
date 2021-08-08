@@ -91,17 +91,6 @@ class _DraggableValueSelectorState extends State<DraggableValueSelector> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // Positioned(
-              //   top: listHeight * 0.315,
-              //   child: Container(
-              //     height: itemHeight,
-              //     width: width,
-              //     decoration: BoxDecoration(
-              //       color: Colors.red,
-              //       borderRadius: BorderRadius.circular(20),
-              //     ),
-              //   ),
-              // ),
               NotificationListener<ScrollNotification>(
                 onNotification: (notification) {
                   if (notification is ScrollUpdateNotification) {

@@ -1,20 +1,33 @@
 part of 'duration_selector_bloc.dart';
 
 enum DurationSelectorStatus { initial, scrolling, scrollEnded }
+enum DurationSelectorValueMode { minutes, x }
 
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({
     this.focusedIndex = 0,
     this.offset = 0,
     this.status = DurationSelectorStatus.initial,
+    required this.itemsLength,
+    required this.mode,
   });
 
   final int focusedIndex;
   final double offset;
   final DurationSelectorStatus status;
+  final int itemsLength;
+  final DurationSelectorValueMode mode;
 
   @override
-  List<Object> get props => [focusedIndex, offset, status];
+  List<Object> get props {
+    return [
+      focusedIndex,
+      offset,
+      status,
+      itemsLength,
+      mode,
+    ];
+  }
 
   double getAnimateToValue(double itemWidth) {
     return itemWidth * focusedIndex;
@@ -38,14 +51,6 @@ class DurationSelectorState extends Equatable {
     }
   }
 
-  int mapIndexToMinutes() {
-    return focusedIndex;
-  }
-
-  static int mapMinutesToIndex(int minutes) {
-    return minutes.toInt();
-  }
-
   String mapIndexToText() {
     if (this.focusedIndex < 60) {
       return '${focusedIndex}min';
@@ -62,10 +67,6 @@ class DurationSelectorState extends Equatable {
     int minutes = ((a - hours) * 60).round();
 
     return '${hours}h ${minutes}min';
-  }
-
-  int get itemsLenght {
-    return 3600;
   }
 
   Duration get animationDuration {
@@ -100,11 +101,15 @@ class DurationSelectorState extends Equatable {
     int? focusedIndex,
     double? offset,
     DurationSelectorStatus? status,
+    int? itemsLength,
+    DurationSelectorValueMode? mode,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
       offset: offset ?? this.offset,
       status: status ?? this.status,
+      itemsLength: itemsLength ?? this.itemsLength,
+      mode: mode ?? this.mode,
     );
   }
 }

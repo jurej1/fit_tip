@@ -1,4 +1,3 @@
-import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -21,8 +20,6 @@ class ActiveWorkoutBuilder extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => FocusedWorkoutDayBloc(
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
             tableCalendarBloc: BlocProvider.of<TableCalendarBloc>(context),
           ),

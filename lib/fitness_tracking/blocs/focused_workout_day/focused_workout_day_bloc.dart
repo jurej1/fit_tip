@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/authentication/blocs/blocs.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 import '../blocs.dart';
@@ -14,13 +11,9 @@ part 'focused_workout_day_state.dart';
 
 class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutDayState> {
   FocusedWorkoutDayBloc({
-    required FitnessRepository fitnessRepository,
-    required AuthenticationBloc authenticationBloc,
     required ActiveWorkoutBloc activeWorkoutBloc,
     required TableCalendarBloc tableCalendarBloc,
-  })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
-        _activeWorkoutBloc = activeWorkoutBloc,
+  })  : _activeWorkoutBloc = activeWorkoutBloc,
         super(FocusedWorkoutDayLoading()) {
     if (tableCalendarBloc.state is TableCalendarLoadSuccess) {
       add(FocusedWorkoutDayDateUpdated((tableCalendarBloc.state as TableCalendarLoadSuccess).focusedDay));
@@ -33,14 +26,9 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
     });
   }
 
-  final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
   final ActiveWorkoutBloc _activeWorkoutBloc;
 
   late final StreamSubscription _streamSubscription;
-
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
 
   @override
   Stream<FocusedWorkoutDayState> mapEventToState(

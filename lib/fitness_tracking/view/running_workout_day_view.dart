@@ -32,8 +32,19 @@ class RunningWorkoutDayView extends StatelessWidget {
       appBar: AppBar(
         title: _AppBarTextDisplayer(),
         actions: [
-          const _SelectedPageDisplayer(),
-          const SizedBox(width: 20),
+          BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+            builder: (context, state) {
+              return Visibility(
+                visible: state.workoutDay.excercises.length != 0,
+                child: Row(
+                  children: [
+                    const _SelectedPageDisplayer(),
+                    const SizedBox(width: 20),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(

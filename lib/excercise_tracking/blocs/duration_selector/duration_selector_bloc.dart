@@ -8,12 +8,11 @@ part 'duration_selector_event.dart';
 part 'duration_selector_state.dart';
 
 class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorState> {
-  DurationSelectorBloc({
-    int? duration,
-  }) : super(
-          duration != null
-              ? DurationSelectorState(focusedIndex: DurationSelectorState.mapMinutesToIndex(duration))
-              : DurationSelectorState(),
+  DurationSelectorBloc({int? initialIndex, required int itemsLength, required DurationSelectorValueMode mode})
+      : super(
+          initialIndex != null
+              ? DurationSelectorState(focusedIndex: initialIndex, itemsLength: itemsLength, mode: mode)
+              : DurationSelectorState(itemsLength: itemsLength, mode: mode),
         );
 
   @override

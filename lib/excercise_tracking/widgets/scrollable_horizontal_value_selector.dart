@@ -2,21 +2,32 @@ import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DurationSelector extends StatelessWidget {
-  const DurationSelector({
+class ScrollableHorizontalValueSelector extends StatelessWidget {
+  const ScrollableHorizontalValueSelector({
     Key? key,
     required this.onValueUpdated,
-    this.duration,
+    this.initialIndex,
+    required this.width,
+    required this.itemsLength,
+    required this.mode,
   }) : super(key: key);
 
-  final int? duration;
-  final void Function(int minutes) onValueUpdated;
+  final int? initialIndex;
+  final void Function(int value) onValueUpdated;
+  final double width;
+  final int itemsLength;
+  final DurationSelectorValueMode mode;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DurationSelectorBloc(duration: duration),
+      create: (context) => DurationSelectorBloc(
+        initialIndex: initialIndex,
+        itemsLength: itemsLength,
+        mode: mode,
+      ),
       child: _Body(
+        width: width,
         onValueUpdated: onValueUpdated,
       ),
     );
@@ -24,8 +35,13 @@ class DurationSelector extends StatelessWidget {
 }
 
 class _Body extends StatefulWidget {
-  const _Body({Key? key, required this.onValueUpdated}) : super(key: key);
-  final void Function(int minutes) onValueUpdated;
+  const _Body({
+    Key? key,
+    required this.onValueUpdated,
+    required this.width,
+  }) : super(key: key);
+  final void Function(int value) onValueUpdated;
+  final double width;
 
   @override
   __BodyState createState() => __BodyState();
@@ -52,11 +68,9 @@ class __BodyState extends State<_Body> {
   }
 
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        widget.onValueUpdated(state.mapIndexToMinutes());
+        widget.onValueUpdated(state.focusedIndex);
 
         if (state.status == DurationSelectorStatus.scrollEnded) {
           _scrollController.animateTo(
@@ -69,7 +83,7 @@ class __BodyState extends State<_Body> {
       },
       builder: (context, state) {
         return Container(
-          width: size.width,
+          width: widget.width,
           height: columnHeight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +114,7 @@ class __BodyState extends State<_Body> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.5 - (itemWidth * 0.5),
+                      horizontal: widget.width * 0.5 - (itemWidth * 0.5),
                     ),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
@@ -121,7 +135,7 @@ class __BodyState extends State<_Body> {
                         ),
                       );
                     },
-                    itemCount: state.itemsLenght,
+                    itemCount: state.itemsLength,
                   ),
                 ),
               ),
