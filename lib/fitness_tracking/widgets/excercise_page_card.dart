@@ -58,7 +58,7 @@ class ExcercisePageCard extends StatelessWidget {
                       '     Set ${index + 1}',
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    _SetDisplayer(),
+                    _SetDisplayer(setIndex: index),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -94,7 +94,11 @@ class _GoalRowDisplayer extends StatelessWidget {
 }
 
 class _SetDisplayer extends StatelessWidget {
-  const _SetDisplayer({Key? key}) : super(key: key);
+  const _SetDisplayer({
+    Key? key,
+    required this.setIndex,
+  }) : super(key: key);
+  final int setIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +121,9 @@ class _SetDisplayer extends StatelessWidget {
               const SizedBox(height: 8),
               Expanded(
                 child: ScrollableHorizontalValueSelector(
-                  onValueUpdated: (value) {},
+                  onValueUpdated: (value) {
+                    BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: value, repIndex: setIndex));
+                  },
                   width: size.width * 0.5,
                   initialIndex: 10,
                   itemsLength: 40,
@@ -144,7 +150,9 @@ class _SetDisplayer extends StatelessWidget {
               const SizedBox(height: 8),
               Expanded(
                 child: ScrollableHorizontalValueSelector(
-                  onValueUpdated: (value) {},
+                  onValueUpdated: (value) {
+                    BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageWeightCountUpdated(value: value, repIndex: setIndex));
+                  },
                   width: size.width * 0.5,
                   initialIndex: 80,
                   itemsLength: 300,
