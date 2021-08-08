@@ -9,25 +9,25 @@ abstract class ExcercisePageCardEvent extends Equatable {
 
 class ExcercisePageRepCountUpdated extends ExcercisePageCardEvent {
   final int value;
-  final int repIndex;
+  final int setIndex;
 
   const ExcercisePageRepCountUpdated({
     required this.value,
-    required this.repIndex,
+    required this.setIndex,
   });
   @override
-  List<Object> get props => [value, repIndex];
+  List<Object> get props => [value, setIndex];
 }
 
 class ExcercisePageWeightCountUpdated extends ExcercisePageCardEvent {
   final double value;
-  final int repIndex;
+  final int setIndex;
 
   const ExcercisePageWeightCountUpdated({
     required this.value,
-    required this.repIndex,
+    required this.setIndex,
   });
 
   @override
-  List<Object> get props => [value, repIndex];
+  List<Object> get props => [value, setIndex];
 }

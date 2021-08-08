@@ -122,7 +122,7 @@ class _SetDisplayer extends StatelessWidget {
               Expanded(
                 child: ScrollableHorizontalValueSelector(
                   onValueUpdated: (value) {
-                    BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: value, repIndex: setIndex));
+                    BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: value, setIndex: setIndex));
                   },
                   width: size.width * 0.5,
                   initialIndex: 10,
@@ -152,7 +152,7 @@ class _SetDisplayer extends StatelessWidget {
                 child: ScrollableHorizontalValueSelector(
                   onValueUpdated: (value) {
                     BlocProvider.of<ExcercisePageCardBloc>(context)
-                        .add(ExcercisePageWeightCountUpdated(value: value.toDouble(), repIndex: setIndex));
+                        .add(ExcercisePageWeightCountUpdated(value: value.toDouble(), setIndex: setIndex));
                   },
                   width: size.width * 0.5,
                   initialIndex: 80,
