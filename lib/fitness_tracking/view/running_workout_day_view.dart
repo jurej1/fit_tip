@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
@@ -7,6 +5,8 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
+import '../fitness_tracking.dart';
 
 class RunningWorkoutDayView extends StatelessWidget {
   const RunningWorkoutDayView({Key? key}) : super(key: key);
@@ -30,34 +30,28 @@ class RunningWorkoutDayView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Running workout view'),
+        title: _AppBarTextDisplayer(),
+        actions: [
+          const _SelectedPageDisplayer(),
+          const SizedBox(width: 20),
+        ],
       ),
       body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
         builder: (context, state) {
-          return Column(
-            children: [
-              _SelectedPageDisplayer(),
-              Expanded(
-                child: PageView.builder(
-                  itemCount: state.workoutDay.excercises.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return Container(
-                        child: Text('Overview page'),
-                      );
-                    }
-                    return Container(
-                      child: Center(
-                        child: Text('$index'),
-                      ),
-                    );
-                  },
-                  onPageChanged: (index) {
-                    BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
-                  },
-                ),
-              ),
-            ],
+          return PageView.builder(
+            itemCount: state.workoutDay.excercises.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Container(
+                  child: Text('Overview page'),
+                );
+              }
+              final item = state.workoutDay.excercises[index - 1];
+              return ExcercisePageCard.provider(item);
+            },
+            onPageChanged: (index) {
+              BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
+            },
           );
         },
       ),
@@ -71,12 +65,12 @@ class _SelectedPageDisplayer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = useAnimationController(
+      initialValue: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewIndex.toDouble(),
       upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
       duration: const Duration(milliseconds: 300),
     );
     return BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       listener: (context, state) {
-        log('animating');
         _controller.animateTo(state.pageViewIndex.toDouble());
       },
       builder: (context, state) {
@@ -87,6 +81,22 @@ class _SelectedPageDisplayer extends HookWidget {
           width: 30,
           selectedColor: Colors.blue,
         );
+      },
+    );
+  }
+}
+
+class _AppBarTextDisplayer extends StatelessWidget {
+  const _AppBarTextDisplayer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+      builder: (context, state) {
+        if (state.pageViewIndex == 0) return Text('Overview');
+
+        final item = state.workoutDay.excercises[state.pageViewIndex - 1];
+        return Text(item.name);
       },
     );
   }
