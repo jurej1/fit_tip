@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,7 @@ class SetDisplayer extends StatelessWidget {
 
     return BlocListener<SetDisplayerCubit, SetDisplayerState>(
       listener: (context, state) {
+        log('listening');
         BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
         BlocProvider.of<ExcercisePageCardBloc>(context)
             .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
