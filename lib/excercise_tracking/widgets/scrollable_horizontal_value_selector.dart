@@ -9,14 +9,14 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
     this.initialIndex,
     required this.width,
     required this.itemsLength,
-    required this.mode,
+    required this.textBuilder,
   }) : super(key: key);
 
   final int? initialIndex;
   final void Function(int value) onValueUpdated;
   final double width;
   final int itemsLength;
-  final DurationSelectorValueMode mode;
+  final Widget Function(int value) textBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
       create: (context) => DurationSelectorBloc(
         initialIndex: initialIndex,
         itemsLength: itemsLength,
-        mode: mode,
       ),
       child: _Body(
         width: width,
         onValueUpdated: onValueUpdated,
+        textBuilder: textBuilder,
       ),
     );
   }
@@ -39,8 +39,11 @@ class _Body extends StatefulWidget {
     Key? key,
     required this.onValueUpdated,
     required this.width,
+    required this.textBuilder,
   }) : super(key: key);
   final void Function(int value) onValueUpdated;
+  final Widget Function(int value) textBuilder;
+
   final double width;
 
   @override
@@ -88,7 +91,9 @@ class __BodyState extends State<_Body> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _TextDisplayer(),
+              _TextDisplayer(
+                textBuilder: widget.textBuilder,
+              ),
               const SizedBox(height: 7),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
@@ -150,7 +155,10 @@ class __BodyState extends State<_Body> {
 class _TextDisplayer extends StatelessWidget {
   const _TextDisplayer({
     Key? key,
+    required this.textBuilder,
   }) : super(key: key);
+
+  final Widget Function(int value) textBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +171,7 @@ class _TextDisplayer extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             color: state.status == DurationSelectorStatus.scrolling ? Colors.blue.shade100 : Colors.grey.shade200,
           ),
-          child: Text(
-            state.mode == DurationSelectorValueMode.minutes ? state.mapIndexToText() : state.focusedIndex.toStringAsFixed(0),
-          ),
+          child: textBuilder(state.focusedIndex),
         );
       },
     );

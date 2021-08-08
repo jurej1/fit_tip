@@ -1,9 +1,10 @@
-import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
-import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
+import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 
 class ExcercisePageCard extends StatelessWidget {
   const ExcercisePageCard({Key? key}) : super(key: key);
@@ -21,30 +22,89 @@ class ExcercisePageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final double containerSize = 120;
     return BlocBuilder<ExcercisePageCardBloc, ExcercisePageCardState>(
       builder: (context, state) {
         return SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text(
+                      'Goal',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    _GoalRowDisplayer(
+                      title: 'Set goal',
+                      value: '${state.excercise.setsString}x',
+                    ),
+                    _GoalRowDisplayer(
+                      title: 'Rep goal',
+                      value: '${state.excercise.repsString}x',
+                    ),
+                  ],
+                ),
+              ),
               Row(
                 children: [
                   Container(
-                    height: 100,
+                    height: containerSize,
                     width: size.width * 0.5,
-                    color: Colors.red,
-                    // child: DraggableValueSelector.route(itemHeight: 20, onValueUpdated: (value) {}, itemCount: 20, height: 80),
-                    child: ScrollableHorizontalValueSelector(
-                      mode: DurationSelectorValueMode.x,
-                      onValueUpdated: (value) {},
-                      width: size.width * 0.5,
-                      initialIndex: 10,
-                      itemsLength: 20,
+                    // color: Colors.red,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text('Rep Count'),
+                        const SizedBox(height: 8),
+                        Expanded(
+                          child: ScrollableHorizontalValueSelector(
+                            onValueUpdated: (value) {},
+                            width: size.width * 0.5,
+                            initialIndex: 10,
+                            itemsLength: 20,
+                            textBuilder: (value) {
+                              return Text('$value min');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
-                    height: 100,
+                    height: containerSize,
                     width: size.width * 0.5,
-                    color: Colors.blue,
+                    // color: Colors.blue,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text('Weight'),
+                        const SizedBox(height: 8),
+                        Expanded(
+                          child: ScrollableHorizontalValueSelector(
+                            onValueUpdated: (value) {},
+                            width: size.width * 0.5,
+                            initialIndex: 80,
+                            itemsLength: 300,
+                            textBuilder: (value) {
+                              return Text('$value kg');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -52,6 +112,27 @@ class ExcercisePageCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _GoalRowDisplayer extends StatelessWidget {
+  const _GoalRowDisplayer({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title),
+        Text(value),
+      ],
     );
   }
 }

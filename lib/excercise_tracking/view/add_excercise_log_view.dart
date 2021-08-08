@@ -126,7 +126,9 @@ class _DurationInput extends StatelessWidget {
                 BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(minutes));
               },
               itemsLength: 3600,
-              mode: DurationSelectorValueMode.minutes,
+              textBuilder: (value) {
+                return Text('$value min');
+              },
             ),
           ],
         );

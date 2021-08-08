@@ -1,7 +1,6 @@
 part of 'duration_selector_bloc.dart';
 
 enum DurationSelectorStatus { initial, scrolling, scrollEnded }
-enum DurationSelectorValueMode { minutes, x }
 
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({
@@ -9,14 +8,12 @@ class DurationSelectorState extends Equatable {
     this.offset = 0,
     this.status = DurationSelectorStatus.initial,
     required this.itemsLength,
-    required this.mode,
   });
 
   final int focusedIndex;
   final double offset;
   final DurationSelectorStatus status;
   final int itemsLength;
-  final DurationSelectorValueMode mode;
 
   @override
   List<Object> get props {
@@ -25,7 +22,6 @@ class DurationSelectorState extends Equatable {
       offset,
       status,
       itemsLength,
-      mode,
     ];
   }
 
@@ -102,14 +98,12 @@ class DurationSelectorState extends Equatable {
     double? offset,
     DurationSelectorStatus? status,
     int? itemsLength,
-    DurationSelectorValueMode? mode,
   }) {
     return DurationSelectorState(
       focusedIndex: focusedIndex ?? this.focusedIndex,
       offset: offset ?? this.offset,
       status: status ?? this.status,
       itemsLength: itemsLength ?? this.itemsLength,
-      mode: mode ?? this.mode,
     );
   }
 }
