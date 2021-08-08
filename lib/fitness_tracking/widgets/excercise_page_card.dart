@@ -151,7 +151,8 @@ class _SetDisplayer extends StatelessWidget {
               Expanded(
                 child: ScrollableHorizontalValueSelector(
                   onValueUpdated: (value) {
-                    BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageWeightCountUpdated(value: value, repIndex: setIndex));
+                    BlocProvider.of<ExcercisePageCardBloc>(context)
+                        .add(ExcercisePageWeightCountUpdated(value: value.toDouble(), repIndex: setIndex));
                   },
                   width: size.width * 0.5,
                   initialIndex: 80,

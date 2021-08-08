@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -26,15 +25,15 @@ class ExcercisePageCardBloc extends Bloc<ExcercisePageCardEvent, ExcercisePageCa
 
   Stream<ExcercisePageCardState> _mapWeightCountUpdatedToState(ExcercisePageWeightCountUpdated event) async* {
     final int index = event.repIndex;
-    final List<int> repCount = List.from(state.repsCount);
-    repCount[index] = event.value;
-    yield state.copyWith(repsCount: repCount);
+    final List<double> weightCount = List.from(state.weightCount);
+    weightCount[index] = event.value;
+    yield state.copyWith(weightCount: weightCount);
   }
 
   Stream<ExcercisePageCardState> _mapRepCountUpdatedToState(ExcercisePageRepCountUpdated event) async* {
     final int index = event.repIndex;
-    final List<int> weightCount = List.from(state.weightCount);
-    weightCount[index] = event.value;
-    yield state.copyWith(weightCount: weightCount);
+    final List<int> repsCount = List.from(state.repsCount);
+    repsCount[index] = event.value;
+    yield state.copyWith(repsCount: repsCount);
   }
 }

@@ -9,7 +9,7 @@ class ExcercisePageCardState extends Equatable {
 
   final WorkoutExcercise excercise;
   final List<int> repsCount;
-  final List<int> weightCount;
+  final List<double> weightCount;
 
   factory ExcercisePageCardState.pure(WorkoutExcercise workoutExcercise) {
     final amountOfSets = workoutExcercise.sets;
@@ -24,14 +24,14 @@ class ExcercisePageCardState extends Equatable {
     return ExcercisePageCardState(
       excercise: workoutExcercise,
       repsCount: List<int>.generate(amountOfSets, (index) => 0),
-      weightCount: List<int>.generate(amountOfSets, (index) => 50),
+      weightCount: List<double>.generate(amountOfSets, (index) => 50),
     );
   }
 
   ExcercisePageCardState copyWith({
     WorkoutExcercise? excercise,
     List<int>? repsCount,
-    List<int>? weightCount,
+    List<double>? weightCount,
   }) {
     return ExcercisePageCardState(
       excercise: excercise ?? this.excercise,
@@ -42,4 +42,8 @@ class ExcercisePageCardState extends Equatable {
 
   @override
   List<Object> get props => [excercise, repsCount, weightCount];
+
+  WorkoutExcercise getNewWorkoutExcercise() {
+    return this.excercise.copyWith(repCount: repsCount, weightCount: weightCount);
+  }
 }

@@ -20,7 +20,7 @@ class ExcercisePageRepCountUpdated extends ExcercisePageCardEvent {
 }
 
 class ExcercisePageWeightCountUpdated extends ExcercisePageCardEvent {
-  final int value;
+  final double value;
   final int repIndex;
 
   const ExcercisePageWeightCountUpdated({
