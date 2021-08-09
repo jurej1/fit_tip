@@ -11,14 +11,15 @@ class WorkoutExcercise extends Equatable {
   final List<int>? repCount;
   final List<double>? weightCount;
 
-  const WorkoutExcercise(
-      {required this.id,
-      required this.name,
-      required this.sets,
-      required this.reps,
-      required this.repUnit,
-      this.repCount,
-      this.weightCount});
+  const WorkoutExcercise({
+    required this.id,
+    required this.name,
+    required this.sets,
+    required this.reps,
+    required this.repUnit,
+    this.repCount,
+    this.weightCount,
+  });
 
   @override
   List<Object?> get props {

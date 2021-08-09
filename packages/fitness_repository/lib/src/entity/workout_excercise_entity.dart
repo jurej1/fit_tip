@@ -11,6 +11,7 @@ class _DocKeys {
   static String repUnit = 'unit';
   static String id = 'id';
   static String repCount = 'repCount';
+  static String weightCount = 'weightCount';
 }
 
 class WorkoutExcerciseEntity extends Equatable {
@@ -94,6 +95,8 @@ class WorkoutExcerciseEntity extends Equatable {
       _DocKeys.reps: this.reps,
       _DocKeys.sets: this.reps,
       _DocKeys.repUnit: describeEnum(this.repUnit),
+      _DocKeys.repCount: this.repCount,
+      _DocKeys.weightCount: this.weightCount,
     };
   }
 
