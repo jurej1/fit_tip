@@ -13,7 +13,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
   }) : super(key: key);
 
   final int? initialIndex;
-  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final void Function(int value) onValueUpdated;
   final double width;
   final int itemsLength;
   final Widget Function(int value) textBuilder;
@@ -41,7 +41,7 @@ class _Body extends StatefulWidget {
     required this.width,
     required this.textBuilder,
   }) : super(key: key);
-  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final void Function(int value) onValueUpdated;
   final Widget Function(int value) textBuilder;
 
   final double width;
@@ -73,8 +73,7 @@ class __BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) {
-        widget.onValueUpdated(state.focusedIndex, state.status);
-
+        widget.onValueUpdated(state.focusedIndex);
         if (state.status == DurationSelectorStatus.scrollEnded) {
           _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),

@@ -45,13 +45,11 @@ class SetDisplayer extends StatelessWidget {
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        onValueUpdated: (value, status) {
-                          if (status == DurationSelectorStatus.scrollEnded) {
-                            BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
-                          }
+                        onValueUpdated: (value) {
+                          BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                         },
                         width: size.width * 0.5,
-                        initialIndex: state.repAmount,
+                        initialIndex: 10,
                         itemsLength: 40,
                         textBuilder: (value) {
                           return Text('$value x');
@@ -75,25 +73,21 @@ class SetDisplayer extends StatelessWidget {
               children: [
                 Text('Weight'),
                 const SizedBox(height: 8),
-                Expanded(
-                  child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
-                    builder: (context, state) {
-                      return ScrollableHorizontalValueSelector(
-                        onValueUpdated: (value, status) {
-                          if (status == DurationSelectorStatus.scrollEnded) {
-                            BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
-                          }
-                        },
-                        width: size.width * 0.5,
-                        initialIndex: state.weightAmount.toInt(),
-                        itemsLength: 300,
-                        textBuilder: (value) {
-                          return Text('$value kg');
-                        },
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
+                  builder: (context, state) {
+                    return ScrollableHorizontalValueSelector(
+                      onValueUpdated: (value) {
+                        BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
+                      },
+                      width: size.width * 0.5,
+                      initialIndex: state.weightAmount.toInt(),
+                      itemsLength: 300,
+                      textBuilder: (value) {
+                        return Text('$value kg');
+                      },
+                    );
+                  },
+                )),
               ],
             ),
           ),

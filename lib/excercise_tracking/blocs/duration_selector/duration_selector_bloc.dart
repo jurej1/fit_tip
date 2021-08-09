@@ -14,7 +14,7 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
   }) : super(
           initialIndex != null
               ? DurationSelectorState(focusedIndex: initialIndex, itemsLength: itemsLength)
-              : DurationSelectorState(itemsLength: itemsLength),
+              : DurationSelectorState(itemsLength: itemsLength, focusedIndex: 0),
         );
 
   @override

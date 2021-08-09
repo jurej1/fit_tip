@@ -4,7 +4,7 @@ enum DurationSelectorStatus { initial, scrolling, scrollEnded }
 
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({
-    this.focusedIndex = 0,
+    required this.focusedIndex,
     this.offset = 0,
     this.status = DurationSelectorStatus.initial,
     required this.itemsLength,
