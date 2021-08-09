@@ -44,6 +44,9 @@ class ExcercisePageCardState extends Equatable {
   List<Object> get props => [excercise, repsCount, weightCount];
 
   WorkoutExcercise getNewWorkoutExcercise() {
-    return this.excercise.copyWith(repCount: repsCount, weightCount: weightCount);
+    return this.excercise.copyWith(
+          repCount: repsCount,
+          weightCount: weightCount,
+        );
   }
 }
