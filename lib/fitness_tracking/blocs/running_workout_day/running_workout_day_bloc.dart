@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -20,7 +21,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
         super(
-          RunningWorkoutDayInitial(
+          RunningWorkoutDayState(
             log: WorkoutDayLog(
               created: date,
               workoutId: workoutDay.workoutId,
@@ -44,7 +45,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     RunningWorkoutDayEvent event,
   ) async* {
     if (event is RunningWorkoutDayPageIndexUpdated) {
-      yield RunningWorkoutDayInitial(pageViewIndex: event.value, log: state.log);
+      yield state.copyWith(pageViewIndex: event.value);
     } else if (event is RunningWorkoutDayWorkoutExcerciseUpdated) {
       yield* _mapExcerciseUpdatetToState(event);
     } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
@@ -63,28 +64,30 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
       return e;
     }).toList();
 
-    yield RunningWorkoutDayInitial(log: log.copyWith(excercises: excercises), pageViewIndex: state.pageViewIndex);
+    yield state.copyWith(
+      log: log.copyWith(excercises: excercises),
+    );
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
     if (_isAuth) {
       try {
-        yield RunningWorkoutDayLoading(
-          log: state.log,
-          pageViewIndex: state.pageViewIndex,
-        );
+        // yield state.copyWith(
+        //   log: state.log,
+        //   pageViewIndex: state.pageViewIndex,
+        // );
 
         DocumentReference ref = await _fitnessRepository.addWorkoutLog(
           _user!.id!,
           state.log,
         );
 
-        yield RunningWorkoutDayLoadSuccess(log: state.log.copyWith(id: ref.id), pageViewIndex: state.pageViewIndex);
+        yield state.copyWith(log: state.log.copyWith(id: ref.id), pageViewIndex: state.pageViewIndex);
       } catch (error) {
-        yield RunningWorkoutDayFailure(log: state.log, pageViewIndex: state.pageViewIndex);
+        yield state.copyWith(log: state.log, pageViewIndex: state.pageViewIndex);
       }
     } else {
-      yield RunningWorkoutDayFailure(
+      yield state.copyWith(
         log: state.log,
         pageViewIndex: state.pageViewIndex,
       );
