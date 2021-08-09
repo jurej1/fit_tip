@@ -1,5 +1,6 @@
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,10 +9,9 @@ class SetDisplayer extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static Widget provider(int setIndex) {
+  static Widget provider(int setIndex, WorkoutExcercise excercise) {
     return BlocProvider(
-      key: ValueKey(setIndex),
-      create: (context) => SetDisplayerCubit(setIndex: setIndex),
+      create: (context) => SetDisplayerCubit(setIndex: setIndex, excercise: excercise),
       child: SetDisplayer(),
     );
   }
@@ -49,7 +49,7 @@ class SetDisplayer extends StatelessWidget {
                           BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                         },
                         width: size.width * 0.5,
-                        initialIndex: 10,
+                        initialIndex: state.repAmount,
                         itemsLength: 40,
                         textBuilder: (value) {
                           return Text('$value x');
