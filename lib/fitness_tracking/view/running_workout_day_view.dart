@@ -61,7 +61,9 @@ class RunningWorkoutDayView extends StatelessWidget {
                 return Center(
                   child: ElevatedButton(
                     child: Text('Submit'),
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
+                    },
                   ),
                 );
               }
