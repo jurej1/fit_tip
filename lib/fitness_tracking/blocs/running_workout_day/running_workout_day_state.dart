@@ -2,57 +2,55 @@ part of 'running_workout_day_bloc.dart';
 
 abstract class RunningWorkoutDayState extends Equatable {
   const RunningWorkoutDayState({
-    required this.workoutDay,
+    required this.log,
     this.pageViewIndex = 0,
-    required this.date,
   });
 
-  final WorkoutDay workoutDay;
+  final WorkoutDayLog log;
   final int pageViewIndex;
-  final DateTime date;
 
   @override
-  List<Object> get props => [workoutDay, pageViewIndex];
+  List<Object> get props => [log, pageViewIndex];
 
-  int get pageViewLength => workoutDay.excercises.length + 1 + 1;
+  int get pageViewLength => log.excercises.length + 1 + 1;
 }
 
 class RunningWorkoutDayInitial extends RunningWorkoutDayState {
   RunningWorkoutDayInitial({
-    required WorkoutDay workoutDay,
+    required WorkoutDayLog log,
     required int pageViewIndex,
-    required DateTime date,
   }) : super(
-          workoutDay: workoutDay,
+          log: log,
           pageViewIndex: pageViewIndex,
-          date: date,
         );
 }
 
 class RunningWorkoutDayLoading extends RunningWorkoutDayState {
   RunningWorkoutDayLoading({
-    required WorkoutDay workoutDay,
+    required WorkoutDayLog log,
     required int pageViewIndex,
-    required DateTime date,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex, date: date);
+  }) : super(
+          log: log,
+          pageViewIndex: pageViewIndex,
+        );
 }
 
 class RunningWorkoutDayLoadSuccess extends RunningWorkoutDayState {
   RunningWorkoutDayLoadSuccess({
-    required WorkoutDay workoutDay,
+    required WorkoutDayLog log,
     required int pageViewIndex,
-    required DateTime date,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex, date: date);
+  }) : super(
+          log: log,
+          pageViewIndex: pageViewIndex,
+        );
 }
 
 class RunningWorkoutDayFailure extends RunningWorkoutDayState {
   RunningWorkoutDayFailure({
-    required WorkoutDay workoutDay,
+    required WorkoutDayLog log,
     required int pageViewIndex,
-    required DateTime date,
   }) : super(
-          workoutDay: workoutDay,
+          log: log,
           pageViewIndex: pageViewIndex,
-          date: date,
         );
 }

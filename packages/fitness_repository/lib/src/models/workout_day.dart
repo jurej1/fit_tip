@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 class WorkoutDay extends Equatable {
   final String id;
+  final String workoutId;
   final String? note;
   final int day;
   final List<MuscleGroup>? musclesTargeted;
@@ -13,10 +14,11 @@ class WorkoutDay extends Equatable {
 
   WorkoutDay({
     String? id,
-    this.note,
     int? day,
-    this.musclesTargeted,
     int? numberOfExcercises,
+    required this.workoutId,
+    this.note,
+    this.musclesTargeted,
     this.excercises = const [],
   })  : this.day = day ?? 0,
         this.id = id ?? UniqueKey().toString();
@@ -25,6 +27,7 @@ class WorkoutDay extends Equatable {
   List<Object?> get props {
     return [
       id,
+      workoutId,
       note,
       day,
       musclesTargeted,
@@ -50,6 +53,7 @@ class WorkoutDay extends Equatable {
 
   WorkoutDay copyWith({
     String? id,
+    String? workoutId,
     String? note,
     int? day,
     List<MuscleGroup>? musclesTargeted,
@@ -57,6 +61,7 @@ class WorkoutDay extends Equatable {
   }) {
     return WorkoutDay(
       id: id ?? this.id,
+      workoutId: workoutId ?? this.workoutId,
       note: note ?? this.note,
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
@@ -72,6 +77,7 @@ class WorkoutDay extends Equatable {
       excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
       musclesTargeted: entity.musclesTargeted,
       note: entity.note,
+      workoutId: entity.workoutId,
     );
   }
 
@@ -86,10 +92,11 @@ class WorkoutDay extends Equatable {
       excercises: excercises.map((e) => e.toEntity()).toList(),
       musclesTargeted: musclesTargeted,
       note: note,
+      workoutId: workoutId,
     );
   }
 
   static WorkoutDay fromListIndexToPure(int index) {
-    return WorkoutDay(day: _calculateDayFromIndex(index));
+    return WorkoutDay(day: _calculateDayFromIndex(index), workoutId: '');
   }
 }

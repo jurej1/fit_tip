@@ -16,6 +16,7 @@ class _DocKeys {
 
 class WorkoutDayEntity extends Equatable {
   final String id;
+  final String workoutId;
   final String? note;
   final int day;
   final List<MuscleGroup>? musclesTargeted;
@@ -23,6 +24,7 @@ class WorkoutDayEntity extends Equatable {
 
   const WorkoutDayEntity({
     required this.id,
+    required this.workoutId,
     this.note,
     required this.day,
     this.musclesTargeted,
@@ -35,6 +37,7 @@ class WorkoutDayEntity extends Equatable {
   List<Object?> get props {
     return [
       id,
+      workoutId,
       note,
       day,
       musclesTargeted,
@@ -44,6 +47,7 @@ class WorkoutDayEntity extends Equatable {
 
   WorkoutDayEntity copyWith({
     String? id,
+    String? workoutId,
     String? note,
     int? day,
     List<MuscleGroup>? musclesTargeted,
@@ -51,6 +55,7 @@ class WorkoutDayEntity extends Equatable {
   }) {
     return WorkoutDayEntity(
       id: id ?? this.id,
+      workoutId: workoutId ?? this.workoutId,
       note: note ?? this.note,
       day: day ?? this.day,
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
@@ -62,6 +67,7 @@ class WorkoutDayEntity extends Equatable {
     final data = snap.data() as Map<String, dynamic>;
 
     return WorkoutDayEntity(
+      workoutId: '',
       id: snap.id,
       day: data[_DocKeys.day],
       note: data[_DocKeys.note],
@@ -75,8 +81,9 @@ class WorkoutDayEntity extends Equatable {
     );
   }
 
-  static WorkoutDayEntity fromMap(Map<String, dynamic> map) {
+  static WorkoutDayEntity fromMap(Map<String, dynamic> map, String workoutId) {
     return WorkoutDayEntity(
+      workoutId: workoutId,
       id: map[_DocKeys.id],
       day: map[_DocKeys.day],
       musclesTargeted: map.containsKey(_DocKeys.musclesTargeted)

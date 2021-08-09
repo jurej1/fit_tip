@@ -116,7 +116,7 @@ class WorkoutEntity extends Equatable {
       daysPerWeek: data[_DocKeys.daysPerWeek],
       timePerWorkout: data[_DocKeys.timePerWorkout],
       startDate: date.toDate(),
-      workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
+      workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e, snapshot.id)).toList(),
       isActive: data[_DocKeys.isActive] ?? false,
       created: created?.toDate() ?? DateTime.now(),
       title: data.containsKey(_DocKeys.title) ? data[_DocKeys.title] : 'Test title',

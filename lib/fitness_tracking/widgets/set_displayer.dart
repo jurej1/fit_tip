@@ -10,6 +10,7 @@ class SetDisplayer extends StatelessWidget {
 
   static Widget provider(int setIndex) {
     return BlocProvider(
+      key: ValueKey(setIndex),
       create: (context) => SetDisplayerCubit(setIndex: setIndex),
       child: SetDisplayer(),
     );

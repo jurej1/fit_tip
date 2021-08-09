@@ -19,6 +19,7 @@ class AddWorkoutDayFormState {
 
   WorkoutDay get workoutDay {
     return WorkoutDay(
+      workoutId: '',
       id: id,
       day: day.value,
       excercises: getExcercisesList(),

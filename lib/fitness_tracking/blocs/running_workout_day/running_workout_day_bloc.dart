@@ -4,8 +4,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'running_workout_day_event.dart';
 part 'running_workout_day_state.dart';
@@ -19,7 +19,16 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
         super(
-          RunningWorkoutDayInitial(workoutDay: workoutDay, date: date, pageViewIndex: 0),
+          RunningWorkoutDayInitial(
+              log: WorkoutDayLog(
+                created: date,
+                workoutId: workoutDay.workoutId,
+                excercises: workoutDay.excercises,
+                id: UniqueKey().toString(),
+                workoutDayId: workoutDay.id,
+                musclesTargeted: workoutDay.musclesTargeted,
+              ),
+              pageViewIndex: 0),
         );
 
   final AuthenticationBloc _authenticationBloc;
@@ -33,7 +42,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     RunningWorkoutDayEvent event,
   ) async* {
     if (event is RunningWorkoutDayPageIndexUpdated) {
-      yield RunningWorkoutDayInitial(pageViewIndex: event.value, workoutDay: state.workoutDay, date: state.date);
+      yield RunningWorkoutDayInitial(pageViewIndex: event.value, log: state.log);
     } else if (event is RunningWorkoutDayWorkoutExcerciseUpdated) {
       yield* _mapExcerciseUpdatetToState(event);
     } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
@@ -42,27 +51,32 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseUpdatetToState(RunningWorkoutDayWorkoutExcerciseUpdated event) async* {
-    WorkoutDay workoutDay = this.state.workoutDay;
-    List<WorkoutExcercise> excercises = workoutDay.excercises;
+    WorkoutDayLog log = this.state.log;
+    List<WorkoutExcercise> excercises = log.excercises;
 
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) return event.excercise;
       return e;
     }).toList();
 
-    yield RunningWorkoutDayInitial(
-        workoutDay: workoutDay.copyWith(excercises: excercises), date: state.date, pageViewIndex: state.pageViewIndex);
+    yield RunningWorkoutDayInitial(log: log.copyWith(excercises: excercises), pageViewIndex: state.pageViewIndex);
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
     if (_isAuth) {
       try {
-        yield RunningWorkoutDayLoading(workoutDay: state.workoutDay, pageViewIndex: state.pageViewIndex, date: state.date);
+        yield RunningWorkoutDayLoading(
+          log: state.log,
+          pageViewIndex: state.pageViewIndex,
+        );
 
         // _fitnessRepository.addWorkoutLog(_user!.id!, workout, dateLogged);
       } catch (error) {}
     } else {
-      yield RunningWorkoutDayFailure(workoutDay: state.workoutDay, pageViewIndex: state.pageViewIndex, date: state.date);
+      yield RunningWorkoutDayFailure(
+        log: state.log,
+        pageViewIndex: state.pageViewIndex,
+      );
     }
   }
 }
