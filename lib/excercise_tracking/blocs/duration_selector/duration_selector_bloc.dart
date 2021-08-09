@@ -29,7 +29,7 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
       yield* mapScrollToState(event.itemWidth, event.controller);
       yield state.copyWith(status: DurationSelectorStatus.scrollEnded);
     } else if (event is DurationSelectorListSnapped) {
-      yield state.copyWith(status: DurationSelectorStatus.dirty);
+      yield state.copyWith(status: DurationSelectorStatus.snapped);
     }
   }
 
