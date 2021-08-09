@@ -22,6 +22,10 @@ class FitnessRepository {
     return _firebaseFirestore.collection('users').doc(userId).collection('fitness_tracking_plan');
   }
 
+  CollectionReference _fitnessTrackingWorkoutRef(String userId) {
+    return _firebaseFirestore.collection('users').doc(userId).collection('fitness_tracking_workouts');
+  }
+
   Future<void> deleteExcerciseLog(String userId, ExcerciseLog log) {
     return _activityTrackingRef(userId).doc(log.id).delete();
   }
@@ -110,25 +114,7 @@ class FitnessRepository {
     return workout.copyWith(isActive: true);
   }
 
-  Future<void> addWorkoutLog(String userId, Workout workout, DateTime dateLogged) async {
-    return _fitnessTrackingPlanRef(userId)
-        .doc(workout.id)
-        .collection('workouts')
-        .doc(
-          Workout.dateTimeToWorkoutLogId(dateLogged),
-        )
-        .set(
-          workout.toWorkoutLogMap(dateLogged.weekday),
-        );
-  }
+  Future<void> addWorkoutLog(String userId, Workout workout, DateTime dateLogged) async {}
 
-  Future<Workout> getWorkoutLogData(String userId, Workout workout, DateTime date) async {
-    DocumentSnapshot snap =
-        await _fitnessTrackingPlanRef(userId).doc(workout.id).collection('workouts').doc(Workout.dateTimeToWorkoutLogId(date)).get();
-
-    if (!snap.exists)
-      return workout;
-    else
-      return Workout.fromEntity(workout.toEntity().fromWorkoutLogSnapshot(snap));
-  }
+  // Future<Workout> getWorkoutLogData(String userId, Workout workout, DateTime date) async {}
 }

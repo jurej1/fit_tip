@@ -11,15 +11,15 @@ import '../fitness_tracking.dart';
 class RunningWorkoutDayView extends StatelessWidget {
   const RunningWorkoutDayView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(WorkoutDay workoutDay) {
+  static MaterialPageRoute route(WorkoutDay workoutDay, DateTime date) {
     return MaterialPageRoute(
       builder: (context) {
         return BlocProvider(
           create: (context) => RunningWorkoutDayBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-            workoutDay: workoutDay,
-          ),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              workoutDay: workoutDay,
+              date: date),
           child: RunningWorkoutDayView(),
         );
       },

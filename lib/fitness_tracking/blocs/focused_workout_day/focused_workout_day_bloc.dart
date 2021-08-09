@@ -46,11 +46,12 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
       final activeState = _activeWorkoutBloc.state as ActiveWorkoutLoadSuccess;
 
       if (!activeState.workout.workouts.any((element) => element.day == event.value.weekday)) {
-        yield FocusedWorkoutDayLoadSuccess();
+        yield FocusedWorkoutDayLoadSuccess(event.value);
       } else {
         yield FocusedWorkoutDayLoading();
 
         yield FocusedWorkoutDayLoadSuccess(
+          event.value,
           activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday),
         );
       }

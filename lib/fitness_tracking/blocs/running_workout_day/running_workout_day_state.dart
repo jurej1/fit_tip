@@ -4,10 +4,12 @@ abstract class RunningWorkoutDayState extends Equatable {
   const RunningWorkoutDayState({
     required this.workoutDay,
     this.pageViewIndex = 0,
+    required this.date,
   });
 
   final WorkoutDay workoutDay;
   final int pageViewIndex;
+  final DateTime date;
 
   @override
   List<Object> get props => [workoutDay, pageViewIndex];
@@ -18,27 +20,39 @@ abstract class RunningWorkoutDayState extends Equatable {
 class RunningWorkoutDayInitial extends RunningWorkoutDayState {
   RunningWorkoutDayInitial({
     required WorkoutDay workoutDay,
-    int pageViewIndex = 0,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex);
+    required int pageViewIndex,
+    required DateTime date,
+  }) : super(
+          workoutDay: workoutDay,
+          pageViewIndex: pageViewIndex,
+          date: date,
+        );
 }
 
 class RunningWorkoutDayLoading extends RunningWorkoutDayState {
   RunningWorkoutDayLoading({
     required WorkoutDay workoutDay,
-    int pageViewIndex = 0,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex);
+    required int pageViewIndex,
+    required DateTime date,
+  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex, date: date);
 }
 
 class RunningWorkoutDayLoadSuccess extends RunningWorkoutDayState {
   RunningWorkoutDayLoadSuccess({
     required WorkoutDay workoutDay,
-    int pageViewIndex = 0,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex);
+    required int pageViewIndex,
+    required DateTime date,
+  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex, date: date);
 }
 
 class RunningWorkoutDayFailure extends RunningWorkoutDayState {
   RunningWorkoutDayFailure({
     required WorkoutDay workoutDay,
-    int pageViewIndex = 0,
-  }) : super(workoutDay: workoutDay, pageViewIndex: pageViewIndex);
+    required int pageViewIndex,
+    required DateTime date,
+  }) : super(
+          workoutDay: workoutDay,
+          pageViewIndex: pageViewIndex,
+          date: date,
+        );
 }
