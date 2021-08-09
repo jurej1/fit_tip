@@ -57,6 +57,7 @@ class WorkoutDayLog extends Equatable {
       workoutDayId: entity.workoutDayId,
       excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
       created: entity.created,
+      musclesTargeted: entity.musclesTargeted,
     );
   }
 
@@ -67,6 +68,7 @@ class WorkoutDayLog extends Equatable {
       workoutDayId: workoutDayId,
       excercises: excercises.map((e) => e.toEntity()).toList(),
       created: created,
+      musclesTargeted: musclesTargeted,
     );
   }
 }

@@ -57,12 +57,16 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     WorkoutDayLog log = this.state.log;
     List<WorkoutExcercise> excercises = log.excercises;
 
+    dev.log('dev.log before ' + log.toString());
+
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) {
         return event.excercise;
       }
       return e;
     }).toList();
+
+    dev.log('dev.log after ' + log.copyWith(excercises: excercises).toString());
 
     yield state.copyWith(
       log: log.copyWith(excercises: excercises),
