@@ -21,8 +21,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
         super(
-          RunningWorkoutDayState(
-            log: WorkoutDayLog(
+          RunningWorkoutDayInitial(
+            WorkoutDayLog(
               created: date,
               workoutId: workoutDay.workoutId,
               excercises: workoutDay.excercises,
@@ -30,7 +30,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
               workoutDayId: workoutDay.id,
               musclesTargeted: workoutDay.musclesTargeted,
             ),
-            pageViewIndex: 0,
+            0,
           ),
         );
 
@@ -45,7 +45,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     RunningWorkoutDayEvent event,
   ) async* {
     if (event is RunningWorkoutDayPageIndexUpdated) {
-      yield state.copyWith(pageViewIndex: event.value);
+      yield RunningWorkoutDayInitial(state.log, event.value);
     } else if (event is RunningWorkoutDayWorkoutExcerciseUpdated) {
       yield* _mapExcerciseUpdatetToState(event);
     } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
@@ -68,32 +68,29 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
 
     dev.log('dev.log after ' + log.copyWith(excercises: excercises).toString());
 
-    yield state.copyWith(
-      log: log.copyWith(excercises: excercises),
-    );
+    yield RunningWorkoutDayInitial(log.copyWith(excercises: excercises), state.pageViewIndex);
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
     if (_isAuth) {
       try {
-        // yield state.copyWith(
-        //   log: state.log,
-        //   pageViewIndex: state.pageViewIndex,
-        // );
+        yield RunningWorkoutLoading(
+          state.log,
+          state.pageViewIndex,
+        );
 
         DocumentReference ref = await _fitnessRepository.addWorkoutLog(
           _user!.id!,
           state.log,
         );
-
-        yield state.copyWith(log: state.log.copyWith(id: ref.id), pageViewIndex: state.pageViewIndex);
+        yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);
       } catch (error) {
-        yield state.copyWith(log: state.log, pageViewIndex: state.pageViewIndex);
+        yield RunningWorkoutDayFail(state.log, state.pageViewIndex);
       }
     } else {
-      yield state.copyWith(
-        log: state.log,
-        pageViewIndex: state.pageViewIndex,
+      yield RunningWorkoutDayFail(
+        state.log,
+        state.pageViewIndex,
       );
     }
   }
