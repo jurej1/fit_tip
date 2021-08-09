@@ -77,7 +77,7 @@ class SetDisplayer extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text('Weight'),
+                const Text('Weight'),
                 const SizedBox(height: 8),
                 Expanded(child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                   builder: (context, state) {
