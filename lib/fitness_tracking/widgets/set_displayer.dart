@@ -72,7 +72,7 @@ class SetDisplayer extends StatelessWidget {
             width: size.width * 0.5,
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: Colors.black),
+                left: const BorderSide(color: Colors.black),
               ),
             ),
             child: Column(
