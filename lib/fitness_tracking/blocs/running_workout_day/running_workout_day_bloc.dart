@@ -57,7 +57,9 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     List<WorkoutExcercise> excercises = log.excercises;
 
     excercises = excercises.map((e) {
-      if (e.id == event.excercise.id) return event.excercise;
+      if (e.id == event.excercise.id) {
+        return event.excercise;
+      }
       return e;
     }).toList();
 

@@ -1,9 +1,8 @@
-import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
 import 'package:fitness_repository/src/models/models.dart';
 
-class WorkoutDayLog extends Equatable {
+class WorkoutDayLog {
   final String id;
   final String workoutId;
   final String workoutDayId;
@@ -19,18 +18,6 @@ class WorkoutDayLog extends Equatable {
     required this.created,
     this.musclesTargeted,
   });
-
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      workoutId,
-      workoutDayId,
-      musclesTargeted,
-      excercises,
-      created,
-    ];
-  }
 
   WorkoutDayLog copyWith({
     String? id,
