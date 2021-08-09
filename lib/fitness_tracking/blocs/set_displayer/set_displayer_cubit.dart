@@ -16,11 +16,15 @@ class SetDisplayerCubit extends Cubit<SetDisplayerState> {
           ),
         );
 
-  void repAmountUpdated(int repAmount) {
+  void repAmountUpdated(int repAmount) async {
+    await _delay;
     emit(state.copyWith(repAmount: repAmount));
   }
 
-  void weightAmountUpdated(double weightAmount) {
+  void weightAmountUpdated(double weightAmount) async {
+    await _delay;
     emit(state.copyWith(weightAmount: weightAmount));
   }
+
+  Future<void> get _delay => Future.delayed(Duration(milliseconds: 500));
 }
