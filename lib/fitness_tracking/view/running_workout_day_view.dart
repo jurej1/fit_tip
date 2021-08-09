@@ -50,11 +50,17 @@ class RunningWorkoutDayView extends StatelessWidget {
       body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
         builder: (context, state) {
           return PageView.builder(
-            itemCount: state.workoutDay.excercises.length + 1,
+            itemCount: state.pageViewLength,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return Container(
                   child: Text('Overview page'),
+                );
+              }
+
+              if (index == state.pageViewIndex) {
+                return Container(
+                  child: Text('Submit Page'),
                 );
               }
               final item = state.workoutDay.excercises[index - 1];
@@ -89,7 +95,7 @@ class _SelectedPageDisplayer extends HookWidget {
           dotSize: 10,
           length: state.pageViewLength,
           controller: _controller,
-          width: 30,
+          width: 40,
           selectedColor: Colors.blue,
         );
       },
@@ -105,6 +111,7 @@ class _AppBarTextDisplayer extends StatelessWidget {
     return BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       builder: (context, state) {
         if (state.pageViewIndex == 0) return Text('Overview');
+        if (state.pageViewIndex == state.pageViewLength) return Text('Submit page');
 
         final int index = state.pageViewIndex - 1;
         final item = state.workoutDay.excercises[index];

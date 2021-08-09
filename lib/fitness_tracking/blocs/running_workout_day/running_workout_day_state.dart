@@ -22,5 +22,5 @@ class RunningWorkoutDayState extends Equatable {
     );
   }
 
-  int get pageViewLength => workoutDay.excercises.length + 1;
+  int get pageViewLength => workoutDay.excercises.length + 1 + 1;
 }
