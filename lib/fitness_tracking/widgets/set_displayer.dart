@@ -11,7 +11,11 @@ class SetDisplayer extends StatelessWidget {
 
   static Widget provider(int setIndex, WorkoutExcercise excercise) {
     return BlocProvider(
-      create: (context) => SetDisplayerCubit(setIndex: setIndex, excercise: excercise),
+      create: (context) => SetDisplayerCubit(
+        setIndex: setIndex,
+        repAmount: excercise.repCount?[setIndex] ?? 10,
+        weightAmount: excercise.weightCount?[setIndex] ?? 20,
+      ),
       child: SetDisplayer(),
     );
   }
@@ -45,8 +49,10 @@ class SetDisplayer extends StatelessWidget {
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        onValueUpdated: (value) {
-                          BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
+                        onValueUpdated: (value, status) {
+                          if (status == DurationSelectorStatus.scrollEnded) {
+                            BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
+                          }
                         },
                         width: size.width * 0.5,
                         initialIndex: state.repAmount,
@@ -76,8 +82,10 @@ class SetDisplayer extends StatelessWidget {
                 Expanded(child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                   builder: (context, state) {
                     return ScrollableHorizontalValueSelector(
-                      onValueUpdated: (value) {
-                        BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
+                      onValueUpdated: (value, status) {
+                        if (status == DurationSelectorStatus.scrollEnded) {
+                          BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
+                        }
                       },
                       width: size.width * 0.5,
                       initialIndex: state.weightAmount.toInt(),

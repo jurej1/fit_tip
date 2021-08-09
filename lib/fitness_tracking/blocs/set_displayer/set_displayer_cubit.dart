@@ -5,12 +5,15 @@ import 'package:fitness_repository/fitness_repository.dart';
 part 'set_displayer_state.dart';
 
 class SetDisplayerCubit extends Cubit<SetDisplayerState> {
-  SetDisplayerCubit({required int setIndex, required WorkoutExcercise excercise})
-      : super(
+  SetDisplayerCubit({
+    required int setIndex,
+    required int repAmount,
+    required double weightAmount,
+  }) : super(
           SetDisplayerState(
-            repAmount: excercise.repCount![setIndex],
+            repAmount: repAmount,
             setIndex: setIndex,
-            weightAmount: excercise.weightCount![setIndex],
+            weightAmount: weightAmount,
           ),
         );
 
