@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
 import 'package:fitness_repository/src/models/models.dart';
 
@@ -46,6 +47,26 @@ class WorkoutDayLog extends Equatable {
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
       created: created ?? this.created,
+    );
+  }
+
+  factory WorkoutDayLog.fromEntity(WorkoutDayLogEntity entity) {
+    return WorkoutDayLog(
+      id: entity.id,
+      workoutId: entity.workoutId,
+      workoutDayId: entity.workoutDayId,
+      excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
+      created: entity.created,
+    );
+  }
+
+  WorkoutDayLogEntity toEntity() {
+    return WorkoutDayLogEntity(
+      id: id,
+      workoutId: workoutId,
+      workoutDayId: workoutDayId,
+      excercises: excercises.map((e) => e.toEntity()).toList(),
+      created: created,
     );
   }
 }

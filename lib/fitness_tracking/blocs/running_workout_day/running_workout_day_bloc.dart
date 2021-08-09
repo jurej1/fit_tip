@@ -20,15 +20,16 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         _fitnessRepository = fitnessRepository,
         super(
           RunningWorkoutDayInitial(
-              log: WorkoutDayLog(
-                created: date,
-                workoutId: workoutDay.workoutId,
-                excercises: workoutDay.excercises,
-                id: UniqueKey().toString(),
-                workoutDayId: workoutDay.id,
-                musclesTargeted: workoutDay.musclesTargeted,
-              ),
-              pageViewIndex: 0),
+            log: WorkoutDayLog(
+              created: date,
+              workoutId: workoutDay.workoutId,
+              excercises: workoutDay.excercises,
+              id: UniqueKey().toString(),
+              workoutDayId: workoutDay.id,
+              musclesTargeted: workoutDay.musclesTargeted,
+            ),
+            pageViewIndex: 0,
+          ),
         );
 
   final AuthenticationBloc _authenticationBloc;
