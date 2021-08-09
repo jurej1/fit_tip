@@ -22,7 +22,7 @@ class ExcercisePageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ExcercisePageCardBloc, ExcercisePageCardState>(
       listener: (context, state) {
-        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseUpdated(state.getNewWorkoutExcercise()));
+        // BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseUpdated(state.getNewWorkoutExcercise()));
       },
       builder: (context, state) {
         return SingleChildScrollView(
