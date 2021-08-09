@@ -24,3 +24,5 @@ class RunningWorkoutDayWorkoutExcerciseUpdated extends RunningWorkoutDayEvent {
   @override
   List<Object> get props => [excercise];
 }
+
+class RunningWorkoutDayWorkoutExcerciseSubmit extends RunningWorkoutDayEvent {}

@@ -57,12 +57,15 @@ class RunningWorkoutDayView extends StatelessWidget {
                   child: Text('Overview page'),
                 );
               }
-
-              if (index == state.pageViewIndex) {
-                return Container(
-                  child: Text('Submit Page'),
+              if (index == state.pageViewLength - 1) {
+                return Center(
+                  child: ElevatedButton(
+                    child: Text('Submit'),
+                    onPressed: () {},
+                  ),
                 );
               }
+
               final item = state.workoutDay.excercises[index - 1];
               return ExcercisePageCard.provider(item);
             },
@@ -111,7 +114,7 @@ class _AppBarTextDisplayer extends StatelessWidget {
     return BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       builder: (context, state) {
         if (state.pageViewIndex == 0) return Text('Overview');
-        if (state.pageViewIndex == state.pageViewLength) return Text('Submit page');
+        if (state.pageViewIndex == state.pageViewLength - 1) return Text('Submit');
 
         final int index = state.pageViewIndex - 1;
         final item = state.workoutDay.excercises[index];

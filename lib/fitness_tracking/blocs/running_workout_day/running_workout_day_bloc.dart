@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 part 'running_workout_day_event.dart';
@@ -15,7 +16,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     required FitnessRepository fitnessRepository,
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
-        super(RunningWorkoutDayState(workoutDay: workoutDay));
+        super(RunningWorkoutDayInitial(workoutDay: workoutDay));
 
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
@@ -25,9 +26,11 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     RunningWorkoutDayEvent event,
   ) async* {
     if (event is RunningWorkoutDayPageIndexUpdated) {
-      yield state.copyWith(pageViewIndex: event.value);
+      yield RunningWorkoutDayInitial(pageViewIndex: event.value, workoutDay: state.workoutDay);
     } else if (event is RunningWorkoutDayWorkoutExcerciseUpdated) {
       yield* _mapExcerciseUpdatetToState(event);
+    } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
+      yield* _mapExcerciseSubmitToState(event);
     }
   }
 
@@ -40,6 +43,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
       return e;
     }).toList();
 
-    yield this.state.copyWith(workoutDay: workoutDay.copyWith(excercises: excercises));
+    yield RunningWorkoutDayInitial(workoutDay: workoutDay.copyWith(excercises: excercises));
   }
+
+  Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {}
 }
