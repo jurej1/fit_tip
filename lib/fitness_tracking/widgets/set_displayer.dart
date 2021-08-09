@@ -50,7 +50,7 @@ class SetDisplayer extends StatelessWidget {
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
                         onValueUpdated: (value, status) {
-                          if (status == DurationSelectorStatus.scrollEnded) {
+                          if (status == DurationSelectorStatus.snapped) {
                             BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                           }
                         },
