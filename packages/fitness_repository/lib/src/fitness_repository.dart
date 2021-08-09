@@ -114,7 +114,7 @@ class FitnessRepository {
     return workout.copyWith(isActive: true);
   }
 
-  Future<void> addWorkoutLog(String userId, Workout workout, DateTime dateLogged) async {}
-
-  // Future<Workout> getWorkoutLogData(String userId, Workout workout, DateTime date) async {}
+  Future<DocumentReference> addWorkoutLog(String userId, WorkoutDayLog log) async {
+    return _fitnessTrackingWorkoutRef(userId).add(log.toEntity().toDocumentSnapshot());
+  }
 }

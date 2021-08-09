@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -71,8 +72,15 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           pageViewIndex: state.pageViewIndex,
         );
 
-        // _fitnessRepository.addWorkoutLog(_user!.id!, workout, dateLogged);
-      } catch (error) {}
+        DocumentReference ref = await _fitnessRepository.addWorkoutLog(
+          _user!.id!,
+          state.log,
+        );
+
+        yield RunningWorkoutDayLoadSuccess(log: state.log.copyWith(id: ref.id), pageViewIndex: state.pageViewIndex);
+      } catch (error) {
+        yield RunningWorkoutDayFailure(log: state.log, pageViewIndex: state.pageViewIndex);
+      }
     } else {
       yield RunningWorkoutDayFailure(
         log: state.log,
