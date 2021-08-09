@@ -15,3 +15,12 @@ class RunningWorkoutDayPageIndexUpdated extends RunningWorkoutDayEvent {
   @override
   List<Object> get props => [value];
 }
+
+class RunningWorkoutDayWorkoutExcerciseUpdated extends RunningWorkoutDayEvent {
+  final WorkoutExcercise excercise;
+
+  const RunningWorkoutDayWorkoutExcerciseUpdated(this.excercise);
+
+  @override
+  List<Object> get props => [excercise];
+}

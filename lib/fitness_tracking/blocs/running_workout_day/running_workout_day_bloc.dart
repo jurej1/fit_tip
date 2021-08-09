@@ -26,6 +26,20 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   ) async* {
     if (event is RunningWorkoutDayPageIndexUpdated) {
       yield state.copyWith(pageViewIndex: event.value);
+    } else if (event is RunningWorkoutDayWorkoutExcerciseUpdated) {
+      yield* _mapExcerciseUpdatetToState(event);
     }
+  }
+
+  Stream<RunningWorkoutDayState> _mapExcerciseUpdatetToState(RunningWorkoutDayWorkoutExcerciseUpdated event) async* {
+    WorkoutDay workoutDay = this.state.workoutDay;
+    List<WorkoutExcercise> excercises = workoutDay.excercises;
+
+    excercises = excercises.map((e) {
+      if (e.id == event.excercise.id) return event.excercise;
+      return e;
+    }).toList();
+
+    yield this.state.copyWith(workoutDay: workoutDay.copyWith(excercises: excercises));
   }
 }
