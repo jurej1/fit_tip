@@ -93,7 +93,17 @@ class WorkoutExcerciseEntity extends Equatable {
       _DocKeys.id: this.id,
       _DocKeys.name: this.name,
       _DocKeys.reps: this.reps,
-      _DocKeys.sets: this.reps,
+      _DocKeys.sets: this.sets,
+      _DocKeys.repUnit: describeEnum(this.repUnit),
+      if (this.repCount != null) _DocKeys.repCount: this.repCount,
+      if (this.weightCount != null) _DocKeys.weightCount: this.weightCount,
+    };
+  }
+
+  Map<String, dynamic> toMapLog() {
+    return {
+      _DocKeys.id: this.id,
+      _DocKeys.name: this.name,
       _DocKeys.repUnit: describeEnum(this.repUnit),
       _DocKeys.repCount: this.repCount,
       _DocKeys.weightCount: this.weightCount,
@@ -101,12 +111,16 @@ class WorkoutExcerciseEntity extends Equatable {
   }
 
   static WorkoutExcerciseEntity fromMap(Map<String, dynamic> map) {
+    List<int>? repCount = map.containsKey(_DocKeys.repCount) ? map[_DocKeys.repCount] : null;
+    List<double>? weightCount = map.containsKey(_DocKeys.weightCount) ? map[_DocKeys.weightCount] : null;
     return WorkoutExcerciseEntity(
       id: map[_DocKeys.id],
       name: map[_DocKeys.name],
-      sets: map[_DocKeys.sets],
-      reps: map[_DocKeys.reps],
+      sets: map.containsKey(_DocKeys.sets) ? map[_DocKeys.sets] : repCount?.length ?? 0,
+      reps: map.containsKey(_DocKeys.reps) ? map[_DocKeys.reps] : repCount?.first ?? 0,
       repUnit: RepUnit.values.firstWhere((element) => describeEnum(element) == map[_DocKeys.repUnit]),
+      repCount: repCount,
+      weightCount: weightCount,
     );
   }
 }
