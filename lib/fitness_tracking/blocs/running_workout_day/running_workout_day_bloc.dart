@@ -70,12 +70,12 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
     if (_isAuth) {
       try {
-        yield RunningWorkoutLoading(
+        yield RunningWorkoutDayLoading(
           state.log,
           state.pageViewIndex,
         );
 
-        DocumentReference ref = await _fitnessRepository.addWorkoutLog(
+        DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(
           _user!.id!,
           state.log,
         );

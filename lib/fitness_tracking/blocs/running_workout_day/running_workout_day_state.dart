@@ -19,8 +19,8 @@ class RunningWorkoutDayInitial extends RunningWorkoutDayState {
   const RunningWorkoutDayInitial(WorkoutDayLog log, int pageViewIndex) : super(log, pageViewIndex);
 }
 
-class RunningWorkoutLoading extends RunningWorkoutDayState {
-  const RunningWorkoutLoading(WorkoutDayLog log, int pageViewIndex) : super(log, pageViewIndex);
+class RunningWorkoutDayLoading extends RunningWorkoutDayState {
+  const RunningWorkoutDayLoading(WorkoutDayLog log, int pageViewIndex) : super(log, pageViewIndex);
 }
 
 class RunningWorkoutDayLoadSuccess extends RunningWorkoutDayState {

@@ -28,54 +28,65 @@ class RunningWorkoutDayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _AppBarTextDisplayer(),
-        actions: [
-          BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
-            builder: (context, state) {
-              return Visibility(
-                visible: state.log.excercises.length != 0,
-                child: Row(
-                  children: [
-                    const _SelectedPageDisplayer(),
-                    const SizedBox(width: 20),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
-        builder: (context, state) {
-          return PageView.builder(
-            itemCount: state.pageViewLength,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Container(
-                  child: Text('Overview page'),
-                );
-              }
-              if (index == state.pageViewLength - 1) {
-                return Center(
-                  child: ElevatedButton(
-                    child: Text('Submit'),
-                    onPressed: () {
-                      BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
-                    },
+    return BlocListener<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+      listener: (context, state) {
+        //TODO when the workout it published to firebase
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: _AppBarTextDisplayer(),
+          actions: [
+            BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+              builder: (context, state) {
+                return Visibility(
+                  visible: state.log.excercises.length != 0,
+                  child: Row(
+                    children: [
+                      const _SelectedPageDisplayer(),
+                      const SizedBox(width: 20),
+                    ],
                   ),
                 );
-              }
+              },
+            ),
+          ],
+        ),
+        body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+          builder: (context, state) {
+            if (state is RunningWorkoutDayLoading) {
+              return Center(
+                child: const CircularProgressIndicator(),
+              );
+            }
 
-              final item = state.log.excercises[index - 1];
-              return ExcercisePageCard.provider(item);
-            },
-            onPageChanged: (index) {
-              BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
-            },
-          );
-        },
+            return PageView.builder(
+              itemCount: state.pageViewLength,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Container(
+                    child: Text('Overview page'),
+                  );
+                }
+                if (index == state.pageViewLength - 1) {
+                  return Center(
+                    child: ElevatedButton(
+                      child: Text('Submit'),
+                      onPressed: () {
+                        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
+                      },
+                    ),
+                  );
+                }
+
+                final item = state.log.excercises[index - 1];
+                return ExcercisePageCard.provider(item);
+              },
+              onPageChanged: (index) {
+                BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
+              },
+            );
+          },
+        ),
       ),
     );
   }
