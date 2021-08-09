@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fitness_repository/fitness_repository.dart';
 
 part 'set_displayer_state.dart';
 

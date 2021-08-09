@@ -1,6 +1,6 @@
 part of 'running_workout_day_bloc.dart';
 
-class RunningWorkoutDayState {
+class RunningWorkoutDayState extends Equatable {
   const RunningWorkoutDayState({
     required this.log,
     this.pageViewIndex = 0,
@@ -20,4 +20,7 @@ class RunningWorkoutDayState {
       pageViewIndex: pageViewIndex ?? this.pageViewIndex,
     );
   }
+
+  @override
+  List<Object> get props => [log, pageViewIndex];
 }
