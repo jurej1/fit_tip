@@ -360,7 +360,15 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       try {
         if (state.formMode == FormMode.add) {
           DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
-          yield state.copyWith(status: FormzStatus.submissionSuccess, id: ref.id);
+          yield state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            id: ref.id,
+            workoutDays: WorkoutDaysList.dirty(
+              // TODO test this three lines
+              value: state.workoutDays.value.map((e) => e.copyWith(workoutId: ref.id)).toList(),
+              workoutsPerWeekend: state.daysPerWeek.getIntValue(),
+            ),
+          );
         } else {
           await _fitnessRepository.updateWorkout(_user!.id!, state.workout);
           yield state.copyWith(status: FormzStatus.submissionSuccess);
