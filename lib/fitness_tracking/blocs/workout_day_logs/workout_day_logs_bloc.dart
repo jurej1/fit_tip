@@ -43,6 +43,8 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
   }
 
   Stream<WorkoutDayLogsState> _mapWorkoutUpdatedToState() async* {
+    if (state is WorkoutDayLogsLoadSuccess) return;
+
     if (_isAuth && _activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
       yield WorkoutDayLogsLoading();
 

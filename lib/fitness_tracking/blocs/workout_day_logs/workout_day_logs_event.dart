@@ -7,13 +7,7 @@ abstract class WorkoutDayLogsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WorkoutDayLogsLoadRequested extends WorkoutDayLogsEvent {
-  final Workout workout;
-
-  const WorkoutDayLogsLoadRequested(this.workout);
-  @override
-  List<Object> get props => [workout];
-}
+class WorkoutDayLogsLoadRequested extends WorkoutDayLogsEvent {}
 
 class WorkoutDayLogsLogAdded extends WorkoutDayLogsEvent {
   final WorkoutDayLog log;
