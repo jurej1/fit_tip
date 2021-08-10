@@ -150,4 +150,14 @@ class FitnessRepository {
           .toList();
     }
   }
+
+  Future<WorkoutDayLog?> getWorkoutDayLogById(String userId, String id) async {
+    DocumentSnapshot snap = await _fitnessTrackingWorkoutRef(userId).doc(id).get();
+
+    if (snap.exists) {
+      return WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(snap));
+    }
+
+    return null;
+  }
 }
