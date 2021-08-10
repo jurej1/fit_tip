@@ -53,7 +53,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Fitness tracking'),
+              const Text('Fitness tracking'),
               _AppBarPageDisplayer(),
             ],
           ),
@@ -74,7 +74,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
               onPressed: () {
                 if (state is FocusedWorkoutDayLoadSuccess) {
                   if (state.workoutDay == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You do not have any workouts today')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('You do not have any workouts today')));
                   } else {
                     Navigator.of(context).push(
                       RunningWorkoutDayView.route(
@@ -84,7 +84,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                     );
                   }
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Loading... try again in a second')));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('Loading... try again in a second')));
                 }
               },
               label: Text('Start Workout'),
