@@ -125,4 +125,29 @@ class FitnessRepository {
   Future<void> updateWorkoutDayLog(String userId, WorkoutDayLog log) async {
     return _fitnessTrackingWorkoutRef(userId).doc(log.id).update(log.toEntity().toDocumentSnapshot());
   }
+
+  Future<List<WorkoutDayLog>> getWorkoutDayLogByDate(String userId, DateTime date) async {
+    final lowerBound = DateTime(date.year, date.month, date.day);
+    final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
+
+    QuerySnapshot querySnapshot = await _fitnessTrackingWorkoutRef(userId)
+        .where(
+          'created',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(lowerBound),
+          isLessThanOrEqualTo: Timestamp.fromDate(upperBound),
+        )
+        .get();
+
+    if (querySnapshot.size == 0) {
+      return [];
+    } else {
+      return querySnapshot.docs
+          .map(
+            (e) => WorkoutDayLog.fromEntity(
+              WorkoutDayLogEntity.fromDocumentSnapshot(e),
+            ),
+          )
+          .toList();
+    }
+  }
 }

@@ -81,7 +81,11 @@ class WorkoutDayLogEntity extends Equatable {
       id: snap.id,
       workoutId: data[_DocKeys.workoutId],
       workoutDayId: data[_DocKeys.workoutDayId],
-      excercises: excercises.map<WorkoutExcerciseEntity>((e) => WorkoutExcerciseEntity.fromMap(e)).toList(),
+      excercises: excercises
+          .map<WorkoutExcerciseEntity>(
+            (e) => WorkoutExcerciseEntity.fromMap(e),
+          )
+          .toList(),
       created: created.toDate(),
       musclesTargeted: data.containsKey(_DocKeys.muscleTargeted)
           ? ((data[_DocKeys.muscleTargeted] as List<dynamic>)
