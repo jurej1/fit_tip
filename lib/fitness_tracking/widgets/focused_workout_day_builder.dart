@@ -17,9 +17,9 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
             child: LinearProgressIndicator(),
           );
         } else if (state is FocusedWorkoutDayLoadSuccess) {
-          final WorkoutDay? day = state.workoutDay;
+          final WorkoutDay? workoutDay = state.workoutDay;
 
-          if (day == null) {
+          if (workoutDay == null) {
             return Container(
               child: Text(
                 'No workout',
@@ -31,13 +31,30 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
               ),
             );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(day.id),
-              Text(day.mapDayToText),
-              Text(day.numberOfExcercises.toStringAsFixed(0)),
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (workoutDay.musclesTargeted != null && workoutDay.musclesTargeted!.isNotEmpty) ...{
+                  Text(
+                    'Muscles targeted',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  ...workoutDay.musclesTargeted!
+                      .map(
+                        (e) => Chip(
+                          backgroundColor: Colors.blue.shade300,
+                          label: Text(mapMuscleGroupToString(e)),
+                          labelStyle: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                }
+              ],
+            ),
           );
         } else if (state is FocusedWorkoutDayFail) {
           return Container(
