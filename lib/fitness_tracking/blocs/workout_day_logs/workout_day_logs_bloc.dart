@@ -42,6 +42,12 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
   ) async* {
     if (event is _WorkoutDayLogsWorkoutUpdated) {
       yield* _mapWorkoutUpdatedToState(event);
+    } else if (event is WorkoutDayLogsLogAdded) {
+      yield* _mapLogAddedToState(event);
+    } else if (event is WorkoutDayLogsLogRemoved) {
+      yield* _mapLogRemovedToState(event);
+    } else if (event is WorkoutDayLogsLogUpdated) {
+      yield* _mapLogUpdatedToState(event);
     }
   }
 
@@ -66,6 +72,46 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
       } catch (error) {}
     } else {
       yield WorkoutDayLogsFailure();
+    }
+  }
+
+  Stream<WorkoutDayLogsState> _mapLogAddedToState(WorkoutDayLogsLogAdded event) async* {
+    if (state is WorkoutDayLogsLoadSuccess) {
+      final currentState = state as WorkoutDayLogsLoadSuccess;
+
+      if (currentState.logs.isEmpty) {
+        yield WorkoutDayLogsLoadSuccess([event.log]);
+      } else {
+        List<WorkoutDayLog> logs = currentState.logs;
+
+        logs.add(event.log);
+        logs.sort((a, b) => b.created.compareTo(a.created));
+
+        yield WorkoutDayLogsLoadSuccess(logs);
+      }
+    }
+  }
+
+  Stream<WorkoutDayLogsState> _mapLogRemovedToState(WorkoutDayLogsLogRemoved event) async* {
+    if (state is WorkoutDayLogsLoadSuccess) {
+      final currentState = state as WorkoutDayLogsLoadSuccess;
+      List<WorkoutDayLog> logs = currentState.logs;
+      logs.removeWhere((element) => element.id == event.log.id);
+      yield WorkoutDayLogsLoadSuccess(logs);
+    }
+  }
+
+  Stream<WorkoutDayLogsState> _mapLogUpdatedToState(WorkoutDayLogsLogUpdated event) async* {
+    if (state is WorkoutDayLogsLoadSuccess) {
+      final currentState = state as WorkoutDayLogsLoadSuccess;
+      List<WorkoutDayLog> logs = currentState.logs;
+      logs = logs.map((e) {
+        if (e.id == event.log.id) {
+          return event.log;
+        }
+        return e;
+      }).toList();
+      yield WorkoutDayLogsLoadSuccess(logs);
     }
   }
 }
