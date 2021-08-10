@@ -106,7 +106,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           return PageView(
             physics: const ClampingScrollPhysics(),
             children: [
-              const Page1(),
+              const ActiveWorkoutOverviewBuilder(),
               const Page2(),
               const Page3(),
             ],
@@ -150,60 +150,21 @@ class Page2 extends StatelessWidget {
   }
 }
 
-class Page1 extends StatelessWidget {
-  const Page1({Key? key}) : super(key: key);
+class Page3 extends StatelessWidget {
+  const Page3({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
       builder: (context, state) {
         if (state is ActiveWorkoutLoadSuccess) {
-          return ListView(
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.all(10),
-            children: [
-              WorkoutInfoRow(
-                created: state.workout.mapCreatedToText,
-                daysPerWeek: state.workout.daysPerWeek.toStringAsFixed(0),
-                goal: mapWorkoutGoalToText(state.workout.goal),
-              ),
-              if (state.workout.note != null) ...{
-                Text(
-                  'Info',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(state.workout.note!),
-                const SizedBox(height: 10),
-              },
-              ...state.workout.workouts
-                  .map(
-                    (e) => Column(
-                      children: [
-                        WorkoutDetailItem(workout: e),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ],
+          return Center(
+            child: Text('Workouts logs'),
           );
         }
+
         return Container();
       },
-    );
-  }
-}
-
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Workout logs list view'),
     );
   }
 }
