@@ -108,6 +108,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             children: [
               const Page1(),
               const Page2(),
+              const Page3(),
             ],
             onPageChanged: (index) {
               BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
@@ -196,6 +197,17 @@ class Page1 extends StatelessWidget {
   }
 }
 
+class Page3 extends StatelessWidget {
+  const Page3({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Workout logs list view'),
+    );
+  }
+}
+
 class _AppBarPageDisplayer extends HookWidget {
   const _AppBarPageDisplayer({Key? key}) : super(key: key);
 
@@ -212,7 +224,7 @@ class _AppBarPageDisplayer extends HookWidget {
       },
       child: SelectedViewDisplayer(
         unselectedColor: Colors.grey,
-        width: 30,
+        width: 40,
         dotSize: 10,
         length: ActiveWorkoutView.values.length,
         controller: _controller,

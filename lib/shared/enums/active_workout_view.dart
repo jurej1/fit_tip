@@ -1,1 +1,1 @@
-enum ActiveWorkoutView { workout, calendar }
+enum ActiveWorkoutView { workout, calendar, workoutLogs }
