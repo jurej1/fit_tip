@@ -113,7 +113,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
               children: [
                 const ActiveWorkoutOverviewBuilder(),
                 const Page2(),
-                const Page3(),
+                const WorkoutDayLogsBuilder(),
               ],
               onPageChanged: (index) {
                 BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
@@ -150,25 +150,6 @@ class Page2 extends StatelessWidget {
             ),
           );
         }
-        return Container();
-      },
-    );
-  }
-}
-
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
-      builder: (context, state) {
-        if (state is ActiveWorkoutLoadSuccess) {
-          return Center(
-            child: Text('Workouts logs'),
-          );
-        }
-
         return Container();
       },
     );
