@@ -14,3 +14,27 @@ class _WorkoutDayLogsWorkoutUpdated extends WorkoutDayLogsEvent {
   @override
   List<Object> get props => [workout];
 }
+
+class WorkoutDayLogsLogAdded extends WorkoutDayLogsEvent {
+  final WorkoutDayLog log;
+
+  const WorkoutDayLogsLogAdded(this.log);
+  @override
+  List<Object> get props => [log];
+}
+
+class WorkoutDayLogsLogRemoved extends WorkoutDayLogsEvent {
+  final WorkoutDayLog log;
+
+  const WorkoutDayLogsLogRemoved(this.log);
+  @override
+  List<Object> get props => [log];
+}
+
+class WorkoutDayLogsLogUpdated extends WorkoutDayLogsEvent {
+  final WorkoutDayLog log;
+
+  const WorkoutDayLogsLogUpdated(this.log);
+  @override
+  List<Object> get props => [log];
+}
