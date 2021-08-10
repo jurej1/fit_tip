@@ -11,11 +11,12 @@ class FocusedWorkoutDayLoading extends FocusedWorkoutDayState {}
 
 class FocusedWorkoutDayLoadSuccess extends FocusedWorkoutDayState {
   final WorkoutDay? workoutDay;
+  final List<WorkoutDayLog> workoutDayLog;
   final DateTime date;
 
-  const FocusedWorkoutDayLoadSuccess(this.date, [this.workoutDay]);
+  const FocusedWorkoutDayLoadSuccess({required this.date, this.workoutDay, this.workoutDayLog = const []});
   @override
-  List<Object?> get props => [workoutDay, date];
+  List<Object?> get props => [workoutDay, date, workoutDayLog];
 }
 
 class FocusedWorkoutDayFail extends FocusedWorkoutDayState {}

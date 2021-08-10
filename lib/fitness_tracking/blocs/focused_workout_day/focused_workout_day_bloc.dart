@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 import '../blocs.dart';
@@ -13,7 +15,11 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   FocusedWorkoutDayBloc({
     required ActiveWorkoutBloc activeWorkoutBloc,
     required TableCalendarBloc tableCalendarBloc,
+    required FitnessRepository fitnessRepository,
+    required AuthenticationBloc authenticationBloc,
   })  : _activeWorkoutBloc = activeWorkoutBloc,
+        _fitnessRepository = fitnessRepository,
+        _authenticationBloc = authenticationBloc,
         super(FocusedWorkoutDayLoading()) {
     if (tableCalendarBloc.state is TableCalendarLoadSuccess) {
       add(FocusedWorkoutDayDateUpdated((tableCalendarBloc.state as TableCalendarLoadSuccess).focusedDay));
@@ -27,8 +33,12 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   }
 
   final ActiveWorkoutBloc _activeWorkoutBloc;
-
+  final FitnessRepository _fitnessRepository;
+  final AuthenticationBloc _authenticationBloc;
   late final StreamSubscription _streamSubscription;
+
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  User? get _user => _authenticationBloc.state.user;
 
   @override
   Stream<FocusedWorkoutDayState> mapEventToState(
@@ -42,17 +52,20 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   }
 
   Stream<FocusedWorkoutDayState> _mapDateUpdatedToState(FocusedWorkoutDayDateUpdated event) async* {
-    if (_activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
+    if (_activeWorkoutBloc.state is ActiveWorkoutLoadSuccess && _isAuth) {
       final activeState = _activeWorkoutBloc.state as ActiveWorkoutLoadSuccess;
 
       if (!activeState.workout.workouts.any((element) => element.day == event.value.weekday)) {
-        yield FocusedWorkoutDayLoadSuccess(event.value);
+        yield FocusedWorkoutDayLoadSuccess(date: event.value);
       } else {
         yield FocusedWorkoutDayLoading();
 
+        List<WorkoutDayLog> logs = await _fitnessRepository.getWorkoutDayLogByDate(_user!.id!, event.value);
+
         yield FocusedWorkoutDayLoadSuccess(
-          event.value,
-          activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday),
+          date: event.value,
+          workoutDay: activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday),
+          workoutDayLog: logs,
         );
       }
     } else {
