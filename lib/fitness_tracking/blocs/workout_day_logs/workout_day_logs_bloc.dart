@@ -59,7 +59,9 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
         } else {
           yield WorkoutDayLogsLoadSuccess();
         }
-      } catch (error) {}
+      } catch (error) {
+        yield WorkoutDayLogsFailure();
+      }
     } else {
       yield WorkoutDayLogsFailure();
     }
