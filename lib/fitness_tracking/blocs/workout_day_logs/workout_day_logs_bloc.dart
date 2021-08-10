@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -60,6 +61,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
           yield WorkoutDayLogsLoadSuccess();
         }
       } catch (error) {
+        log(error.toString());
         yield WorkoutDayLogsFailure();
       }
     } else {

@@ -111,8 +111,20 @@ class WorkoutExcerciseEntity extends Equatable {
   }
 
   static WorkoutExcerciseEntity fromMap(Map<String, dynamic> map) {
-    List<int>? repCount = map.containsKey(_DocKeys.repCount) ? map[_DocKeys.repCount] : null;
-    List<double>? weightCount = map.containsKey(_DocKeys.weightCount) ? map[_DocKeys.weightCount] : null;
+    List<int>? repCount = map.containsKey(_DocKeys.repCount)
+        ? (map[_DocKeys.repCount] as List<dynamic>)
+            .map(
+              (e) => e as int,
+            )
+            .toList()
+        : null;
+    List<double>? weightCount = map.containsKey(_DocKeys.weightCount)
+        ? (map[_DocKeys.weightCount] as List<dynamic>)
+            .map(
+              (e) => e as double,
+            )
+            .toList()
+        : null;
     return WorkoutExcerciseEntity(
       id: map[_DocKeys.id],
       name: map[_DocKeys.name],

@@ -7,11 +7,33 @@ class WorkoutDayLogsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+    return BlocBuilder<WorkoutDayLogsBloc, WorkoutDayLogsState>(
       builder: (context, state) {
-        if (state is ActiveWorkoutLoadSuccess) {
+        if (state is WorkoutDayLogsLoading) {
+          return Column(
+            children: [
+              LinearProgressIndicator(),
+            ],
+          );
+        } else if (state is WorkoutDayLogsLoadSuccess) {
+          if (state.logs.isEmpty) {
+            return Center(
+              child: Text('You do not have any workout logs'),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: state.logs.length,
+            itemBuilder: (context, index) {
+              final item = state.logs[index];
+              return ListTile(
+                title: Text(item.created.toIso8601String()),
+              );
+            },
+          );
+        } else if (state is WorkoutDayLogsFailure) {
           return Center(
-            child: Text('Workouts logs'),
+            child: Text('failure'),
           );
         }
 
