@@ -18,3 +18,4 @@ export 'today_excercise/today_excercise_bloc.dart';
 export 'running_workout_day/running_workout_day_bloc.dart';
 export 'excercise_page_card/excercise_page_card_bloc.dart';
 export 'set_displayer/set_displayer_cubit.dart';
+export 'workout_day_logs/workout_day_logs_bloc.dart';

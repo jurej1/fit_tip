@@ -160,4 +160,14 @@ class FitnessRepository {
 
     return null;
   }
+
+  Future<List<WorkoutDayLog>?> getWorkoutDayLogByWorkoutId(String userId, String workoutId) async {
+    QuerySnapshot snap = await _fitnessTrackingWorkoutRef(userId).where('workoutId', isEqualTo: workoutId).get();
+
+    if (snap.size != 0) {
+      return snap.docs.map((e) => WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(e))).toList();
+    }
+
+    return null;
+  }
 }
