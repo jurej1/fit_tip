@@ -30,39 +30,7 @@ class WorkoutDayLogsBuilder extends StatelessWidget {
             itemCount: state.logs.length,
             itemBuilder: (context, index) {
               final item = state.logs[index];
-
-              return Material(
-                color: Colors.grey.shade300,
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Workout on ${DateFormat('EEE, MMM d ' 'yy').format(item.created)}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 5),
-                        Wrap(
-                          children: item.musclesTargeted
-                                  ?.map(
-                                    (e) => Chip(
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                      label: Text(mapMuscleGroupToString(e)),
-                                      padding: const EdgeInsets.all(2),
-                                      backgroundColor: Colors.blue.shade100,
-                                    ),
-                                  )
-                                  .toList() ??
-                              [],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+              return WorkoutDayLogCard(item: item);
             },
             separatorBuilder: (context, index) {
               return Container(

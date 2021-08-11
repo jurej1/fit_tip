@@ -23,3 +23,4 @@ export 'set_displayer.dart';
 export 'active_workout_overview_builder.dart';
 export 'workout_day_logs_builder.dart';
 export 'workout_excercise_card.dart';
+export 'workout_day_log_card.dart';
