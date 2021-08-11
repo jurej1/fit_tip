@@ -49,24 +49,7 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
                       itemCount: e.excercises.length,
                       itemBuilder: (context, index) {
                         final item = e.excercises[index];
-                        return Material(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.blue.shade300,
-                          child: Container(
-                            height: 45,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(item.name),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.more_horiz),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        return WorkoutExcerciseCard.provider(item);
                       },
                     );
                   },
