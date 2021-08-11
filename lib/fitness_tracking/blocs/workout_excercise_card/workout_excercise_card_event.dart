@@ -6,3 +6,5 @@ abstract class WorkoutExcerciseCardEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class WorkoutExcerciseCardArrowPressed extends WorkoutExcerciseCardEvent {}
