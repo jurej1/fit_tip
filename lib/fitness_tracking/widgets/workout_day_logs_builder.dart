@@ -1,8 +1,6 @@
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class WorkoutDayLogsBuilder extends StatelessWidget {
   const WorkoutDayLogsBuilder({Key? key}) : super(key: key);
@@ -16,13 +14,13 @@ class WorkoutDayLogsBuilder extends StatelessWidget {
         if (state is WorkoutDayLogsLoading) {
           return Column(
             children: [
-              LinearProgressIndicator(),
+              const LinearProgressIndicator(),
             ],
           );
         } else if (state is WorkoutDayLogsLoadSuccess) {
           if (state.logs.isEmpty) {
             return Center(
-              child: Text('You do not have any workout logs'),
+              child: const Text('You do not have any workout logs'),
             );
           }
 

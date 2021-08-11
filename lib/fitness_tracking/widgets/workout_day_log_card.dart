@@ -1,3 +1,4 @@
+import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,9 @@ class WorkoutDayLogCard extends StatelessWidget {
     return Material(
       color: Colors.grey.shade300,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).push(WorkoutDayLogDetailView.route(item));
+        },
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
