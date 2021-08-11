@@ -24,14 +24,80 @@ class WorkoutExcerciseCard extends StatelessWidget {
         return Material(
           color: Colors.blue.shade300,
           borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            height: 45,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(state.excercise.name),
-                _RotatableArrowIcon(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(state.excercise.name),
+                      const _RotatableArrowIcon(),
+                    ],
+                  ),
+                ),
+                AnimatedContainer(
+                  height: state.isExpanded ? 100 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  child: ListView(
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Sets'),
+                          Text('${state.excercise.sets}'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Reps'),
+                          Text('${state.excercise.reps}'),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        height: 1,
+                        color: Colors.black26,
+                      ),
+                      const SizedBox(height: 10),
+                      ...List.generate(
+                        state.excercise.sets,
+                        (index) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Set ${index + 1}',
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Reps: ${state.excercise.repCount?[index]}',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Weight: ${state.excercise.weightCount?[index].toStringAsFixed(0)}kg',
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ).toList()
+                    ],
+                  ),
+                )
               ],
             ),
           ),

@@ -46,6 +46,7 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
                   (e) {
                     return ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: e.excercises.length,
                       itemBuilder: (context, index) {
                         final item = e.excercises[index];
