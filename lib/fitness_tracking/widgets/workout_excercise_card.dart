@@ -67,34 +67,7 @@ class WorkoutExcerciseCard extends StatelessWidget {
                         color: Colors.black26,
                       ),
                       const SizedBox(height: 10),
-                      ...List.generate(
-                        state.excercise.sets,
-                        (index) {
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Set ${index + 1}',
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Reps: ${state.excercise.repCount?[index]}',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Weight: ${state.excercise.weightCount?[index].toStringAsFixed(0)}kg',
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ).toList()
+                      ..._dataListBuilder(state),
                     ],
                   ),
                 )
@@ -104,6 +77,37 @@ class WorkoutExcerciseCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<Widget> _dataListBuilder(WorkoutExcerciseCardState state) {
+    return List.generate(
+      state.excercise.sets,
+      (index) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                'Set ${index + 1}',
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                'Reps: ${state.excercise.repCount?[index]}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                'Weight: ${state.excercise.weightCount?[index].toStringAsFixed(0)}kg',
+                textAlign: TextAlign.right,
+              ),
+            ),
+          ],
+        );
+      },
+    ).toList();
   }
 }
 
