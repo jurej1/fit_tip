@@ -33,30 +33,33 @@ class WorkoutDayLogsBuilder extends StatelessWidget {
 
               return Material(
                 color: Colors.grey.shade300,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Workout on ${DateFormat('EEE, MMM d ' 'yy').format(item.created)}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 5),
-                      Wrap(
-                        children: item.musclesTargeted
-                                ?.map(
-                                  (e) => Chip(
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    label: Text(mapMuscleGroupToString(e)),
-                                    padding: EdgeInsets.all(2),
-                                    backgroundColor: Colors.blue.shade100,
-                                  ),
-                                )
-                                .toList() ??
-                            [],
-                      ),
-                    ],
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Workout on ${DateFormat('EEE, MMM d ' 'yy').format(item.created)}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 5),
+                        Wrap(
+                          children: item.musclesTargeted
+                                  ?.map(
+                                    (e) => Chip(
+                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      label: Text(mapMuscleGroupToString(e)),
+                                      padding: const EdgeInsets.all(2),
+                                      backgroundColor: Colors.blue.shade100,
+                                    ),
+                                  )
+                                  .toList() ??
+                              [],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
