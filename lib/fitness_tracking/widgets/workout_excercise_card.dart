@@ -49,7 +49,8 @@ class _RotatableArrowIcon extends HookWidget {
     final _controller = useAnimationController(
       duration: const Duration(milliseconds: 200),
       lowerBound: -pi / 2,
-      upperBound: -(3 * pi) / 2,
+      initialValue: -pi / 2,
+      upperBound: pi / 2,
     );
     return BlocConsumer<WorkoutExcerciseCardBloc, WorkoutExcerciseCardState>(
       listener: (context, state) {
