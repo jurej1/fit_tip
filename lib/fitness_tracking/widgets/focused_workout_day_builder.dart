@@ -49,17 +49,22 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
                       itemCount: e.excercises.length,
                       itemBuilder: (context, index) {
                         final item = e.excercises[index];
-                        return Container(
-                          height: 42,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade300,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(item.name),
-                            ],
+                        return Material(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue.shade300,
+                          child: Container(
+                            height: 45,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(item.name),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.more_horiz),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
