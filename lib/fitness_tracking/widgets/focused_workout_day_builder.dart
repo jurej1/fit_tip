@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../fitness_tracking.dart';
 
 class FocusedWorkoutDayBuilder extends StatelessWidget {
-  const FocusedWorkoutDayBuilder({Key? key}) : super(key: key);
+  FocusedWorkoutDayBuilder({Key? key}) : super(key: key);
+
+  final _titleStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16);
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +38,34 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (workoutDay.musclesTargeted != null && workoutDay.musclesTargeted!.isNotEmpty) ...{
-                  Text(
-                    'Muscles targeted',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  ...workoutDay.musclesTargeted!
-                      .map(
-                        (e) => Chip(
-                          backgroundColor: Colors.blue.shade300,
-                          label: Text(mapMuscleGroupToString(e)),
-                          labelStyle: TextStyle(
-                            fontSize: 12,
+                if (workoutDay.musclesTargeted != null && workoutDay.musclesTargeted!.isNotEmpty) _buildMuscleTargeted(workoutDay),
+                if (workoutDay.note != null) _buildNote(workoutDay),
+                _buildWorkoutTitle(workoutDay),
+                const SizedBox(height: 10),
+                ...state.workoutDayLog.map(
+                  (e) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: e.excercises.length,
+                      itemBuilder: (context, index) {
+                        final item = e.excercises[index];
+                        return Container(
+                          height: 42,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade300,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ),
-                      )
-                      .toList(),
-                }
+                          child: Row(
+                            children: [
+                              Text(item.name),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ).toList(),
               ],
             ),
           );
@@ -64,6 +77,58 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
 
         return Container();
       },
+    );
+  }
+
+  Widget _buildWorkoutTitle(WorkoutDay workoutDay) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Workouts',
+          style: _titleStyle,
+        ),
+        Text(
+          '${workoutDay.numberOfExcercises}',
+          style: _titleStyle,
+        )
+      ],
+    );
+  }
+
+  Widget _buildMuscleTargeted(WorkoutDay workoutDay) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [Text('Muscles targeted', style: _titleStyle), Text('${workoutDay.numberOfMusclesTargeted}', style: _titleStyle)],
+        ),
+        ...workoutDay.musclesTargeted!
+            .map(
+              (e) => Chip(
+                backgroundColor: Colors.blue.shade300,
+                label: Text(mapMuscleGroupToString(e)),
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            )
+            .toList(),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildNote(WorkoutDay workoutDay) {
+    return Column(
+      children: [
+        Text('Note', style: _titleStyle),
+        Text(
+          workoutDay.note!,
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }

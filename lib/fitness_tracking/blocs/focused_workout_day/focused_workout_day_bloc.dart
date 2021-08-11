@@ -60,12 +60,13 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
         yield FocusedWorkoutDayLoadSuccess(date: event.value);
       } else {
         yield FocusedWorkoutDayLoading();
+        WorkoutDay workoutDay = activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday);
 
         List<WorkoutDayLog> logs = await _fitnessRepository.getWorkoutDayLogByDate(_user!.id!, event.value);
 
         yield FocusedWorkoutDayLoadSuccess(
           date: event.value,
-          workoutDay: activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday),
+          workoutDay: workoutDay,
           workoutDayLog: logs,
         );
       }
