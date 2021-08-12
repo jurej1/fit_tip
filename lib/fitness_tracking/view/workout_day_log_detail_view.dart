@@ -12,12 +12,19 @@ class WorkoutDayLogDetailView extends StatelessWidget {
   static MaterialPageRoute route(WorkoutDayLog log) {
     return MaterialPageRoute(
       builder: (context) {
-        return BlocProvider(
-          create: (context) => WorkoutDayLogDetailBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            dayLog: log,
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => WorkoutDayLogDetailBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                dayLog: log,
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              ),
+            ),
+            BlocProvider.value(
+              value: BlocProvider.of<WorkoutDayLogsBloc>(context),
+            ),
+          ],
           child: const WorkoutDayLogDetailView(),
         );
       },
