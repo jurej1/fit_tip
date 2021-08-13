@@ -78,4 +78,10 @@ class WorkoutDayLog extends Equatable {
       duration: duration,
     );
   }
+
+  int get hours => this.duration.inHours.remainder(24).toInt();
+  int get minutes => this.duration.inMinutes.remainder(60).toInt();
+  int get seconds => this.duration.inSeconds.remainder(60).toInt();
+
+  DateTime get endTime => this.created.add(duration);
 }

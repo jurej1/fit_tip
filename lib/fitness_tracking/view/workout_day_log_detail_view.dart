@@ -70,6 +70,31 @@ class WorkoutDayLogDetailView extends StatelessWidget {
                   Text(
                     'Created on ${DateFormat('EEE, MMM d ' 'yy').format(state.dayLog.created)}',
                   ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Start time'),
+                          Text(DateFormat('hh:mm:ss').format(state.dayLog.created)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('End time time'),
+                          Text(DateFormat('hh:mm:ss').format(state.dayLog.endTime)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Duration'),
+                          Text('${state.dayLog.hours}h ${state.dayLog.minutes}min ${state.dayLog.seconds}s'),
+                        ],
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
