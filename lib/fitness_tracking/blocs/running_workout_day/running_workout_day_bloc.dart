@@ -72,7 +72,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     if (_isAuth) {
       try {
         yield RunningWorkoutDayLoading(
-          state.log.copyWith(created: DateTime.now()),
+          state.log,
           state.pageViewIndex,
         );
 
