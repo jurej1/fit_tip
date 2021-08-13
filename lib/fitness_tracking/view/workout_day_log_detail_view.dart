@@ -36,7 +36,7 @@ class WorkoutDayLogDetailView extends StatelessWidget {
     return BlocListener<WorkoutDayLogDetailBloc, WorkoutDayLogDetailState>(
       listener: (context, state) {
         if (state is WorkoutDayLogDetailDeleteSuccess) {
-          //TODO update the list
+          BlocProvider.of<WorkoutDayLogsBloc>(context).add(WorkoutDayLogsLogRemoved(state.dayLog));
           Navigator.of(context).pop();
         } else if (state is WorkoutDayLogDetailFail) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sorry there was an error')));

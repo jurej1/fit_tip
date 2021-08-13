@@ -26,5 +26,5 @@ class SetDisplayerCubit extends Cubit<SetDisplayerState> {
     emit(state.copyWith(weightAmount: weightAmount));
   }
 
-  Future<void> get _delay => Future.delayed(Duration(milliseconds: 500));
+  Future<void> get _delay => Future.delayed(Duration(milliseconds: 1000));
 }

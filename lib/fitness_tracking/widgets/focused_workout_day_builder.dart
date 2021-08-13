@@ -74,7 +74,7 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Workouts',
+          'Excercises',
           style: _titleStyle,
         ),
         Text(
