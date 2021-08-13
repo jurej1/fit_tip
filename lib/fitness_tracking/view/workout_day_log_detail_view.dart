@@ -57,7 +57,7 @@ class WorkoutDayLogDetailView extends StatelessWidget {
         body: BlocBuilder<WorkoutDayLogDetailBloc, WorkoutDayLogDetailState>(
           builder: (context, state) {
             if (state is WorkoutDayLogDetailLoading) {
-              return Center(
+              return const Center(
                 child: const CircularProgressIndicator(),
               );
             }
