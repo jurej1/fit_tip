@@ -77,40 +77,51 @@ class RunningWorkoutDayView extends StatelessWidget {
               );
             }
 
-            return PageView.builder(
-              itemCount: state.pageViewLength,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return ListView(
-                    children: [
-                      Text(
-                        'Excercises ${state.log.excercises.length}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                if (index == state.pageViewLength - 1) {
-                  return Center(
-                    child: ElevatedButton(
-                      child: Text('Submit'),
-                      onPressed: () {
-                        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
-                      },
-                    ),
-                  );
-                }
+            return Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  height: (state.pageViewIndex == 0 || state.pageViewIndex == state.pageViewLength - 1) ? 0 : 40,
+                  child: _TimerBuilder(),
+                ),
+                Expanded(
+                  child: PageView.builder(
+                    itemCount: state.pageViewLength,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return ListView(
+                          children: [
+                            Text(
+                              'Excercises ${state.log.excercises.length}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      if (index == state.pageViewLength - 1) {
+                        return Center(
+                          child: ElevatedButton(
+                            child: const Text('Submit'),
+                            onPressed: () {
+                              BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
+                            },
+                          ),
+                        );
+                      }
 
-                final item = state.log.excercises[index - 1];
-                return ExcercisePageCard.provider(item);
-              },
-              onPageChanged: (index) {
-                BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
-              },
+                      final item = state.log.excercises[index - 1];
+                      return ExcercisePageCard.provider(item);
+                    },
+                    onPageChanged: (index) {
+                      BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayPageIndexUpdated(index));
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),
@@ -159,6 +170,32 @@ class _AppBarTextDisplayer extends StatelessWidget {
         final int index = state.pageViewIndex - 1;
         final item = state.log.excercises[index];
         return Text('${index + 1}. ${item.name}');
+      },
+    );
+  }
+}
+
+class _TimerBuilder extends StatelessWidget {
+  _TimerBuilder({Key? key}) : super(key: key);
+
+  final _textStyle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TimerBloc, TimerState>(
+      builder: (context, state) {
+        if (state.hours != 0) {
+          return Text(
+            '${state.hours}:${state.minutes}:${state.seconds}',
+            style: _textStyle,
+          );
+        }
+        return Text(
+          '${state.minutes}:${state.seconds}',
+          style: _textStyle,
+        );
       },
     );
   }

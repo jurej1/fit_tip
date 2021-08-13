@@ -12,7 +12,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
           TimerState(Duration.zero, false),
         );
 
-  final int _milliseconds = 100;
+  final int _milliseconds = 1000;
   late final Timer _timer;
 
   @override
@@ -28,7 +28,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
 
   Stream<TimerState> _mapTimerStartToState() async* {
     if (!state.isInit) {
-      _timer = Timer.periodic(Duration(microseconds: _milliseconds), (timer) {
+      _timer = Timer.periodic(Duration(milliseconds: _milliseconds), (timer) {
         add(_TimerUpdated());
       });
     }

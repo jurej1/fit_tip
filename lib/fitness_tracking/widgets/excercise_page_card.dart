@@ -28,7 +28,6 @@ class ExcercisePageCard extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-              _TimerBuilder(),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
@@ -69,22 +68,6 @@ class ExcercisePageCard extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
-  }
-}
-
-class _TimerBuilder extends StatelessWidget {
-  const _TimerBuilder({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TimerBloc, TimerState>(
-      builder: (context, state) {
-        if (state.hours != 0) {
-          return Text('${state.hours}:${state.minutes}:${state.seconds}');
-        }
-        return Text('${state.minutes}:${state.seconds}');
       },
     );
   }
