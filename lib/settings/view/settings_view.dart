@@ -17,6 +17,20 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings bar'),
       ),
+      body: Column(
+        children: [
+          ListTile(
+            title: const Text('Profile'),
+            leading: const Icon(Icons.person),
+            onTap: () {},
+          ),
+          ListTile(
+            title: const Text('Theme'),
+            leading: const Icon(Icons.brush),
+            onTap: () {},
+          ),
+        ],
+      ),
     );
   }
 }

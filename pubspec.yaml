@@ -9,30 +9,31 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+  another_flushbar: ^1.10.18
   authentication_repository:
     path: packages/authentication_repository
-  fitness_repository:
-    path: packages/fitness_repository
-  food_repository:
-    path: packages/food_repository
-  water_repository:
-    path: packages/water_repository
-  weight_repository:
-    path: packages/weight_repository
-  another_flushbar: ^1.10.18
   carousel_slider: ^4.0.0
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
   firebase_core: ^1.0.3
+  fitness_repository:
+    path: packages/fitness_repository
   fl_chart: ^0.36.0
+  flutter:
+    sdk: flutter
   flutter_bloc: ^7.0.0
   flutter_hooks: ^0.18.0
+  food_repository:
+    path: packages/food_repository
   formz: 0.4.0-nullsafety.0
+  hydrated_bloc: ^7.0.1
   intl: ^0.17.0
   table_calendar: ^3.0.1
+  water_repository:
+    path: packages/water_repository
+  weight_repository:
+    path: packages/weight_repository
 
 dev_dependencies:
   flutter_test:
