@@ -72,7 +72,7 @@ class __BodyState extends State<_Body> {
 
   Widget build(BuildContext context) {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status == DurationSelectorStatus.scrollEnded) {
           _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
@@ -80,6 +80,7 @@ class __BodyState extends State<_Body> {
             curve: Curves.fastOutSlowIn,
           );
           BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
+          await Future.delayed(state.animationDuration);
           widget.onValueUpdated(state.focusedIndex, state.status);
         }
       },
