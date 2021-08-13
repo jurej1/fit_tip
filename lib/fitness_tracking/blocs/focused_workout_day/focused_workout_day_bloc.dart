@@ -67,6 +67,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
           date: event.value,
           workoutDay: workoutDay,
           workoutDayLog: logs,
+          isWorkoutCompleted: logs.isEmpty ? false : true,
         );
       }
     } else {
