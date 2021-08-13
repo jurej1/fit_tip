@@ -107,9 +107,8 @@ class RunningWorkoutDayView extends StatelessWidget {
                           child: ElevatedButton(
                             child: const Text('Submit'),
                             onPressed: () {
-                              BlocProvider.of<RunningWorkoutDayBloc>(context).add(
-                                RunningWorkoutDayWorkoutExcerciseSubmit(),
-                              );
+                              BlocProvider.of<TimerBloc>(context).add(TimerStop());
+                              BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseSubmit());
                             },
                           ),
                         );
@@ -186,7 +185,10 @@ class _TimerBuilder extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TimerBloc, TimerState>(
+    return BlocConsumer<TimerBloc, TimerState>(
+      listener: (context, state) {
+        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutDurationUpdated(state.duration));
+      },
       builder: (context, state) {
         if (state.hours != 0) {
           return Text(
