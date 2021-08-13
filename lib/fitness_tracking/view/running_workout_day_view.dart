@@ -17,6 +17,9 @@ class RunningWorkoutDayView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
+              create: (context) => TimerBloc(),
+            ),
+            BlocProvider(
               create: (context) => RunningWorkoutDayBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
@@ -61,7 +64,12 @@ class RunningWorkoutDayView extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+        body: BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+          listener: (contex, state) {
+            if (state.pageViewIndex == 1) {
+              BlocProvider.of<TimerBloc>(context).add(TimerStart());
+            }
+          },
           builder: (context, state) {
             if (state is RunningWorkoutDayLoading) {
               return Center(

@@ -9,7 +9,7 @@ part 'timer_state.dart';
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   TimerBloc()
       : super(
-          TimerState(Duration.zero),
+          TimerState(Duration.zero, false),
         );
 
   final int _milliseconds = 100;
@@ -27,9 +27,11 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStartToState() async* {
-    _timer = Timer.periodic(Duration(microseconds: _milliseconds), (timer) {
-      add(_TimerUpdated());
-    });
+    if (!state.isInit) {
+      _timer = Timer.periodic(Duration(microseconds: _milliseconds), (timer) {
+        add(_TimerUpdated());
+      });
+    }
   }
 
   Stream<TimerState> _mapTimerUpdatedToState() async* {
@@ -38,6 +40,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         duration: Duration(
           milliseconds: state.duration.inMilliseconds + _milliseconds,
         ),
+        isInit: true,
       );
     }
   }
