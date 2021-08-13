@@ -7,4 +7,4 @@ export 'excercise_type.dart';
 export 'workout_gender.dart';
 export 'intensity.dart';
 export 'impact.dart';
-export 'workout_routine_type.dart';
+export 'workout_type.dart';

@@ -136,7 +136,7 @@ class _WorkoutGoalInput extends HookWidget {
                 items: WorkoutGoal.values
                     .map(
                       (e) => DropdownMenuItem(
-                        child: Text(describeEnum(e)),
+                        child: Text(mapWorkoutGoalToText(e)),
                         value: e,
                       ),
                     )
@@ -185,7 +185,7 @@ class _WorkoutTypeInput extends HookWidget {
                       (e) => DropdownMenuItem(
                         value: e,
                         child: Text(
-                          describeEnum(e),
+                          mapWorkoutTypeToString(e),
                         ),
                       ),
                     )

@@ -1,4 +1,0 @@
-enum WorkoutType {
-  split,
-  fullBody,
-}
