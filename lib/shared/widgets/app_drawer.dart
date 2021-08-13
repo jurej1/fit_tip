@@ -1,6 +1,7 @@
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/view/fitness_tracking_view.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
+import 'package:fit_tip/settings/settings.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,13 @@ class AppDrawer extends StatelessWidget {
               title: Text('Fitness tracking'),
               onTap: () {
                 Navigator.of(context).push(FitnessTrackingView.route(context));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                Navigator.of(context).push(SettingsView.route(context));
               },
             )
           ],
