@@ -52,7 +52,7 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     yield WorkoutsListLoading();
 
     try {
-      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutDayLogs(_user!.id!);
+      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_user!.id!);
 
       List<Workout> workouts = Workout.fromQuerySnapshot(querySnapshot);
 

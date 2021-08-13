@@ -96,8 +96,8 @@ class FitnessRepository {
     return _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
   }
 
-  Future<QuerySnapshot> getWorkoutDayLogs(String userId) {
-    return _fitnessTrackingPlanRef(userId).orderBy('created').get();
+  Future<QuerySnapshot> getWorkouts(String userId) {
+    return _fitnessTrackingPlanRef(userId).orderBy('created', descending: true).get();
   }
 
   Future<Workout> setWorkoutAsActive(String userId, Workout workout) async {
@@ -167,9 +167,7 @@ class FitnessRepository {
           'workoutId',
           isEqualTo: workoutId,
         )
-        .orderBy(
-          'created',
-        )
+        .orderBy('created', descending: true)
         .get();
 
     if (snap.size != 0) {
