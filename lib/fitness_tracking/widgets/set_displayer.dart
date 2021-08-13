@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fitness_repository/fitness_repository.dart';
