@@ -9,9 +9,9 @@ import '../fitness_tracking.dart';
 class WorkoutDayLogDetailView extends StatelessWidget {
   const WorkoutDayLogDetailView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(WorkoutDayLog log) {
+  static MaterialPageRoute route(BuildContext context, WorkoutDayLog log) {
     return MaterialPageRoute(
-      builder: (context) {
+      builder: (_) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(

@@ -17,7 +17,7 @@ class WorkoutDayLogCard extends StatelessWidget {
       color: Colors.grey.shade300,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(WorkoutDayLogDetailView.route(item));
+          Navigator.of(context).push(WorkoutDayLogDetailView.route(context, item));
         },
         child: Container(
           padding: EdgeInsets.all(10),
