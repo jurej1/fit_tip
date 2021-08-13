@@ -1,0 +1,4 @@
+enum RepUnit {
+  x,
+  sec,
+}

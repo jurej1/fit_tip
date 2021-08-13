@@ -13,14 +13,14 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  fitness_repository:
+    path: packages/fitness_repository
   food_repository:
     path: packages/food_repository
   water_repository:
     path: packages/water_repository
   weight_repository:
     path: packages/weight_repository
-  fitness_repository:
-    path: packages/fitness_repository
   another_flushbar: ^1.10.18
   carousel_slider: ^4.0.0
   cloud_firestore: ^2.2.0
@@ -29,8 +29,10 @@ dependencies:
   firebase_core: ^1.0.3
   fl_chart: ^0.36.0
   flutter_bloc: ^7.0.0
+  flutter_hooks: ^0.18.0
   formz: 0.4.0-nullsafety.0
   intl: ^0.17.0
+  table_calendar: ^3.0.1
 
 dev_dependencies:
   flutter_test:

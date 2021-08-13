@@ -102,6 +102,7 @@ class _DurationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<AddExcerciseLogBloc, AddExcerciseLogState>(
       builder: (context, state) {
         return Column(
@@ -118,10 +119,15 @@ class _DurationInput extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 7),
-            DurationSelector(
-              duration: state.duration.value,
-              onValueUpdated: (minutes) {
+            ScrollableHorizontalValueSelector(
+              width: size.width,
+              initialIndex: state.duration.value,
+              onValueUpdated: (minutes, status) {
                 BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(minutes));
+              },
+              itemsLength: 3600,
+              textBuilder: (value) {
+                return Text('$value min');
               },
             ),
           ],

@@ -2,30 +2,49 @@ import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DurationSelector extends StatelessWidget {
-  const DurationSelector({
+class ScrollableHorizontalValueSelector extends StatelessWidget {
+  const ScrollableHorizontalValueSelector({
     Key? key,
     required this.onValueUpdated,
-    this.duration,
+    this.initialIndex,
+    required this.width,
+    required this.itemsLength,
+    required this.textBuilder,
   }) : super(key: key);
 
-  final int? duration;
-  final void Function(int minutes) onValueUpdated;
+  final int? initialIndex;
+  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final double width;
+  final int itemsLength;
+  final Widget Function(int value) textBuilder;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DurationSelectorBloc(duration: duration),
+      create: (context) => DurationSelectorBloc(
+        initialIndex: initialIndex,
+        itemsLength: itemsLength,
+      ),
       child: _Body(
+        width: width,
         onValueUpdated: onValueUpdated,
+        textBuilder: textBuilder,
       ),
     );
   }
 }
 
 class _Body extends StatefulWidget {
-  const _Body({Key? key, required this.onValueUpdated}) : super(key: key);
-  final void Function(int minutes) onValueUpdated;
+  const _Body({
+    Key? key,
+    required this.onValueUpdated,
+    required this.width,
+    required this.textBuilder,
+  }) : super(key: key);
+  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final Widget Function(int value) textBuilder;
+
+  final double width;
 
   @override
   __BodyState createState() => __BodyState();
@@ -52,12 +71,8 @@ class __BodyState extends State<_Body> {
   }
 
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
-      listener: (context, state) {
-        widget.onValueUpdated(state.mapIndexToMinutes());
-
+      listener: (context, state) async {
         if (state.status == DurationSelectorStatus.scrollEnded) {
           _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
@@ -65,16 +80,20 @@ class __BodyState extends State<_Body> {
             curve: Curves.fastOutSlowIn,
           );
           BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
+          await Future.delayed(state.animationDuration);
+          widget.onValueUpdated(state.focusedIndex, state.status);
         }
       },
       builder: (context, state) {
         return Container(
-          width: size.width,
+          width: widget.width,
           height: columnHeight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _TextDisplayer(),
+              _TextDisplayer(
+                textBuilder: widget.textBuilder,
+              ),
               const SizedBox(height: 7),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
@@ -100,7 +119,7 @@ class __BodyState extends State<_Body> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.5 - (itemWidth * 0.5),
+                      horizontal: widget.width * 0.5 - (itemWidth * 0.5),
                     ),
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
@@ -121,7 +140,7 @@ class __BodyState extends State<_Body> {
                         ),
                       );
                     },
-                    itemCount: state.itemsLenght,
+                    itemCount: state.itemsLength,
                   ),
                 ),
               ),
@@ -136,7 +155,10 @@ class __BodyState extends State<_Body> {
 class _TextDisplayer extends StatelessWidget {
   const _TextDisplayer({
     Key? key,
+    required this.textBuilder,
   }) : super(key: key);
+
+  final Widget Function(int value) textBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +171,7 @@ class _TextDisplayer extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             color: state.status == DurationSelectorStatus.scrolling ? Colors.blue.shade100 : Colors.grey.shade200,
           ),
-          child: Text(
-            state.mapIndexToText(),
-          ),
+          child: textBuilder(state.focusedIndex),
         );
       },
     );

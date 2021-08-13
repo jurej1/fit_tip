@@ -9,11 +9,12 @@ part 'duration_selector_state.dart';
 
 class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorState> {
   DurationSelectorBloc({
-    int? duration,
+    int? initialIndex,
+    required int itemsLength,
   }) : super(
-          duration != null
-              ? DurationSelectorState(focusedIndex: DurationSelectorState.mapMinutesToIndex(duration))
-              : DurationSelectorState(),
+          initialIndex != null
+              ? DurationSelectorState(focusedIndex: initialIndex, itemsLength: itemsLength)
+              : DurationSelectorState(itemsLength: itemsLength, focusedIndex: 0),
         );
 
   @override
@@ -26,10 +27,9 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
       yield state.copyWith(status: DurationSelectorStatus.scrolling);
     } else if (event is DurationSelectorScrollEnd) {
       yield* mapScrollToState(event.itemWidth, event.controller);
-
       yield state.copyWith(status: DurationSelectorStatus.scrollEnded);
     } else if (event is DurationSelectorListSnapped) {
-      yield state.copyWith(status: DurationSelectorStatus.initial);
+      yield state.copyWith(status: DurationSelectorStatus.snapped);
     }
   }
 
