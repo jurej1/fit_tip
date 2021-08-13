@@ -81,7 +81,8 @@ class RunningWorkoutDayView extends StatelessWidget {
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: (state.pageViewIndex == 0 || state.pageViewIndex == state.pageViewLength - 1) ? 0 : 40,
+                  height: (state.pageViewIndex == 0 || state.pageViewIndex == state.pageViewLength - 1) ? 0 : 30,
+                  alignment: Alignment.center,
                   child: _TimerBuilder(),
                 ),
                 Expanded(
@@ -180,7 +181,7 @@ class _TimerBuilder extends StatelessWidget {
 
   final _textStyle = TextStyle(
     fontWeight: FontWeight.w500,
-    fontSize: 16,
+    fontSize: 19,
   );
   @override
   Widget build(BuildContext context) {
