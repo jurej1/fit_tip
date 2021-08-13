@@ -42,6 +42,7 @@ class RunningWorkoutDayView extends StatelessWidget {
       listener: (context, state) {
         if (state is RunningWorkoutDayLoadSuccess) {
           BlocProvider.of<WorkoutDayLogsBloc>(context).add(WorkoutDayLogsLogAdded(state.log));
+          Navigator.of(context).pop();
         }
       },
       child: Scaffold(
