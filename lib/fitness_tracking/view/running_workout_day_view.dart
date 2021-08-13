@@ -11,15 +11,23 @@ import '../fitness_tracking.dart';
 class RunningWorkoutDayView extends StatelessWidget {
   const RunningWorkoutDayView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(WorkoutDay workoutDay, DateTime date) {
+  static MaterialPageRoute route(BuildContext context, WorkoutDay workoutDay, DateTime date) {
     return MaterialPageRoute(
-      builder: (context) {
-        return BlocProvider(
-          create: (context) => RunningWorkoutDayBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-              workoutDay: workoutDay,
-              date: date),
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => RunningWorkoutDayBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+                workoutDay: workoutDay,
+                date: date,
+              ),
+            ),
+            BlocProvider.value(
+              value: BlocProvider.of<WorkoutDayLogsBloc>(context),
+            )
+          ],
           child: RunningWorkoutDayView(),
         );
       },
@@ -30,7 +38,9 @@ class RunningWorkoutDayView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       listener: (context, state) {
-        //TODO when the workout it published to firebase
+        if (state is RunningWorkoutDayLoadSuccess) {
+          BlocProvider.of<WorkoutDayLogsBloc>(context).add(WorkoutDayLogsLogAdded(state.log));
+        }
       },
       child: Scaffold(
         appBar: AppBar(

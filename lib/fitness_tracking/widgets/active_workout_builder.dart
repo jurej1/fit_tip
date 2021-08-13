@@ -81,6 +81,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                   } else {
                     Navigator.of(context).push(
                       RunningWorkoutDayView.route(
+                        context,
                         state.workoutDay!,
                         state.date,
                       ),
