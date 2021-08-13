@@ -23,6 +23,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield* _mapTimerStartToState();
     } else if (event is _TimerUpdated) {
       yield* _mapTimerUpdatedToState();
+    } else if (event is TimerStop) {
+      yield* _mapTimerStopToState();
     }
   }
 
@@ -42,6 +44,12 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         ),
         isInit: true,
       );
+    }
+  }
+
+  Stream<TimerState> _mapTimerStopToState() async* {
+    if (_timer.isActive) {
+      _timer.cancel();
     }
   }
 }

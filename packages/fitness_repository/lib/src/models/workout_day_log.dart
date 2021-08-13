@@ -10,6 +10,7 @@ class WorkoutDayLog extends Equatable {
   final List<MuscleGroup>? musclesTargeted;
   final List<WorkoutExcercise> excercises;
   final DateTime created;
+  final Duration duration;
 
   const WorkoutDayLog({
     required this.id,
@@ -18,6 +19,7 @@ class WorkoutDayLog extends Equatable {
     required this.excercises,
     required this.created,
     this.musclesTargeted,
+    this.duration = Duration.zero,
   });
 
   @override
@@ -29,6 +31,7 @@ class WorkoutDayLog extends Equatable {
       musclesTargeted,
       excercises,
       created,
+      duration,
     ];
   }
 
@@ -39,6 +42,7 @@ class WorkoutDayLog extends Equatable {
     List<MuscleGroup>? musclesTargeted,
     List<WorkoutExcercise>? excercises,
     DateTime? created,
+    Duration? duration,
   }) {
     return WorkoutDayLog(
       id: id ?? this.id,
@@ -47,6 +51,7 @@ class WorkoutDayLog extends Equatable {
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
       created: created ?? this.created,
+      duration: duration ?? this.duration,
     );
   }
 
@@ -58,6 +63,7 @@ class WorkoutDayLog extends Equatable {
       excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
       created: entity.created,
       musclesTargeted: entity.musclesTargeted,
+      duration: entity.duration,
     );
   }
 
@@ -69,6 +75,7 @@ class WorkoutDayLog extends Equatable {
       excercises: excercises.map((e) => e.toEntity()).toList(),
       created: created,
       musclesTargeted: musclesTargeted,
+      duration: duration,
     );
   }
 }

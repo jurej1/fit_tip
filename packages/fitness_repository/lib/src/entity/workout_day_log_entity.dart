@@ -11,6 +11,7 @@ class _DocKeys {
   static String muscleTargeted = 'musclesTargeted';
   static String excercises = 'excercises';
   static String created = 'created';
+  static String duration = 'duration';
 }
 
 class WorkoutDayLogEntity extends Equatable {
@@ -20,6 +21,7 @@ class WorkoutDayLogEntity extends Equatable {
   final List<MuscleGroup>? musclesTargeted;
   final List<WorkoutExcerciseEntity> excercises;
   final DateTime created;
+  final Duration duration;
 
   const WorkoutDayLogEntity({
     required this.id,
@@ -28,6 +30,7 @@ class WorkoutDayLogEntity extends Equatable {
     required this.excercises,
     required this.created,
     this.musclesTargeted,
+    this.duration = Duration.zero,
   });
 
   @override
@@ -39,6 +42,7 @@ class WorkoutDayLogEntity extends Equatable {
       musclesTargeted,
       excercises,
       created,
+      duration,
     ];
   }
 
@@ -49,6 +53,7 @@ class WorkoutDayLogEntity extends Equatable {
     List<MuscleGroup>? musclesTargeted,
     List<WorkoutExcerciseEntity>? excercises,
     DateTime? created,
+    Duration? duration,
   }) {
     return WorkoutDayLogEntity(
       id: id ?? this.id,
@@ -57,6 +62,7 @@ class WorkoutDayLogEntity extends Equatable {
       musclesTargeted: musclesTargeted ?? this.musclesTargeted,
       excercises: excercises ?? this.excercises,
       created: created ?? this.created,
+      duration: duration ?? this.duration,
     );
   }
 
@@ -67,6 +73,7 @@ class WorkoutDayLogEntity extends Equatable {
       if (musclesTargeted != null) _DocKeys.muscleTargeted: musclesTargeted!.map((e) => describeEnum(e)).toList(),
       _DocKeys.workoutDayId: workoutDayId,
       _DocKeys.workoutId: workoutId,
+      _DocKeys.duration: duration.inMilliseconds,
     };
   }
 
@@ -94,6 +101,7 @@ class WorkoutDayLogEntity extends Equatable {
               )
               .toList())
           : null,
+      duration: data.containsKey(_DocKeys.duration) ? Duration(milliseconds: data[_DocKeys.duration]) : Duration.zero,
     );
   }
 }

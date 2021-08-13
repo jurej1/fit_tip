@@ -49,6 +49,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
       yield* _mapExcerciseUpdatetToState(event);
     } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
       yield* _mapExcerciseSubmitToState(event);
+    } else if (event is RunningWorkoutDayWorkoutDurationUpdated) {
+      yield* _mapDurationUpdatedToState(event);
     }
   }
 
@@ -88,5 +90,9 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         state.pageViewIndex,
       );
     }
+  }
+
+  Stream<RunningWorkoutDayState> _mapDurationUpdatedToState(RunningWorkoutDayWorkoutDurationUpdated event) async* {
+    yield RunningWorkoutDayInitial(state.log.copyWith(duration: event.duration), state.pageViewIndex);
   }
 }

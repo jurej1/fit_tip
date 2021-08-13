@@ -10,3 +10,5 @@ abstract class TimerEvent extends Equatable {
 class TimerStart extends TimerEvent {}
 
 class _TimerUpdated extends TimerEvent {}
+
+class TimerStop extends TimerEvent {}
