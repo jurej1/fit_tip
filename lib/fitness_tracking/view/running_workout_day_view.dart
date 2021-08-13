@@ -63,8 +63,17 @@ class RunningWorkoutDayView extends StatelessWidget {
               itemCount: state.pageViewLength,
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  return Container(
-                    child: Text('Overview page'),
+                  return ListView(
+                    children: [
+                      Text(
+                        'Excercises ${state.log.excercises.length}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   );
                 }
                 if (index == state.pageViewLength - 1) {
