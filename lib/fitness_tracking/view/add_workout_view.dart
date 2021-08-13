@@ -7,27 +7,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class AddWorkoutView {
+  static List<dynamic> _baseProviders(context, Workout? workout) => [
+        BlocProvider(
+          create: (_) => AddWorkoutViewCubit(),
+        ),
+        BlocProvider(
+          create: (_) => AddWorkoutFormBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+            workout: workout,
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AddWorkoutFloatingActionButtonCubit(
+            addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context),
+          ),
+        )
+      ];
+
   static MaterialPageRoute route(BuildContext context, {Workout? workout}) {
     final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (_) => AddWorkoutViewCubit(),
-            ),
-            BlocProvider(
-              create: (_) => AddWorkoutFormBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-                workout: workout,
-              ),
-            ),
-            BlocProvider(
-              create: (context) => AddWorkoutFloatingActionButtonCubit(
-                addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context),
-              ),
-            ),
+            ..._baseProviders(context, workout),
             BlocProvider.value(value: workoutsListBloc),
           ],
           child: _FormBuilder(),
@@ -43,21 +47,7 @@ class AddWorkoutView {
       builder: (_) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (_) => AddWorkoutViewCubit(),
-            ),
-            BlocProvider(
-              create: (_) => AddWorkoutFormBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-                workout: workout,
-              ),
-            ),
-            BlocProvider(
-              create: (context) => AddWorkoutFloatingActionButtonCubit(
-                addWorkoutViewCubit: BlocProvider.of<AddWorkoutViewCubit>(context),
-              ),
-            ),
+            ..._baseProviders(context, workout),
             BlocProvider.value(value: workoutsListBloc),
             BlocProvider.value(value: workoutDetailViewBloc),
           ],

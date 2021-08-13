@@ -67,6 +67,19 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                 Navigator.of(context).push(AddWorkoutView.route(context));
               },
             ),
+            BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+              builder: (context, state) {
+                if (state is ActiveWorkoutLoadSuccess) {
+                  return IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+                    },
+                  );
+                }
+                return Container();
+              },
+            ),
           ],
         ),
         body: _bodyBuilder(),
