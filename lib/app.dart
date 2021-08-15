@@ -8,6 +8,7 @@ import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
+import 'settings/settings.dart';
 import 'weight_tracking/weight.dart';
 
 class App extends StatelessWidget {
@@ -65,41 +66,50 @@ class App extends StatelessWidget {
               weightRepository: RepositoryProvider.of<WeightRepository>(context),
               authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
-          )
-        ],
-        child: MaterialApp(
-          navigatorKey: _navigatorState,
-          title: 'FitTip',
-          theme: ThemeData(
-            primaryColor: Colors.blue[900],
-            snackBarTheme: SnackBarThemeData(
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
           ),
-          builder: (context, child) {
-            return MultiBlocListener(
-              listeners: [
-                BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listenWhen: (previous, current) => previous.status != current.status,
-                  listener: (context, state) {
-                    if (state.status == AuthenticationStatus.unauthenticated) {
-                      _navigatorState.currentState!.pushReplacement(LoginView.route(context));
-                    } else if (state.status == AuthenticationStatus.authenticated) {
-                      _navigatorState.currentState!.pushReplacement(Home.route(context));
-                    }
-                  },
+          BlocProvider<ThemeBloc>(
+            create: (context) => ThemeBloc(),
+          ),
+        ],
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              navigatorKey: _navigatorState,
+              title: 'FitTip',
+              themeMode: state.themeMode,
+              darkTheme: ThemeData.dark(),
+              theme: ThemeData(
+                primaryColor: state.accentColor,
+                snackBarTheme: SnackBarThemeData(
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listener: (context, state) {
-                    BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
-                  },
-                ),
-              ],
-              child: child!,
+              ),
+              builder: (context, child) {
+                return MultiBlocListener(
+                  listeners: [
+                    BlocListener<AuthenticationBloc, AuthenticationState>(
+                      listenWhen: (previous, current) => previous.status != current.status,
+                      listener: (context, state) {
+                        if (state.status == AuthenticationStatus.unauthenticated) {
+                          _navigatorState.currentState!.pushReplacement(LoginView.route(context));
+                        } else if (state.status == AuthenticationStatus.authenticated) {
+                          _navigatorState.currentState!.pushReplacement(Home.route(context));
+                        }
+                      },
+                    ),
+                    BlocListener<AuthenticationBloc, AuthenticationState>(
+                      listener: (context, state) {
+                        BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
+                      },
+                    ),
+                  ],
+                  child: child!,
+                );
+              },
+              home: _SplashScreen(),
             );
           },
-          home: _SplashScreen(),
         ),
       ),
     );

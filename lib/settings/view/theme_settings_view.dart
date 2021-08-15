@@ -9,10 +9,12 @@ class ThemeSettingsView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return BlocProvider(
-          create: (context) => ThemeBloc(),
-          child: ThemeSettingsView(),
-        );
+        // return BlocProvider(
+        //   create: (context) => ThemeBloc(),
+        //   child: ThemeSettingsView(),
+        // );
+
+        return ThemeSettingsView();
       },
     );
   }
