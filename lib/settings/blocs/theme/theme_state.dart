@@ -11,7 +11,7 @@ class ThemeState extends Equatable {
   factory ThemeState.initial() {
     return ThemeState(
       themeMode: ThemeMode.system,
-      accentColor: Colors.blue,
+      accentColor: availableAccentColors.first,
     );
   }
 
@@ -28,7 +28,7 @@ class ThemeState extends Equatable {
     );
   }
 
-  List<Color> get availableAccentColors => [
+  static List<Color> get availableAccentColors => [
         Colors.blue,
         Colors.green,
         Colors.red,
@@ -38,5 +38,5 @@ class ThemeState extends Equatable {
         Colors.indigoAccent,
       ];
 
-  bool isAccentColorSelected(Color color) => color == this.accentColor;
+  bool isAccentColorSelected(Color color) => color.value == this.accentColor.value;
 }

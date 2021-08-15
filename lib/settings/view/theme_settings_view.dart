@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/settings/blocs/blocs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,25 +50,27 @@ class ThemeSettingsView extends StatelessWidget {
                     },
                   ),
                 ),
-                Text('Accent Color'),
+                const Text('Accent Color'),
                 Container(
                   height: 40,
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: state.availableAccentColors.length,
+                    itemCount: ThemeState.availableAccentColors.length,
                     itemBuilder: (context, index) {
-                      final item = state.availableAccentColors[index];
+                      log(state.accentColor.toString());
+                      final item = ThemeState.availableAccentColors[index];
                       final bool isSelected = state.isAccentColorSelected(item);
                       final double size = isSelected ? 30 : 20;
+                      log(isSelected.toString());
 
                       return GestureDetector(
                         onTap: () {
                           BlocProvider.of<ThemeBloc>(context).add(ThemeAccentColorUpdated(item));
                         },
                         child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 200),
                           height: size,
                           width: size,
                           decoration: BoxDecoration(
