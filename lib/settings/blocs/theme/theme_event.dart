@@ -4,7 +4,7 @@ abstract class ThemeEvent extends Equatable {
   const ThemeEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ThemeAccentColorUpdated extends ThemeEvent {
@@ -17,9 +17,9 @@ class ThemeAccentColorUpdated extends ThemeEvent {
 }
 
 class ThemeThemeModeUpdated extends ThemeEvent {
-  final ThemeMode value;
+  final ThemeMode? value;
 
   const ThemeThemeModeUpdated(this.value);
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }

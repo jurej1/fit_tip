@@ -1,3 +1,4 @@
+import 'package:fit_tip/settings/view/theme_settings_view.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatelessWidget {
@@ -27,7 +28,9 @@ class SettingsView extends StatelessWidget {
           ListTile(
             title: const Text('Theme'),
             leading: const Icon(Icons.brush),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(ThemeSettingsView.route(context));
+            },
           ),
         ],
       ),

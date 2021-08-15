@@ -4,14 +4,19 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
-
+import 'package:path_provider/path_provider.dart' as path;
 import 'app.dart';
 import 'utilities/fit_tip_bloc_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await path.getApplicationDocumentsDirectory(),
+  );
   await Firebase.initializeApp();
 
   Bloc.observer = FitTipBlocObserver();
