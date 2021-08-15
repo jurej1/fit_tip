@@ -27,4 +27,16 @@ class ThemeState extends Equatable {
       accentColor: accentColor ?? this.accentColor,
     );
   }
+
+  List<Color> get availableAccentColors => [
+        Colors.blue,
+        Colors.green,
+        Colors.red,
+        Colors.purple,
+        Colors.orange,
+        Colors.redAccent,
+        Colors.indigoAccent,
+      ];
+
+  bool isAccentColorSelected(Color color) => color == this.accentColor;
 }
