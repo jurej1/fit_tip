@@ -30,8 +30,10 @@ class ThemeSettingsView extends StatelessWidget {
             height: size.height,
             width: size.width,
             child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               children: [
                 ListTile(
+                  contentPadding: EdgeInsets.zero,
                   title: const Text('Theme Mode'),
                   trailing: DropdownButton<ThemeMode>(
                     value: state.themeMode,
@@ -52,9 +54,8 @@ class ThemeSettingsView extends StatelessWidget {
                 ),
                 const Text('Accent Color'),
                 Container(
-                  height: 40,
+                  height: 30,
                   child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: ThemeState.availableAccentColors.length,
@@ -62,7 +63,7 @@ class ThemeSettingsView extends StatelessWidget {
                       log(state.accentColor.toString());
                       final item = ThemeState.availableAccentColors[index];
                       final bool isSelected = state.isAccentColorSelected(item);
-                      final double size = isSelected ? 30 : 20;
+                      final double size = isSelected ? 25 : 20;
                       log(isSelected.toString());
 
                       return GestureDetector(
