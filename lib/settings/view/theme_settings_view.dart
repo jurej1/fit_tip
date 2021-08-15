@@ -50,7 +50,7 @@ class ThemeSettingsView extends StatelessWidget {
                 ),
                 Text('Accent Color'),
                 Container(
-                  height: 30,
+                  height: 40,
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     shrinkWrap: true,
@@ -59,21 +59,26 @@ class ThemeSettingsView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = state.availableAccentColors[index];
                       final bool isSelected = state.isAccentColorSelected(item);
-                      final double size = isSelected ? 25 : 20;
+                      final double size = isSelected ? 30 : 20;
 
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        height: size,
-                        width: size,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: item,
-                          border: isSelected
-                              ? Border.all(
-                                  color: state.themeMode == ThemeMode.dark ? Colors.white : Colors.black,
-                                  width: 1,
-                                )
-                              : null,
+                      return GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<ThemeBloc>(context).add(ThemeAccentColorUpdated(item));
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          height: size,
+                          width: size,
+                          decoration: BoxDecoration(
+                            color: item,
+                            shape: BoxShape.circle,
+                            border: isSelected
+                                ? Border.all(
+                                    color: state.themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+                                    width: 1,
+                                  )
+                                : null,
+                          ),
                         ),
                       );
                     },
