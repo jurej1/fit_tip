@@ -4,6 +4,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
+import 'package:fit_tip/settings/models/models.dart';
+import 'package:formz/formz.dart';
 
 part 'profile_settings_event.dart';
 part 'profile_settings_state.dart';
@@ -12,15 +14,8 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
   ProfileSettingsBloc({
     required AuthenticationBloc authenticationBloc,
   }) : super(
-          ProfileSettingsState(status: authenticationBloc.state.status, mode: ProfileSettingsMode.look),
+          ProfileSettingsState.fromUser(authenticationBloc.state.user),
         ) {
-    final authState = authenticationBloc.state;
-    if (authState.isAuthenticated) {
-      add(_ProfileSettingsUserUpdated(authState.user));
-    } else {
-      add(_ProfileSettingsUserFail());
-    }
-
     _streamSubscription = authenticationBloc.stream.listen(
       (authState) {
         if (authState.isAuthenticated) {
@@ -38,11 +33,9 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
   Stream<ProfileSettingsState> mapEventToState(
     ProfileSettingsEvent event,
   ) async* {
-    if (event is _ProfileSettingsUserFail) {
-      yield ProfileSettingsState(status: AuthenticationStatus.unauthenticated, mode: state.mode);
-    } else if (event is _ProfileSettingsUserUpdated) {
+    if (event is _ProfileSettingsUserUpdated) {
       yield state.copyWith(
-        status: AuthenticationStatus.authenticated,
+        authenticationStatus: AuthenticationStatus.authenticated,
         user: event.user,
       );
     } else if (event is ProfileSettingsEditButtonPressed) {
