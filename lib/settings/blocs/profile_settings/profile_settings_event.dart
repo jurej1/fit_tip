@@ -16,3 +16,5 @@ class _ProfileSettingsUserUpdated extends ProfileSettingsEvent {
 }
 
 class _ProfileSettingsUserFail extends ProfileSettingsEvent {}
+
+class ProfileSettingsEditButtonPressed extends ProfileSettingsEvent {}
