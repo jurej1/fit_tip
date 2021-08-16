@@ -22,7 +22,7 @@ class ThemeSettingsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Theme settings'),
+        title: const Text('Theme settings'),
       ),
       body: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
@@ -60,11 +60,9 @@ class ThemeSettingsView extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: ThemeState.availableAccentColors.length,
                     itemBuilder: (context, index) {
-                      log(state.accentColor.toString());
                       final item = ThemeState.availableAccentColors[index];
                       final bool isSelected = state.isAccentColorSelected(item);
                       final double size = isSelected ? 25 : 20;
-                      log(isSelected.toString());
 
                       return GestureDetector(
                         onTap: () {
