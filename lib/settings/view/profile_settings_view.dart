@@ -67,12 +67,16 @@ class ProfileSettingsView extends StatelessWidget {
                         const SizedBox(
                           height: 2,
                         ),
-                        Container(
-                          height: 3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.red,
-                          ),
+                        BlocBuilder<ThemeBloc, ThemeState>(
+                          builder: (context, state) {
+                            return Container(
+                              height: 3,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: state.accentColor,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
