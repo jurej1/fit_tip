@@ -71,3 +71,5 @@ class ProfileSettingsEmailUpdated extends ProfileSettingsEvent {
   @override
   List<Object?> get props => [value];
 }
+
+class ProfileSettingsFormSubmit extends ProfileSettingsEvent {}

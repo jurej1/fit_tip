@@ -86,4 +86,15 @@ class ProfileSettingsState extends Equatable {
   }
 
   bool get isEditMode => mode == ProfileSettingsMode.edit;
+
+  User? getNewUser() {
+    return user?.copyWith(
+      birthdate: birthday.value,
+      displayName: displayName.value,
+      email: email.value,
+      gender: gender.value,
+      height: double.parse(height.value),
+      introduction: introductionLine.value,
+    );
+  }
 }

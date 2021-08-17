@@ -14,9 +14,9 @@ part 'profile_settings_state.dart';
 class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsState> {
   ProfileSettingsBloc({
     required AuthenticationBloc authenticationBloc,
-  }) : super(
-          ProfileSettingsState.fromUser(authenticationBloc.state.user),
-        ) {
+    required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
+        super(ProfileSettingsState.fromUser(authenticationBloc.state.user)) {
     _streamSubscription = authenticationBloc.stream.listen(
       (authState) {
         if (authState.isAuthenticated) {
@@ -29,6 +29,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
   }
 
   late final StreamSubscription _streamSubscription;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Stream<ProfileSettingsState> mapEventToState(
@@ -53,6 +54,8 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
       yield* _mapIntroductionLineUpdatedToState(event);
     } else if (event is ProfileSettingsEmailUpdated) {
       yield* _mapEmailUpdatedToState(event);
+    } else if (event is ProfileSettingsFormSubmit) {
+      yield* _mapFormSubmitToState(event);
     }
   }
 
@@ -179,9 +182,46 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
           state.height,
           state.gender,
           state.displayName,
-          state.email,
         ]),
       );
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapFormSubmitToState(ProfileSettingsFormSubmit event) async* {
+    if (state.isEditMode && state.authenticationStatus == AuthenticationStatus.authenticated) {
+      final email = Email.dirty(state.email.value);
+      final introductionLine = IntroductionLineInput.dirty(state.introductionLine.value);
+      final birhtday = BirthdayInput.dirty(state.birthday.value);
+      final height = HeightInput.dirty(state.height.value);
+      final gender = GenderInput.dirty(state.gender.value);
+      final displayName = DisplayNameInput.dirty(state.displayName.value);
+
+      yield state.copyWith(
+          status: Formz.validate([
+        email,
+        introductionLine,
+        birhtday,
+        height,
+        gender,
+        displayName,
+      ]));
+
+      if (state.status.isValidated) {
+        try {
+          yield state.copyWith(status: FormzStatus.submissionInProgress);
+
+          await _authenticationRepository.updatedUserData(state.getNewUser()!);
+
+          if (!state.email.pure) {
+            await _authenticationRepository.updateUserEmail(state.email.value);
+          }
+
+          yield state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            user: state.getNewUser(),
+          );
+        } catch (error) {}
+      }
     }
   }
 }
