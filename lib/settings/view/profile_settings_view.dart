@@ -48,6 +48,19 @@ class ProfileSettingsView extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Profile Settings'),
           actions: [
+            BlocBuilder<ProfileSettingsBloc, ProfileSettingsState>(
+              builder: (context, state) {
+                return Visibility(
+                  visible: state.isEditMode,
+                  child: IconButton(
+                    icon: const Icon(Icons.check),
+                    onPressed: () {
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsFormSubmit());
+                    },
+                  ),
+                );
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
@@ -106,7 +119,7 @@ class ProfileSettingsView extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
-                    key: ValueKey('displayName'),
+                    key: const ValueKey('displayName'),
                     initialValue: profileState.user?.displayName ?? 'None',
                     decoration: InputDecoration(
                       labelText: 'Display name',
@@ -118,7 +131,7 @@ class ProfileSettingsView extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    key: ValueKey('introductionLine'),
+                    key: const ValueKey('introductionLine'),
                     initialValue: profileState.user?.introduction ?? 'None',
                     decoration: InputDecoration(
                       labelText: 'Introduction',
@@ -137,7 +150,7 @@ class ProfileSettingsView extends StatelessWidget {
                     title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
                   ),
                   ListTile(
-                    key: ValueKey('Birthday'),
+                    key: const ValueKey('Birthday'),
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       'Birthday ',
@@ -158,7 +171,7 @@ class ProfileSettingsView extends StatelessWidget {
                     },
                   ),
                   TextFormField(
-                    key: ValueKey('email'),
+                    key: const ValueKey('email'),
                     initialValue: profileState.user?.email ?? 'None',
                     decoration: InputDecoration(
                       labelText: 'Email',
@@ -170,7 +183,7 @@ class ProfileSettingsView extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    key: ValueKey('Gender'),
+                    key: const ValueKey('Gender'),
                     contentPadding: EdgeInsets.zero,
                     title: const Text(
                       'Gender',

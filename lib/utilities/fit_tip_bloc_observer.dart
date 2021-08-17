@@ -10,7 +10,7 @@ class FitTipBlocObserver extends BlocObserver {
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    log(transition.toString());
+    print(transition.toString());
     super.onTransition(bloc, transition);
   }
 }

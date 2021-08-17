@@ -93,7 +93,7 @@ class ProfileSettingsState extends Equatable {
       displayName: displayName.value,
       email: email.value,
       gender: gender.value,
-      height: double.parse(height.value),
+      height: height.getDoubleValue(),
       introduction: introductionLine.value,
     );
   }

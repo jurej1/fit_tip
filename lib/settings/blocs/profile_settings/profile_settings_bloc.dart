@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -221,6 +222,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             user: state.getNewUser(),
           );
         } catch (error) {
+          log(error.toString());
           yield state.copyWith(status: FormzStatus.submissionFailure);
         }
       }
