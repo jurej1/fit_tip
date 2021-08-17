@@ -40,6 +40,16 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
       );
     } else if (event is ProfileSettingsEditButtonPressed) {
       yield* _mapButtonPressedToState();
+    } else if (event is ProfileSettingsBirthdayUpdated) {
+      yield* _mapBirthdayUpdatedToState(event);
+    } else if (event is ProfileSettingsDisplayNameUpdated) {
+      yield* _mapDisplayNameUpdatedToState(event);
+    } else if (event is ProfileSettingsGenderUpdated) {
+      yield* _mapGenderUpdatedToState(event);
+    } else if (event is ProfileSettingsHeightUpdated) {
+      yield* _mapHeightUpdatedToState(event);
+    } else if (event is ProfileSettingsIntroductionLineUpdated) {
+      yield* _mapIntroductionLineUpdatedToState(event);
     }
   }
 
@@ -54,6 +64,95 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
       yield state.copyWith(mode: ProfileSettingsMode.edit);
     } else {
       yield state.copyWith(mode: ProfileSettingsMode.look);
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapBirthdayUpdatedToState(ProfileSettingsBirthdayUpdated event) async* {
+    if (state.isEditMode) {
+      final birthdayInput = BirthdayInput.dirty(event.value);
+      yield state.copyWith(
+        birthday: birthdayInput,
+        status: Formz.validate(
+          [
+            birthdayInput,
+            state.displayName,
+            state.gender,
+            state.height,
+            state.introductionLine,
+          ],
+        ),
+      );
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapDisplayNameUpdatedToState(ProfileSettingsDisplayNameUpdated event) async* {
+    if (state.isEditMode) {
+      final displayNameInput = DisplayNameInput.dirty(event.value);
+
+      yield state.copyWith(
+          displayName: displayNameInput,
+          status: Formz.validate([
+            displayNameInput,
+            state.birthday,
+            state.gender,
+            state.height,
+            state.introductionLine,
+          ]));
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapGenderUpdatedToState(ProfileSettingsGenderUpdated event) async* {
+    if (state.isEditMode && event.value != null) {
+      final gender = GenderInput.dirty(event.value!);
+
+      yield state.copyWith(
+        gender: gender,
+        status: Formz.validate([
+          gender,
+          state.birthday,
+          state.displayName,
+          state.height,
+          state.introductionLine,
+        ]),
+      );
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapHeightUpdatedToState(ProfileSettingsHeightUpdated event) async* {
+    if (state.isEditMode && event.value != null) {
+      final heightInput = HeightInput.dirty(event.value.toString());
+
+      yield state.copyWith(
+        height: heightInput,
+        status: Formz.validate(
+          [
+            heightInput,
+            state.gender,
+            state.birthday,
+            state.displayName,
+            state.introductionLine,
+          ],
+        ),
+      );
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapIntroductionLineUpdatedToState(ProfileSettingsIntroductionLineUpdated event) async* {
+    if (state.isEditMode) {
+      final introductionLine = IntroductionLineInput.dirty(event.value);
+
+      yield state.copyWith(
+        introductionLine: introductionLine,
+        status: Formz.validate(
+          [
+            introductionLine,
+            state.birthday,
+            state.height,
+            state.gender,
+            state.displayName,
+          ],
+        ),
+      );
     }
   }
 }

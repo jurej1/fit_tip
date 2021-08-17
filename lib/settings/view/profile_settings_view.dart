@@ -89,7 +89,7 @@ class ProfileSettingsView extends StatelessWidget {
                     labelText: 'Display name',
                     border: InputBorder.none,
                   ),
-                  enabled: false,
+                  enabled: state.mode == ProfileSettingsMode.edit ? true : false,
                 ),
                 TextFormField(
                   key: ValueKey('introductionLine'),

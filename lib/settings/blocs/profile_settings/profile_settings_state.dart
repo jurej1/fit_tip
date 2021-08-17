@@ -78,4 +78,6 @@ class ProfileSettingsState extends Equatable {
       status: status ?? this.status,
     );
   }
+
+  bool get isEditMode => mode == ProfileSettingsMode.edit;
 }
