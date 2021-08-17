@@ -54,7 +54,7 @@ class ProfileSettingsView extends StatelessWidget {
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: state.mode == ProfileSettingsMode.edit ? 30 : 0,
+                  height: state.isEditMode ? 30 : 0,
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +89,10 @@ class ProfileSettingsView extends StatelessWidget {
                     labelText: 'Display name',
                     border: InputBorder.none,
                   ),
-                  enabled: state.mode == ProfileSettingsMode.edit ? true : false,
+                  enabled: state.isEditMode ? true : false,
+                  onChanged: (value) {
+                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsDisplayNameUpdated(value));
+                  },
                 ),
                 TextFormField(
                   key: ValueKey('introductionLine'),
@@ -98,7 +101,10 @@ class ProfileSettingsView extends StatelessWidget {
                     labelText: 'Introduction',
                     border: InputBorder.none,
                   ),
-                  enabled: false,
+                  enabled: state.isEditMode ? true : false,
+                  onChanged: (value) {
+                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsIntroductionLineUpdated(value));
+                  },
                 ),
                 Text(
                   'Date joined ${state.user != null ? DateFormat.yMMMd().format(state.user!.dateJoined!) : ''}',
@@ -110,14 +116,37 @@ class ProfileSettingsView extends StatelessWidget {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    'Birthday: ${state.user != null && state.user?.birthdate != null ? DateFormat.yMMMd().format(state.user!.dateJoined!) : 'Unknown'}',
+                    'Birthday: ${state.user != null && state.user?.birthdate != null ? DateFormat.yMMMd().format(state.user!.birthdate!) : 'Unknown'}',
                   ),
+                  onTap: () async {
+                    final now = DateTime.now();
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: state.user?.birthdate ?? now,
+                      firstDate: DateTime(now.year),
+                      lastDate: DateTime(now.year, DateTime.december, 31),
+                    );
+
+                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
+                  },
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'Email: ${state.user != null && state.user?.email != null ? state.user!.email : 'Unknown'}',
+                // ListTile(
+                //   contentPadding: EdgeInsets.zero,
+                //   title: Text(
+                //     'Email: ${state.user != null && state.user?.email != null ? state.user!.email : 'Unknown'}',
+                //   ),
+                // ),
+                TextFormField(
+                  key: ValueKey('email'),
+                  initialValue: state.user?.email ?? 'None',
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: InputBorder.none,
                   ),
+                  enabled: state.isEditMode ? true : false,
+                  onChanged: (value) {
+                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEmailUpdated(value));
+                  },
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,

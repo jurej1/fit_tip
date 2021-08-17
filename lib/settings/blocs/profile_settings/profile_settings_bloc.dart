@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
 import 'package:fit_tip/settings/models/models.dart';
 import 'package:formz/formz.dart';
@@ -50,6 +51,8 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
       yield* _mapHeightUpdatedToState(event);
     } else if (event is ProfileSettingsIntroductionLineUpdated) {
       yield* _mapIntroductionLineUpdatedToState(event);
+    } else if (event is ProfileSettingsEmailUpdated) {
+      yield* _mapEmailUpdatedToState(event);
     }
   }
 
@@ -79,6 +82,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             state.gender,
             state.height,
             state.introductionLine,
+            state.email,
           ],
         ),
       );
@@ -90,14 +94,18 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
       final displayNameInput = DisplayNameInput.dirty(event.value);
 
       yield state.copyWith(
-          displayName: displayNameInput,
-          status: Formz.validate([
+        displayName: displayNameInput,
+        status: Formz.validate(
+          [
             displayNameInput,
             state.birthday,
             state.gender,
             state.height,
             state.introductionLine,
-          ]));
+            state.email,
+          ],
+        ),
+      );
     }
   }
 
@@ -113,6 +121,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
           state.displayName,
           state.height,
           state.introductionLine,
+          state.email,
         ]),
       );
     }
@@ -131,6 +140,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             state.birthday,
             state.displayName,
             state.introductionLine,
+            state.email,
           ],
         ),
       );
@@ -150,8 +160,27 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             state.height,
             state.gender,
             state.displayName,
+            state.email,
           ],
         ),
+      );
+    }
+  }
+
+  Stream<ProfileSettingsState> _mapEmailUpdatedToState(ProfileSettingsEmailUpdated event) async* {
+    if (state.isEditMode) {
+      final email = Email.dirty(event.value);
+      yield state.copyWith(
+        email: email,
+        status: Formz.validate([
+          email,
+          state.introductionLine,
+          state.birthday,
+          state.height,
+          state.gender,
+          state.displayName,
+          state.email,
+        ]),
       );
     }
   }

@@ -62,3 +62,12 @@ class ProfileSettingsIntroductionLineUpdated extends ProfileSettingsEvent {
   @override
   List<Object?> get props => [value];
 }
+
+class ProfileSettingsEmailUpdated extends ProfileSettingsEvent {
+  final String value;
+
+  const ProfileSettingsEmailUpdated(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}

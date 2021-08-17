@@ -13,6 +13,7 @@ class ProfileSettingsState extends Equatable {
     this.height = const HeightInput.pure(),
     this.introductionLine = const IntroductionLineInput.pure(),
     this.status = FormzStatus.pure,
+    this.email = const Email.pure(),
   });
 
   final User? user;
@@ -24,6 +25,7 @@ class ProfileSettingsState extends Equatable {
   final HeightInput height;
   final IntroductionLineInput introductionLine;
   final FormzStatus status;
+  final Email email;
 
   @override
   List<Object?> get props {
@@ -36,6 +38,7 @@ class ProfileSettingsState extends Equatable {
       height,
       introductionLine,
       status,
+      email,
     ];
   }
 
@@ -52,6 +55,7 @@ class ProfileSettingsState extends Equatable {
       gender: GenderInput.pure(user.gender ?? Gender.unknown),
       height: HeightInput.pure(user.height?.toString() ?? ''),
       introductionLine: IntroductionLineInput.pure(user.introduction ?? ''),
+      email: Email.pure(user.email ?? ''),
     );
   }
 
@@ -65,6 +69,7 @@ class ProfileSettingsState extends Equatable {
     HeightInput? height,
     IntroductionLineInput? introductionLine,
     FormzStatus? status,
+    Email? email,
   }) {
     return ProfileSettingsState(
       user: user ?? this.user,
@@ -76,6 +81,7 @@ class ProfileSettingsState extends Equatable {
       height: height ?? this.height,
       introductionLine: introductionLine ?? this.introductionLine,
       status: status ?? this.status,
+      email: email ?? this.email,
     );
   }
 
