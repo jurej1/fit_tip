@@ -217,10 +217,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             await _authenticationRepository.updateUserEmail(state.email.value);
           }
 
-          yield state.copyWith(
-            status: FormzStatus.submissionSuccess,
-            user: state.getNewUser(),
-          );
+          yield state.copyWith(status: FormzStatus.submissionSuccess, user: state.getNewUser(), mode: ProfileSettingsMode.look);
         } catch (error) {
           log(error.toString());
           yield state.copyWith(status: FormzStatus.submissionFailure);

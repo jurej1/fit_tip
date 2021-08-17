@@ -101,7 +101,7 @@ class ProfileSettingsView extends StatelessWidget {
                           BlocBuilder<ThemeBloc, ThemeState>(
                             builder: (context, state) {
                               return Container(
-                                height: 3,
+                                height: 5,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
                                   color: profileState.status.isSubmissionInProgress ? Colors.transparent : state.accentColor,
