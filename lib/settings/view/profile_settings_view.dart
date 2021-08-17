@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:formz/formz.dart';
 
 import '../settings.dart';
 
@@ -27,157 +28,179 @@ class ProfileSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile Settings'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEditButtonPressed());
-            },
-          )
-        ],
-      ),
-      body: BlocBuilder<ProfileSettingsBloc, ProfileSettingsState>(
-        builder: (context, state) {
-          if (state.authenticationStatus != AuthenticationStatus.authenticated) {
-            return Center(
-              child: Text('Sorry there was an error'),
-            );
-          }
-
-          return SizedBox(
-            height: size.height,
-            width: size.width,
-            child: ListView(
-              padding: const EdgeInsets.all(10),
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: state.isEditMode ? 30 : 0,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Editing Mode',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        BlocBuilder<ThemeBloc, ThemeState>(
-                          builder: (context, state) {
-                            return Container(
-                              height: 3,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: state.accentColor,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  key: ValueKey('displayName'),
-                  initialValue: state.user?.displayName ?? 'None',
-                  decoration: InputDecoration(
-                    labelText: 'Display name',
-                    border: InputBorder.none,
-                  ),
-                  enabled: state.isEditMode ? true : false,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsDisplayNameUpdated(value));
-                  },
-                ),
-                TextFormField(
-                  key: ValueKey('introductionLine'),
-                  initialValue: state.user?.introduction ?? 'None',
-                  decoration: InputDecoration(
-                    labelText: 'Introduction',
-                    border: InputBorder.none,
-                  ),
-                  enabled: state.isEditMode ? true : false,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsIntroductionLineUpdated(value));
-                  },
-                ),
-                Text(
-                  'Date joined ${state.user != null ? DateFormat.yMMMd().format(state.user!.dateJoined!) : ''}',
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text('Height: ${state.user?.height == null ? 'unknow' : state.user?.height}'),
-                ),
-                ListTile(
-                  key: ValueKey('Birthday'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'Birthday ',
-                  ),
-                  trailing: Text(
-                    '${state.user != null && state.user?.birthdate != null ? DateFormat.yMMMd().format(state.user!.birthdate!) : 'Unknown'}',
-                  ),
-                  onTap: () async {
-                    final now = DateTime.now();
-                    final date = await showDatePicker(
-                      context: context,
-                      initialDate: state.user?.birthdate ?? now,
-                      firstDate: DateTime(now.year),
-                      lastDate: DateTime(now.year, DateTime.december, 31),
-                    );
-
-                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
-                  },
-                ),
-                TextFormField(
-                  key: ValueKey('email'),
-                  initialValue: state.user?.email ?? 'None',
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: InputBorder.none,
-                  ),
-                  enabled: state.isEditMode ? true : false,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEmailUpdated(value));
-                  },
-                ),
-                ListTile(
-                  key: ValueKey('Gender'),
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text(
-                    'Gender',
-                  ),
-                  trailing: IgnorePointer(
-                    ignoring: !state.isEditMode,
-                    child: DropdownButton<Gender>(
-                      value: state.gender.value,
-                      items: Gender.values
-                          .map(
-                            (e) => DropdownMenuItem<Gender>(
-                              key: ValueKey(e),
-                              child: Text(
-                                describeEnum(e),
-                              ),
-                              value: e,
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsGenderUpdated(value));
-                      },
-                    ),
-                  ),
-                ),
-              ],
+    return BlocListener<ProfileSettingsBloc, ProfileSettingsState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Sorry there was an error'),
             ),
           );
-        },
+        } else if (state.status.isSubmissionSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Data updated successfully'),
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Profile Settings'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEditButtonPressed());
+              },
+            )
+          ],
+        ),
+        body: BlocBuilder<ProfileSettingsBloc, ProfileSettingsState>(
+          builder: (context, profileState) {
+            if (profileState.authenticationStatus != AuthenticationStatus.authenticated) {
+              return Center(
+                child: Text('Sorry there was an error'),
+              );
+            }
+
+            return SizedBox(
+              height: size.height,
+              width: size.width,
+              child: ListView(
+                padding: const EdgeInsets.all(10),
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: profileState.isEditMode ? 30 : 0,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Editing Mode',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          BlocBuilder<ThemeBloc, ThemeState>(
+                            builder: (context, state) {
+                              return Container(
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: profileState.status.isSubmissionInProgress ? Colors.transparent : state.accentColor,
+                                ),
+                                child: profileState.status.isSubmissionInProgress
+                                    ? LinearProgressIndicator(
+                                        color: state.accentColor,
+                                      )
+                                    : Container(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    key: ValueKey('displayName'),
+                    initialValue: profileState.user?.displayName ?? 'None',
+                    decoration: InputDecoration(
+                      labelText: 'Display name',
+                      border: InputBorder.none,
+                    ),
+                    enabled: profileState.isEditMode ? true : false,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsDisplayNameUpdated(value));
+                    },
+                  ),
+                  TextFormField(
+                    key: ValueKey('introductionLine'),
+                    initialValue: profileState.user?.introduction ?? 'None',
+                    decoration: InputDecoration(
+                      labelText: 'Introduction',
+                      border: InputBorder.none,
+                    ),
+                    enabled: profileState.isEditMode ? true : false,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsIntroductionLineUpdated(value));
+                    },
+                  ),
+                  Text(
+                    'Date joined ${profileState.user != null ? DateFormat.yMMMd().format(profileState.user!.dateJoined!) : ''}',
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
+                  ),
+                  ListTile(
+                    key: ValueKey('Birthday'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Birthday ',
+                    ),
+                    trailing: Text(
+                      '${profileState.user != null && profileState.user?.birthdate != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
+                    ),
+                    onTap: () async {
+                      final now = DateTime.now();
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: profileState.user?.birthdate ?? now,
+                        firstDate: DateTime(now.year),
+                        lastDate: DateTime(now.year, DateTime.december, 31),
+                      );
+
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
+                    },
+                  ),
+                  TextFormField(
+                    key: ValueKey('email'),
+                    initialValue: profileState.user?.email ?? 'None',
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: InputBorder.none,
+                    ),
+                    enabled: profileState.isEditMode ? true : false,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEmailUpdated(value));
+                    },
+                  ),
+                  ListTile(
+                    key: ValueKey('Gender'),
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text(
+                      'Gender',
+                    ),
+                    trailing: IgnorePointer(
+                      ignoring: !profileState.isEditMode,
+                      child: DropdownButton<Gender>(
+                        value: profileState.gender.value,
+                        items: Gender.values
+                            .map(
+                              (e) => DropdownMenuItem<Gender>(
+                                key: ValueKey(e),
+                                child: Text(
+                                  describeEnum(e),
+                                ),
+                                value: e,
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsGenderUpdated(value));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

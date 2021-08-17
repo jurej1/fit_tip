@@ -220,7 +220,9 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
             status: FormzStatus.submissionSuccess,
             user: state.getNewUser(),
           );
-        } catch (error) {}
+        } catch (error) {
+          yield state.copyWith(status: FormzStatus.submissionFailure);
+        }
       }
     }
   }
