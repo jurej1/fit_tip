@@ -40,7 +40,7 @@ class ProfileSettingsView extends StatelessWidget {
       ),
       body: BlocBuilder<ProfileSettingsBloc, ProfileSettingsState>(
         builder: (context, state) {
-          if (state.status != AuthenticationStatus.authenticated) {
+          if (state.authenticationStatus != AuthenticationStatus.authenticated) {
             return Center(
               child: Text('Sorry there was an error'),
             );
