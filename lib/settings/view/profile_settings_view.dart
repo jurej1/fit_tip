@@ -114,9 +114,13 @@ class ProfileSettingsView extends StatelessWidget {
                   title: Text('Height: ${state.user?.height == null ? 'unknow' : state.user?.height}'),
                 ),
                 ListTile(
+                  key: ValueKey('Birthday'),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    'Birthday: ${state.user != null && state.user?.birthdate != null ? DateFormat.yMMMd().format(state.user!.birthdate!) : 'Unknown'}',
+                    'Birthday ',
+                  ),
+                  trailing: Text(
+                    '${state.user != null && state.user?.birthdate != null ? DateFormat.yMMMd().format(state.user!.birthdate!) : 'Unknown'}',
                   ),
                   onTap: () async {
                     final now = DateTime.now();
@@ -130,12 +134,6 @@ class ProfileSettingsView extends StatelessWidget {
                     BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
                   },
                 ),
-                // ListTile(
-                //   contentPadding: EdgeInsets.zero,
-                //   title: Text(
-                //     'Email: ${state.user != null && state.user?.email != null ? state.user!.email : 'Unknown'}',
-                //   ),
-                // ),
                 TextFormField(
                   key: ValueKey('email'),
                   initialValue: state.user?.email ?? 'None',
@@ -149,9 +147,30 @@ class ProfileSettingsView extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  key: ValueKey('Gender'),
                   contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'Gender: ${state.user != null && state.user?.gender != null ? describeEnum(state.user!.gender!) : 'Unknown'}',
+                  title: const Text(
+                    'Gender',
+                  ),
+                  trailing: IgnorePointer(
+                    ignoring: !state.isEditMode,
+                    child: DropdownButton<Gender>(
+                      value: state.gender.value,
+                      items: Gender.values
+                          .map(
+                            (e) => DropdownMenuItem<Gender>(
+                              key: ValueKey(e),
+                              child: Text(
+                                describeEnum(e),
+                              ),
+                              value: e,
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsGenderUpdated(value));
+                      },
+                    ),
                   ),
                 ),
               ],
