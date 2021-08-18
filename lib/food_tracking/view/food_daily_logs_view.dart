@@ -31,12 +31,12 @@ class FoodDailyLogsView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return FoodDailyLogsView.provider(context);
+        return FoodDailyLogsView.widget(context);
       },
     );
   }
 
-  static Widget provider(BuildContext context) {
+  static Widget widget(BuildContext context) {
     return MultiBlocProvider(
       providers: _providers(),
       child: FoodDailyLogsView(),

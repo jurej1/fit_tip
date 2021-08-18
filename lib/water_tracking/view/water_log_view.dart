@@ -35,12 +35,12 @@ class WaterLogView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return WaterLogView.provider(context);
+        return WaterLogView.widget(context);
       },
     );
   }
 
-  static Widget provider(BuildContext context) {
+  static Widget widget(BuildContext context) {
     return MultiBlocProvider(
       providers: _providers(),
       child: WaterLogView(),

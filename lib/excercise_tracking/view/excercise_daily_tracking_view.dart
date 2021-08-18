@@ -10,30 +10,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ExcerciseDailyTrackingView extends StatelessWidget {
   const ExcerciseDailyTrackingView({Key? key}) : super(key: key);
 
+  static List<BlocProvider> _providers() => [
+        BlocProvider(
+          create: (context) => DaySelectorBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ExcerciseDailyListBloc(
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          )..add(ExcerciseDailyListDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+        BlocProvider(
+          create: (context) => ExcerciseDailyGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+      ];
+
+  static List<BlocProvider> providers() => [..._providers()];
+
   static route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => DaySelectorBloc(),
-            ),
-            BlocProvider(
-              create: (context) => ExcerciseDailyListBloc(
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              )..add(ExcerciseDailyListDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-            BlocProvider(
-              create: (context) => ExcerciseDailyGoalBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-              )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-          ],
-          child: ExcerciseDailyTrackingView(),
-        );
+        return ExcerciseDailyTrackingView.widget(context);
       },
+    );
+  }
+
+  static widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: _providers(),
+      child: ExcerciseDailyTrackingView(),
     );
   }
 
