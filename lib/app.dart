@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:fit_tip/home.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
+import 'home/home.dart';
 import 'settings/settings.dart';
 import 'weight_tracking/weight.dart';
 
@@ -94,7 +94,7 @@ class App extends StatelessWidget {
                         if (state.status == AuthenticationStatus.unauthenticated) {
                           _navigatorState.currentState!.pushReplacement(LoginView.route(context));
                         } else if (state.status == AuthenticationStatus.authenticated) {
-                          _navigatorState.currentState!.pushReplacement(Home.route(context));
+                          _navigatorState.currentState!.pushReplacement(HomeView.route(context));
                         }
                       },
                     ),
