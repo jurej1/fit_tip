@@ -52,7 +52,6 @@ class HomeView extends StatelessWidget {
           if (state.isFood) {
             return FoodDailyLogsView();
           }
-
           if (state.isWater) {
             return WaterLogView();
           }

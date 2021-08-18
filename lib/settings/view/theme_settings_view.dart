@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fit_tip/settings/blocs/blocs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
