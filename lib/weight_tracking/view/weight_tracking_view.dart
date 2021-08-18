@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class WeightTrackingView extends StatelessWidget {
   // static const routeName = 'weight_tracking_view';
 
+  const WeightTrackingView();
+
   static MaterialPageRoute route(BuildContext context) {
     BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
     BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());

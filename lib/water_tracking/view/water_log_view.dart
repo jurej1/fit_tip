@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_repository/water_repository.dart';
 
 class WaterLogView extends StatelessWidget {
+  const WaterLogView();
+
   static List<BlocProvider> _providers() => [
         BlocProvider<DaySelectorBloc>(
           create: (context) => DaySelectorBloc(),
