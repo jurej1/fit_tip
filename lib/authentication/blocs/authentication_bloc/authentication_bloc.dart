@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -10,9 +11,15 @@ part 'authentication_state.dart';
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
-  })   : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(AuthenticationState()) {
     _statusSubscription = _authenticationRepository.authenticationStatus.listen((status) => add(_StatusUpdated(status)));
+  }
+
+  @override
+  void onTransition(Transition<AuthenticationEvent, AuthenticationState> transition) {
+    super.onTransition(transition);
+    log(transition.toString());
   }
 
   final AuthenticationRepository _authenticationRepository;

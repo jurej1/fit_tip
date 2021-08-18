@@ -66,7 +66,7 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
         child: ListView(
           children: [
             ExcerciseDaySelector(),
-            Expanded(child: ExcerciseDailyListBuilder()),
+            ExcerciseDailyListBuilder(),
           ],
         ),
       ),
