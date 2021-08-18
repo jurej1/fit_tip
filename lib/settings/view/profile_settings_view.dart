@@ -81,6 +81,7 @@ class ProfileSettingsView extends StatelessWidget {
               height: size.height,
               width: size.width,
               child: ListView(
+                physics: const ClampingScrollPhysics(),
                 padding: const EdgeInsets.all(10),
                 children: [
                   AnimatedContainer(
@@ -142,33 +143,39 @@ class ProfileSettingsView extends StatelessWidget {
                       BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsIntroductionLineUpdated(value));
                     },
                   ),
-                  Text(
-                    'Date joined ${profileState.user != null ? DateFormat.yMMMd().format(profileState.user!.dateJoined!) : ''}',
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Date joined ${profileState.user != null ? DateFormat.yMMMd().format(profileState.user!.dateJoined!) : ''}',
+                    ),
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
                   ),
-                  ListTile(
-                    key: const ValueKey('Birthday'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      'Birthday ',
-                    ),
-                    trailing: Text(
-                      '${profileState.user != null && profileState.user?.birthdate != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
-                    ),
-                    onTap: () async {
-                      final now = DateTime.now();
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: profileState.user?.birthdate ?? now,
-                        firstDate: DateTime(now.year),
-                        lastDate: DateTime(now.year, DateTime.december, 31),
-                      );
+                  IgnorePointer(
+                    ignoring: !profileState.isEditMode,
+                    child: ListTile(
+                      key: const ValueKey('Birthday'),
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text(
+                        'Birthday ',
+                      ),
+                      trailing: Text(
+                        '${profileState.user != null && profileState.user?.birthdate != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
+                      ),
+                      onTap: () async {
+                        final now = DateTime.now();
+                        final date = await showDatePicker(
+                          context: context,
+                          initialDate: profileState.user?.birthdate ?? now,
+                          firstDate: DateTime(now.year),
+                          lastDate: DateTime(now.year, DateTime.december, 31),
+                        );
 
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
-                    },
+                        BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
+                      },
+                    ),
                   ),
                   TextFormField(
                     key: const ValueKey('email'),
