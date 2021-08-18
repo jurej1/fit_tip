@@ -43,45 +43,57 @@ class FoodDailyLogsView extends StatelessWidget {
     );
   }
 
+  static AppBar appBar(context) {
+    return AppBar(
+      title: Text('Daily logs'),
+      actions: [
+        BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
+          builder: (context, state) {
+            if (state is CalorieDailyGoalLoadSuccess) {
+              return IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
+                },
+              );
+            }
+            return Container();
+          },
+        )
+      ],
+    );
+  }
+
+  static Widget body() {
+    return Column(
+      children: [
+        FoodLogDaySelector(),
+        FoodLogBuilder(),
+      ],
+    );
+  }
+
+  static FloatingActionButton floatingActionButton(context) {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).push(AddFoodLogView.route(context));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Daily logs'),
-        actions: [
-          BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
-            builder: (context, state) {
-              if (state is CalorieDailyGoalLoadSuccess) {
-                return IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
-                  },
-                );
-              }
-              return Container();
-            },
-          )
-        ],
-      ),
+      appBar: appBar(context),
       body: SizedBox(
         height: size.height,
         width: size.width,
-        child: Column(
-          children: [
-            FoodLogDaySelector(),
-            FoodLogBuilder(),
-          ],
-        ),
+        child: body(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(AddFoodLogView.route(context));
-        },
-      ),
+      floatingActionButton: floatingActionButton(context),
     );
   }
 }

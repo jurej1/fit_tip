@@ -45,37 +45,49 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
     );
   }
 
+  static AppBar appBar(BuildContext context) {
+    return AppBar(
+      title: Text('Excercise tracking'),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(EditExcerciseDailyGoalView.route(context));
+          },
+          icon: Icon(Icons.edit),
+        ),
+      ],
+    );
+  }
+
+  static FloatingActionButton floatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).push(AddExcerciseLogView.route(context));
+      },
+    );
+  }
+
+  static Widget body() {
+    return ListView(
+      children: [
+        ExcerciseDaySelector(),
+        ExcerciseDailyListBuilder(),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Excercise tracking'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(EditExcerciseDailyGoalView.route(context));
-            },
-            icon: Icon(Icons.edit),
-          ),
-        ],
-      ),
+      appBar: appBar(context),
       body: SizedBox(
         height: size.height,
         width: size.width,
-        child: ListView(
-          children: [
-            ExcerciseDaySelector(),
-            ExcerciseDailyListBuilder(),
-          ],
-        ),
+        child: body(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(AddExcerciseLogView.route(context));
-        },
-      ),
+      floatingActionButton: floatingActionButton(context),
     );
   }
 }

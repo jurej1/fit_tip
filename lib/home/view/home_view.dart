@@ -100,13 +100,13 @@ class HomeView extends StatelessWidget {
       body: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
         builder: (context, state) {
           if (state.isExcercise) {
-            return ExcerciseDailyTrackingView();
+            return ExcerciseDailyTrackingView.body();
           }
           if (state.isFood) {
-            return FoodDailyLogsView();
+            return FoodDailyLogsView.body();
           }
           if (state.isWater) {
-            return WaterLogView();
+            return WaterLogView.body();
           }
           if (state.isWeight) {
             return WeightTrackingView();

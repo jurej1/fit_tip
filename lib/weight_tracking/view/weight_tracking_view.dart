@@ -25,35 +25,43 @@ class WeightTrackingView extends StatelessWidget {
     return WeightTrackingView();
   }
 
+  static AppBar appBar(context) {
+    return AppBar(
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.pie_chart),
+          onPressed: () {
+            Navigator.of(context).push(WeightStatisticsView.route(context));
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).push(AddWeightView.route(context));
+          },
+        )
+      ],
+    );
+  }
+
+  static Widget body() {
+    return Container(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _WeightGoalView(),
+            _WeightHistoryView(),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.pie_chart),
-            onPressed: () {
-              Navigator.of(context).push(WeightStatisticsView.route(context));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(AddWeightView.route(context));
-            },
-          )
-        ],
-      ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _WeightGoalView(),
-              _WeightHistoryView(),
-            ],
-          ),
-        ),
-      ),
+      appBar: appBar(context),
+      body: body(),
     );
   }
 }

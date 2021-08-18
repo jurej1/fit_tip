@@ -19,17 +19,15 @@ class ExcerciseDailyListBuilder extends StatelessWidget {
             child: Text('Oops something went wrong'),
           );
         } else if (state is ExcerciseDailyListLoadSuccess) {
-          return Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 10),
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  ExcerciseDailyGoalProgress(),
-                  const SizedBox(height: 15),
-                  ExcerciseDailyList(excercises: state.excercises),
-                ],
-              ),
+          return SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 10),
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                ExcerciseDailyGoalProgress(),
+                const SizedBox(height: 15),
+                ExcerciseDailyList(excercises: state.excercises),
+              ],
             ),
           );
         }

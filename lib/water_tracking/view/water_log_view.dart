@@ -49,55 +49,67 @@ class WaterLogView extends StatelessWidget {
     );
   }
 
+  static AppBar appBar(context) {
+    return AppBar(
+      title: Text('Water tracking'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            Navigator.of(context).push(AddWaterDailyGoalView.route(context));
+          },
+        ),
+      ],
+    );
+  }
+
+  static Widget body() {
+    return Column(
+      children: [
+        WaterLogDaySelector(),
+        WaterLogBuilder(),
+      ],
+    );
+  }
+
+  static FloatingActionButton floatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showModalBottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(10),
+              topRight: const Radius.circular(10),
+            ),
+          ),
+          context: context,
+          isScrollControlled: true,
+          builder: (_) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: BlocProvider.of<WaterLogDayBloc>(context),
+                  child: AddWaterLogSheet(),
+                ),
+                BlocProvider.value(
+                  value: BlocProvider.of<DaySelectorBloc>(context),
+                ),
+              ],
+              child: AddWaterLogSheet(),
+            );
+          },
+        );
+      },
+      child: const Icon(Icons.add),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Water tracking'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.of(context).push(AddWaterDailyGoalView.route(context));
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          WaterLogDaySelector(),
-          WaterLogBuilder(),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(10),
-                topRight: const Radius.circular(10),
-              ),
-            ),
-            context: context,
-            isScrollControlled: true,
-            builder: (_) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(
-                    value: BlocProvider.of<WaterLogDayBloc>(context),
-                    child: AddWaterLogSheet(),
-                  ),
-                  BlocProvider.value(
-                    value: BlocProvider.of<DaySelectorBloc>(context),
-                  ),
-                ],
-                child: AddWaterLogSheet(),
-              );
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      appBar: appBar(context),
+      body: body(),
+      floatingActionButton: floatingActionButton(context),
     );
   }
 }
