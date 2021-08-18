@@ -8,30 +8,36 @@ import 'package:food_repository/food_repository.dart';
 class FoodDailyLogsView extends StatelessWidget {
   const FoodDailyLogsView({Key? key}) : super(key: key);
 
+  static List<BlocProvider> _providers() => [
+        BlocProvider<DaySelectorBloc>(
+          create: (context) => DaySelectorBloc(),
+        ),
+        BlocProvider<CalorieDailyGoalBloc>(
+          create: (context) => CalorieDailyGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            foodRepository: RepositoryProvider.of<FoodRepository>(context),
+          )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+        BlocProvider<FoodDailyLogsBloc>(
+          create: (context) => FoodDailyLogsBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            foodRepository: RepositoryProvider.of<FoodRepository>(context),
+          )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        )
+      ];
+
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<DaySelectorBloc>(
-              create: (context) => DaySelectorBloc(),
-            ),
-            BlocProvider<CalorieDailyGoalBloc>(
-              create: (context) => CalorieDailyGoalBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-            BlocProvider<FoodDailyLogsBloc>(
-              create: (context) => FoodDailyLogsBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            )
-          ],
-          child: FoodDailyLogsView(),
-        );
+        return FoodDailyLogsView.provider(context);
       },
+    );
+  }
+
+  static Widget provider(BuildContext context) {
+    return MultiBlocProvider(
+      providers: _providers(),
+      child: FoodDailyLogsView(),
     );
   }
 

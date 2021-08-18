@@ -6,35 +6,43 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_repository/water_repository.dart';
 
 class WaterLogView extends StatelessWidget {
+  static List<BlocProvider> _providers() => [
+        BlocProvider<DaySelectorBloc>(
+          create: (context) => DaySelectorBloc(),
+        ),
+        BlocProvider<WaterLogDayBloc>(
+          create: (context) => WaterLogDayBloc(
+            waterRepository: RepositoryProvider.of<WaterRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          )..add(WaterLogFocusedDayUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+        BlocProvider<WaterDailyGoalBloc>(create: (context) {
+          return WaterDailyGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            waterRepository: RepositoryProvider.of<WaterRepository>(context),
+          )..add(WaterDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate));
+        }),
+        BlocProvider<WaterLogConsumptionBloc>(
+          create: (context) => WaterLogConsumptionBloc(
+            waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
+            waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
+          ),
+        ),
+      ];
+
   static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(builder: (_) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<DaySelectorBloc>(
-            create: (context) => DaySelectorBloc(),
-          ),
-          BlocProvider<WaterLogDayBloc>(
-            create: (context) => WaterLogDayBloc(
-              waterRepository: RepositoryProvider.of<WaterRepository>(context),
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            )..add(WaterLogFocusedDayUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-          ),
-          BlocProvider<WaterDailyGoalBloc>(create: (context) {
-            return WaterDailyGoalBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              waterRepository: RepositoryProvider.of<WaterRepository>(context),
-            )..add(WaterDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate));
-          }),
-          BlocProvider<WaterLogConsumptionBloc>(
-            create: (context) => WaterLogConsumptionBloc(
-              waterDailyGoalBloc: BlocProvider.of<WaterDailyGoalBloc>(context),
-              waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
-            ),
-          ),
-        ],
-        child: WaterLogView(),
-      );
-    });
+    return MaterialPageRoute(
+      builder: (_) {
+        return WaterLogView.provider(context);
+      },
+    );
+  }
+
+  static Widget provider(BuildContext context) {
+    return MultiBlocProvider(
+      providers: _providers(),
+      child: WaterLogView(),
+    );
   }
 
   @override
