@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/home/home.dart';
 import 'package:fit_tip/shared/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class HomeView extends StatelessWidget {
       body: Center(
         child: Text('Home'),
       ),
+      bottomNavigationBar: HomeViewSelector(),
     );
   }
 }
