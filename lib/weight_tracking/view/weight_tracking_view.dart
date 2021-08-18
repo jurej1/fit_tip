@@ -20,7 +20,6 @@ class WeightTrackingView extends StatelessWidget {
   static Widget provider(BuildContext context) {
     BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
     BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
-
     return WeightTrackingView();
   }
 
