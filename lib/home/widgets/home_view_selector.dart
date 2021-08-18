@@ -11,13 +11,22 @@ class HomeViewSelector extends StatelessWidget {
     return BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
       builder: (context, state) {
         return BottomNavigationBar(
+          currentIndex: HomeViewSelectorState.values.indexOf(state),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
           items: HomeViewSelectorState.values
               .map(
                 (e) => BottomNavigationBarItem(
                   icon: Icon(BlocProvider.of<HomeViewSelectorCubit>(context).mapStateToIcon(e)),
+                  label: '',
                 ),
               )
               .toList(),
+          onTap: (index) {
+            BlocProvider.of<HomeViewSelectorCubit>(context).valuUpdatedIndex(index);
+          },
         );
       },
     );

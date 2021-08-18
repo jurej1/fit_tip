@@ -8,9 +8,16 @@ class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(
-      builder: (_) => HomeView(),
-    );
+    return MaterialPageRoute(builder: (_) {
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => HomeViewSelectorCubit(),
+          ),
+        ],
+        child: HomeView(),
+      );
+    });
   }
 
   @override
