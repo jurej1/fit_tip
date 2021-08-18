@@ -48,19 +48,7 @@ class ProfileSettingsView extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Profile Settings'),
           actions: [
-            BlocBuilder<ProfileSettingsBloc, ProfileSettingsState>(
-              builder: (context, state) {
-                return Visibility(
-                  visible: state.isEditMode,
-                  child: IconButton(
-                    icon: const Icon(Icons.check),
-                    onPressed: () {
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsFormSubmit());
-                    },
-                  ),
-                );
-              },
-            ),
+            const SubmitProfileFormButton(),
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
@@ -73,7 +61,7 @@ class ProfileSettingsView extends StatelessWidget {
           builder: (context, profileState) {
             if (profileState.authenticationStatus != AuthenticationStatus.authenticated) {
               return Center(
-                child: Text('Sorry there was an error'),
+                child: const Text('Sorry there was an error'),
               );
             }
 
@@ -84,65 +72,9 @@ class ProfileSettingsView extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 padding: const EdgeInsets.all(10),
                 children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    height: profileState.isEditMode ? 30 : 0,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Editing Mode',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          BlocBuilder<ThemeBloc, ThemeState>(
-                            builder: (context, state) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Container(
-                                  height: 5,
-                                  color: profileState.status.isSubmissionInProgress ? Colors.transparent : state.accentColor,
-                                  child: profileState.status.isSubmissionInProgress
-                                      ? LinearProgressIndicator(
-                                          color: state.accentColor,
-                                        )
-                                      : Container(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    key: const ValueKey('displayName'),
-                    initialValue: profileState.user?.displayName ?? 'None',
-                    decoration: InputDecoration(
-                      labelText: 'Display name',
-                      border: InputBorder.none,
-                    ),
-                    enabled: profileState.isEditMode ? true : false,
-                    onChanged: (value) {
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsDisplayNameUpdated(value));
-                    },
-                  ),
-                  TextFormField(
-                    key: const ValueKey('introductionLine'),
-                    initialValue: profileState.user?.introduction ?? 'None',
-                    decoration: InputDecoration(
-                      labelText: 'Introduction',
-                      border: InputBorder.none,
-                    ),
-                    enabled: profileState.isEditMode ? true : false,
-                    onChanged: (value) {
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsIntroductionLineUpdated(value));
-                    },
-                  ),
+                  const EditModeIndicator(),
+                  const DisplayNameInputField(),
+                  const IntroductionLineInputField(),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
@@ -153,69 +85,9 @@ class ProfileSettingsView extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
                   ),
-                  IgnorePointer(
-                    ignoring: !profileState.isEditMode,
-                    child: ListTile(
-                      key: const ValueKey('Birthday'),
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text(
-                        'Birthday ',
-                      ),
-                      trailing: Text(
-                        '${profileState.user != null && profileState.user?.birthdate != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
-                      ),
-                      onTap: () async {
-                        final now = DateTime.now();
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: profileState.user?.birthdate ?? now,
-                          firstDate: DateTime(now.year),
-                          lastDate: DateTime(now.year, DateTime.december, 31),
-                        );
-
-                        BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
-                      },
-                    ),
-                  ),
-                  TextFormField(
-                    key: const ValueKey('email'),
-                    initialValue: profileState.user?.email ?? 'None',
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: InputBorder.none,
-                    ),
-                    enabled: profileState.isEditMode ? true : false,
-                    onChanged: (value) {
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsEmailUpdated(value));
-                    },
-                  ),
-                  ListTile(
-                    key: const ValueKey('Gender'),
-                    contentPadding: EdgeInsets.zero,
-                    title: const Text(
-                      'Gender',
-                    ),
-                    trailing: IgnorePointer(
-                      ignoring: !profileState.isEditMode,
-                      child: DropdownButton<Gender>(
-                        value: profileState.gender.value,
-                        items: Gender.values
-                            .map(
-                              (e) => DropdownMenuItem<Gender>(
-                                key: ValueKey(e),
-                                child: Text(
-                                  describeEnum(e),
-                                ),
-                                value: e,
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsGenderUpdated(value));
-                        },
-                      ),
-                    ),
-                  ),
+                  const BirthdayInputTile(),
+                  const EmailInputTile(),
+                  const GenderInputTile(),
                 ],
               ),
             );
