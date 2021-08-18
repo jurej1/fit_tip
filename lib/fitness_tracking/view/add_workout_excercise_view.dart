@@ -115,14 +115,14 @@ class _RepsInput extends StatelessWidget {
               ),
               Spacer(),
               DraggableValueSelector.route(
-                itemHeight: 30,
-                itemCount: 61,
-                focusedValue: state.reps.value,
-                onValueUpdated: (value) {
-                  BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseRepsUpdated(value));
-                },
-                height: 75,
-              ),
+                  itemHeight: 30,
+                  itemCount: 61,
+                  focusedValue: state.reps.value,
+                  onValueUpdated: (value) {
+                    BlocProvider.of<AddWorkoutExcerciseFormBloc>(context).add(AddWorkoutExcerciseRepsUpdated(value));
+                  },
+                  height: 75,
+                  width: 40),
               RepUnitValueSelector.route(
                 itemHeight: 20,
                 height: 75,
@@ -155,6 +155,7 @@ class _SetsInput extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
             DraggableValueSelector.route(
+              width: 40,
               height: 75,
               itemHeight: 30,
               itemCount: 21,

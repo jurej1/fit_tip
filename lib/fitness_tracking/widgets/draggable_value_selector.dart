@@ -11,8 +11,8 @@ class DraggableValueSelector extends StatefulWidget {
     required this.itemCount,
     required this.onValueUpdated,
     required this.height,
-  })  : this.width = itemHeight * 1.5,
-        super(key: key);
+    required this.width,
+  }) : super(key: key);
 
   static Widget route({
     Key? key,
@@ -22,6 +22,7 @@ class DraggableValueSelector extends StatefulWidget {
     required int itemCount,
     required double height,
     int? focusedValue,
+    required double width,
   }) {
     return BlocProvider(
       create: (context) => DraggableValueSelectorBloc(focusedValue: focusedValue),
@@ -32,6 +33,7 @@ class DraggableValueSelector extends StatefulWidget {
         itemCount: itemCount,
         onValueUpdated: onValueUpdated,
         height: height,
+        width: width,
       ),
     );
   }

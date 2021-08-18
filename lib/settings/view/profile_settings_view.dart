@@ -84,6 +84,11 @@ class ProfileSettingsView extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
+                    onTap: () async {
+                      final int? value = await Navigator.of(context).push<int?>(HeightFormView.route(context));
+
+                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
+                    },
                   ),
                   const BirthdayInputTile(),
                   const EmailInputTile(),

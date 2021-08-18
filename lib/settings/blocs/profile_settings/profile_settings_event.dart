@@ -46,7 +46,7 @@ class ProfileSettingsGenderUpdated extends ProfileSettingsEvent {
 }
 
 class ProfileSettingsHeightUpdated extends ProfileSettingsEvent {
-  final double? value;
+  final int? value;
 
   const ProfileSettingsHeightUpdated(this.value);
 
