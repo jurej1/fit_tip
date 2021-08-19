@@ -46,7 +46,32 @@ class FitnessTrackingView extends StatelessWidget {
 
   static Widget widget(BuildContext context) {
     return MultiBlocProvider(
-      providers: _providers(),
+      providers: [
+        BlocProvider(
+          create: (context) => FitnessTrackingViewCubit(),
+        ),
+        BlocProvider(
+          create: (context) => WorkoutsListBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          )..add(WorkoutsListLoadRequested()),
+        ),
+        BlocProvider(
+          create: (context) => ActiveWorkoutBloc(
+            workoutsListBloc: BlocProvider.of<WorkoutsListBloc>(context),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ActiveWorkoutViewSelectorCubit(),
+        ),
+        BlocProvider(
+          create: (context) => WorkoutDayLogsBloc(
+            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          ),
+        )
+      ],
       child: FitnessTrackingView(),
     );
   }
