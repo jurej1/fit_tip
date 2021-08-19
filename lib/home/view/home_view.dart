@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/birthday/birthday.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/home/home.dart';
@@ -102,61 +103,72 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: AppDrawer(),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
+    return BlocListener<BirthdayMessengerBloc, bool>(
+      listener: (context, isBirthday) {
+        if (isBirthday) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Happy Birthday'),
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        drawer: AppDrawer(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
+            builder: (context, state) {
+              if (state.isExcercise) {
+                return ExcerciseDailyTrackingView.appBar(context);
+              }
+              if (state.isFood) {
+                return FoodDailyLogsView.appBar(context);
+              }
+              if (state.isWater) {
+                return WaterLogView.appBar(context);
+              }
+              if (state.isWeight) {
+                return WeightTrackingView.appBar(context);
+              }
+
+              return Container();
+            },
+          ),
+        ),
+        body: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
           builder: (context, state) {
             if (state.isExcercise) {
-              return ExcerciseDailyTrackingView.appBar(context);
+              return ExcerciseDailyTrackingView.body();
             }
             if (state.isFood) {
-              return FoodDailyLogsView.appBar(context);
+              return FoodDailyLogsView.body();
             }
             if (state.isWater) {
-              return WaterLogView.appBar(context);
+              return WaterLogView.body();
             }
             if (state.isWeight) {
-              return WeightTrackingView.appBar(context);
+              return WeightTrackingView.body();
             }
 
             return Container();
           },
         ),
-      ),
-      body: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
-        builder: (context, state) {
-          if (state.isExcercise) {
-            return ExcerciseDailyTrackingView.body();
-          }
-          if (state.isFood) {
-            return FoodDailyLogsView.body();
-          }
-          if (state.isWater) {
-            return WaterLogView.body();
-          }
-          if (state.isWeight) {
-            return WeightTrackingView.body();
-          }
-
-          return Container();
-        },
-      ),
-      bottomNavigationBar: HomeViewSelector(),
-      floatingActionButton: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
-        builder: (context, state) {
-          if (state.isExcercise) {
-            return ExcerciseDailyTrackingView.floatingActionButton(context);
-          }
-          if (state.isFood) {
-            return FoodDailyLogsView.floatingActionButton(context);
-          }
-          if (state.isWater) {
-            return WaterLogView.floatingActionButton(context);
-          }
-          return Container();
-        },
+        bottomNavigationBar: HomeViewSelector(),
+        floatingActionButton: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
+          builder: (context, state) {
+            if (state.isExcercise) {
+              return ExcerciseDailyTrackingView.floatingActionButton(context);
+            }
+            if (state.isFood) {
+              return FoodDailyLogsView.floatingActionButton(context);
+            }
+            if (state.isWater) {
+              return WaterLogView.floatingActionButton(context);
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

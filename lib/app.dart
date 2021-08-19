@@ -7,6 +7,7 @@ import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
 import 'authentication/authentication.dart';
+import 'birthday/birthday.dart';
 import 'home/home.dart';
 import 'settings/settings.dart';
 
@@ -57,6 +58,11 @@ class App extends StatelessWidget {
           BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(),
           ),
+          BlocProvider(
+            create: (context) => BirthdayMessengerBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            ),
+          )
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
