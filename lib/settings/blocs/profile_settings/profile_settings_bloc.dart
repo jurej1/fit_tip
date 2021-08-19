@@ -133,7 +133,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
 
   Stream<ProfileSettingsState> _mapHeightUpdatedToState(ProfileSettingsHeightUpdated event) async* {
     if (state.isEditMode && event.value != null) {
-      final heightInput = HeightInput.dirty(event.value.toString());
+      final heightInput = HeightInput.dirty(event.value!.toDouble());
 
       yield state.copyWith(
         height: heightInput,

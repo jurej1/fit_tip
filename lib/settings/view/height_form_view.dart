@@ -36,6 +36,7 @@ class HeightFormView extends StatelessWidget {
                 icon: const Icon(Icons.check),
                 onPressed: () {
                   BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
+                  Navigator.of(context).pop();
                 },
               );
             },

@@ -2,21 +2,12 @@ import 'package:formz/formz.dart';
 
 enum HeightInputValidationError { invalid }
 
-class HeightInput extends FormzInput<String, HeightInputValidationError> {
-  const HeightInput.dirty([String value = '']) : super.dirty(value);
-  const HeightInput.pure([String value = '']) : super.pure(value);
-
-  double getDoubleValue() {
-    final val = double.tryParse(this.value);
-
-    if (val == null)
-      return 0;
-    else
-      return val;
-  }
+class HeightInput extends FormzInput<double, HeightInputValidationError> {
+  const HeightInput.dirty([double value = 0]) : super.dirty(value);
+  const HeightInput.pure([double value = 0]) : super.pure(value);
 
   @override
-  HeightInputValidationError? validator(String? value) {
+  HeightInputValidationError? validator(double? value) {
     if (value == null) {
       return HeightInputValidationError.invalid;
     }
