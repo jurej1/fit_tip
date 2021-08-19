@@ -86,16 +86,26 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: AppDrawer(),
-      appBar: AppBar(
-        actions: [
-          TextButton(
-            child: const Text('Logout'),
-            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-            onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogoutRequested());
-            },
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
+          builder: (context, state) {
+            if (state.isExcercise) {
+              return ExcerciseDailyTrackingView.appBar(context);
+            }
+            if (state.isFood) {
+              return FoodDailyLogsView.appBar(context);
+            }
+            if (state.isWater) {
+              return WaterLogView.appBar(context);
+            }
+            if (state.isWeight) {
+              return WeightTrackingView.appBar(context);
+            }
+
+            return Container();
+          },
+        ),
       ),
       body: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
         builder: (context, state) {
@@ -116,6 +126,7 @@ class HomeView extends StatelessWidget {
         },
       ),
       bottomNavigationBar: HomeViewSelector(),
+      floatingActionButton: Container(),
     );
   }
 }
