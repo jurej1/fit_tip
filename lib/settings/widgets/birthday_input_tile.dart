@@ -20,15 +20,15 @@ class BirthdayInputTile extends StatelessWidget {
               'Birthday ',
             ),
             trailing: Text(
-              '${profileState.user != null && profileState.user?.birthdate != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
+              '${profileState.birthday.value != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
             ),
             onTap: () async {
               final now = DateTime.now();
               final date = await showDatePicker(
                 context: context,
-                initialDate: profileState.user?.birthdate ?? now,
+                initialDate: profileState.birthday.value ?? now,
                 firstDate: DateTime(now.year),
-                lastDate: DateTime(now.year, DateTime.december, 31),
+                lastDate: DateTime(now.year + 1, DateTime.january, 0),
               );
 
               BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsBirthdayUpdated(date));
