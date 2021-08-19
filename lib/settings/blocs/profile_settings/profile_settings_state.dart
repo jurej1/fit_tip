@@ -53,7 +53,7 @@ class ProfileSettingsState extends Equatable {
       birthday: BirthdayInput.pure(user.birthdate),
       displayName: DisplayNameInput.pure(user.displayName),
       gender: GenderInput.pure(user.gender ?? Gender.unknown),
-      height: HeightInput.pure(user.height?.toString() ?? ''),
+      height: HeightInput.pure(user.height ?? 0),
       introductionLine: IntroductionLineInput.pure(user.introduction ?? ''),
       email: Email.pure(user.email ?? ''),
     );
@@ -93,7 +93,7 @@ class ProfileSettingsState extends Equatable {
       displayName: displayName.value,
       email: email.value,
       gender: gender.value,
-      height: height.getDoubleValue(),
+      height: height.value,
       introduction: introductionLine.value,
     );
   }

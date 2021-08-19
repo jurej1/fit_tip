@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/fitness_tracking/widgets/widgets.dart';
 import 'package:fit_tip/settings/blocs/blocs.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,7 @@ class HeightFormView extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.check),
                 onPressed: () {
+                  log(value.toString());
                   BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
                   Navigator.of(context).pop();
                 },
@@ -56,6 +59,7 @@ class HeightFormView extends StatelessWidget {
                     return DraggableValueSelector.route(
                       itemHeight: 20,
                       onValueUpdated: (val) {
+                        log('updating');
                         BlocProvider.of<HeightFormBloc>(context).add(HeightFormHeightUpdated(val));
                       },
                       focusedValue: val,

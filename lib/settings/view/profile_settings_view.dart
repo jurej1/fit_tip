@@ -84,9 +84,10 @@ class ProfileSettingsView extends StatelessWidget {
                   IgnorePointer(
                     ignoring: !profileState.isEditMode,
                     child: ListTile(
+                      key: ValueKey(profileState.height),
                       contentPadding: EdgeInsets.zero,
                       title: Text('Height:'),
-                      trailing: Text(' ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}cm'),
+                      trailing: Text(' ${profileState.height.value} cm'),
                       onTap: () async {
                         final int? value = await Navigator.of(context).push<int?>(HeightFormView.route(context));
 

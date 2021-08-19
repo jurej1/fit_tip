@@ -71,15 +71,16 @@ class _DraggableValueSelectorState extends State<DraggableValueSelector> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DraggableValueSelectorBloc, DraggableValueSelectorState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.listState == DraggableValueSelectorListState.stop) {
-          _controller.animateTo(
+          await _controller.animateTo(
             state.getAnimateToValue(widget.itemHeight),
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutQuad,
           );
 
           BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorListSnapped());
+          widget.onValueUpdated(state.focusedValue);
         }
       },
       builder: (context, state) {
