@@ -81,14 +81,18 @@ class ProfileSettingsView extends StatelessWidget {
                       'Date joined ${profileState.user != null ? DateFormat.yMMMd().format(profileState.user!.dateJoined!) : ''}',
                     ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text('Height: ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}'),
-                    onTap: () async {
-                      final int? value = await Navigator.of(context).push<int?>(HeightFormView.route(context));
+                  IgnorePointer(
+                    ignoring: !profileState.isEditMode,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text('Height:'),
+                      trailing: Text(' ${profileState.user?.height == null ? 'unknow' : profileState.user?.height}cm'),
+                      onTap: () async {
+                        final int? value = await Navigator.of(context).push<int?>(HeightFormView.route(context));
 
-                      BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
-                    },
+                        BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
+                      },
+                    ),
                   ),
                   const BirthdayInputTile(),
                   const EmailInputTile(),
