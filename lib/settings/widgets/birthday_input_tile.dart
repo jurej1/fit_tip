@@ -20,7 +20,7 @@ class BirthdayInputTile extends StatelessWidget {
               'Birthday ',
             ),
             trailing: Text(
-              '${profileState.birthday.value != null ? DateFormat.yMMMd().format(profileState.user!.birthdate!) : 'Unknown'}',
+              '${profileState.birthday.value != null ? DateFormat.yMMMd().format(profileState.birthday.value!) : 'Unknown'}',
             ),
             onTap: () async {
               final now = DateTime.now();
