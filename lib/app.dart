@@ -9,7 +9,6 @@ import 'package:weight_repository/weight_repository.dart';
 import 'authentication/authentication.dart';
 import 'home/home.dart';
 import 'settings/settings.dart';
-import 'weight_tracking/weight.dart';
 
 class App extends StatelessWidget {
   final AuthenticationRepository _authenticationRepository;
@@ -54,18 +53,6 @@ class App extends StatelessWidget {
           ),
           BlocProvider<MeasurmentSystemBloc>(
             create: (context) => MeasurmentSystemBloc(),
-          ),
-          BlocProvider<WeightHistoryBloc>(
-            create: (context) => WeightHistoryBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              weightRepository: RepositoryProvider.of<WeightRepository>(context),
-            ),
-          ),
-          BlocProvider<WeightGoalBloc>(
-            create: (context) => WeightGoalBloc(
-              weightRepository: RepositoryProvider.of<WeightRepository>(context),
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            ),
           ),
           BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(),

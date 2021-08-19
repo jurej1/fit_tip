@@ -7,11 +7,13 @@ import 'package:fit_tip/shared/widgets/app_drawer.dart';
 import 'package:fit_tip/water_tracking/view/view.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:fit_tip/weight_tracking/view/view.dart';
+import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:water_repository/water_repository.dart';
+import 'package:weight_repository/weight_repository.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class HomeView extends StatelessWidget {
             BlocProvider(
               create: (context) => HomeViewSelectorCubit(),
             ),
+
+            //Food
             BlocProvider<DaySelectorBloc>(
               create: (context) => DaySelectorBloc(),
             ),
@@ -39,6 +43,8 @@ class HomeView extends StatelessWidget {
                 foodRepository: RepositoryProvider.of<FoodRepository>(context),
               )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
+
+            //Water
             BlocProvider<DaySelectorBloc>(
               create: (context) => DaySelectorBloc(),
             ),
@@ -60,6 +66,8 @@ class HomeView extends StatelessWidget {
                 waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
               ),
             ),
+
+            //Excercise
             BlocProvider(
               create: (context) => DaySelectorBloc(),
             ),
@@ -75,6 +83,20 @@ class HomeView extends StatelessWidget {
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
               )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
             ),
+
+            //Weight
+            BlocProvider<WeightHistoryBloc>(
+              create: (context) => WeightHistoryBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                weightRepository: RepositoryProvider.of<WeightRepository>(context),
+              )..add(WeightHistoryLoad()),
+            ),
+            BlocProvider<WeightGoalBloc>(
+              create: (context) => WeightGoalBloc(
+                weightRepository: RepositoryProvider.of<WeightRepository>(context),
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              )..add(WeightGoalLoadEvent()),
+            )
           ],
           child: HomeView(),
         );

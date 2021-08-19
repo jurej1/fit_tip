@@ -1,8 +1,10 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/weight_statistics/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weight_repository/weight_repository.dart';
 
 class WeightTrackingView extends StatelessWidget {
   // static const routeName = 'weight_tracking_view';
@@ -10,19 +12,31 @@ class WeightTrackingView extends StatelessWidget {
   const WeightTrackingView();
 
   static MaterialPageRoute route(BuildContext context) {
-    BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
-    BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
     return MaterialPageRoute(
       builder: (_) {
-        return WeightTrackingView();
+        return widget(context);
       },
     );
   }
 
   static Widget widget(BuildContext context) {
-    BlocProvider.of<WeightHistoryBloc>(context).add(WeightHistoryLoad());
-    BlocProvider.of<WeightGoalBloc>(context).add(WeightGoalLoadEvent());
-    return WeightTrackingView();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => WeightHistoryBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            weightRepository: RepositoryProvider.of<WeightRepository>(context),
+          )..add(WeightHistoryLoad()),
+        ),
+        BlocProvider(
+          create: (context) => WeightGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            weightRepository: RepositoryProvider.of<WeightRepository>(context),
+          )..add(WeightGoalLoadEvent()),
+        ),
+      ],
+      child: WeightTrackingView(),
+    );
   }
 
   static AppBar appBar(context) {
