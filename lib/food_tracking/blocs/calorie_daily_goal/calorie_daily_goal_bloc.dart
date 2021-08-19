@@ -35,6 +35,8 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
   }
 
   Stream<CalorieDailyGoalState> _mapFocusedDateUpdatedToState(CalorieDailyGoalFocusedDateUpdated event) async* {
+    if (state is CalorieDailyGoalLoadSuccess) return;
+
     if (_isAuth && event.date != null) {
       yield CalorieDailyGoalLoading();
 

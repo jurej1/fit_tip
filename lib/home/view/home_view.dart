@@ -141,14 +141,27 @@ class HomeView extends StatelessWidget {
             return WaterLogView.body();
           }
           if (state.isWeight) {
-            return WeightTrackingView();
+            return WeightTrackingView.body();
           }
 
           return Container();
         },
       ),
       bottomNavigationBar: HomeViewSelector(),
-      floatingActionButton: Container(),
+      floatingActionButton: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
+        builder: (context, state) {
+          if (state.isExcercise) {
+            return ExcerciseDailyTrackingView.floatingActionButton(context);
+          }
+          if (state.isFood) {
+            return FoodDailyLogsView.floatingActionButton(context);
+          }
+          if (state.isWater) {
+            return WaterLogView.floatingActionButton(context);
+          }
+          return Container();
+        },
+      ),
     );
   }
 }
