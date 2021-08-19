@@ -7,35 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FitnessTrackingView extends StatelessWidget {
   const FitnessTrackingView({Key? key}) : super(key: key);
 
-  static List<BlocProvider> _providers() => [
-        BlocProvider(
-          create: (context) => FitnessTrackingViewCubit(),
-        ),
-        BlocProvider(
-          create: (context) => WorkoutsListBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          )..add(WorkoutsListLoadRequested()),
-        ),
-        BlocProvider(
-          create: (context) => ActiveWorkoutBloc(
-            workoutsListBloc: BlocProvider.of<WorkoutsListBloc>(context),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => ActiveWorkoutViewSelectorCubit(),
-        ),
-        BlocProvider(
-          create: (context) => WorkoutDayLogsBloc(
-            activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          ),
-        )
-      ];
-
-  static List<BlocProvider> providers() => [...providers()];
-
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
