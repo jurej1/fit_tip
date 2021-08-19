@@ -5,6 +5,29 @@ enum FoodDayProgressCarouselView { calories, proteins, carbs, fats }
 abstract class FoodDayProgressState extends Equatable {
   const FoodDayProgressState();
 
+  factory FoodDayProgressState.initial({
+    required CalorieDailyGoalBloc calGoalBloc,
+    required FoodDailyLogsBloc dailyLogsBloc,
+  }) {
+    final goalState = calGoalBloc.state;
+    final logsState = dailyLogsBloc.state;
+
+    if (goalState is CalorieDailyGoalLoadSuccess && logsState is FoodDailyLogsLoadSuccess) {
+      return FoodDayProgressLoadSuccess(
+        calorieConsume: logsState.mealDay.totalCalories,
+        calorieGoal: goalState.calorieDailyGoal.amount,
+        carbsGoal: goalState.calorieDailyGoal.carbs ?? 0,
+        carbsConsumed: logsState.mealDay.getMacroAmount(Macronutrient.carbs),
+        fatsConsumed: logsState.mealDay.getMacroAmount(Macronutrient.fat),
+        fatsGoal: goalState.calorieDailyGoal.fats ?? 0,
+        proteinConsumed: logsState.mealDay.getMacroAmount(Macronutrient.protein),
+        proteinGoal: goalState.calorieDailyGoal.proteins ?? 0,
+      );
+    }
+
+    return FoodDayProgressLoading();
+  }
+
   @override
   List<Object> get props => [];
 }
