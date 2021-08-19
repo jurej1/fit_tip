@@ -45,7 +45,7 @@ class FoodDailyLogsView extends StatelessWidget {
 
   static AppBar appBar(context) {
     return AppBar(
-      title: Text('Daily logs'),
+      title: Text('Food'),
       actions: [
         BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
           builder: (context, state) {

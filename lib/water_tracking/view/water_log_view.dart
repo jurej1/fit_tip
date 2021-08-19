@@ -51,7 +51,7 @@ class WaterLogView extends StatelessWidget {
 
   static AppBar appBar(context) {
     return AppBar(
-      title: Text('Water tracking'),
+      title: Text('Water'),
       actions: [
         IconButton(
           icon: const Icon(Icons.edit),

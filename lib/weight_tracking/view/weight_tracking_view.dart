@@ -41,6 +41,7 @@ class WeightTrackingView extends StatelessWidget {
 
   static AppBar appBar(context) {
     return AppBar(
+      title: const Text('Weight'),
       actions: [
         IconButton(
           icon: const Icon(Icons.pie_chart),

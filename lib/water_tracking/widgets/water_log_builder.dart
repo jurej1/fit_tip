@@ -15,12 +15,15 @@ class WaterLogBuilder extends StatelessWidget {
           );
         } else if (state is WaterLogDayLoadSuccess) {
           return Expanded(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                WaterLogConsumption(),
-                WaterLogGrid(waterLogs: state.waterLogs),
-              ],
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  WaterLogConsumption(),
+                  WaterLogGrid(waterLogs: state.waterLogs),
+                ],
+              ),
             ),
           );
         } else if (state is WaterLogDayFailure) {

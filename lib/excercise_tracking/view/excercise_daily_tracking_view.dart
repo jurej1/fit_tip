@@ -47,7 +47,7 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
 
   static AppBar appBar(BuildContext context) {
     return AppBar(
-      title: Text('Excercise tracking'),
+      title: Text('Excercise'),
       actions: [
         IconButton(
           onPressed: () {
