@@ -12,7 +12,7 @@ class IntroductionLineInputField extends StatelessWidget {
       builder: (context, profileState) {
         return TextFormField(
           key: const ValueKey('introductionLine'),
-          initialValue: profileState.user?.introduction ?? 'None',
+          initialValue: profileState.introductionLine.value,
           decoration: InputDecoration(
             labelText: 'Introduction',
             border: InputBorder.none,

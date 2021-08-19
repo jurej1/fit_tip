@@ -12,7 +12,7 @@ class DisplayNameInputField extends StatelessWidget {
       builder: (context, profileState) {
         return TextFormField(
           key: const ValueKey('displayName'),
-          initialValue: profileState.user?.displayName ?? 'None',
+          initialValue: profileState.displayName.value ?? 'None',
           decoration: InputDecoration(
             labelText: 'Display name',
             border: InputBorder.none,

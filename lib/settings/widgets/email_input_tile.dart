@@ -12,7 +12,7 @@ class EmailInputTile extends StatelessWidget {
       builder: (context, profileState) {
         return TextFormField(
           key: const ValueKey('email'),
-          initialValue: profileState.user?.email ?? 'None',
+          initialValue: profileState.email.value,
           decoration: InputDecoration(
             labelText: 'Email',
             border: InputBorder.none,
