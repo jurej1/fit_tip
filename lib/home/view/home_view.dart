@@ -27,10 +27,10 @@ class HomeView extends StatelessWidget {
               create: (context) => HomeViewSelectorCubit(),
             ),
 
-            //Food
             BlocProvider<DaySelectorBloc>(
               create: (context) => DaySelectorBloc(),
             ),
+            //Food
             BlocProvider<CalorieDailyGoalBloc>(
               create: (context) => CalorieDailyGoalBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -45,9 +45,7 @@ class HomeView extends StatelessWidget {
             ),
 
             //Water
-            BlocProvider<DaySelectorBloc>(
-              create: (context) => DaySelectorBloc(),
-            ),
+
             BlocProvider<WaterLogDayBloc>(
               create: (context) => WaterLogDayBloc(
                 waterRepository: RepositoryProvider.of<WaterRepository>(context),
@@ -68,9 +66,7 @@ class HomeView extends StatelessWidget {
             ),
 
             //Excercise
-            BlocProvider(
-              create: (context) => DaySelectorBloc(),
-            ),
+
             BlocProvider(
               create: (context) => ExcerciseDailyListBloc(
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
