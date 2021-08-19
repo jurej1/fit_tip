@@ -15,9 +15,7 @@ class GenderInputTile extends StatelessWidget {
         return ListTile(
           key: const ValueKey('Gender'),
           contentPadding: EdgeInsets.zero,
-          title: const Text(
-            'Gender',
-          ),
+          title: const Text('Gender'),
           trailing: IgnorePointer(
             ignoring: !profileState.isEditMode,
             child: DropdownButton<Gender>(
