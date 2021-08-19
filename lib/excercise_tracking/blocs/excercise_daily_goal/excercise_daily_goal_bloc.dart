@@ -35,6 +35,17 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
   }
 
   Stream<ExcerciseDailyGoalState> _mapDateUpdatedToState(ExcerciseDailyGoalDateUpdated event) async* {
+    if (this.state is ExcerciseDailyGoalLoadSuccess) {
+      final current = state as ExcerciseDailyGoalLoadSuccess;
+
+      final goalDate = current.goal.date;
+      final eventDate = event.date;
+      final a = DateTime(goalDate.year, goalDate.month, goalDate.day);
+      final b = DateTime(eventDate.year, eventDate.month, eventDate.day);
+
+      if (a == b) return;
+    }
+
     if (_isAuth) {
       yield ExcerciseDailyGoalLoading();
 

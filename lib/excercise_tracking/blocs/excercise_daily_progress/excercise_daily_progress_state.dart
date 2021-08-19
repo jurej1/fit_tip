@@ -9,6 +9,27 @@ enum ExcerciseDailyProgressView {
 abstract class ExcerciseDailyProgressState extends Equatable {
   const ExcerciseDailyProgressState();
 
+  factory ExcerciseDailyProgressState.initial({
+    required ExcerciseDailyListBloc listBloc,
+    required ExcerciseDailyGoalBloc goalBloc,
+  }) {
+    final listState = listBloc.state;
+    final goalState = goalBloc.state;
+
+    if (listState is ExcerciseDailyListLoadSuccess && goalState is ExcerciseDailyGoalLoadSuccess) {
+      final int minutesPerDay = listState.excercises.fold(0, (p, e) => p + e.duration);
+      return ExcerciseDailyProgressLoadSuccess(
+        goal: goalState.goal,
+        view: ExcerciseDailyProgressView.minutesWorkout,
+        caloriesBurnedPerDay: listState.excercises.fold(0, (p, e) => p + e.calories),
+        minutesPerDay: minutesPerDay,
+        avgMinutesPerWorkout: listState.excercises.isEmpty ? 0 : (minutesPerDay / listState.excercises.length).round(),
+      );
+    }
+
+    return ExcerciseDailyProgressLoading();
+  }
+
   @override
   List<Object> get props => [];
 }

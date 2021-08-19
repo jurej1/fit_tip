@@ -17,15 +17,7 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
     required ExcerciseDailyGoalBloc excerciseDailyGoalBloc,
   })  : this._excerciseDailyGoalBloc = excerciseDailyGoalBloc,
         this._excerciseDailyListBloc = excerciseDailyListBloc,
-        super(ExcerciseDailyProgressLoading()) {
-    final _goalState = _excerciseDailyGoalBloc.state;
-
-    if (_goalState is ExcerciseDailyGoalLoadSuccess) {
-      add(_ExcerciseDailyProgressGoalUpdated(_goalState.goal));
-    } else if (_goalState is ExcerciseDailyGoalFailure) {
-      add(_ExcerciseDailyProgressGoalFailRequested());
-    }
-
+        super(ExcerciseDailyProgressState.initial(listBloc: excerciseDailyListBloc, goalBloc: excerciseDailyGoalBloc)) {
     _goalSubscription = _excerciseDailyGoalBloc.stream.listen((goalState) {
       if (goalState is ExcerciseDailyGoalLoadSuccess) {
         add(_ExcerciseDailyProgressGoalUpdated(goalState.goal));
@@ -33,14 +25,6 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
         add(_ExcerciseDailyProgressGoalFailRequested());
       }
     });
-
-    final _listState = _excerciseDailyListBloc.state;
-
-    if (_listState is ExcerciseDailyListLoadSuccess) {
-      add(_ExcerciseDailyProgressExcercisesUpdated(_listState.excercises));
-    } else if (_listState is ExcerciseDailyListFailure) {
-      add(_ExcerciseDailyProgressGoalFailRequested());
-    }
 
     _listSubscription = _excerciseDailyListBloc.stream.listen((listState) {
       if (listState is ExcerciseDailyListLoadSuccess) {
@@ -85,7 +69,7 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
         goal: goalState.goal,
         avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(event.excercises),
         caloriesBurnedPerDay: calculateCalorieBurnedFromExcercises(event.excercises),
-        minutesPerDay: calculateMinutesWorokutFromExcercises(event.excercises),
+        minutesPerDay: calculateMinutesWorkoutFromExcercises(event.excercises),
       );
     }
   }
@@ -97,14 +81,13 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
         goal: event.goal,
         avgMinutesPerWorkout: calculateAvgMinutesPerWorkoutFromExcercises(listState.excercises),
         caloriesBurnedPerDay: calculateCalorieBurnedFromExcercises(listState.excercises),
-        minutesPerDay: calculateMinutesWorokutFromExcercises(listState.excercises),
+        minutesPerDay: calculateMinutesWorkoutFromExcercises(listState.excercises),
       );
     }
   }
 
   Stream<ExcerciseDailyProgressState> _mapViewUpdatedToState(ExcerciseDailyProgressViewUpdated event) async* {
     if (state is ExcerciseDailyProgressLoadSuccess) {
-      print('View changed');
       final currentState = state as ExcerciseDailyProgressLoadSuccess;
 
       yield currentState.copyWith(
@@ -117,13 +100,13 @@ class ExcerciseDailyProgressBloc extends Bloc<ExcerciseDailyProgressEvent, Excer
     return excercises.fold(0, (p, e) => p + e.calories);
   }
 
-  int calculateMinutesWorokutFromExcercises(List<ExcerciseLog> excercises) {
+  int calculateMinutesWorkoutFromExcercises(List<ExcerciseLog> excercises) {
     return excercises.fold(0, (p, e) => p + e.duration);
   }
 
   int calculateAvgMinutesPerWorkoutFromExcercises(List<ExcerciseLog> excercises) {
     if (excercises.isEmpty) return 0;
 
-    return (calculateMinutesWorokutFromExcercises(excercises) / excercises.length).round();
+    return (calculateMinutesWorkoutFromExcercises(excercises) / excercises.length).round();
   }
 }
