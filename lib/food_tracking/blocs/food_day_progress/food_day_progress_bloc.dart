@@ -13,24 +13,12 @@ class FoodDayProgressBloc extends Bloc<FoodDayProgressEvent, FoodDayProgressStat
   FoodDayProgressBloc({
     required CalorieDailyGoalBloc calorieDailyGoalBloc,
     required FoodDailyLogsBloc foodDailyLogsBloc,
-  })   : _calorieDailyGoalBloc = calorieDailyGoalBloc,
+  })  : _calorieDailyGoalBloc = calorieDailyGoalBloc,
         _foodDailyLogsBloc = foodDailyLogsBloc,
-        super(FoodDayProgressLoading()) {
-    final calState = _calorieDailyGoalBloc.state;
-
-    if (calState is CalorieDailyGoalLoadSuccess) {
-      add(FoodDayProgressCalorieGoalUpdated(calorieGoal: calState.calorieDailyGoal));
-    } else if (calState is CalorieDailyGoalFailure) {
-      add(FoodDayProgressErroOcurred());
-    }
-
-    final logsState = _foodDailyLogsBloc.state;
-
-    if (logsState is FoodDailyLogsLoadSuccess) {
-      add(FoodDayProgressDailyLogsUpdated(mealDay: logsState.mealDay));
-    } else if (logsState is FoodDailyLogsFailure) {
-      add(FoodDayProgressErroOcurred());
-    }
+        super(FoodDayProgressState.initial(
+          calGoalBloc: calorieDailyGoalBloc,
+          dailyLogsBloc: foodDailyLogsBloc,
+        )) {
     _logsSubscription = foodDailyLogsBloc.stream.listen((logState) {
       if (logState is FoodDailyLogsLoadSuccess) {
         add(FoodDayProgressDailyLogsUpdated(mealDay: logState.mealDay));

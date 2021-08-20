@@ -8,29 +8,76 @@ import 'package:food_repository/food_repository.dart';
 class FoodDailyLogsView extends StatelessWidget {
   const FoodDailyLogsView({Key? key}) : super(key: key);
 
+  static List<BlocProvider> _providers() => [
+        BlocProvider<DaySelectorBloc>(
+          create: (context) => DaySelectorBloc(),
+        ),
+        BlocProvider<CalorieDailyGoalBloc>(
+          create: (context) => CalorieDailyGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            foodRepository: RepositoryProvider.of<FoodRepository>(context),
+          )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+        BlocProvider<FoodDailyLogsBloc>(
+          create: (context) => FoodDailyLogsBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            foodRepository: RepositoryProvider.of<FoodRepository>(context),
+          )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        )
+      ];
+
+  static List<BlocProvider> providers() => [..._providers()];
+
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<DaySelectorBloc>(
-              create: (context) => DaySelectorBloc(),
-            ),
-            BlocProvider<CalorieDailyGoalBloc>(
-              create: (context) => CalorieDailyGoalBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(CalorieDailyGoalFocusedDateUpdated(date: BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-            BlocProvider<FoodDailyLogsBloc>(
-              create: (context) => FoodDailyLogsBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                foodRepository: RepositoryProvider.of<FoodRepository>(context),
-              )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            )
-          ],
-          child: FoodDailyLogsView(),
-        );
+        return FoodDailyLogsView.widget(context);
+      },
+    );
+  }
+
+  static Widget widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: _providers(),
+      child: FoodDailyLogsView(),
+    );
+  }
+
+  static AppBar appBar(context) {
+    return AppBar(
+      title: Text('Food'),
+      actions: [
+        BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
+          builder: (context, state) {
+            if (state is CalorieDailyGoalLoadSuccess) {
+              return IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
+                },
+              );
+            }
+            return Container();
+          },
+        )
+      ],
+    );
+  }
+
+  static Widget body() {
+    return Column(
+      children: [
+        FoodLogDaySelector(),
+        FoodLogBuilder(),
+      ],
+    );
+  }
+
+  static FloatingActionButton floatingActionButton(context) {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).push(AddFoodLogView.route(context));
       },
     );
   }
@@ -40,40 +87,13 @@ class FoodDailyLogsView extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Daily logs'),
-        actions: [
-          BlocBuilder<CalorieDailyGoalBloc, CalorieDailyGoalState>(
-            builder: (context, state) {
-              if (state is CalorieDailyGoalLoadSuccess) {
-                return IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.of(context).push(EditCalorieDailyGoalView.route(context));
-                  },
-                );
-              }
-              return Container();
-            },
-          )
-        ],
-      ),
+      appBar: appBar(context),
       body: SizedBox(
         height: size.height,
         width: size.width,
-        child: Column(
-          children: [
-            FoodLogDaySelector(),
-            FoodLogBuilder(),
-          ],
-        ),
+        child: body(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(AddFoodLogView.route(context));
-        },
-      ),
+      floatingActionButton: floatingActionButton(context),
     );
   }
 }

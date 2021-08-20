@@ -12,7 +12,7 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
   WaterDailyGoalBloc({
     required AuthenticationBloc authenticationBloc,
     required WaterRepository waterRepository,
-  })   : _authenticationBloc = authenticationBloc,
+  })  : _authenticationBloc = authenticationBloc,
         _waterRepository = waterRepository,
         super(WaterDailyGoalLoading());
 
@@ -46,8 +46,6 @@ class WaterDailyGoalBloc extends Bloc<WaterDailyGoalEvent, WaterDailyGoalState> 
 
       yield WaterDailyGoalLoadSuccess(goal);
     } catch (error) {
-      print('error' + error.toString());
-
       yield WaterDailyGoalFailure('');
     }
   }

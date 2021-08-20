@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 
 class _DocKeys {
   static String goal = 'goal';

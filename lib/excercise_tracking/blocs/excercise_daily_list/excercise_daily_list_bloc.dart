@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -16,10 +17,18 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(ExcerciseDailyListLoading());
+        super(ExcerciseDailyListLoading()) {
+    _authSubscription = authenticationBloc.stream.listen((event) {
+      if (event.isAuthenticated) {
+        add(ExcerciseDailyListDateUpdated(DateTime.now()));
+      }
+    });
+  }
 
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
+
+  late final StreamSubscription _authSubscription;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   User? get _user => _authenticationBloc.state.user;
@@ -51,6 +60,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
       yield ExcerciseDailyListLoadSuccess(ExcerciseLog.fromQuerySnapshot(snapshot));
     } catch (error) {
+      log(error.toString());
       yield ExcerciseDailyListFailure();
     }
   }
@@ -93,5 +103,11 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
       yield ExcerciseDailyListLoadSuccess(logs);
     }
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
   }
 }

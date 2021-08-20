@@ -18,7 +18,9 @@ class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
     if (event is ThemeAccentColorUpdated) {
       yield state.copyWith(accentColor: event.value);
     } else if (event is ThemeThemeModeUpdated) {
-      yield state.copyWith(themeMode: event.value);
+      if (event.value != null) {
+        yield state.copyWith(themeMode: event.value);
+      }
     }
   }
 

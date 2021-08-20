@@ -20,14 +20,14 @@ class MealCustomTileBloc extends Bloc<MealCustomTileEvent, MealCustomTileState> 
           MealCustomTileState(
             meal: meal,
             mealType: mealType,
+            mealCalorieGoal: (calorieDailyGoalBloc.state is CalorieDailyGoalLoadSuccess)
+                ? MealCustomTileState.calorieMealGoal(
+                    mealType,
+                    (calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal,
+                  )
+                : null,
           ),
         ) {
-    final calState = _calorieDailyGoalBloc.state;
-
-    if (calState is CalorieDailyGoalLoadSuccess) {
-      add(_MealCustomTileBlocUpdated((calState.calorieDailyGoal)));
-    }
-
     _calorieDailyGoalSubscription = _calorieDailyGoalBloc.stream.listen((calState) {
       if (calState is CalorieDailyGoalLoadSuccess) {
         add(_MealCustomTileBlocUpdated((calState.calorieDailyGoal)));

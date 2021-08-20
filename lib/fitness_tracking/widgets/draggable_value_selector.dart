@@ -11,8 +11,8 @@ class DraggableValueSelector extends StatefulWidget {
     required this.itemCount,
     required this.onValueUpdated,
     required this.height,
-  })  : this.width = itemHeight * 1.5,
-        super(key: key);
+    required this.width,
+  }) : super(key: key);
 
   static Widget route({
     Key? key,
@@ -22,6 +22,7 @@ class DraggableValueSelector extends StatefulWidget {
     required int itemCount,
     required double height,
     int? focusedValue,
+    required double width,
   }) {
     return BlocProvider(
       create: (context) => DraggableValueSelectorBloc(focusedValue: focusedValue),
@@ -32,6 +33,7 @@ class DraggableValueSelector extends StatefulWidget {
         itemCount: itemCount,
         onValueUpdated: onValueUpdated,
         height: height,
+        width: width,
       ),
     );
   }
@@ -69,15 +71,16 @@ class _DraggableValueSelectorState extends State<DraggableValueSelector> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DraggableValueSelectorBloc, DraggableValueSelectorState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.listState == DraggableValueSelectorListState.stop) {
-          _controller.animateTo(
+          await _controller.animateTo(
             state.getAnimateToValue(widget.itemHeight),
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeInOutQuad,
           );
 
           BlocProvider.of<DraggableValueSelectorBloc>(context).add(DraggableValueSelectorListSnapped());
+          widget.onValueUpdated(state.focusedValue);
         }
       },
       builder: (context, state) {

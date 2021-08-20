@@ -10,30 +10,70 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ExcerciseDailyTrackingView extends StatelessWidget {
   const ExcerciseDailyTrackingView({Key? key}) : super(key: key);
 
+  static List<BlocProvider> _providers() => [
+        BlocProvider(
+          create: (context) => DaySelectorBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ExcerciseDailyListBloc(
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+          )..add(ExcerciseDailyListDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+        BlocProvider(
+          create: (context) => ExcerciseDailyGoalBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
+        ),
+      ];
+
+  static List<BlocProvider> providers() => [..._providers()];
+
   static route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => DaySelectorBloc(),
-            ),
-            BlocProvider(
-              create: (context) => ExcerciseDailyListBloc(
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              )..add(ExcerciseDailyListDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-            BlocProvider(
-              create: (context) => ExcerciseDailyGoalBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-              )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
-            ),
-          ],
-          child: ExcerciseDailyTrackingView(),
-        );
+        return ExcerciseDailyTrackingView.widget(context);
       },
+    );
+  }
+
+  static widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: _providers(),
+      child: ExcerciseDailyTrackingView(),
+    );
+  }
+
+  static AppBar appBar(BuildContext context) {
+    return AppBar(
+      title: Text('Excercise'),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(EditExcerciseDailyGoalView.route(context));
+          },
+          icon: Icon(Icons.edit),
+        ),
+      ],
+    );
+  }
+
+  static FloatingActionButton floatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).push(AddExcerciseLogView.route(context));
+      },
+    );
+  }
+
+  static Widget body() {
+    return ListView(
+      children: [
+        ExcerciseDaySelector(),
+        ExcerciseDailyListBuilder(),
+      ],
     );
   }
 
@@ -41,33 +81,13 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Excercise tracking'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(EditExcerciseDailyGoalView.route(context));
-            },
-            icon: Icon(Icons.edit),
-          ),
-        ],
-      ),
+      appBar: appBar(context),
       body: SizedBox(
         height: size.height,
         width: size.width,
-        child: Column(
-          children: [
-            ExcerciseDaySelector(),
-            ExcerciseDailyListBuilder(),
-          ],
-        ),
+        child: body(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(AddExcerciseLogView.route(context));
-        },
-      ),
+      floatingActionButton: floatingActionButton(context),
     );
   }
 }

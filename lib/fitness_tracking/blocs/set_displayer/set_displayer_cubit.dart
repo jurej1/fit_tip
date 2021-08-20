@@ -23,6 +23,4 @@ class SetDisplayerCubit extends Cubit<SetDisplayerState> {
   void weightAmountUpdated(double weightAmount) async {
     emit(state.copyWith(weightAmount: weightAmount));
   }
-
-  Future<void> get _delay => Future.delayed(Duration(milliseconds: 1000));
 }
