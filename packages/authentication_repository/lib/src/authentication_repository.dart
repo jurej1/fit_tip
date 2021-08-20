@@ -6,6 +6,10 @@ import '../src/models/models.dart' as model;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
+extension AuthenticationStatusX on AuthenticationStatus {
+  bool get isAuthenticated => this == AuthenticationStatus.authenticated;
+}
+
 class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
