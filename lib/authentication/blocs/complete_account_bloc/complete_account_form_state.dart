@@ -9,6 +9,9 @@ class CompleteAccountFormState extends Equatable {
     this.birthday = const BirthdayInput.pure(),
     this.introduction = const IntroductionLineInput.pure(),
     this.status = FormzStatus.pure,
+    this.user,
+    this.measurmentSystem = const MeasurmentSystemInput.pure(),
+    this.height = const HeightInput.pure(),
   });
 
   final NameInput firstName;
@@ -18,9 +21,12 @@ class CompleteAccountFormState extends Equatable {
   final BirthdayInput birthday;
   final IntroductionLineInput introduction;
   final FormzStatus status;
+  final User? user;
+  final MeasurmentSystemInput measurmentSystem;
+  final HeightInput height;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       firstName,
       lastName,
@@ -29,6 +35,9 @@ class CompleteAccountFormState extends Equatable {
       birthday,
       introduction,
       status,
+      user,
+      measurmentSystem,
+      height,
     ];
   }
 
@@ -37,24 +46,29 @@ class CompleteAccountFormState extends Equatable {
     NameInput? lastName,
     NameInput? displayName,
     GenderInput? gender,
-    BirthdayInput? birthdayInput,
+    BirthdayInput? birthday,
     IntroductionLineInput? introduction,
     FormzStatus? status,
+    User? user,
+    MeasurmentSystemInput? measurmentSystem,
+    HeightInput? height,
   }) {
     return CompleteAccountFormState(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       displayName: displayName ?? this.displayName,
       gender: gender ?? this.gender,
-      birthday: birthdayInput ?? this.birthday,
+      birthday: birthday ?? this.birthday,
       introduction: introduction ?? this.introduction,
       status: status ?? this.status,
+      user: user ?? this.user,
+      measurmentSystem: measurmentSystem ?? this.measurmentSystem,
+      height: height ?? this.height,
     );
   }
 
-  factory CompleteAccountFormState.initial(AuthenticationBloc authenticationBloc) {
-    if (authenticationBloc.state.status.isAuthenticated && authenticationBloc.state.user != null) {
-      final User user = authenticationBloc.state.user!;
+  factory CompleteAccountFormState.initial(User? user) {
+    if (user != null) {
       return CompleteAccountFormState(
         birthday: BirthdayInput.pure(user.birthdate),
         displayName: NameInput.pure(user.displayName ?? ''),
@@ -62,8 +76,24 @@ class CompleteAccountFormState extends Equatable {
         gender: GenderInput.pure(user.gender),
         introduction: IntroductionLineInput.pure(user.introduction ?? ''),
         lastName: NameInput.pure(user.lastName ?? ''),
+        user: user,
+        measurmentSystem: MeasurmentSystemInput.pure(user.measurmentSystem),
+        height: HeightInput.pure(user.height ?? 0),
       );
     }
     return CompleteAccountFormState();
+  }
+
+  User? getNewUser() {
+    return this.user?.copyWith(
+          birthdate: birthday.value,
+          displayName: displayName.value,
+          firstName: firstName.value,
+          gender: gender.value,
+          introduction: introduction.value,
+          lastName: lastName.value,
+          measurmentSystem: measurmentSystem.value,
+          height: height.value,
+        );
   }
 }
