@@ -52,7 +52,7 @@ class ProfileSettingsState extends Equatable {
       user: user,
       birthday: BirthdayInput.pure(user.birthdate),
       displayName: DisplayNameInput.pure(user.displayName),
-      gender: GenderInput.pure(user.gender ?? Gender.unknown),
+      gender: GenderInput.pure(user.gender),
       height: HeightInput.pure(user.height ?? 0),
       introductionLine: IntroductionLineInput.pure(user.introduction ?? ''),
       email: Email.pure(user.email ?? ''),
