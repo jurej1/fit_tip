@@ -22,7 +22,7 @@ class _DocKeys {
 class UserEntity extends Equatable {
   final String? id;
   final Timestamp? dateJoined;
-  final Gender? gender;
+  final Gender gender;
   final String? firstName;
   final String? lastName;
   final String? displayName;
@@ -36,7 +36,7 @@ class UserEntity extends Equatable {
   const UserEntity({
     this.id,
     this.dateJoined,
-    this.gender,
+    this.gender = Gender.unknown,
     this.firstName,
     this.lastName,
     this.displayName,
@@ -94,7 +94,7 @@ class UserEntity extends Equatable {
       if (displayName != null) _DocKeys.displayName: displayName,
       if (email != null) _DocKeys.email: email,
       if (firstName != null) _DocKeys.firstName: firstName,
-      if (gender != null) _DocKeys.gender: describeEnum(gender!),
+      _DocKeys.gender: describeEnum(gender),
       if (height != null) _DocKeys.height: height,
       if (introduction != null) _DocKeys.introduction: introduction,
       if (lastName != null) _DocKeys.lastName: lastName,

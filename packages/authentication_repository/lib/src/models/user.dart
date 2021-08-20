@@ -8,7 +8,7 @@ import '../models/models.dart' as model;
 class User extends Equatable {
   final DateTime? dateJoined;
   final String? id;
-  final Gender? gender;
+  final Gender gender;
   final String? firstName;
   final String? lastName;
   final String? displayName;
@@ -22,7 +22,7 @@ class User extends Equatable {
   const User({
     this.dateJoined,
     this.id,
-    this.gender,
+    this.gender = Gender.unknown,
     this.firstName,
     this.lastName,
     this.displayName,
@@ -114,5 +114,15 @@ class User extends Equatable {
       introduction,
       location,
     ];
+  }
+
+  bool get isCompleted {
+    return gender != Gender.unknown &&
+        firstName != null &&
+        lastName != null &&
+        displayName != null &&
+        birthdate != null &&
+        email != null &&
+        height != null;
   }
 }
