@@ -15,3 +15,27 @@ Gender stringToGender(String? val) {
     return Gender.unknown;
   }
 }
+
+extension GenderX on Gender {
+  bool get isMale => this == Gender.male;
+  bool get isFemale => this == Gender.female;
+  bool get isUnknown => this == Gender.unknown;
+  bool get isRatherNotSay => this == Gender.ratherNotSay;
+
+  String toStringReadable() {
+    if (this == Gender.male) {
+      return 'Male';
+    }
+    if (this == Gender.female) {
+      return 'Female';
+    }
+    if (this == Gender.unknown) {
+      return 'Unknown';
+    }
+    if (this == Gender.ratherNotSay) {
+      return 'Rather not say';
+    }
+
+    return '';
+  }
+}

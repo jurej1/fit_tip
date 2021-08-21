@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HeightFormView extends StatelessWidget {
-  const HeightFormView({Key? key}) : super(key: key);
+  const HeightFormView({Key? key, required this.onSubmit}) : super(key: key);
 
-  static MaterialPageRoute<int?> route(BuildContext context, {int? initialValue}) {
-    final profileSettingsBloc = BlocProvider.of<ProfileSettingsBloc>(context);
+  final void Function(int value) onSubmit;
 
+  static MaterialPageRoute<int?> route(BuildContext context, void Function(int value) onSubmit, {int? initialValue}) {
     return MaterialPageRoute<int?>(
       builder: (_) {
         return MultiBlocProvider(
@@ -18,9 +18,10 @@ class HeightFormView extends StatelessWidget {
             BlocProvider(
               create: (context) => HeightFormBloc(initialValue: initialValue ?? 160),
             ),
-            BlocProvider.value(value: profileSettingsBloc),
           ],
-          child: HeightFormView(),
+          child: HeightFormView(
+            onSubmit: onSubmit,
+          ),
         );
       },
     );
@@ -37,9 +38,7 @@ class HeightFormView extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.check),
                 onPressed: () {
-                  log(value.toString());
-                  BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsHeightUpdated(value));
-                  Navigator.of(context).pop();
+                  onSubmit(value);
                 },
               );
             },
@@ -74,6 +73,17 @@ class HeightFormView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Widget extends StatelessWidget {
+  const _Widget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: null,
     );
   }
 }

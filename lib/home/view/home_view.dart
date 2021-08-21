@@ -103,16 +103,28 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BirthdayMessengerBloc, bool>(
-      listener: (context, isBirthday) {
-        if (isBirthday) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Happy Birthday'),
-            ),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthenticationBloc, AuthenticationState>(
+          listenWhen: (p, c) => p.user == null && c.user != null,
+          listener: (context, state) {
+            if (state.user != null && !state.user!.isCompleted) {
+              Navigator.of(context).push(CompleteAccountView.route(context));
+            }
+          },
+        ),
+        BlocListener<BirthdayMessengerBloc, bool>(
+          listener: (context, isBirthday) {
+            if (isBirthday) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Happy Birthday'),
+                ),
+              );
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: PreferredSize(

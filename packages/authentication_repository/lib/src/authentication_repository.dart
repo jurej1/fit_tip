@@ -6,6 +6,10 @@ import '../src/models/models.dart' as model;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
+extension AuthenticationStatusX on AuthenticationStatus {
+  bool get isAuthenticated => this == AuthenticationStatus.authenticated;
+}
+
 class AuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
@@ -79,7 +83,9 @@ class AuthenticationRepository {
   }
 
   Future<void> updatedUserData(model.User user) async {
-    return _firebaseFirestore.collection('users').doc(user.id).set(user.toEntity().toDocumentSnapshot(), SetOptions(merge: true));
+    return _firebaseFirestore.collection('users').doc(user.id).update(
+          user.toEntity().toDocumentSnapshot(),
+        );
   }
 
   Future<void> updateUserEmail(String email) async {
