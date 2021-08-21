@@ -33,7 +33,9 @@ class CompleteAccountView extends StatelessWidget {
           _DisplayNameInput(),
           _FirstNameInput(),
           _LastNameInput(),
+          _IntroductionLineInput(),
           _GenderInputTile(),
+          _MeasurmentSystemInputTile(),
         ],
       ),
     );
@@ -127,6 +129,59 @@ class _GenderInputTile extends StatelessWidget {
                 .toList(),
             onChanged: (Gender? value) {
               BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormGenderUpdated(value));
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _IntroductionLineInput extends StatelessWidget {
+  const _IntroductionLineInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.introduction.value,
+          decoration: InputDecoration(
+            labelText: 'Introduction line',
+            errorText: state.introduction.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormIntroductionUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _MeasurmentSystemInputTile extends StatelessWidget {
+  const _MeasurmentSystemInputTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Measurment system'),
+          trailing: DropdownButton<MeasurmentSystem>(
+            value: state.measurmentSystem.value,
+            items: MeasurmentSystem.values
+                .map(
+                  (e) => DropdownMenuItem(
+                    child: Text(
+                      e.toStringReadable(),
+                    ),
+                    value: e,
+                  ),
+                )
+                .toList(),
+            onChanged: (MeasurmentSystem? value) {
+              BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormMeasurmentSystemUpdated(value));
             },
           ),
         );
