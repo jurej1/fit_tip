@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,8 +29,108 @@ class CompleteAccountView extends StatelessWidget {
         title: const Text('Complete account view'),
       ),
       body: ListView(
-        children: [],
+        children: [
+          _DisplayNameInput(),
+          _FirstNameInput(),
+          _LastNameInput(),
+          _GenderInputTile(),
+        ],
       ),
+    );
+  }
+}
+
+class _DisplayNameInput extends StatelessWidget {
+  const _DisplayNameInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.displayName.value,
+          decoration: InputDecoration(
+            labelText: 'Display name',
+            errorText: state.displayName.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormDisplayNameUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _FirstNameInput extends StatelessWidget {
+  const _FirstNameInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.firstName.value,
+          decoration: InputDecoration(
+            labelText: 'First name',
+            errorText: state.firstName.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormFirstNameUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _LastNameInput extends StatelessWidget {
+  const _LastNameInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.lastName.value,
+          decoration: InputDecoration(
+            labelText: 'Last name',
+            errorText: state.lastName.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormLastNameUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _GenderInputTile extends StatelessWidget {
+  const _GenderInputTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return ListTile(
+          title: const Text('Gender'),
+          trailing: DropdownButton<Gender>(
+            value: state.gender.value,
+            items: Gender.values
+                .map(
+                  (e) => DropdownMenuItem(
+                    child: Text(e.toStringReadable()),
+                    value: e,
+                  ),
+                )
+                .toList(),
+            onChanged: (Gender? value) {
+              BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormGenderUpdated(value));
+            },
+          ),
+        );
+      },
     );
   }
 }
