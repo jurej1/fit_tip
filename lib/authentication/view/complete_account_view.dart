@@ -3,6 +3,7 @@ import 'package:fit_tip/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:intl/intl.dart';
 
 import '../authentication.dart';
 
@@ -62,6 +63,7 @@ class CompleteAccountView extends StatelessWidget {
               _GenderInputTile(),
               _MeasurmentSystemInputTile(),
               _HeightInputTile(),
+              _BirthdateInputTile(),
             ],
           );
         },
@@ -259,7 +261,9 @@ class _BirthdateInputTile extends StatelessWidget {
     return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text('Birthdate'),
+          trailing: Text(state.birthday.value != null ? '${DateFormat.yMMMd().format(state.birthday.value!)}' : 'Tap me'),
           onTap: () async {
             final now = DateTime.now();
             final value = await showDatePicker(
