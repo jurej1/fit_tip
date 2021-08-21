@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import '../authentication.dart';
 
@@ -27,16 +27,41 @@ class CompleteAccountView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Complete account view'),
-      ),
-      body: ListView(
-        children: [
-          _DisplayNameInput(),
-          _FirstNameInput(),
-          _LastNameInput(),
-          _IntroductionLineInput(),
-          _GenderInputTile(),
-          _MeasurmentSystemInputTile(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormSubmit());
+            },
+          ),
         ],
+      ),
+      body: BlocConsumer<CompleteAccountFormBloc, CompleteAccountFormState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('Failure')));
+          }
+          if (state.status.isSubmissionSuccess) {
+            Navigator.of(context).pop();
+          }
+        },
+        builder: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            return Center(
+              child: const CircularProgressIndicator(),
+            );
+          }
+          return ListView(
+            children: [
+              _DisplayNameInput(),
+              _FirstNameInput(),
+              _LastNameInput(),
+              _IntroductionLineInput(),
+              _GenderInputTile(),
+              _MeasurmentSystemInputTile(),
+            ],
+          );
+        },
       ),
     );
   }
