@@ -89,9 +89,6 @@ class App extends StatelessWidget {
                         } else if (state.status == AuthenticationStatus.authenticated) {
                           _navigatorState.currentState!.pushReplacement(HomeView.route(context));
                         }
-
-                        if (state.user != null && !state.user!.isCompleted)
-                          _navigatorState.currentState!.push(CompleteAccountView.route(context));
                       },
                     ),
                     BlocListener<AuthenticationBloc, AuthenticationState>(

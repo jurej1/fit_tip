@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -211,6 +212,8 @@ class CompleteAccountFormBloc extends Bloc<CompleteAccountFormEvent, CompleteAcc
 
         try {
           await _authenticationRepository.updatedUserData(state.user!);
+
+          log(state.user!.toString());
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         } catch (error) {
           yield state.copyWith(status: FormzStatus.submissionFailure);

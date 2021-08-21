@@ -61,7 +61,7 @@ class CompleteAccountFormState extends Equatable {
       birthday: birthday ?? this.birthday,
       introduction: introduction ?? this.introduction,
       status: status ?? this.status,
-      user: user ?? this.user,
+      user: user ?? this.getNewUser() ?? this.user,
       measurmentSystem: measurmentSystem ?? this.measurmentSystem,
       height: height ?? this.height,
     );
