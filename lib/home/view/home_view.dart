@@ -106,6 +106,7 @@ class HomeView extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthenticationBloc, AuthenticationState>(
+          listenWhen: (p, c) => p.user == null && c.user != null,
           listener: (context, state) {
             if (state.user != null && !state.user!.isCompleted) {
               Navigator.of(context).push(CompleteAccountView.route(context));
