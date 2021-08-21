@@ -75,6 +75,20 @@ class ProfileSettingsView extends StatelessWidget {
                   const EditModeIndicator(),
                   const DisplayNameInputField(),
                   const IntroductionLineInputField(),
+                  Visibility(
+                    visible: !(profileState.user?.isCompleted ?? true),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                          'Your account is not completed! Please put in all your informatio',
+                          style: TextStyle(color: Colors.red, fontSize: 15),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(

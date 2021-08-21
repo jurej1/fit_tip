@@ -72,7 +72,7 @@ class ProfileSettingsState extends Equatable {
     Email? email,
   }) {
     return ProfileSettingsState(
-      user: user ?? this.user,
+      user: user ?? this.getNewUser() ?? this.user,
       authenticationStatus: authenticationStatus ?? this.authenticationStatus,
       mode: mode ?? this.mode,
       birthday: birthday ?? this.birthday,
