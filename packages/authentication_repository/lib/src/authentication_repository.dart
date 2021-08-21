@@ -83,7 +83,9 @@ class AuthenticationRepository {
   }
 
   Future<void> updatedUserData(model.User user) async {
-    return _firebaseFirestore.collection('users').doc(user.id).set(user.toEntity().toDocumentSnapshot(), SetOptions(merge: true));
+    return _firebaseFirestore.collection('users').doc(user.id).set(
+          user.toEntity().toDocumentSnapshot(),
+        );
   }
 
   Future<void> updateUserEmail(String email) async {
