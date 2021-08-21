@@ -52,12 +52,12 @@ class CompleteAccountFormIntroductionUpdated extends CompleteAccountFormEvent {
 }
 
 class CompleteAccountFormBirthdateUpdated extends CompleteAccountFormEvent {
-  final DateTime value;
+  final DateTime? value;
 
   const CompleteAccountFormBirthdateUpdated(this.value);
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class CompleteAccountFormGenderUpdated extends CompleteAccountFormEvent {

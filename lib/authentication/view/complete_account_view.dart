@@ -250,3 +250,29 @@ class _HeightInputTile extends StatelessWidget {
     );
   }
 }
+
+class _BirthdateInputTile extends StatelessWidget {
+  const _BirthdateInputTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Birthdate'),
+          onTap: () async {
+            final now = DateTime.now();
+            final value = await showDatePicker(
+              context: context,
+              initialDate: state.birthday.value ?? now,
+              firstDate: DateTime(now.year),
+              lastDate: DateTime(now.year + 1, 1, 0),
+            );
+
+            BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormBirthdateUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
