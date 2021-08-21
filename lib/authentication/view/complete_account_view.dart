@@ -52,6 +52,7 @@ class CompleteAccountView extends StatelessWidget {
             );
           }
           return ListView(
+            padding: const EdgeInsets.all(10),
             children: [
               _DisplayNameInput(),
               _FirstNameInput(),
@@ -141,6 +142,7 @@ class _GenderInputTile extends StatelessWidget {
     return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: const Text('Gender'),
           trailing: DropdownButton<Gender>(
             value: state.gender.value,
@@ -192,6 +194,7 @@ class _MeasurmentSystemInputTile extends StatelessWidget {
     return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text('Measurment system'),
           trailing: DropdownButton<MeasurmentSystem>(
             value: state.measurmentSystem.value,
