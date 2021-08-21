@@ -79,7 +79,7 @@ class CompleteAccountFormMeasurmentSystemUpdated extends CompleteAccountFormEven
 }
 
 class CompleteAccountFormHeightUpdated extends CompleteAccountFormEvent {
-  final double? value;
+  final int? value;
 
   const CompleteAccountFormHeightUpdated(this.value);
 

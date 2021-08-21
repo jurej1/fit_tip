@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:fit_tip/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -16,7 +17,7 @@ class CompleteAccountView extends StatelessWidget {
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
           ),
-          child: CompleteAccountView(),
+          child: const CompleteAccountView(),
         );
       },
     );
@@ -60,6 +61,7 @@ class CompleteAccountView extends StatelessWidget {
               _IntroductionLineInput(),
               _GenderInputTile(),
               _MeasurmentSystemInputTile(),
+              _HeightInputTile(),
             ],
           );
         },
@@ -212,6 +214,36 @@ class _MeasurmentSystemInputTile extends StatelessWidget {
               BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormMeasurmentSystemUpdated(value));
             },
           ),
+        );
+      },
+    );
+  }
+}
+
+class _HeightInputTile extends StatelessWidget {
+  const _HeightInputTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
+      builder: (context, state) {
+        return ListTile(
+          title: Text('Height'),
+          trailing: Text(
+            state.height.value.toString(),
+          ),
+          onTap: () async {
+            Navigator.of(context).push(
+              HeightFormView.route(
+                context,
+                (value) {
+                  BlocProvider.of<CompleteAccountFormBloc>(context).add(CompleteAccountFormHeightUpdated(value));
+                  Navigator.of(context).pop();
+                },
+                initialValue: state.height.value.toInt(),
+              ),
+            );
+          },
         );
       },
     );

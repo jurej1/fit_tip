@@ -118,7 +118,7 @@ class HomeView extends StatelessWidget {
             if (isBirthday) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Happy Birthday'),
+                  content: const Text('Happy Birthday'),
                 ),
               );
             }

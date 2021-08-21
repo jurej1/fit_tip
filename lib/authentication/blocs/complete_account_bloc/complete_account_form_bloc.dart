@@ -243,7 +243,7 @@ class CompleteAccountFormBloc extends Bloc<CompleteAccountFormEvent, CompleteAcc
 
   Stream<CompleteAccountFormState> _mapHeightUpdatedToState(CompleteAccountFormHeightUpdated event) async* {
     if (event.value != null) {
-      final height = HeightInput.dirty(event.value!);
+      final height = HeightInput.dirty(event.value!.toDouble());
 
       yield state.copyWith(
         height: height,
