@@ -228,6 +228,7 @@ class _HeightInputTile extends StatelessWidget {
     return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           title: Text('Height'),
           trailing: Text(
             state.height.value.toString(),
