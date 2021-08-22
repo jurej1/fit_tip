@@ -1,8 +1,7 @@
-import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class _DocKeys {
+class BlogPostDocKeys {
   static String authorId = 'authorId';
   static String author = 'author';
   static String created = 'created';
@@ -54,36 +53,36 @@ class BlogPostEntity extends Equatable {
     ];
   }
 
-  Map<String, dynamic> documentSnapshot() {
+  Map<String, dynamic> toDocumentSnapshot() {
     return {
-      _DocKeys.authorId: authorId,
-      if (author != null) _DocKeys.author: author,
-      if (bannerUrl != null) _DocKeys.bannerUrl: bannerUrl,
-      _DocKeys.content: content,
-      _DocKeys.created: Timestamp.fromDate(created),
-      _DocKeys.isPublic: isPublic,
-      _DocKeys.likes: likes,
-      if (tags != null) _DocKeys.tags: tags,
-      _DocKeys.title: title,
+      BlogPostDocKeys.authorId: authorId,
+      if (author != null) BlogPostDocKeys.author: author,
+      if (bannerUrl != null) BlogPostDocKeys.bannerUrl: bannerUrl,
+      BlogPostDocKeys.content: content,
+      BlogPostDocKeys.created: Timestamp.fromDate(created),
+      BlogPostDocKeys.isPublic: isPublic,
+      BlogPostDocKeys.likes: likes,
+      if (tags != null) BlogPostDocKeys.tags: tags,
+      BlogPostDocKeys.title: title,
     };
   }
 
   static BlogPostEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
 
-    final created = data[_DocKeys.created] as Timestamp;
+    final created = data[BlogPostDocKeys.created] as Timestamp;
 
     return BlogPostEntity(
       id: snapshot.id,
-      authorId: data[_DocKeys.authorId],
-      title: data[_DocKeys.title],
-      content: data[_DocKeys.content],
-      isPublic: data[_DocKeys.isPublic],
-      author: data.containsKey(_DocKeys.author) ? data[_DocKeys.author] : null,
-      bannerUrl: data.containsKey(_DocKeys.bannerUrl) ? data[_DocKeys.bannerUrl] : null,
+      authorId: data[BlogPostDocKeys.authorId],
+      title: data[BlogPostDocKeys.title],
+      content: data[BlogPostDocKeys.content],
+      isPublic: data[BlogPostDocKeys.isPublic],
+      author: data.containsKey(BlogPostDocKeys.author) ? data[BlogPostDocKeys.author] : null,
+      bannerUrl: data.containsKey(BlogPostDocKeys.bannerUrl) ? data[BlogPostDocKeys.bannerUrl] : null,
       created: created.toDate(),
-      likes: data[_DocKeys.likes],
-      tags: data[_DocKeys.tags],
+      likes: data[BlogPostDocKeys.likes],
+      tags: data[BlogPostDocKeys.tags],
     );
   }
 }

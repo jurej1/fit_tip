@@ -1,6 +1,5 @@
+import 'package:blog_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../blog_repository.dart';
 
 class BlogPost extends Equatable {
   final String id;
