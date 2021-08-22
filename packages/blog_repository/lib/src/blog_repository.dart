@@ -38,6 +38,18 @@ class BlogRepository {
     return query.get();
   }
 
+  Future<void> likeBlogPost() async {
+    return _blogsReference().doc().update({
+      BlogPostDocKeys.likes: FieldValue.increment(1),
+    });
+  }
+
+  Future<void> dislikeBlogPost() async {
+    return _blogsReference().doc().update({
+      BlogPostDocKeys.likes: FieldValue.increment(-1),
+    });
+  }
+
   Future<QuerySnapshot> getBlogPostsWithSpecificDateCreated({
     required DateTime firstDate,
     required DateTime lastDate,
@@ -81,7 +93,7 @@ class BlogRepository {
     List<String> tags, {
     required int limit,
     DocumentSnapshot? startAfterDoc,
-  }) {
+  }) async {
     final query = _blogsReference().where(BlogPostDocKeys.tags, arrayContains: tags).orderBy(BlogPostDocKeys.created).limit(limit);
 
     if (startAfterDoc != null) {
@@ -95,7 +107,7 @@ class BlogRepository {
     return _blogsReference().add(blogPost.toEntity().toDocumentSnapshot());
   }
 
-  Future<void> updateBlogPost(BlogPost blogPost) {
+  Future<void> updateBlogPost(BlogPost blogPost) async {
     return _blogsReference().doc(blogPost.id).update(blogPost.toEntity().toDocumentSnapshot());
   }
 
