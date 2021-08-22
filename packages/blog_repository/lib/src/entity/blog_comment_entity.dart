@@ -1,4 +1,3 @@
-import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,6 +8,7 @@ class BlogCommentDocumentKeys {
   static String created = 'created';
   static String message = 'message';
   static String likes = 'likes';
+  static String comments = 'comments';
 }
 
 class BlogCommentEntity extends Equatable {
@@ -19,6 +19,7 @@ class BlogCommentEntity extends Equatable {
   final DateTime created;
   final String message;
   final int likes;
+  final int comments;
 
   BlogCommentEntity({
     required this.id,
@@ -28,6 +29,7 @@ class BlogCommentEntity extends Equatable {
     DateTime? created,
     required this.message,
     this.likes = 0,
+    this.comments = 0,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -40,6 +42,7 @@ class BlogCommentEntity extends Equatable {
       created,
       message,
       likes,
+      comments,
     ];
   }
 
@@ -51,6 +54,7 @@ class BlogCommentEntity extends Equatable {
     DateTime? created,
     String? message,
     int? likes,
+    int? comments,
   }) {
     return BlogCommentEntity(
       id: id ?? this.id,
@@ -60,6 +64,7 @@ class BlogCommentEntity extends Equatable {
       created: created ?? this.created,
       message: message ?? this.message,
       likes: likes ?? this.likes,
+      comments: comments ?? this.comments,
     );
   }
 
@@ -71,6 +76,7 @@ class BlogCommentEntity extends Equatable {
       BlogCommentDocumentKeys.message: message,
       BlogCommentDocumentKeys.ownerId: ownerId,
       BlogCommentDocumentKeys.ownerName: ownerName,
+      BlogCommentDocumentKeys.comments: comments,
     };
   }
 
@@ -86,6 +92,7 @@ class BlogCommentEntity extends Equatable {
       ownerName: data[BlogCommentDocumentKeys.ownerName],
       created: created.toDate(),
       likes: data[BlogCommentDocumentKeys.likes],
+      comments: data[BlogCommentDocumentKeys.comments],
     );
   }
 }

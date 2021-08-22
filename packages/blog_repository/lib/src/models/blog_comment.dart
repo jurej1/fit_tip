@@ -8,6 +8,7 @@ class BlogComment extends Equatable {
   final String ownerName;
   final DateTime created;
   final String message;
+  final int comments;
   final int likes;
 
   BlogComment({
@@ -18,11 +19,21 @@ class BlogComment extends Equatable {
     DateTime? created,
     required this.message,
     this.likes = 0,
+    this.comments = 0,
   }) : this.created = created ?? DateTime.now();
 
   @override
   List<Object> get props {
-    return [id, blogId, ownerId, ownerName, created, message, likes];
+    return [
+      id,
+      blogId,
+      ownerId,
+      ownerName,
+      created,
+      message,
+      comments,
+      likes,
+    ];
   }
 
   BlogComment copyWith({
@@ -32,6 +43,7 @@ class BlogComment extends Equatable {
     String? ownerName,
     DateTime? created,
     String? message,
+    int? comments,
     int? likes,
   }) {
     return BlogComment(
@@ -41,20 +53,21 @@ class BlogComment extends Equatable {
       ownerName: ownerName ?? this.ownerName,
       created: created ?? this.created,
       message: message ?? this.message,
+      comments: comments ?? this.comments,
       likes: likes ?? this.likes,
     );
   }
 
   BlogCommentEntity toEntity() {
     return BlogCommentEntity(
-      id: id,
-      blogId: blogId,
-      ownerId: ownerId,
-      ownerName: ownerName,
-      message: message,
-      created: created,
-      likes: likes,
-    );
+        id: id,
+        blogId: blogId,
+        ownerId: ownerId,
+        ownerName: ownerName,
+        message: message,
+        created: created,
+        likes: likes,
+        comments: comments);
   }
 
   static BlogComment fromEntity(BlogCommentEntity entity) {
@@ -66,6 +79,7 @@ class BlogComment extends Equatable {
       message: entity.message,
       created: entity.created,
       likes: entity.likes,
+      comments: entity.comments,
     );
   }
 }
