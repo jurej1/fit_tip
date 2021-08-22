@@ -11,6 +11,7 @@ class BlogComment extends Equatable {
   final int comments;
   final int likes;
   final bool isOwner;
+  final bool isUpliked;
 
   BlogComment({
     required this.id,
@@ -22,6 +23,7 @@ class BlogComment extends Equatable {
     this.likes = 0,
     this.comments = 0,
     this.isOwner = false,
+    this.isUpliked = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -36,6 +38,7 @@ class BlogComment extends Equatable {
       comments,
       likes,
       isOwner,
+      isUpliked,
     ];
   }
 
@@ -49,6 +52,7 @@ class BlogComment extends Equatable {
     int? comments,
     int? likes,
     bool? isOwner,
+    bool? isUpliked,
   }) {
     return BlogComment(
       id: id ?? this.id,
@@ -60,6 +64,7 @@ class BlogComment extends Equatable {
       comments: comments ?? this.comments,
       likes: likes ?? this.likes,
       isOwner: isOwner ?? this.isOwner,
+      isUpliked: isUpliked ?? this.isUpliked,
     );
   }
 
