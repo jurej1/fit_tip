@@ -35,6 +35,9 @@ dependencies:
     path: packages/water_repository
   weight_repository:
     path: packages/weight_repository
+  blog_repository:
+    path: packages/blog_repository
+
 
 dev_dependencies:
   flutter_test:
