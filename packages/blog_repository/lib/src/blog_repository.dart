@@ -1,5 +1,6 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:blog_repository/src/entity/blog_post_entity.dart';
+import 'package:blog_repository/src/enums/blog_comment_order_by.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'entity/entity.dart';
@@ -13,6 +14,10 @@ class BlogRepository {
 
   CollectionReference _blogsReference() {
     return _firebaseFirestore.collection('blogs');
+  }
+
+  CollectionReference _commentsReference() {
+    return _firebaseFirestore.collection('blog_comments');
   }
 
   /// The function returns null if the document does not exists
@@ -38,15 +43,9 @@ class BlogRepository {
     return query.get();
   }
 
-  Future<void> likeBlogPost() async {
-    return _blogsReference().doc().update({
-      BlogPostDocKeys.likes: FieldValue.increment(1),
-    });
-  }
-
-  Future<void> dislikeBlogPost() async {
-    return _blogsReference().doc().update({
-      BlogPostDocKeys.likes: FieldValue.increment(-1),
+  Future<void> likeBlogPost(String blogId, Like action) async {
+    return _blogsReference().doc(blogId).update({
+      BlogPostDocKeys.likes: FieldValue.increment(action.isUp ? 1 : -1),
     });
   }
 
@@ -113,5 +112,66 @@ class BlogRepository {
 
   Future<void> deleteBlogPost(String id) async {
     return _blogsReference().doc(id).delete();
+  }
+
+///////////////////////////////////////777
+  Future<DocumentReference> addBlogComment(BlogComment comment) async {
+    return _commentsReference().add(comment.toEntity().toDocumentSnapshot());
+  }
+
+  Future<void> deleteBlogComment(String id) async {
+    return _commentsReference().doc(id).delete();
+  }
+
+  Future<void> updateBlogComment(BlogComment comment) async {
+    return _commentsReference().doc(comment.id).update(comment.toEntity().toDocumentSnapshot());
+  }
+
+  Future<void> likeBlogComment(String commentId, Like action) {
+    return _commentsReference().doc(commentId).update({
+      BlogCommentDocumentKeys.likes: FieldValue.increment(action.isUp ? 1 : -1),
+    });
+  }
+
+  Query _getBlogCommenQueryByOrderBy(Query query, BlogCommentOrderBy orderBy) {
+    if (orderBy.isCreatedAscending) {
+      return query.orderBy(BlogCommentDocumentKeys.created, descending: false);
+    } else if (orderBy.isCreatedDescending) {
+      return query.orderBy(BlogCommentDocumentKeys.created, descending: true);
+    } else if (orderBy.isLikesAscending) {
+      return query.orderBy(BlogCommentDocumentKeys.likes, descending: false);
+    } else if (orderBy.isLikesDescending) {
+      return query.orderBy(BlogCommentOrderBy.likesDescending, descending: true);
+    } else {
+      return query.orderBy(BlogCommentDocumentKeys.likes, descending: true).orderBy(BlogCommentDocumentKeys.created, descending: true);
+    }
+  }
+
+  Future<QuerySnapshot> getBlogCommentsBySpecificBlogId(
+    String blogId, {
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+    BlogCommentOrderBy orderBy = BlogCommentOrderBy.likesAndCreatedDescending,
+  }) async {
+    Query query = _commentsReference().where(BlogCommentDocumentKeys.blogId, isEqualTo: blogId).limit(limit);
+
+    if (startAfterDoc != null) {
+      query = query.startAfterDocument(startAfterDoc);
+    }
+    return _getBlogCommenQueryByOrderBy(query, orderBy).get();
+  }
+
+  Future<QuerySnapshot> getBlogCommentsByOwnerId(
+    String ownerId, {
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+    BlogCommentOrderBy orderBy = BlogCommentOrderBy.likesAndCreatedDescending,
+  }) async {
+    Query query = _commentsReference().where(BlogCommentDocumentKeys.ownerId, isEqualTo: ownerId).limit(limit);
+
+    if (startAfterDoc != null) {
+      query = query.startAfterDocument(startAfterDoc);
+    }
+    return _getBlogCommenQueryByOrderBy(query, orderBy).get();
   }
 }
