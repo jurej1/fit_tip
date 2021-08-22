@@ -10,6 +10,7 @@ class BlogComment extends Equatable {
   final String message;
   final int comments;
   final int likes;
+  final bool isOwner;
 
   BlogComment({
     required this.id,
@@ -20,6 +21,7 @@ class BlogComment extends Equatable {
     required this.message,
     this.likes = 0,
     this.comments = 0,
+    this.isOwner = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -33,6 +35,7 @@ class BlogComment extends Equatable {
       message,
       comments,
       likes,
+      isOwner,
     ];
   }
 
@@ -45,6 +48,7 @@ class BlogComment extends Equatable {
     String? message,
     int? comments,
     int? likes,
+    bool? isOwner,
   }) {
     return BlogComment(
       id: id ?? this.id,
@@ -55,19 +59,21 @@ class BlogComment extends Equatable {
       message: message ?? this.message,
       comments: comments ?? this.comments,
       likes: likes ?? this.likes,
+      isOwner: isOwner ?? this.isOwner,
     );
   }
 
   BlogCommentEntity toEntity() {
     return BlogCommentEntity(
-        id: id,
-        blogId: blogId,
-        ownerId: ownerId,
-        ownerName: ownerName,
-        message: message,
-        created: created,
-        likes: likes,
-        comments: comments);
+      id: id,
+      blogId: blogId,
+      ownerId: ownerId,
+      ownerName: ownerName,
+      message: message,
+      created: created,
+      likes: likes,
+      comments: comments,
+    );
   }
 
   static BlogComment fromEntity(BlogCommentEntity entity) {
