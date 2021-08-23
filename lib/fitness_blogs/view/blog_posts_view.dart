@@ -30,7 +30,7 @@ class BlogPostsView extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Blogs view'),
+        title: const Text('Blogs view'),
       ),
       body: BlocBuilder<BlogPostsListBloc, BlogPostsListState>(
         builder: (context, state) {
