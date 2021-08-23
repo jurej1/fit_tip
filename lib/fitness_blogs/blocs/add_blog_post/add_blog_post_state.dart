@@ -7,6 +7,7 @@ class AddBlogPostState extends Equatable {
     this.content = const BlogContent.pure(),
     this.banner = const BlogBanner.pure(),
     this.tags = const BlogTags.pure(),
+    required this.user,
   });
 
   final FormzStatus status;
@@ -14,10 +15,18 @@ class AddBlogPostState extends Equatable {
   final BlogContent content;
   final BlogBanner banner;
   final BlogTags tags;
+  final User user;
 
   @override
-  List<Object> get props {
-    return [status, title, content, banner, tags];
+  List<Object?> get props {
+    return [
+      status,
+      title,
+      content,
+      banner,
+      tags,
+      user,
+    ];
   }
 
   AddBlogPostState copyWith({
@@ -26,6 +35,7 @@ class AddBlogPostState extends Equatable {
     BlogContent? content,
     BlogBanner? banner,
     BlogTags? tags,
+    User? user,
   }) {
     return AddBlogPostState(
       status: status ?? this.status,
@@ -33,6 +43,7 @@ class AddBlogPostState extends Equatable {
       content: content ?? this.content,
       banner: banner ?? this.banner,
       tags: tags ?? this.tags,
+      user: user ?? this.user,
     );
   }
 }
