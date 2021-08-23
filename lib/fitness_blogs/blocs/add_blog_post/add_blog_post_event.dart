@@ -61,4 +61,6 @@ class AddBlogPostTagRemoved extends AddBlogPostEvent {
   List<Object> get props => [value];
 }
 
+class AddBlogPostPublicPressed extends AddBlogPostEvent {}
+
 class AddBlogPostSubmit extends AddBlogPostEvent {}

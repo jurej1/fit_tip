@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
@@ -16,7 +17,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     required AuthenticationBloc authenticationBloc,
     required BlogRepository blogRepository,
   })  : _blogRepository = blogRepository,
-        super(AddBlogPostState(user: authenticationBloc.state.user!)) {
+        super(AddBlogPostState.initial(authenticationBloc.state.user)) {
     _authSubscription = authenticationBloc.stream.listen((authState) {
       add(_AddBlogPostUserUpdated(authState.user));
     });
@@ -36,9 +37,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     AddBlogPostEvent event,
   ) async* {
     if (event is _AddBlogPostUserUpdated) {
-      if (event.value != null) {
-        yield state.copyWith(user: event.value);
-      }
+      yield* _mapUserUpdatedToState(event);
     } else if (event is AddBlogPostTitleUpdated) {
       yield* _mapTitleUpdatedToState(event);
     } else if (event is AddBlogPostContentUpdated) {
@@ -51,6 +50,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
       yield* _mapTagRemovedToState(event);
     } else if (event is AddBlogPostSubmit) {
       yield* _mapSubmitToState(event);
+    } else if (event is AddBlogPostPublicPressed) {
+      yield state.copyWith(isPublic: !state.isPublic);
     }
   }
 
@@ -64,6 +65,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.banner,
         state.content,
         state.tags,
+        state.author,
       ]),
     );
   }
@@ -78,6 +80,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.banner,
         state.tags,
         state.tags,
+        state.author,
       ]),
     );
   }
@@ -98,6 +101,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.banner,
         state.content,
         state.title,
+        state.author,
       ]),
     );
   }
@@ -114,11 +118,71 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.banner,
         state.content,
         state.title,
+        state.author,
       ]),
     );
   }
 
   Stream<AddBlogPostState> _mapSubmitToState(AddBlogPostSubmit event) async* {
-    //TODO
+    final author = BlogAuthor.dirty(state.author.value);
+    final banner = BlogBanner.dirty(state.banner.value);
+    final content = BlogContent.dirty(state.content.value);
+    final tags = BlogTags.dirty(state.tags.value);
+    final title = BlogTitle.dirty(state.title.value);
+
+    yield state.copyWith(
+      author: author,
+      banner: banner,
+      content: content,
+      tags: tags,
+      title: title,
+      status: Formz.validate([
+        author,
+        banner,
+        content,
+        tags,
+        title,
+      ]),
+    );
+
+    if (state.status.isValidated && state.user != null) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+
+      try {
+        BlogPost blog = BlogPost(
+          authorId: state.user!.id!,
+          content: state.content.value,
+          id: '',
+          isPublic: state.isPublic,
+          title: state.title.value,
+          author: state.author.value,
+          tags: state.tags.value,
+          isAuthor: true,
+        );
+
+        DocumentReference ref = await _blogRepository.addBlogPost(blog);
+
+        blog = blog.copyWith(id: ref.id);
+
+        yield state.copyWith(blogPost: blog, status: FormzStatus.submissionSuccess);
+      } catch (e) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
+    }
+  }
+
+  Stream<AddBlogPostState> _mapUserUpdatedToState(_AddBlogPostUserUpdated event) async* {
+    final author = BlogAuthor.dirty(event.value?.displayName);
+    yield state.copyWith(
+      user: event.value,
+      author: author,
+      status: Formz.validate([
+        author,
+        state.banner,
+        state.content,
+        state.tags,
+        state.title,
+      ]),
+    );
   }
 }
