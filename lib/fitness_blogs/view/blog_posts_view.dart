@@ -31,6 +31,12 @@ class BlogPostsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blogs view'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: BlocBuilder<BlogPostsListBloc, BlogPostsListState>(
         builder: (context, state) {
@@ -61,6 +67,10 @@ class BlogPostsView extends StatelessWidget {
               separatorBuilder: (context, index) {
                 return const SizedBox(height: 10);
               },
+            );
+          } else if (state is BlogPostsListFail) {
+            return Center(
+              child: const Text('Sorry. There was an error.'),
             );
           }
           return Container();
