@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class BlogsView extends StatelessWidget {
-  const BlogsView({Key? key}) : super(key: key);
+class BlogPostsView extends StatelessWidget {
+  const BlogPostsView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return BlogsView();
+        return BlogPostsView();
       },
     );
   }

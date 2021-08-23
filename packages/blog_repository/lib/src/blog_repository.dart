@@ -25,24 +25,6 @@ class BlogRepository {
     return _blogsReference().doc(id).get();
   }
 
-  Future<QuerySnapshot> getBlogPostsWithSpecificLikeCounts({
-    int minimum = 0,
-    int? maximum,
-    required int limit,
-    DocumentSnapshot? startAfterDoc,
-  }) async {
-    final query = _blogsReference()
-        .where(BlogPostDocKeys.likes, isGreaterThanOrEqualTo: minimum, isLessThanOrEqualTo: maximum)
-        .orderBy(BlogPostDocKeys.created)
-        .limit(limit);
-
-    if (startAfterDoc != null) {
-      return query.startAfterDocument(startAfterDoc).get();
-    }
-
-    return query.get();
-  }
-
   Future<void> likeBlogPost(String blogId, Like action) async {
     return _blogsReference().doc(blogId).update({
       BlogPostDocKeys.likes: FieldValue.increment(action.isUp ? 1 : -1),
@@ -80,6 +62,34 @@ class BlogRepository {
     DocumentSnapshot? startAfterDoc,
   }) {
     final query = _blogsReference().where(BlogPostDocKeys.authorId, isEqualTo: uid).orderBy(BlogPostDocKeys.created).limit(limit);
+
+    if (startAfterDoc != null) {
+      return query.startAfterDocument(startAfterDoc).get();
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getBlogPostByCreated({
+    bool descending = false,
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+  }) {
+    final query = _blogsReference().orderBy(BlogPostDocKeys.created, descending: descending).limit(limit);
+
+    if (startAfterDoc != null) {
+      return query.startAfterDocument(startAfterDoc).get();
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getBlogPostByLikes({
+    bool descending = false,
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+  }) {
+    final query = _blogsReference().orderBy(BlogPostDocKeys.likes, descending: descending).limit(limit);
 
     if (startAfterDoc != null) {
       return query.startAfterDocument(startAfterDoc).get();

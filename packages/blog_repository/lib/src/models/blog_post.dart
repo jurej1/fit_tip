@@ -13,7 +13,7 @@ class BlogPost extends Equatable {
   final String content;
   final bool isPublic;
 
-  final bool isOwner;
+  final bool isAuthor;
   final bool isUpliked;
 
   BlogPost({
@@ -27,7 +27,7 @@ class BlogPost extends Equatable {
     this.bannerUrl,
     required this.content,
     required this.isPublic,
-    this.isOwner = false,
+    this.isAuthor = false,
     this.isUpliked = false,
   }) : this.created = created ?? DateTime.now();
 
@@ -44,7 +44,7 @@ class BlogPost extends Equatable {
       bannerUrl,
       content,
       isPublic,
-      isOwner,
+      isAuthor,
       isUpliked,
     ];
   }
@@ -60,7 +60,7 @@ class BlogPost extends Equatable {
     String? bannerUrl,
     String? content,
     bool? isPublic,
-    bool? isOwner,
+    bool? isAuthor,
     bool? isUpliked,
   }) {
     return BlogPost(
@@ -74,7 +74,7 @@ class BlogPost extends Equatable {
       bannerUrl: bannerUrl ?? this.bannerUrl,
       content: content ?? this.content,
       isPublic: isPublic ?? this.isPublic,
-      isOwner: isOwner ?? this.isOwner,
+      isAuthor: isAuthor ?? this.isAuthor,
       isUpliked: isUpliked ?? this.isUpliked,
     );
   }
