@@ -1,16 +1,22 @@
+import 'dart:io';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:blog_repository/src/entity/blog_post_entity.dart';
 import 'package:blog_repository/src/enums/blog_comment_order_by.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'entity/entity.dart';
 
 class BlogRepository {
   final FirebaseFirestore _firebaseFirestore;
+  final FirebaseStorage _firebaseStorage;
 
   BlogRepository({
     FirebaseFirestore? firebaseFirestore,
-  }) : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+    FirebaseStorage? firebaseStorage,
+  })  : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        this._firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
 
   CollectionReference _blogsReference() {
     return _firebaseFirestore.collection('blogs');
@@ -18,6 +24,10 @@ class BlogRepository {
 
   CollectionReference _commentsReference() {
     return _firebaseFirestore.collection('blog_comments');
+  }
+
+  Reference _blogBannerBucketRef(String fileName) {
+    return _firebaseStorage.ref().child('blog_banner_images/$fileName');
   }
 
   /// The function returns null if the document does not exists
@@ -124,9 +134,23 @@ class BlogRepository {
     return _blogsReference().doc(id).delete();
   }
 
-  Future<void> uploadBlogBanner() async {}
+  Future<String?> uploadBlogBanner(File file) async {
+    String fileName = file.path;
 
-///////////////////////////////////////777
+    Reference ref = _blogBannerBucketRef(fileName);
+
+    UploadTask uploadTask = ref.putFile(file);
+
+    TaskSnapshot task = await uploadTask;
+
+    if (task.state == TaskState.error) {
+      return null;
+    } else if (task.state == TaskState.success) {
+      return await task.ref.getDownloadURL();
+    }
+  }
+
+///////////////////////////////////////
   Future<DocumentReference> addBlogComment(BlogComment comment) async {
     return _commentsReference().add(comment.toEntity().toDocumentSnapshot());
   }

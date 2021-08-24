@@ -186,6 +186,14 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
           isAuthor: true,
         );
 
+        if (state.banner.value != null) {
+          String? downloadUrl = await _blogRepository.uploadBlogBanner(state.banner.value!);
+
+          blog = blog.copyWith(
+            bannerUrl: downloadUrl,
+          );
+        }
+
         DocumentReference ref = await _blogRepository.addBlogPost(blog);
 
         blog = blog.copyWith(id: ref.id);
