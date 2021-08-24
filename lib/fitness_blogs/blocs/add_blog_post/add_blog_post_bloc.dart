@@ -193,9 +193,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
             bannerUrl: downloadUrl,
           );
         }
-
         DocumentReference ref = await _blogRepository.addBlogPost(blog);
-
         blog = blog.copyWith(id: ref.id);
 
         yield state.copyWith(blogPost: blog, status: FormzStatus.submissionSuccess);
