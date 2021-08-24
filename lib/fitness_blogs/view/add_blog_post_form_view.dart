@@ -119,7 +119,7 @@ class _TagsInputField extends HookWidget {
     return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
       builder: (context, state) {
         return TextFormField(
-          enabled: !state.tags.hasReachedMaxAmount(),
+          readOnly: state.tags.hasReachedMaxAmount(),
           controller: _textController,
           decoration: InputDecoration(
             isDense: true,

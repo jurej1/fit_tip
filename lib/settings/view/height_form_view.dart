@@ -76,14 +76,3 @@ class HeightFormView extends StatelessWidget {
     );
   }
 }
-
-class _Widget extends StatelessWidget {
-  const _Widget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: null,
-    );
-  }
-}

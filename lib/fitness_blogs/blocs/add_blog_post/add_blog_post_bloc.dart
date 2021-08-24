@@ -53,7 +53,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     } else if (event is AddBlogPostPublicPressed) {
       yield state.copyWith(isPublic: !state.isPublic);
     } else if (event is AddBlogPostTagFieldUpdated) {
-      yield state.copyWith(tagField: event.value.trim());
+      yield state.copyWith(tagField: event.value);
     }
   }
 
@@ -92,7 +92,9 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    final tags = List<String>.from(state.tags.value)..add(state.tagField);
+    List<String> tags = List<String>.from(state.tags.value)
+      ..add(state.tagField)
+      ..toSet().toList();
 
     final blogTags = BlogTags.dirty(tags);
 
@@ -110,7 +112,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagRemovedToState(AddBlogPostTagRemoved event) async* {
-    final tags = state.tags.value..removeWhere((element) => element == event.value);
+    final tags = state.tags.value..where((element) => element == event.value);
 
     final blogTags = BlogTags.dirty(tags);
 
