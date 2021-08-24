@@ -5,6 +5,7 @@ import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:formz/formz.dart';
 
 class AddBlogPostFormView extends StatelessWidget {
   const AddBlogPostFormView({Key? key}) : super(key: key);
@@ -30,18 +31,38 @@ class AddBlogPostFormView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        padding: const EdgeInsets.all(10),
-        children: [
-          _BlogTitleInput(),
-          _BlogPostContentInput(),
-          _IsPublicTile(),
-          _TagsInputField(),
-          _TagsDisplayer(),
-          _BannerPicker(),
-          _BannerDisplayer(),
+      appBar: AppBar(
+        title: Text('Add blog post'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostSubmit());
+            },
+          ),
         ],
+      ),
+      body: BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+        builder: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            return const Center(
+              child: const CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            padding: const EdgeInsets.all(10),
+            children: [
+              _BlogTitleInput(),
+              _BlogPostContentInput(),
+              _IsPublicTile(),
+              _TagsInputField(),
+              _TagsDisplayer(),
+              _BannerPicker(),
+              _BannerDisplayer(),
+            ],
+          );
+        },
       ),
     );
   }

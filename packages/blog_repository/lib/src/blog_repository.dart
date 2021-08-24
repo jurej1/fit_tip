@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:blog_repository/blog_repository.dart';
@@ -134,8 +135,14 @@ class BlogRepository {
     return _blogsReference().doc(id).delete();
   }
 
-  Future<String?> uploadBlogBanner(File file) async {
-    String fileName = file.path;
+  String _editFilePath(String fileName) {
+    int last = fileName.lastIndexOf('/');
+
+    return fileName.substring(last);
+  }
+
+  Future<String?> uploadBlogBanner(File file, String userId) async {
+    String fileName = _editFilePath(file.path) + userId;
 
     Reference ref = _blogBannerBucketRef(fileName);
 
