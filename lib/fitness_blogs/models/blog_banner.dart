@@ -1,14 +1,15 @@
+import 'dart:io';
+
 import 'package:formz/formz.dart';
-import 'package:image_picker/image_picker.dart';
 
 enum BlogBannerValidationError { invalid }
 
-class BlogBanner extends FormzInput<XFile?, BlogBannerValidationError> {
-  const BlogBanner.dirty([XFile? value]) : super.dirty(value);
-  const BlogBanner.pure([XFile? value]) : super.pure(value);
+class BlogBanner extends FormzInput<File?, BlogBannerValidationError> {
+  const BlogBanner.dirty([File? value]) : super.dirty(value);
+  const BlogBanner.pure([File? value]) : super.pure(value);
 
   @override
-  BlogBannerValidationError? validator(XFile? value) {
+  BlogBannerValidationError? validator(File? value) {
     return null;
   }
 }

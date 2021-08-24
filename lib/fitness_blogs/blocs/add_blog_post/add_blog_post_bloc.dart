@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -83,18 +84,27 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         content,
         state.banner,
         state.tags,
-        state.tags,
         state.author,
+        state.title,
       ]),
     );
   }
 
   Stream<AddBlogPostState> _mapBannerUpdatedToState(AddBlogPostBannerUpdated event) async* {
     if (event.value != null) {
-      final banner = BlogBanner.dirty(event.value);
+      final banner = BlogBanner.dirty(File(event.value!.path));
 
       yield state.copyWith(
         banner: banner,
+        status: Formz.validate(
+          [
+            banner,
+            state.tags,
+            state.content,
+            state.title,
+            state.author,
+          ],
+        ),
       );
     }
   }

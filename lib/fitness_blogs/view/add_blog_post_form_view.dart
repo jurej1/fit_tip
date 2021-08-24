@@ -40,6 +40,7 @@ class AddBlogPostFormView extends StatelessWidget {
           _TagsInputField(),
           _TagsDisplayer(),
           _BannerPicker(),
+          _BannerDisplayer(),
         ],
       ),
     );
@@ -211,5 +212,23 @@ class _BannerPicker extends StatelessWidget {
       imageQuality: 70,
     );
     BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostBannerUpdated(file));
+  }
+}
+
+class _BannerDisplayer extends StatelessWidget {
+  const _BannerDisplayer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return Container(
+          width: size.width,
+          height: 200,
+          child: state.banner.value != null ? Image.file(state.banner.value!) : null,
+        );
+      },
+    );
   }
 }
