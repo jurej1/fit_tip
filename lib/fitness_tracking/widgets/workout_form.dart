@@ -345,7 +345,7 @@ class _WorkoutStartDateInput extends HookWidget {
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: state.startDate.value,
-              firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
+              firstDate: BlocProvider.of<UserDataBloc>(context).state.user!.dateJoined!,
               lastDate: DateTime.now(),
             );
 

@@ -15,15 +15,30 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   WorkoutsListBloc({
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
-  })  : _authenticationBloc = authenticationBloc,
-        _fitnessRepository = fitnessRepository,
-        super(WorkoutsListLoading());
+  })  : _fitnessRepository = fitnessRepository,
+        super(WorkoutsListLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutsListState> mapEventToState(
@@ -52,7 +67,7 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     yield WorkoutsListLoading();
 
     try {
-      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_user!.id!);
+      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_userId!);
 
       List<Workout> workouts = Workout.fromQuerySnapshot(querySnapshot);
 
