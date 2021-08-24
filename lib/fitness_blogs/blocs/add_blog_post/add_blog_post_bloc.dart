@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -92,29 +93,33 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    List<String> tags = List<String>.from(state.tags.value)
-      ..add(state.tagField)
-      ..toSet().toList();
+    if (!state.tags.value.contains(state.tagField)) {
+      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField);
 
-    final blogTags = BlogTags.dirty(tags);
+      final blogTags = BlogTags.dirty(tags);
 
-    yield state.copyWith(
-      tags: blogTags,
-      tagField: '',
-      status: Formz.validate([
-        blogTags,
-        state.banner,
-        state.content,
-        state.title,
-        state.author,
-      ]),
-    );
+      yield state.copyWith(
+        tags: blogTags,
+        tagField: '',
+        status: Formz.validate([
+          blogTags,
+          state.banner,
+          state.content,
+          state.title,
+          state.author,
+        ]),
+      );
+    } else {
+      yield state.copyWith(tagField: '');
+    }
   }
 
   Stream<AddBlogPostState> _mapTagRemovedToState(AddBlogPostTagRemoved event) async* {
-    final tags = state.tags.value..where((element) => element == event.value);
+    final tags = List<String>.from(state.tags.value)..removeWhere(((element) => element == event.value));
 
     final blogTags = BlogTags.dirty(tags);
+
+    log(tags.toString());
 
     yield state.copyWith(
       tags: blogTags,
@@ -154,10 +159,9 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
-        BlogPost blog = BlogPost(
+        BlogPost blog = BlogPost.empty().copyWith(
           authorId: state.user!.id!,
           content: state.content.value,
-          id: '',
           isPublic: state.isPublic,
           title: state.title.value,
           author: state.author.value,

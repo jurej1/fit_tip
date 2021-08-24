@@ -49,6 +49,10 @@ class BlogPost extends Equatable {
     ];
   }
 
+  factory BlogPost.empty() {
+    return BlogPost(id: '', authorId: '', title: '', content: '', isPublic: false);
+  }
+
   BlogPost copyWith({
     String? id,
     String? authorId,
