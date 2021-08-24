@@ -20,22 +20,38 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
     required DaySelectorBloc waterLogFocusedDayBloc,
   })  : _waterRepository = waterRepository,
         _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
-        _authenticationBloc = authenticationBloc,
-        super(WaterSheetTileState(cup: cup));
+        super(WaterSheetTileState(cup: cup)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WaterRepository _waterRepository;
-  final AuthenticationBloc _authenticationBloc;
   final DaySelectorBloc _waterLogFocusedDayBloc;
 
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
-  rep.User? get user => _authenticationBloc.state.user;
+  late final StreamSubscription _authSubscription;
+
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WaterSheetTileState> mapEventToState(
     WaterSheetTileEvent event,
   ) async* {
     if (event is WaterSheetTileAddWater) {
-      if (!isAuth) {
+      if (!_isAuth) {
         return;
       }
 
@@ -52,7 +68,7 @@ class WaterSheetTileBloc extends Bloc<WaterSheetTileEvent, WaterSheetTileState> 
           date: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
         );
 
-        DocumentReference? ref = await _waterRepository.addWaterLog(user!.id!, waterLog);
+        DocumentReference? ref = await _waterRepository.addWaterLog(_userId!, waterLog);
 
         if (ref == null) return;
 

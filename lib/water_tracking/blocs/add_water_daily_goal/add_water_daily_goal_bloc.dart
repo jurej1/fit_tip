@@ -20,7 +20,6 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
     required DaySelectorBloc waterLogFocusedDayBloc,
     required WaterDailyGoalBloc waterDailyGoalBloc,
   })  : _waterRepository = waterRepository,
-        _authenticationBloc = authenticationBloc,
         _waterLogFocusedDayBloc = waterLogFocusedDayBloc,
         super(
           AddWaterDailyGoalState(
@@ -30,14 +29,30 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
                   )
                 : WaterGoalAmount.pure(),
           ),
-        );
+        ) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final DaySelectorBloc _waterLogFocusedDayBloc;
   final WaterRepository _waterRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  rep.User? get user => _authenticationBloc.state.user;
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  String? _userId;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AddWaterDailyGoalState> mapEventToState(
@@ -67,12 +82,12 @@ class AddWaterDailyGoalBloc extends Bloc<AddWaterDailyGoalEvent, AddWaterDailyGo
       status: Formz.validate([amount]),
     );
 
-    if (state.status.isValidated && isAuth) {
+    if (state.status.isValidated && _isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
         final DateTime date = _waterLogFocusedDayBloc.state.selectedDate;
         await _waterRepository.addWaterGoal(
-          user!.id!,
+          _userId!,
           WaterDailyGoal(
             amount: double.parse(state.amount.value),
             id: WaterDailyGoal.generateId(date),
