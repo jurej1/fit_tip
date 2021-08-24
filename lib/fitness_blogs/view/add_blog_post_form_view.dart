@@ -3,6 +3,7 @@ import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 class AddBlogPostFormView extends StatelessWidget {
   const AddBlogPostFormView({Key? key}) : super(key: key);
@@ -35,6 +36,8 @@ class AddBlogPostFormView extends StatelessWidget {
           _BlogTitleInput(),
           _BlogPostContentInput(),
           _IsPublicTile(),
+          _TagsInputField(),
+          _TagsDisplayer(),
         ],
       ),
     );
@@ -107,18 +110,57 @@ class _IsPublicTile extends StatelessWidget {
   }
 }
 
-class _TagsInputField extends StatelessWidget {
+class _TagsInputField extends HookWidget {
   const _TagsInputField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _textController = useTextEditingController();
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return TextFormField(
+          controller: _textController,
+          decoration: InputDecoration(
+            isDense: true,
+            labelText: 'Tag',
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.add),
+              color: Colors.blue,
+              splashRadius: 20,
+              onPressed: () {
+                BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagAdded());
+                _textController.clear();
+              },
+            ),
+          ),
+          onChanged: (value) {
+            BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagFieldUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _TagsDisplayer extends StatelessWidget {
+  const _TagsDisplayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
       builder: (context, state) {
-        return TextFormField(
-          decoration: InputDecoration(
-            labelText: 'Tag',
-          ),
-          onSaved: (value) {},
+        return Wrap(
+          spacing: 10,
+          children: state.tags.value
+              .map(
+                (e) => Chip(
+                  label: Text(e),
+                  onDeleted: () {
+                    BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagRemoved(e));
+                  },
+                ),
+              )
+              .toList(),
         );
       },
     );

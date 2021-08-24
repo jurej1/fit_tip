@@ -1,6 +1,6 @@
 part of 'add_blog_post_bloc.dart';
 
-class AddBlogPostState extends Equatable {
+class AddBlogPostState {
   const AddBlogPostState({
     this.status = FormzStatus.pure,
     this.title = const BlogTitle.pure(),
@@ -24,22 +24,6 @@ class AddBlogPostState extends Equatable {
   final bool isPublic;
   final BlogPost? blogPost;
   final String tagField;
-
-  @override
-  List<Object?> get props {
-    return [
-      status,
-      title,
-      content,
-      banner,
-      tags,
-      author,
-      user,
-      isPublic,
-      blogPost,
-      tagField,
-    ];
-  }
 
   AddBlogPostState copyWith({
     FormzStatus? status,

@@ -92,7 +92,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    final tags = state.tags.value..add(state.tagField);
+    final tags = List<String>.from(state.tags.value)..add(state.tagField);
 
     final blogTags = BlogTags.dirty(tags);
 
