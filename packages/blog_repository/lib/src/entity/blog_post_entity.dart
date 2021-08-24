@@ -82,7 +82,7 @@ class BlogPostEntity extends Equatable {
       bannerUrl: data.containsKey(BlogPostDocKeys.bannerUrl) ? data[BlogPostDocKeys.bannerUrl] : null,
       created: created.toDate(),
       likes: data[BlogPostDocKeys.likes],
-      tags: data[BlogPostDocKeys.tags],
+      tags: (data[BlogPostDocKeys.tags] as List<dynamic>).map<String>((e) => e.toString()).toList(),
     );
   }
 }

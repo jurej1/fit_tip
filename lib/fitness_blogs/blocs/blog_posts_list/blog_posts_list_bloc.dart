@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
@@ -73,6 +74,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         hasReachedMax: snapshot.size < _limit,
       );
     } catch (e) {
+      log('error' + e.toString());
       yield BlogPostsListFail();
     }
   }
