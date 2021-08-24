@@ -22,16 +22,27 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
     required DaySelectorBloc daySelectorBloc,
     ExcerciseLog? excerciseLog,
   })  : _fitnessRepository = fitnessREpository,
-        _authenticationBloc = authenticationBloc,
         super(excerciseLog == null
             ? AddExcerciseLogState.initial(daySelectorBloc.state.selectedDate)
-            : AddExcerciseLogState.edit(excerciseLog));
+            : AddExcerciseLogState.edit(excerciseLog)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+    _authSubscription = authenticationBloc.stream.listen((event) {});
+  }
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AddExcerciseLogState> mapEventToState(
@@ -153,7 +164,7 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
       try {
         if (state.mode == FormMode.add) {
           DocumentReference ref = await _fitnessRepository.addExcerciseLog(
-            _user!.id!,
+            _userId!,
             state.excerciseLog,
           );
 
@@ -163,7 +174,7 @@ class AddExcerciseLogBloc extends Bloc<AddExcerciseLogEvent, AddExcerciseLogStat
           );
         } else if (state.mode == FormMode.edit) {
           await _fitnessRepository.updateExcerciseLog(
-            _user!.id!,
+            _userId!,
             state.excerciseLog,
           );
           yield state.copyWith(status: FormzStatus.submissionSuccess);

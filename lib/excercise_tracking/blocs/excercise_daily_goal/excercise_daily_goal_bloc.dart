@@ -16,11 +16,13 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
   })  : _fitnessRepository = fitnessRepository,
         super(ExcerciseDailyGoalLoading()) {
     final authState = authenticationBloc.state;
-    _user = authState.user;
+    _userId = authState.user?.uid;
     _isAuth = authState.isAuthenticated;
 
     _authSubscription = authenticationBloc.stream.listen((event) {
-      _user = event.user;
+      add(ExcerciseDailyGoalDateUpdated(DateTime.now()));
+
+      _userId = event.user?.uid;
       _isAuth = event.isAuthenticated;
     });
   }
@@ -29,7 +31,7 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
   late final StreamSubscription _authSubscription;
 
   bool _isAuth = false;
-  User? _user;
+  String? _userId;
 
   @override
   Future<void> close() {
@@ -64,7 +66,7 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
       yield ExcerciseDailyGoalLoading();
 
       try {
-        ExcerciseDailyGoal goal = await _fitnessRepository.getExcerciseDailyGoal(_user!.id!, event.date);
+        ExcerciseDailyGoal goal = await _fitnessRepository.getExcerciseDailyGoal(_userId!, event.date);
 
         yield ExcerciseDailyGoalLoadSuccess(goal);
       } on Exception catch (e) {

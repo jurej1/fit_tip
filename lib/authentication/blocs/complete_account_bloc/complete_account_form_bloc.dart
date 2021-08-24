@@ -16,23 +16,23 @@ part 'complete_account_form_state.dart';
 
 class CompleteAccountFormBloc extends Bloc<CompleteAccountFormEvent, CompleteAccountFormState> {
   CompleteAccountFormBloc({
-    required AuthenticationBloc authenticationBloc,
+    required UserDataBloc userDataBloc,
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
-        super(CompleteAccountFormState.initial(authenticationBloc.state.user)) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      add(_CompleteAccountFormUserUpdated(authState.user));
+        super(CompleteAccountFormState.initial(userDataBloc.state.user)) {
+    _userSubscription = userDataBloc.stream.listen((userState) {
+      add(_CompleteAccountFormUserUpdated(userState.user));
     });
   }
 
   final AuthenticationRepository _authenticationRepository;
-  late final StreamSubscription _authSubscription;
+  late final StreamSubscription _userSubscription;
 
   bool get _isAuth => state.user != null;
 
   @override
   Future<void> close() {
-    _authSubscription.cancel();
+    _userSubscription.cancel();
     return super.close();
   }
 

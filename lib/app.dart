@@ -57,6 +57,12 @@ class App extends StatelessWidget {
               authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
             ),
           ),
+          BlocProvider(
+            create: (context) => UserDataBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+            ),
+          ),
           BlocProvider<MeasurmentSystemBloc>(
             create: (context) => MeasurmentSystemBloc(),
           ),
@@ -65,7 +71,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => BirthdayMessengerBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              userDataBloc: BlocProvider.of<AuthenticationBloc>(context),
             ),
           )
         ],
@@ -96,7 +102,7 @@ class App extends StatelessWidget {
                         }
                       },
                     ),
-                    BlocListener<AuthenticationBloc, AuthenticationState>(
+                    BlocListener<UserDataBloc, UserDataState>(
                       listener: (context, state) {
                         BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
                       },

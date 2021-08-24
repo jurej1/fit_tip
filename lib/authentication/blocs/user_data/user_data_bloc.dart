@@ -9,8 +9,10 @@ part 'user_data_event.dart';
 part 'user_data_state.dart';
 
 class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
-  UserDataBloc({required AuthenticationBloc authenticationBloc, required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository,
+  UserDataBloc({
+    required AuthenticationBloc authenticationBloc,
+    required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(UserDataState(null)) {
     add(_UserDataAuthStateUpdated(authenticationBloc.state));
     _authenticationSubscription = authenticationBloc.stream.listen((authEvent) => add(_UserDataAuthStateUpdated(authEvent)));

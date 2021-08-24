@@ -9,9 +9,9 @@ part 'birthday_messenger_event.dart';
 
 class BirthdayMessengerBloc extends Bloc<BirthdayMessengerEvent, bool> {
   BirthdayMessengerBloc({
-    required AuthenticationBloc authenticationBloc,
+    required UserDataBloc userDataBloc,
   }) : super(false) {
-    _streamSubscription = authenticationBloc.stream.listen((event) {
+    _streamSubscription = userDataBloc.stream.listen((event) {
       add(_BirthdayMessengerUserUpdated(event.user));
     });
   }

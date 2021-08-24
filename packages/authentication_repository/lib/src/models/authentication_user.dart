@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationUser extends Equatable {
-  final User firebaseUser;
+  final UserInfo firebaseUser;
 
   const AuthenticationUser(this.firebaseUser);
 
@@ -14,7 +14,7 @@ class AuthenticationUser extends Equatable {
   List<Object?> get props => [firebaseUser];
 
   AuthenticationUser copyWith({
-    User? firebaseUser,
+    UserInfo? firebaseUser,
   }) {
     return AuthenticationUser(
       firebaseUser ?? this.firebaseUser,

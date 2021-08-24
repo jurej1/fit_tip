@@ -15,7 +15,7 @@ class CompleteAccountView extends StatelessWidget {
       builder: (context) {
         return BlocProvider(
           create: (context) => CompleteAccountFormBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userDataBloc: BlocProvider.of<UserDataBloc>(context),
             authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
           ),
           child: const CompleteAccountView(),

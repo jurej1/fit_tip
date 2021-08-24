@@ -19,19 +19,32 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
     required FitnessRepository fitnessRepository,
     required DaySelectorBloc daySelectorBloc,
     required ExcerciseDailyGoalBloc excerciseDailyGoalBloc,
-  })  : _authenticationBloc = authenticationBloc,
-        _fitnessRepository = fitnessRepository,
+  })  : _fitnessRepository = fitnessRepository,
         super(
           excerciseDailyGoalBloc.state is ExcerciseDailyGoalLoadSuccess
               ? EditExcerciseDailyGoalState.initial(excerciseDailyGoalBloc.state as ExcerciseDailyGoalLoadSuccess)
               : EditExcerciseDailyGoalState(date: daySelectorBloc.state.selectedDate),
-        );
+        ) {
+    final authState = authenticationBloc.state;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+    _authSubcription = authenticationBloc.stream.listen((event) {
+      _isAuth = event.isAuthenticated;
+      _userId = event.user?.uid;
+    });
+  }
 
-  final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubcription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubcription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<EditExcerciseDailyGoalState> mapEventToState(
@@ -127,7 +140,7 @@ class EditExcerciseDailyGoalBloc extends Bloc<EditExcerciseDailyGoalEvent, EditE
 
       try {
         ExcerciseDailyGoal goal = state.goal();
-        await _fitnessRepository.addExcerciseDailyGoal(_user!.id!, goal);
+        await _fitnessRepository.addExcerciseDailyGoal(_userId!, goal);
 
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } catch (e) {

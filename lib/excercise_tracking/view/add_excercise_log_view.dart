@@ -238,7 +238,7 @@ class _DateInput extends StatelessWidget {
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: state.date.value,
-              firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
+              firstDate: BlocProvider.of<UserDataBloc>(context).state.user!.dateJoined!,
               lastDate: DateTime.now(),
             );
 

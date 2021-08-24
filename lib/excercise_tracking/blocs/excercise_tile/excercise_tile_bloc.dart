@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -15,14 +14,28 @@ class ExcerciseTileBloc extends Bloc<ExcerciseTileEvent, ExcerciseTileState> {
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
   })  : this._activityRepository = fitnessRepository,
-        this._authenticationBloc = authenticationBloc,
-        super(ExcerciseTileInitial(excerciseLog, false));
+        super(ExcerciseTileInitial(excerciseLog, false)) {
+    final authState = authenticationBloc.state;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authenticationSubscription = authenticationBloc.stream.listen((event) {
+      _isAuth = event.isAuthenticated;
+      _userId = event.user?.uid;
+    });
+  }
 
   final FitnessRepository _activityRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authenticationSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authenticationSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<ExcerciseTileState> mapEventToState(
@@ -40,7 +53,7 @@ class ExcerciseTileBloc extends Bloc<ExcerciseTileEvent, ExcerciseTileState> {
       yield ExcerciseTileLoading(state.excerciseLog, false);
 
       try {
-        await _activityRepository.deleteExcerciseLog(_user!.id!, state.excerciseLog);
+        await _activityRepository.deleteExcerciseLog(_userId!, state.excerciseLog);
 
         yield ExcerciseTileDeleteSuccess(state.excerciseLog, false);
       } on Exception catch (e) {
