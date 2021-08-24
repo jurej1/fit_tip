@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -18,17 +17,32 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
     required FoodRepository foodRepository,
     required DaySelectorBloc foodLogFocusedDateBloc,
     required CalorieDailyGoalBloc calorieDailyGoalBloc,
-  })  : _authenticationBloc = authenticationBloc,
-        _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
+  })  : _foodLogFocusedDateBloc = foodLogFocusedDateBloc,
         _foodRepository = foodRepository,
-        super(EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal));
+        super(EditCalorieDailyGoalState.dirty((calorieDailyGoalBloc.state as CalorieDailyGoalLoadSuccess).calorieDailyGoal)) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FoodRepository _foodRepository;
   final DaySelectorBloc _foodLogFocusedDateBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<EditCalorieDailyGoalState> mapEventToState(
@@ -142,7 +156,7 @@ class EditCalorieDailyGoalBloc extends Bloc<EditCalorieDailyGoalEvent, EditCalor
       );
 
       try {
-        await _foodRepository.addCalorieDailyGoal(_user!.id!, goal);
+        await _foodRepository.addCalorieDailyGoal(_userId!, goal);
         yield state.copyWith(
           status: FormzStatus.submissionSuccess,
           goal: goal,

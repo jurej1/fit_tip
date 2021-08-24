@@ -17,20 +17,20 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
         super(FoodDailyLogsLoading()) {
     final authState = authenticationBloc.state;
 
-    _user = authState.user;
     _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
 
-    _authSubscription = authenticationBloc.stream.listen((authEvent) {
-      _user = authEvent.user;
-      _isAuth = authEvent.isAuthenticated;
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
     });
   }
 
   final FoodRepository _foodRepository;
   late final StreamSubscription _authSubscription;
 
-  User? _user;
   bool _isAuth = false;
+  String? _userId;
 
   @override
   Future<void> close() {
@@ -117,7 +117,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
       yield FoodDailyLogsLoading();
 
       try {
-        MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_user!.id!, event.date!);
+        MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_userId!, event.date!);
 
         yield FoodDailyLogsLoadSuccess(mealDay: mealDay == null ? MealDay() : mealDay);
       } on Exception catch (e) {

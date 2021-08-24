@@ -17,19 +17,20 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
   })  : _foodRepository = foodRepository,
         super(CalorieDailyGoalLoading()) {
     final authState = authenticationBloc.state;
-    user = authState.user;
-    _isAuth = authState.isAuthenticated;
 
-    _authSubscription = authenticationBloc.stream.listen((authEvent) {
-      user = authEvent.user;
-      _isAuth = authEvent.isAuthenticated;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
     });
   }
 
   final FoodRepository _foodRepository;
   late final StreamSubscription _authSubscription;
 
-  User? user;
+  String? _userId;
   bool _isAuth = false;
 
   @override
@@ -56,7 +57,7 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
       yield CalorieDailyGoalLoading();
 
       try {
-        CalorieDailyGoal calorieDailyGoal = await _foodRepository.getCalorieDailyGoalForSpecificDate(user!.id!, event.date!);
+        CalorieDailyGoal calorieDailyGoal = await _foodRepository.getCalorieDailyGoalForSpecificDate(_userId!, event.date!);
 
         yield CalorieDailyGoalLoadSuccess(calorieDailyGoal: calorieDailyGoal);
       } catch (e) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -21,16 +20,31 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
         super(
           foodItem == null ? AddFoodItemState.pure(date: focusedDate?.state.selectedDate) : AddFoodItemState.dirty(item: foodItem),
-        );
+        ) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FoodRepository _foodRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AddFoodItemState> mapEventToState(
@@ -268,13 +282,13 @@ class AddFoodItemBloc extends Bloc<AddFoodItemEvent, AddFoodItemState> {
         );
 
         if (state.mode == AddFoodItemStateMode.add) {
-          DocumentReference docRef = await _foodRepository.addFoodItem(_user!.id!, item);
+          DocumentReference docRef = await _foodRepository.addFoodItem(_userId!, item);
 
           item = item.copyWith(id: docRef.id);
         }
 
         if (state.mode == AddFoodItemStateMode.edit) {
-          await _foodRepository.updateFoodItem(_user!.id!, item);
+          await _foodRepository.updateFoodItem(_userId!, item);
         }
 
         yield state.copyWith(
