@@ -155,12 +155,12 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
       ]),
     );
 
-    if (state.status.isValidated && state.user != null) {
+    if (state.status.isValidated && state.userId != null) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
         BlogPost blog = BlogPost.empty().copyWith(
-          authorId: state.user!.id!,
+          authorId: state.userId,
           content: state.content.value,
           isPublic: state.isPublic,
           title: state.title.value,
@@ -183,7 +183,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   Stream<AddBlogPostState> _mapUserUpdatedToState(_AddBlogPostUserUpdated event) async* {
     final author = BlogAuthor.dirty(event.value?.displayName);
     yield state.copyWith(
-      user: event.value,
+      userId: event.value?.id,
       author: author,
       status: Formz.validate([
         author,

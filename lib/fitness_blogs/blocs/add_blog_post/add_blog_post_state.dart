@@ -7,7 +7,7 @@ class AddBlogPostState {
     this.content = const BlogContent.pure(),
     this.banner = const BlogBanner.pure(),
     this.tags = const BlogTags.pure(),
-    this.user,
+    this.userId,
     this.author = const BlogAuthor.pure(),
     this.isPublic = true,
     this.blogPost,
@@ -20,7 +20,7 @@ class AddBlogPostState {
   final BlogBanner banner;
   final BlogTags tags;
   final BlogAuthor author;
-  final User? user;
+  final String? userId;
   final bool isPublic;
   final BlogPost? blogPost;
   final String tagField;
@@ -32,7 +32,7 @@ class AddBlogPostState {
     BlogBanner? banner,
     BlogTags? tags,
     BlogAuthor? author,
-    User? user,
+    String? userId,
     bool? isPublic,
     BlogPost? blogPost,
     String? tagField,
@@ -44,7 +44,7 @@ class AddBlogPostState {
       banner: banner ?? this.banner,
       tags: tags ?? this.tags,
       author: author ?? this.author,
-      user: user ?? this.user,
+      userId: userId ?? this.userId,
       isPublic: isPublic ?? this.isPublic,
       blogPost: blogPost ?? this.blogPost,
       tagField: tagField ?? this.tagField,
@@ -54,7 +54,7 @@ class AddBlogPostState {
   factory AddBlogPostState.initial(User? user) {
     final author = BlogAuthor.dirty(user?.displayName);
     return AddBlogPostState(
-      user: user,
+      userId: user?.id,
       author: author,
       status: Formz.validate([author]),
     );
