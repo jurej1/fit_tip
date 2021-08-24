@@ -13,9 +13,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   BlogPostsListBloc({
     required AuthenticationBloc authenticationBloc,
     required BlogRepository blogRepository,
-  })  : _authenticationState = authenticationBloc.state,
-        _blogRepository = blogRepository,
+  })  : _blogRepository = blogRepository,
         super(BlogPostsListLoading()) {
+    add(_BlogPostAuthUpdated(authenticationBloc.state));
     _authSubscription = authenticationBloc.stream.listen((authState) {
       add(_BlogPostAuthUpdated(authState));
     });
@@ -23,8 +23,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
   late final StreamSubscription _authSubscription;
   final BlogRepository _blogRepository;
+  bool _isAuth = false;
+  String? _userId;
 
-  AuthenticationState _authenticationState;
   late DocumentSnapshot _lastFetchedDoc;
 
   final int _limit = 12;
@@ -40,7 +41,8 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     BlogPostsListEvent event,
   ) async* {
     if (event is _BlogPostAuthUpdated) {
-      _authenticationState = event.value;
+      _isAuth = event.value.isAuthenticated;
+      _userId = event.value.user?.uid;
     } else if (event is BlogPostsListLoadRequested) {
       yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsListLoadMore) {
@@ -97,9 +99,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     return snapshot.docs.map((e) {
       BlogPost blog = BlogPost.fromEntity(BlogPostEntity.fromDocumentSnapshot(e));
 
-      if (_authenticationState.isAuthenticated) {
+      if (_isAuth) {
         blog = blog.copyWith(
-          isAuthor: _authenticationState.user!.id == blog.authorId,
+          isAuthor: _userId! == blog.authorId,
           isUpliked: false, //TODO with hydrated bloc
         );
       }

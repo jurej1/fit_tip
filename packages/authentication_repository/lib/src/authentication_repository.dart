@@ -22,7 +22,7 @@ class AuthenticationRepository {
     return _firebaseAuth.authStateChanges().map(
       (user) {
         if (user == null) return null;
-        return AuthenticationUser(user);
+        return AuthenticationUser(user.providerData.first); // Test this user info
       },
     );
   }

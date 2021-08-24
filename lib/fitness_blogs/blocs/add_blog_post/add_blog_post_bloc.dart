@@ -17,21 +17,21 @@ part 'add_blog_post_state.dart';
 
 class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   AddBlogPostBloc({
-    required AuthenticationBloc authenticationBloc,
+    required UserDataBloc userDataBloc,
     required BlogRepository blogRepository,
   })  : _blogRepository = blogRepository,
-        super(AddBlogPostState.initial(authenticationBloc.state.user)) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      add(_AddBlogPostUserUpdated(authState.user));
+        super(AddBlogPostState.initial(userDataBloc.state.user)) {
+    _userSubscription = userDataBloc.stream.listen((userState) {
+      add(_AddBlogPostUserUpdated(userState.user));
     });
   }
 
-  late final StreamSubscription _authSubscription;
+  late final StreamSubscription _userSubscription;
   final BlogRepository _blogRepository;
 
   @override
   Future<void> close() {
-    _authSubscription.cancel();
+    _userSubscription.cancel();
     return super.close();
   }
 

@@ -1,6 +1,6 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:blog_repository/blog_repository.dart';
-import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,7 @@ class AddBlogPostFormView extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (context) => AddBlogPostBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                userDataBloc: BlocProvider.of<UserDataBloc>(context),
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
               ),
             ),
