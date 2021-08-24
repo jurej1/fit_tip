@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthenticationUser extends Equatable {
   final UserInfo firebaseUser;
 
-  const AuthenticationUser(this.firebaseUser);
+  const AuthenticationUser(
+    this.firebaseUser,
+  );
 
   String get uid => firebaseUser.uid;
   String? get displayName => firebaseUser.displayName;
