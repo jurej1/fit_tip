@@ -119,10 +119,12 @@ class _TagsInputField extends HookWidget {
     return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
       builder: (context, state) {
         return TextFormField(
+          enabled: !state.tags.hasReachedMaxAmount(),
           controller: _textController,
           decoration: InputDecoration(
             isDense: true,
             labelText: 'Tag',
+            errorText: state.tags.hasReachedMaxAmount() ? 'You have reached the max amount' : null,
             suffixIcon: IconButton(
               icon: const Icon(Icons.add),
               color: Colors.blue,

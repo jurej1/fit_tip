@@ -53,7 +53,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     } else if (event is AddBlogPostPublicPressed) {
       yield state.copyWith(isPublic: !state.isPublic);
     } else if (event is AddBlogPostTagFieldUpdated) {
-      yield state.copyWith(tagField: event.value);
+      yield state.copyWith(tagField: event.value.trim());
     }
   }
 
