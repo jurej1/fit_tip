@@ -14,14 +14,28 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
-        super(ExcerciseDailyGoalLoading());
+        super(ExcerciseDailyGoalLoading()) {
+    final authState = authenticationBloc.state;
+    _user = authState.user;
+    _isAuth = authState.isAuthenticated;
 
-  final AuthenticationBloc _authenticationBloc;
+    _authSubscription = authenticationBloc.stream.listen((event) {
+      _user = event.user;
+      _isAuth = event.isAuthenticated;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  User? _user;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<ExcerciseDailyGoalState> mapEventToState(

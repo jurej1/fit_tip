@@ -14,14 +14,29 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
-        super(FoodDailyLogsLoading());
+        super(FoodDailyLogsLoading()) {
+    final authState = authenticationBloc.state;
+
+    _user = authState.user;
+    _isAuth = authState.isAuthenticated;
+
+    _authSubscription = authenticationBloc.stream.listen((authEvent) {
+      _user = authEvent.user;
+      _isAuth = authEvent.isAuthenticated;
+    });
+  }
 
   final FoodRepository _foodRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  User? _user;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<FoodDailyLogsState> mapEventToState(

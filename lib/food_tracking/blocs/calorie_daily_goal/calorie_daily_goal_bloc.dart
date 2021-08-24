@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
 
 part 'calorie_daily_goal_event.dart';
@@ -14,14 +15,28 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
-        super(CalorieDailyGoalLoading());
+        super(CalorieDailyGoalLoading()) {
+    final authState = authenticationBloc.state;
+    user = authState.user;
+    _isAuth = authState.isAuthenticated;
 
-  final AuthenticationBloc _authenticationBloc;
+    _authSubscription = authenticationBloc.stream.listen((authEvent) {
+      user = authEvent.user;
+      _isAuth = authEvent.isAuthenticated;
+    });
+  }
+
   final FoodRepository _foodRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get user => _authenticationBloc.state.user;
+  User? user;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<CalorieDailyGoalState> mapEventToState(

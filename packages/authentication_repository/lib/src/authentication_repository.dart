@@ -18,11 +18,12 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<AuthenticationStatus> get authenticationStatus {
+  Stream<AuthenticationUser?> get authenticationStatus {
     return _firebaseAuth.authStateChanges().map(
       (user) {
-        if (user == null) return AuthenticationStatus.unauthenticated;
-        return AuthenticationStatus.authenticated;
+        if (user == null) return null;
+
+        return AuthenticationUser(user);
       },
     );
   }

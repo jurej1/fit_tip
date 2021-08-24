@@ -18,6 +18,11 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         super(ExcerciseDailyListLoading()) {
+    final authState = authenticationBloc.state;
+
+    _user = authState.user;
+    _isAuth = authState.isAuthenticated;
+
     _authSubscription = authenticationBloc.stream.listen((event) {
       if (event.isAuthenticated) {
         add(ExcerciseDailyListDateUpdated(DateTime.now()));
@@ -30,8 +35,8 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
 
   late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  User? _user;
 
   @override
   Stream<ExcerciseDailyListState> mapEventToState(
