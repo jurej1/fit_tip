@@ -8,7 +8,7 @@ class AuthenticationUser extends Equatable {
     this.firebaseUser,
   );
 
-  String get uid => firebaseUser.uid;
+  String? get uid => firebaseUser.uid;
   String? get displayName => firebaseUser.displayName;
   String? get email => firebaseUser.email;
 

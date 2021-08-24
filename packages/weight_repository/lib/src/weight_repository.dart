@@ -14,7 +14,7 @@ class WeightRepository {
   }
 
   CollectionReference _weightGoalRef(String userId) {
-    return _firebaseFirestore.collection('users').doc(userId).collection('goals');
+    return _firebaseFirestore.collection('users').doc(userId).collection('weight_goals');
   }
 
   DocumentReference _weightGoalDocRef(String userId) {

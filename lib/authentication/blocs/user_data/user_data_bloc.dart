@@ -34,7 +34,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
   ) async* {
     if (event is _UserDataAuthStateUpdated) {
       if (event.state.isAuthenticated) {
-        _userSubscription = _authenticationRepository.user(event.state.user!.uid).listen((event) {
+        _userSubscription = _authenticationRepository.user(event.state.user!.uid!).listen((event) {
           add(UserDataUserUpdated(event));
         });
       } else {
