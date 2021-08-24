@@ -48,18 +48,20 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   }
 
   Stream<WeightTileState> _mapSnackbarClosedToState(WeightTileDeleteRequested event) async* {
-    yield WeightTileDeleteLoading(state.weight);
+    if (_isAuth) {
+      yield WeightTileDeleteLoading(state.weight);
 
-    try {
-      if (state.weight.id == null) {
+      try {
+        if (state.weight.id == null) {
+          yield WeightTileDeleteFail(state.weight);
+          return;
+        }
+        await _weightRepository.deleteWeight(_userId!, state.weight.id!);
+
+        yield WeightTileDeletedSuccessfully(state.weight);
+      } catch (error) {
         yield WeightTileDeleteFail(state.weight);
-        return;
       }
-      await _weightRepository.deleteWeight(_userId!, state.weight.id!);
-
-      yield WeightTileDeletedSuccessfully(state.weight);
-    } catch (error) {
-      yield WeightTileDeleteFail(state.weight);
     }
   }
 }
