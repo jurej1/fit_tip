@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -13,15 +12,30 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   WeightGoalBloc({
     required WeightRepository weightRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _authenticationBloc = authenticationBloc,
-        _weightRepository = weightRepository,
-        super(WeightGoalLoading());
+  })  : _weightRepository = weightRepository,
+        super(WeightGoalLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WeightRepository _weightRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WeightGoalState> mapEventToState(
@@ -35,7 +49,7 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
   }
 
   Stream<WeightGoalState> _mapWeightGoalLoadToState() async* {
-    if (!isAuth) {
+    if (!_isAuth) {
       yield WeightGoalFailure();
       return;
     }
@@ -47,27 +61,14 @@ class WeightGoalBloc extends Bloc<WeightGoalEvent, WeightGoalState> {
     yield WeightGoalLoading();
 
     try {
-      WeightGoal? goal = await _weightRepository.getWeighGoal(user!.id!);
-
-      MeasurmentSystem system = _authenticationBloc.state.user!.measurmentSystem;
+      WeightGoal? goal = await _weightRepository.getWeighGoal(_userId!);
 
       if (goal == null) {
         yield WeightGoalLoading();
       } else {
-        if (system == MeasurmentSystem.metric) {
-          yield WeightGoalLoadSuccess(goal: goal);
-        } else {
-          yield WeightGoalLoadSuccess(
-            goal: goal.copyWith(
-              targetWeight: goal.targetWeight != null ? MeasurmentSystemConverter.kgToLb(goal.targetWeight!) : null,
-              beginWeight: goal.beginWeight != null ? MeasurmentSystemConverter.kgToLb(goal.beginWeight!) : null,
-              // weeklyGoal: MeasurmentSystemConverter.kgToLb(goal.weeklyGoal), //todo
-            ),
-          );
-        }
+        yield WeightGoalLoadSuccess(goal: goal);
       }
     } catch (error) {
-      print('error' + error.toString());
       yield WeightGoalFailure();
     }
   }

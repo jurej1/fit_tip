@@ -20,14 +20,29 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
     required AuthenticationBloc authenticationBloc,
     Weight? weight,
   })  : _weightRepository = weightRepository,
-        _authenticationBloc = authenticationBloc,
-        super(weight == null ? AddWeightFormState.initial() : AddWeightFormState.edit(weight));
+        super(weight == null ? AddWeightFormState.initial() : AddWeightFormState.edit(weight)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WeightRepository _weightRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AddWeightFormState> mapEventToState(
@@ -83,12 +98,9 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
       status: Formz.validate([date, weight, time]),
     );
 
-    if (state.status.isValidated && isAuth) {
-      final user = _authenticationBloc.state.user;
-
+    if (state.status.isValidated && _isAuth) {
       try {
         double weightValue = double.parse(state.weight.value);
-        if (user!.measurmentSystem != MeasurmentSystem.metric) weightValue = MeasurmentSystemConverter.lbTokg(weightValue);
 
         final stateDate = state.dateAdded.value;
         final stateTime = state.timeAdded.value;
@@ -101,10 +113,10 @@ class AddWeightFormBloc extends Bloc<AddWeightFormEvent, AddWeightFormState> {
         );
 
         if (state.mode == FormMode.add) {
-          final doc = await _weightRepository.addWeight(user.id!, weight);
+          final doc = await _weightRepository.addWeight(_userId!, weight);
           weight = weight.copyWith(id: doc.id);
         } else if (state.mode == FormMode.edit) {
-          await _weightRepository.updateWeight(user.id!, weight.copyWith(id: state.weightModel!.id));
+          await _weightRepository.updateWeight(_userId!, weight.copyWith(id: state.weightModel!.id));
         }
 
         yield state.copyWith(status: FormzStatus.submissionSuccess, weightModel: weight);

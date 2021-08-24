@@ -13,15 +13,20 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   WeightHistoryBloc({
     required WeightRepository weightRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _weightRepository = weightRepository,
-        _authenticationBloc = authenticationBloc,
+  })  : _weightRepository = weightRepository,
         super(WeightHistoryLoading());
 
   final WeightRepository _weightRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  String? _userId;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   mapEventToState(
@@ -50,19 +55,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
     try {
       yield WeightHistoryLoading();
 
-      var weights = await _weightRepository.weightHistory(_user!.id!);
-
-      final user = _authenticationBloc.state.user;
-
-      if (user!.measurmentSystem != MeasurmentSystem.metric) {
-        weights = weights
-            .map(
-              (e) => e.copyWith(
-                weight: MeasurmentSystemConverter.kgToLb(e.weight?.toDouble() ?? 0.0),
-              ),
-            )
-            .toList();
-      }
+      var weights = await _weightRepository.weightHistory(_userId!);
 
       yield WeightHistoryLoadSucces(weights: weights);
     } catch (error) {
@@ -71,9 +64,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   }
 
   Stream<WeightHistoryState> _mapWeightHistoryAddedToState(WeightHistoryAdded event) async* {
-    if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is WeightHistoryLoadSucces &&
-        event.weight != null) {
+    if (_isAuth && state is WeightHistoryLoadSucces && event.weight != null) {
       final currentState = state as WeightHistoryLoadSucces;
 
       List<Weight> weights = currentState.weights;
@@ -87,9 +78,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   }
 
   Stream<WeightHistoryState> _mapWeightHistoryDeletedToState(WeightHistoryDelete event) async* {
-    if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is WeightHistoryLoadSucces &&
-        event.weight != null) {
+    if (_isAuth && state is WeightHistoryLoadSucces && event.weight != null) {
       final currentState = state as WeightHistoryLoadSucces;
 
       List<Weight> weights = currentState.weights;
@@ -101,9 +90,7 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
   }
 
   Stream<WeightHistoryState> _mapWeightHistoryUpdatedToState(WeightHistoryUpdated event) async* {
-    if (_authenticationBloc.state.status == AuthenticationStatus.authenticated &&
-        state is WeightHistoryLoadSucces &&
-        event.weight != null) {
+    if (_isAuth && state is WeightHistoryLoadSucces && event.weight != null) {
       final currentState = state as WeightHistoryLoadSucces;
 
       List<Weight> weights = currentState.weights;
