@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
@@ -38,6 +39,7 @@ class AddBlogPostFormView extends StatelessWidget {
           _IsPublicTile(),
           _TagsInputField(),
           _TagsDisplayer(),
+          _BannerPicker(),
         ],
       ),
     );
@@ -166,5 +168,45 @@ class _TagsDisplayer extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _BannerPicker extends StatelessWidget {
+  _BannerPicker({Key? key}) : super(key: key);
+
+  final ImagePicker _imagePicker = ImagePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text('Pick banner'),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.camera),
+                onPressed: () {
+                  _pickImage(context, ImageSource.camera);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.photo),
+                onPressed: () {
+                  _pickImage(context, ImageSource.gallery);
+                },
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    XFile? file = await _imagePicker.pickImage(source: source);
+    BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostBannerUpdated(file));
   }
 }

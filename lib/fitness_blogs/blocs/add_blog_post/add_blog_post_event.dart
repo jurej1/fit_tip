@@ -35,12 +35,12 @@ class AddBlogPostContentUpdated extends AddBlogPostEvent {
 }
 
 class AddBlogPostBannerUpdated extends AddBlogPostEvent {
-  final String value;
+  final XFile? value;
 
   const AddBlogPostBannerUpdated(this.value);
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class AddBlogPostTagAdded extends AddBlogPostEvent {}
