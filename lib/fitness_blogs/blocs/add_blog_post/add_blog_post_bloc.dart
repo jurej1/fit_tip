@@ -52,6 +52,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
       yield* _mapSubmitToState(event);
     } else if (event is AddBlogPostPublicPressed) {
       yield state.copyWith(isPublic: !state.isPublic);
+    } else if (event is AddBlogPostTagFieldUpdated) {
+      yield state.copyWith(tagField: event.value);
     }
   }
 
@@ -90,12 +92,13 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    final tags = state.tags.value..add(event.value);
+    final tags = state.tags.value..add(state.tagField);
 
     final blogTags = BlogTags.dirty(tags);
 
     yield state.copyWith(
       tags: blogTags,
+      tagField: '',
       status: Formz.validate([
         blogTags,
         state.banner,

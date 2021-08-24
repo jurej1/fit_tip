@@ -29,6 +29,98 @@ class AddBlogPostFormView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      body: ListView(
+        padding: const EdgeInsets.all(10),
+        children: [
+          _BlogTitleInput(),
+          _BlogPostContentInput(),
+          _IsPublicTile(),
+        ],
+      ),
+    );
+  }
+}
+
+class _BlogTitleInput extends StatelessWidget {
+  const _BlogTitleInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.title.value,
+          decoration: InputDecoration(
+            labelText: 'Title',
+            errorText: state.title.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTitleUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _BlogPostContentInput extends StatelessWidget {
+  const _BlogPostContentInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.content.value,
+          decoration: InputDecoration(
+            labelText: 'Content',
+            errorText: state.content.invalid ? 'Invalid' : null,
+          ),
+          onChanged: (value) {
+            BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostContentUpdated(value));
+          },
+        );
+      },
+    );
+  }
+}
+
+class _IsPublicTile extends StatelessWidget {
+  const _IsPublicTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text('Public'),
+          trailing: Switch(
+            value: state.isPublic,
+            onChanged: (value) {
+              BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostPublicPressed());
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _TagsInputField extends StatelessWidget {
+  const _TagsInputField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      builder: (context, state) {
+        return TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Tag',
+          ),
+          onSaved: (value) {},
+        );
+      },
     );
   }
 }

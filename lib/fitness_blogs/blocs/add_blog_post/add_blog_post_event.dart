@@ -43,14 +43,7 @@ class AddBlogPostBannerUpdated extends AddBlogPostEvent {
   List<Object> get props => [value];
 }
 
-class AddBlogPostTagAdded extends AddBlogPostEvent {
-  final String value;
-
-  const AddBlogPostTagAdded(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
+class AddBlogPostTagAdded extends AddBlogPostEvent {}
 
 class AddBlogPostTagRemoved extends AddBlogPostEvent {
   final String value;
@@ -62,5 +55,14 @@ class AddBlogPostTagRemoved extends AddBlogPostEvent {
 }
 
 class AddBlogPostPublicPressed extends AddBlogPostEvent {}
+
+class AddBlogPostTagFieldUpdated extends AddBlogPostEvent {
+  final String value;
+
+  const AddBlogPostTagFieldUpdated(this.value);
+
+  @override
+  List<Object> get props => [value];
+}
 
 class AddBlogPostSubmit extends AddBlogPostEvent {}

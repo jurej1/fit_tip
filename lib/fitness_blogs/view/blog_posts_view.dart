@@ -34,7 +34,9 @@ class BlogPostsView extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(AddBlogPostFormView.route(context));
+            },
           ),
         ],
       ),

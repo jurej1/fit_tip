@@ -11,6 +11,7 @@ class AddBlogPostState extends Equatable {
     this.author = const BlogAuthor.pure(),
     this.isPublic = true,
     this.blogPost,
+    this.tagField = '',
   });
 
   final FormzStatus status;
@@ -22,6 +23,7 @@ class AddBlogPostState extends Equatable {
   final User? user;
   final bool isPublic;
   final BlogPost? blogPost;
+  final String tagField;
 
   @override
   List<Object?> get props {
@@ -35,6 +37,7 @@ class AddBlogPostState extends Equatable {
       user,
       isPublic,
       blogPost,
+      tagField,
     ];
   }
 
@@ -48,6 +51,7 @@ class AddBlogPostState extends Equatable {
     User? user,
     bool? isPublic,
     BlogPost? blogPost,
+    String? tagField,
   }) {
     return AddBlogPostState(
       status: status ?? this.status,
@@ -59,6 +63,7 @@ class AddBlogPostState extends Equatable {
       user: user ?? this.user,
       isPublic: isPublic ?? this.isPublic,
       blogPost: blogPost ?? this.blogPost,
+      tagField: tagField ?? this.tagField,
     );
   }
 
