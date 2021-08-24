@@ -2,6 +2,7 @@ import 'package:blog_repository/blog_repository.dart';
 import 'package:blog_repository/src/entity/blog_post_entity.dart';
 import 'package:blog_repository/src/enums/blog_comment_order_by.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'entity/entity.dart';
 
@@ -123,6 +124,8 @@ class BlogRepository {
   Future<void> deleteBlogPost(String id) async {
     return _blogsReference().doc(id).delete();
   }
+
+  Future<void> uploadBlogBanner() async {}
 
 ///////////////////////////////////////777
   Future<DocumentReference> addBlogComment(BlogComment comment) async {
