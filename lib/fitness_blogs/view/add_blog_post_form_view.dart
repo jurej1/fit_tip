@@ -54,6 +54,7 @@ class AddBlogPostFormView extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             children: [
               _BlogTitleInput(),
+              const SizedBox(height: 10),
               _BlogPostContentInput(),
               _IsPublicTile(),
               _TagsInputField(),
@@ -99,9 +100,14 @@ class _BlogPostContentInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.content.value,
+          textAlignVertical: TextAlignVertical.top,
+          minLines: 5,
+          maxLines: 10,
           decoration: InputDecoration(
+            alignLabelWithHint: true,
             labelText: 'Content',
             errorText: state.content.invalid ? 'Invalid' : null,
+            border: OutlineInputBorder(),
           ),
           onChanged: (value) {
             BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostContentUpdated(value));
