@@ -71,7 +71,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => BirthdayMessengerBloc(
-              userDataBloc: BlocProvider.of<AuthenticationBloc>(context),
+              userDataBloc: BlocProvider.of<UserDataBloc>(context),
             ),
           )
         ],
