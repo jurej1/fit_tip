@@ -19,6 +19,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     add(_BlogPostAuthUpdated(authenticationBloc.state));
     _authSubscription = authenticationBloc.stream.listen((authState) {
       add(_BlogPostAuthUpdated(authState));
+      add(BlogPostsListLoadRequested());
     });
   }
 
@@ -44,7 +45,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     if (event is _BlogPostAuthUpdated) {
       _isAuth = event.value.isAuthenticated;
       _userId = event.value.user?.uid;
-      add(BlogPostsListLoadRequested());
     } else if (event is BlogPostsListLoadRequested) {
       yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsListLoadMore) {
