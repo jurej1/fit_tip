@@ -105,7 +105,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<AuthenticationBloc, AuthenticationState>(
+        BlocListener<UserDataBloc, UserDataState>(
           listenWhen: (p, c) => p.user == null && c.user != null,
           listener: (context, state) {
             if (state.user != null && !state.user!.isCompleted) {
