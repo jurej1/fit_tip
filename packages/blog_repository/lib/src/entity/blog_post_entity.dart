@@ -61,7 +61,6 @@ class BlogPostEntity extends Equatable {
       BlogPostDocKeys.content: content,
       BlogPostDocKeys.created: Timestamp.fromDate(created),
       BlogPostDocKeys.isPublic: isPublic,
-      BlogPostDocKeys.likes: likes,
       if (tags != null) BlogPostDocKeys.tags: tags,
       BlogPostDocKeys.title: title,
     };
@@ -81,7 +80,7 @@ class BlogPostEntity extends Equatable {
       author: data.containsKey(BlogPostDocKeys.author) ? data[BlogPostDocKeys.author] : null,
       bannerUrl: data.containsKey(BlogPostDocKeys.bannerUrl) ? data[BlogPostDocKeys.bannerUrl] : null,
       created: created.toDate(),
-      likes: data[BlogPostDocKeys.likes],
+      likes: data.containsKey(BlogPostDocKeys.likes) ? data[BlogPostDocKeys.likes] : null,
       tags: (data[BlogPostDocKeys.tags] as List<dynamic>).map<String>((e) => e.toString()).toList(),
     );
   }

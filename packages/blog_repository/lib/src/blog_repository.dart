@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:blog_repository/blog_repository.dart';
@@ -58,6 +57,7 @@ class BlogRepository {
           isGreaterThanOrEqualTo: Timestamp.fromDate(lowerBound),
           isLessThanOrEqualTo: Timestamp.fromDate(upperBound),
         )
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
         .limit(limit);
 
     if (startAfterDoc != null) {
@@ -86,7 +86,10 @@ class BlogRepository {
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) {
-    final query = _blogsReference().orderBy(BlogPostDocKeys.created, descending: descending).limit(limit);
+    final query = _blogsReference()
+        .orderBy(BlogPostDocKeys.created, descending: descending)
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .limit(limit);
 
     if (startAfterDoc != null) {
       return query.startAfterDocument(startAfterDoc).get();
@@ -100,7 +103,10 @@ class BlogRepository {
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) {
-    final query = _blogsReference().orderBy(BlogPostDocKeys.likes, descending: descending).limit(limit);
+    final query = _blogsReference()
+        .orderBy(BlogPostDocKeys.likes, descending: descending)
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .limit(limit);
 
     if (startAfterDoc != null) {
       return query.startAfterDocument(startAfterDoc).get();
@@ -114,7 +120,11 @@ class BlogRepository {
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) async {
-    final query = _blogsReference().where(BlogPostDocKeys.tags, arrayContains: tags).orderBy(BlogPostDocKeys.created).limit(limit);
+    final query = _blogsReference()
+        .where(BlogPostDocKeys.tags, arrayContains: tags)
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .orderBy(BlogPostDocKeys.created)
+        .limit(limit);
 
     if (startAfterDoc != null) {
       return query.startAfterDocument(startAfterDoc).get();
