@@ -18,11 +18,10 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<AuthenticationUser?> get authenticationStatus {
+  Stream<AuthenticationUser?> get authenticationUser {
     return _firebaseAuth.authStateChanges().map(
       (user) {
         if (user == null) return null;
-
         return AuthenticationUser(user);
       },
     );
@@ -30,11 +29,7 @@ class AuthenticationRepository {
 
   String? get _currentUserId => _firebaseAuth.currentUser?.uid;
 
-  Stream<model.User>? get user {
-    final String? id = _currentUserId;
-
-    if (id == null) return null;
-
+  Stream<model.User> user(String id) {
     return _firebaseFirestore
         .collection('users')
         .doc(id)

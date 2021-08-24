@@ -13,8 +13,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
         super(AuthenticationState()) {
-    _statusSubscription =
-        _authenticationRepository.authenticationStatus.listen((authenticationUser) => add(_AuthenticationUserUpdated(authenticationUser)));
+    _statusSubscription = _authenticationRepository.authenticationUser.listen(
+      (authenticationUser) => add(
+        _AuthenticationUserUpdated(authenticationUser),
+      ),
+    );
   }
 
   @override
