@@ -20,7 +20,7 @@ class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsStat
         super(ProfileSettingsState.fromUser(userDataBloc.state.user)) {
     _streamSubscription = userDataBloc.stream.listen(
       (userData) {
-        if (userData != null) {
+        if (userData.user != null) {
           add(_ProfileSettingsUserUpdated(userData.user));
         } else {
           add(_ProfileSettingsUserFail());

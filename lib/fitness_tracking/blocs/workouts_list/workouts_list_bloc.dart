@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';

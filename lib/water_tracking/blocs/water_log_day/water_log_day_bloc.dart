@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
@@ -32,6 +31,12 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
 
   bool _isAuth = false;
   String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WaterLogDayState> mapEventToState(

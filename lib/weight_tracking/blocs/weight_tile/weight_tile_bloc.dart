@@ -58,7 +58,7 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
       await _weightRepository.deleteWeight(_userId!, state.weight.id!);
 
       yield WeightTileDeletedSuccessfully(state.weight);
-    } catch (errpr) {
+    } catch (error) {
       yield WeightTileDeleteFail(state.weight);
     }
   }
