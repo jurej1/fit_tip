@@ -206,7 +206,10 @@ class _BannerPicker extends StatelessWidget {
   }
 
   Future<void> _pickImage(BuildContext context, ImageSource source) async {
-    XFile? file = await _imagePicker.pickImage(source: source);
+    XFile? file = await _imagePicker.pickImage(
+      source: source,
+      imageQuality: 70,
+    );
     BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostBannerUpdated(file));
   }
 }

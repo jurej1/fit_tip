@@ -90,7 +90,13 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapBannerUpdatedToState(AddBlogPostBannerUpdated event) async* {
-    if (event.value != null) {}
+    if (event.value != null) {
+      final banner = BlogBanner.dirty(event.value);
+
+      yield state.copyWith(
+        banner: banner,
+      );
+    }
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
