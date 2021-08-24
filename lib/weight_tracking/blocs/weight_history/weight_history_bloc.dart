@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -14,7 +15,17 @@ class WeightHistoryBloc extends Bloc<WeightHistoryEvent, WeightHistoryState> {
     required WeightRepository weightRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _weightRepository = weightRepository,
-        super(WeightHistoryLoading());
+        super(WeightHistoryLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WeightRepository _weightRepository;
   late final StreamSubscription _authSubscription;
