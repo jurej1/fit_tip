@@ -111,13 +111,13 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
     if (!state.tags.value.contains(state.tagField) && state.tagField != null) {
-      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField!);
+      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField.value);
 
       final blogTags = BlogTags.dirty(tags);
 
       yield state.copyWith(
         tags: blogTags,
-        tagField: '',
+        tagField: BlogTag.pure(),
         status: Formz.validate([
           blogTags,
           state.banner,
@@ -127,7 +127,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         ]),
       );
     } else {
-      yield state.copyWith(tagField: '');
+      yield state.copyWith(tagField: BlogTag.pure());
     }
   }
 
@@ -219,10 +219,9 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
-    yield state.copyWith(tagField: event.value);
+    yield state.copyWith(tagField: BlogTag.dirty(event.value));
 
-    if (state.tagField?.endsWith('') ?? false) {
-      log('ends with space');
+    if (state.tagField.endsEmpty) {
       add(AddBlogPostTagAdded());
     }
   }
