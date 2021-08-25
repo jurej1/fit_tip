@@ -13,11 +13,11 @@ class TagsInputField extends HookWidget {
     final _textController = useTextEditingController();
     return BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
       listener: (context, state) {
-        if (state.tagField.pure) {
+        if (state.blogTag.pure) {
           _textController.clear();
         }
 
-        if (state.tagField.endsEmpty) {
+        if (state.blogTag.endsEmpty) {
           BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagAdded());
         }
       },

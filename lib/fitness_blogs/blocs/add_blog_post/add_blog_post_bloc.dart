@@ -70,7 +70,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.tags,
         state.author,
-        state.tagField,
+        state.blogTag,
       ]),
     );
   }
@@ -86,7 +86,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.tags,
         state.author,
         state.title,
-        state.tagField,
+        state.blogTag,
       ]),
     );
   }
@@ -104,7 +104,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
             state.content,
             state.title,
             state.author,
-            state.tagField,
+            state.blogTag,
           ],
         ),
       );
@@ -112,8 +112,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    if (!state.tags.value.contains(state.tagField)) {
-      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField.value.trimRight());
+    if (!state.tags.value.contains(state.blogTag)) {
+      List<String> tags = List<String>.from(state.tags.value)..add(state.blogTag.value.trimRight());
 
       final blogTags = BlogTags.dirty(tags);
 
@@ -126,7 +126,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
           state.content,
           state.title,
           state.author,
-          state.tagField,
+          state.blogTag,
         ]),
       );
     } else {
@@ -147,7 +147,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.title,
         state.author,
-        state.tagField,
+        state.blogTag,
       ]),
     );
   }
@@ -158,7 +158,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     final content = BlogContent.dirty(state.content.value);
     final tags = BlogTags.dirty(state.tags.value);
     final title = BlogTitle.dirty(state.title.value);
-    final tagField = BlogTag.dirty(state.tagField.value);
+    final tagField = BlogTag.dirty(state.blogTag.value);
 
     final FormzStatus status = Formz.validate([
       author,
@@ -220,12 +220,22 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.tags,
         state.title,
-        state.tagField,
+        state.blogTag,
       ]),
     );
   }
 
   Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
-    yield state.copyWith(tagField: BlogTag.dirty(event.value));
+    final blogTag = BlogTag.dirty(event.value);
+    yield state.copyWith(
+        tagField: blogTag,
+        status: Formz.validate([
+          blogTag,
+          state.author,
+          state.banner,
+          state.content,
+          state.tags,
+          state.title,
+        ]));
   }
 }
