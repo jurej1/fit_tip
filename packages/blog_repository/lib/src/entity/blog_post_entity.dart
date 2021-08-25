@@ -11,6 +11,7 @@ class BlogPostDocKeys {
   static String bannerUrl = 'bannerUrl';
   static String content = 'content';
   static String isPublic = 'isPublic';
+  static String images = 'images';
 }
 
 class BlogPostEntity extends Equatable {
@@ -23,6 +24,7 @@ class BlogPostEntity extends Equatable {
   final List<String>? tags;
   final String? bannerUrl;
   final String content;
+  final List<String>? images;
   final bool isPublic;
 
   BlogPostEntity({
@@ -36,6 +38,7 @@ class BlogPostEntity extends Equatable {
     this.bannerUrl,
     required this.content,
     required this.isPublic,
+    this.images,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -50,6 +53,7 @@ class BlogPostEntity extends Equatable {
       tags,
       bannerUrl,
       content,
+      images,
     ];
   }
 
@@ -63,6 +67,7 @@ class BlogPostEntity extends Equatable {
       BlogPostDocKeys.isPublic: isPublic,
       if (tags != null) BlogPostDocKeys.tags: tags,
       BlogPostDocKeys.title: title,
+      if (images != null) BlogPostDocKeys.images: images,
     };
   }
 
@@ -81,7 +86,48 @@ class BlogPostEntity extends Equatable {
       bannerUrl: data.containsKey(BlogPostDocKeys.bannerUrl) ? data[BlogPostDocKeys.bannerUrl] : null,
       created: created.toDate(),
       likes: data.containsKey(BlogPostDocKeys.likes) ? data[BlogPostDocKeys.likes] : 0,
-      tags: (data[BlogPostDocKeys.tags] as List<dynamic>).map<String>((e) => e.toString()).toList(),
+      tags: data.containsKey(BlogPostDocKeys.tags)
+          ? (data[BlogPostDocKeys.tags] as List<dynamic>)
+              .map<String>(
+                (e) => e.toString(),
+              )
+              .toList()
+          : null,
+      images: data.containsKey(BlogPostDocKeys.images)
+          ? (data[BlogPostDocKeys.images] as List<dynamic>)
+              .map<String>(
+                (e) => e.toString(),
+              )
+              .toList()
+          : null,
+    );
+  }
+
+  BlogPostEntity copyWith({
+    String? id,
+    String? authorId,
+    String? author,
+    DateTime? created,
+    String? title,
+    int? likes,
+    List<String>? tags,
+    String? bannerUrl,
+    String? content,
+    List<String>? images,
+    bool? isPublic,
+  }) {
+    return BlogPostEntity(
+      id: id ?? this.id,
+      authorId: authorId ?? this.authorId,
+      author: author ?? this.author,
+      created: created ?? this.created,
+      title: title ?? this.title,
+      likes: likes ?? this.likes,
+      tags: tags ?? this.tags,
+      bannerUrl: bannerUrl ?? this.bannerUrl,
+      content: content ?? this.content,
+      images: images ?? this.images,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 }

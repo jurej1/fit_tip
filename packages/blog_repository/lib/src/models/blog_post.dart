@@ -10,6 +10,7 @@ class BlogPost extends Equatable {
   final int likes;
   final List<String>? tags;
   final String? bannerUrl;
+  final List<String>? images;
   final String content;
   final bool isPublic;
 
@@ -29,6 +30,7 @@ class BlogPost extends Equatable {
     required this.isPublic,
     this.isAuthor = false,
     this.isUpliked = false,
+    this.images,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -45,6 +47,7 @@ class BlogPost extends Equatable {
       content,
       isPublic,
       isAuthor,
+      images,
       isUpliked,
     ];
   }
@@ -62,6 +65,7 @@ class BlogPost extends Equatable {
     int? likes,
     List<String>? tags,
     String? bannerUrl,
+    List<String>? images,
     String? content,
     bool? isPublic,
     bool? isAuthor,
@@ -76,6 +80,7 @@ class BlogPost extends Equatable {
       likes: likes ?? this.likes,
       tags: tags ?? this.tags,
       bannerUrl: bannerUrl ?? this.bannerUrl,
+      images: images ?? this.images,
       content: content ?? this.content,
       isPublic: isPublic ?? this.isPublic,
       isAuthor: isAuthor ?? this.isAuthor,
@@ -95,6 +100,7 @@ class BlogPost extends Equatable {
       created: created,
       likes: likes,
       tags: tags,
+      images: images,
     );
   }
 
@@ -110,6 +116,7 @@ class BlogPost extends Equatable {
       created: entity.created,
       likes: entity.likes,
       tags: entity.tags,
+      images: entity.images,
     );
   }
 }
