@@ -44,7 +44,15 @@ class AddBlogPostFormView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+      body: BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
+            Navigator.of(context).pop();
+          } else if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failure')));
+          }
+        },
         builder: (context, state) {
           if (state.status.isSubmissionInProgress) {
             return const Center(
