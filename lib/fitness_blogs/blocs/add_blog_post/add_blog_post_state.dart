@@ -56,7 +56,6 @@ class AddBlogPostState {
     return AddBlogPostState(
       userId: user?.id,
       author: author,
-      status: Formz.validate([author]),
     );
   }
 }
