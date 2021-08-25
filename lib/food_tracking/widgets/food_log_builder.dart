@@ -10,15 +10,10 @@ class FoodLogBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<FoodDailyLogsBloc, FoodDailyLogsState>(
       builder: (context, state) {
         if (state is FoodDailyLogsLoading) {
-          return SizedBox(
-            height: 5,
-            width: size.width,
-            child: const LinearProgressIndicator(),
-          );
+          return const LinearProgressIndicator();
         } else if (state is FoodDailyLogsLoadSuccess) {
           return Expanded(
             child: SingleChildScrollView(
