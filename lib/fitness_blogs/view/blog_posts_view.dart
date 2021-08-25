@@ -49,8 +49,6 @@ class BlogPostsView extends StatelessWidget {
               child: const CircularProgressIndicator(),
             );
           } else if (state is BlogPostsListLoadSuccess) {
-            log(state.hasReachedMax.toString());
-
             final length = state.hasReachedMax ? state.blogs.length : state.blogs.length + 1;
             return SizedBox(
               height: size.height,

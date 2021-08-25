@@ -75,7 +75,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         hasReachedMax: snapshot.size < _limit,
       );
     } catch (e) {
-      log('error' + e.toString());
       yield BlogPostsListFail();
     }
   }
