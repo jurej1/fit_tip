@@ -71,6 +71,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.tags,
         state.author,
+        state.tagField,
       ]),
     );
   }
@@ -86,6 +87,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.tags,
         state.author,
         state.title,
+        state.tagField,
       ]),
     );
   }
@@ -103,6 +105,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
             state.content,
             state.title,
             state.author,
+            state.tagField,
           ],
         ),
       );
@@ -124,6 +127,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
           state.content,
           state.title,
           state.author,
+          state.tagField,
         ]),
       );
     } else {
@@ -146,6 +150,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.title,
         state.author,
+        state.tagField,
       ]),
     );
   }

@@ -8,7 +8,7 @@ class BlogContent extends FormzInput<String, BlogContentValidationError> {
 
   @override
   BlogContentValidationError? validator(String? value) {
-    if (value == null) return BlogContentValidationError.invalid;
+    if (value == null || value.isEmpty) return BlogContentValidationError.invalid;
 
     return null;
   }
