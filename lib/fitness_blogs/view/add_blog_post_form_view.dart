@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
@@ -44,6 +46,7 @@ class AddBlogPostFormView extends StatelessWidget {
       ),
       body: BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
         listener: (context, state) {
+          log(state.status.toString());
           if (state.status.isSubmissionSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
             Navigator.of(context).pop();

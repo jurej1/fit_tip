@@ -140,8 +140,6 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
 
     final blogTags = BlogTags.dirty(tags);
 
-    log(tags.toString());
-
     yield state.copyWith(
       tags: blogTags,
       status: Formz.validate([
@@ -219,6 +217,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.content,
         state.tags,
         state.title,
+        state.tagField,
       ]),
     );
   }
