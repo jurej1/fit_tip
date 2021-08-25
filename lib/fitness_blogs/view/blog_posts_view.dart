@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
@@ -47,42 +49,21 @@ class BlogPostsView extends StatelessWidget {
               child: const CircularProgressIndicator(),
             );
           } else if (state is BlogPostsListLoadSuccess) {
-            final length = state.hasReachedMax ? state.blogs.length : state.blogs.length + 1;
-            return ListView.separated(
-              itemCount: length,
-              itemBuilder: (context, index) {
-                if (length - 1 == index && !state.hasReachedMax) {
-                  return Container(
-                    height: 50,
-                    width: size.width,
-                    child: const Center(
-                      child: const CircularProgressIndicator(),
-                    ),
-                  );
-                }
+            log(state.hasReachedMax.toString());
 
-                final item = state.blogs[index];
-                return ListTile(
-                  leading: item.bannerUrl != null
-                      ? Image.network(
-                          item.bannerUrl!,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? (loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!)
-                                  : null,
-                            );
-                          },
-                        )
-                      : null,
-                  title: Text(item.title),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 10);
-              },
+            final length = state.hasReachedMax ? state.blogs.length : state.blogs.length + 1;
+            return SizedBox(
+              height: size.height,
+              width: size.width,
+              child: ListView.separated(
+                itemCount: length,
+                itemBuilder: (context, index) {
+                  return index >= state.blogs.length ? _BottomLoader() : BlogPostTile(item: state.blogs[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 10);
+                },
+              ),
             );
           } else if (state is BlogPostsListFail) {
             return Center(
@@ -91,6 +72,22 @@ class BlogPostsView extends StatelessWidget {
           }
           return Container();
         },
+      ),
+    );
+  }
+}
+
+class _BottomLoader extends StatelessWidget {
+  const _BottomLoader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Container(
+      height: 50,
+      width: size.width,
+      child: const Center(
+        child: const CircularProgressIndicator(),
       ),
     );
   }
