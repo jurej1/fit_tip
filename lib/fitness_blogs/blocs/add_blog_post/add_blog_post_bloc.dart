@@ -56,7 +56,7 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     } else if (event is AddBlogPostPublicPressed) {
       yield state.copyWith(isPublic: !state.isPublic);
     } else if (event is AddBlogPostTagFieldUpdated) {
-      yield state.copyWith(tagField: event.value);
+      yield* _mapTagFieldUpdatedToState(event);
     }
   }
 
@@ -216,5 +216,13 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
         state.title,
       ]),
     );
+  }
+
+  Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
+    yield state.copyWith(tagField: event.value);
+
+    if (state.tagField.endsWith(' ')) {
+      add(AddBlogPostTagAdded());
+    }
   }
 }
