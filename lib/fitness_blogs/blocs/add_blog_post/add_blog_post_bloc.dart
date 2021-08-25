@@ -110,8 +110,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    if (!state.tags.value.contains(state.tagField)) {
-      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField);
+    if (!state.tags.value.contains(state.tagField) && state.tagField != null) {
+      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField!);
 
       final blogTags = BlogTags.dirty(tags);
 
@@ -221,7 +221,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
     yield state.copyWith(tagField: event.value);
 
-    if (state.tagField.endsWith(' ')) {
+    if (state.tagField?.endsWith('') ?? false) {
+      log('ends with space');
       add(AddBlogPostTagAdded());
     }
   }

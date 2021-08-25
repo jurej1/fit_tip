@@ -80,7 +80,7 @@ class BlogPostEntity extends Equatable {
       author: data.containsKey(BlogPostDocKeys.author) ? data[BlogPostDocKeys.author] : null,
       bannerUrl: data.containsKey(BlogPostDocKeys.bannerUrl) ? data[BlogPostDocKeys.bannerUrl] : null,
       created: created.toDate(),
-      likes: data.containsKey(BlogPostDocKeys.likes) ? data[BlogPostDocKeys.likes] : null,
+      likes: data.containsKey(BlogPostDocKeys.likes) ? data[BlogPostDocKeys.likes] : 0,
       tags: (data[BlogPostDocKeys.tags] as List<dynamic>).map<String>((e) => e.toString()).toList(),
     );
   }

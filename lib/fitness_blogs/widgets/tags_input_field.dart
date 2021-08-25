@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +11,13 @@ class TagsInputField extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _textController = useTextEditingController();
-    return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
+    return BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
+      listener: (context, state) {
+        log(state.tagField.toString());
+        if (state.tagField == null) {
+          _textController.clear();
+        }
+      },
       builder: (context, state) {
         return TextFormField(
           readOnly: state.tags.hasReachedMaxAmount(),
@@ -24,7 +32,6 @@ class TagsInputField extends HookWidget {
               splashRadius: 20,
               onPressed: () {
                 BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagAdded());
-                _textController.clear();
               },
             ),
           ),

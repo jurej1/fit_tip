@@ -11,7 +11,7 @@ class AddBlogPostState {
     this.author = const BlogAuthor.pure(),
     this.isPublic = true,
     this.blogPost,
-    this.tagField = '',
+    this.tagField,
   });
 
   final FormzStatus status;
@@ -23,7 +23,7 @@ class AddBlogPostState {
   final String? userId;
   final bool isPublic;
   final BlogPost? blogPost;
-  final String tagField;
+  final String? tagField;
 
   AddBlogPostState copyWith({
     FormzStatus? status,
