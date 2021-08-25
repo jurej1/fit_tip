@@ -159,8 +159,16 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
     final content = BlogContent.dirty(state.content.value);
     final tags = BlogTags.dirty(state.tags.value);
     final title = BlogTitle.dirty(state.title.value);
+    final tagField = BlogTag.dirty(state.tagField.value);
 
-    log(state.status.toString());
+    final FormzStatus status = Formz.validate([
+      author,
+      banner,
+      content,
+      tags,
+      title,
+      tagField,
+    ]);
 
     yield state.copyWith(
       author: author,
@@ -168,54 +176,38 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
       content: content,
       tags: tags,
       title: title,
-      status: Formz.validate([
-        author,
-        banner,
-        content,
-        tags,
-        title,
-      ]),
+      status: status,
     );
 
-    log(state.status.toString());
+    if (state.status.isValidated && state.userId != null) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
 
-    final bool isValidated = [
-      FormzStatus.submissionFailure,
-      FormzStatus.submissionInProgress,
-      FormzStatus.submissionSuccess,
-      FormzStatus.valid
-    ].contains(state.status);
+      try {
+        BlogPost blog = BlogPost.empty().copyWith(
+          authorId: state.userId,
+          content: state.content.value,
+          isPublic: state.isPublic,
+          title: state.title.value,
+          author: state.author.value,
+          tags: state.tags.value,
+          isAuthor: true,
+        );
 
-    log(isValidated.toString());
-    // if (state.status.isValidated && state.userId != null) {
-    //   yield state.copyWith(status: FormzStatus.submissionInProgress);
+        if (state.banner.value != null) {
+          String? downloadUrl = await _blogRepository.uploadBlogBanner(state.banner.value!, state.userId!);
 
-    //   try {
-    //     BlogPost blog = BlogPost.empty().copyWith(
-    //       authorId: state.userId,
-    //       content: state.content.value,
-    //       isPublic: state.isPublic,
-    //       title: state.title.value,
-    //       author: state.author.value,
-    //       tags: state.tags.value,
-    //       isAuthor: true,
-    //     );
+          blog = blog.copyWith(
+            bannerUrl: downloadUrl,
+          );
+        }
+        DocumentReference ref = await _blogRepository.addBlogPost(blog);
+        blog = blog.copyWith(id: ref.id);
 
-    //     if (state.banner.value != null) {
-    //       String? downloadUrl = await _blogRepository.uploadBlogBanner(state.banner.value!, state.userId!);
-
-    //       blog = blog.copyWith(
-    //         bannerUrl: downloadUrl,
-    //       );
-    //     }
-    //     DocumentReference ref = await _blogRepository.addBlogPost(blog);
-    //     blog = blog.copyWith(id: ref.id);
-
-    //     yield state.copyWith(blogPost: blog, status: FormzStatus.submissionSuccess);
-    //   } catch (e) {
-    //     yield state.copyWith(status: FormzStatus.submissionFailure);
-    //   }
-    // }
+        yield state.copyWith(blogPost: blog, status: FormzStatus.submissionSuccess);
+      } catch (e) {
+        yield state.copyWith(status: FormzStatus.submissionFailure);
+      }
+    }
   }
 
   Stream<AddBlogPostState> _mapUserUpdatedToState(_AddBlogPostUserUpdated event) async* {

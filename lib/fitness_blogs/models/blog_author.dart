@@ -8,7 +8,9 @@ class BlogAuthor extends FormzInput<String?, BlogAuthorValidationError> {
 
   @override
   BlogAuthorValidationError? validator(String? value) {
-    if (value == null || value.isEmpty) return BlogAuthorValidationError.invalid;
+    if (value == null) return BlogAuthorValidationError.invalid;
+    if (value.isEmpty) return BlogAuthorValidationError.invalid;
+
     return null;
   }
 }
