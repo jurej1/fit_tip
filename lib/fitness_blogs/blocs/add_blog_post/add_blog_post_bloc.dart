@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -113,8 +112,8 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagAddedToState(AddBlogPostTagAdded event) async* {
-    if (!state.tags.value.contains(state.tagField) && state.tagField != null) {
-      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField.value);
+    if (!state.tags.value.contains(state.tagField)) {
+      List<String> tags = List<String>.from(state.tags.value)..add(state.tagField.value.trimRight());
 
       final blogTags = BlogTags.dirty(tags);
 
@@ -227,9 +226,10 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
-    yield state.copyWith(tagField: BlogTag.dirty(event.value));
+    final newState = state.copyWith(tagField: BlogTag.dirty(event.value));
 
-    if (state.tagField.endsEmpty) {
+    yield newState;
+    if (newState.tagField.endsEmpty) {
       add(AddBlogPostTagAdded());
     }
   }
