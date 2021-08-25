@@ -16,6 +16,10 @@ class TagsInputField extends HookWidget {
         if (state.tagField.pure) {
           _textController.clear();
         }
+
+        if (state.tagField.endsEmpty) {
+          BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostTagAdded());
+        }
       },
       builder: (context, state) {
         return TextFormField(

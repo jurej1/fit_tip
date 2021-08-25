@@ -226,11 +226,6 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   }
 
   Stream<AddBlogPostState> _mapTagFieldUpdatedToState(AddBlogPostTagFieldUpdated event) async* {
-    final newState = state.copyWith(tagField: BlogTag.dirty(event.value));
-
-    yield newState;
-    if (newState.tagField.endsEmpty) {
-      add(AddBlogPostTagAdded());
-    }
+    yield state.copyWith(tagField: BlogTag.dirty(event.value));
   }
 }
