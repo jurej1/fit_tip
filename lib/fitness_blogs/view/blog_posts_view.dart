@@ -43,7 +43,6 @@ class BlogPostsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blogs view'),
@@ -122,6 +121,17 @@ class _AllBlogPostsListBuilder extends StatelessWidget {
         }
         return Container();
       },
+    );
+  }
+}
+
+class _SavedBlogPostsListBuilder extends StatelessWidget {
+  const _SavedBlogPostsListBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: null,
     );
   }
 }
