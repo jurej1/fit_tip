@@ -13,11 +13,13 @@ class BlogPostDetailView extends StatelessWidget {
     BlogPost blogPost,
   ) {
     final savedBlogPostsBloc = BlocProvider.of<SavedBlogPostsBloc>(context);
+    final likedBlogPostsBloc = BlocProvider.of<LikedBlogPostsBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(value: savedBlogPostsBloc),
+            BlocProvider.value(value: likedBlogPostsBloc),
             BlocProvider(
               create: (context) => BlogPostSaveCubit(
                 blogId: blogPost.id,
@@ -93,6 +95,13 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
           listener: (context, state) {
             if (state is BlogPostLikeSuccess) {
               BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailLikeUpdated(state.like, state.likesAmount));
+
+              if (state.like.isYes) {
+                BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemAdded(state.blogId));
+              }
+              if (state.like.isNo) {
+                BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemRemoved(state.blogId));
+              }
             }
           },
         ),

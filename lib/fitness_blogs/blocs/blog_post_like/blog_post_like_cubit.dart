@@ -11,12 +11,9 @@ class BlogPostLikeCubit extends Cubit<BlogPostLikeState> {
     required String blogId,
     required BlogRepository blogRepository,
   })  : _blogRepository = blogRepository,
-        _blogId = blogId,
-        super(BlogPostLikeInitial(initialValue, likesAmount));
+        super(BlogPostLikeInitial(initialValue, likesAmount, blogId));
 
   final BlogRepository _blogRepository;
-
-  final String _blogId;
 
   Future<void> buttonPressed() async {
     final Like oldStateLike = state.like;
@@ -25,13 +22,13 @@ class BlogPostLikeCubit extends Cubit<BlogPostLikeState> {
     final int oldAmount = state.likesAmount;
     final int newAmount = oppositeValue.isYes ? oldAmount + 1 : oldAmount - 1;
 
-    emit(BlogPostLikeLoading(oppositeValue, newAmount));
+    emit(BlogPostLikeLoading(oppositeValue, newAmount, state.blogId));
 
     try {
-      await _blogRepository.likeBlogPost(_blogId, state.like);
-      emit(BlogPostLikeSuccess(state.like, newAmount));
+      await _blogRepository.likeBlogPost(state.blogId, state.like);
+      emit(BlogPostLikeSuccess(state.like, newAmount, state.blogId));
     } catch (error) {
-      emit(BlogPostLikeFail(oldStateLike, oldAmount));
+      emit(BlogPostLikeFail(oldStateLike, oldAmount, state.blogId));
     }
   }
 }
