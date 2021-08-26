@@ -42,6 +42,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
     final length = widget.hasReachedMax ? widget.blogs.length : widget.blogs.length + 1;
 
     return ListView.separated(
+      physics: const ClampingScrollPhysics(),
       controller: _scrollController,
       itemCount: length,
       itemBuilder: (context, index) {
