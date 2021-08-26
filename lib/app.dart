@@ -79,6 +79,7 @@ class App extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               navigatorKey: _navigatorState,
+              debugShowCheckedModeBanner: false,
               title: 'FitTip',
               themeMode: state.themeMode,
               darkTheme: ThemeData.dark(),

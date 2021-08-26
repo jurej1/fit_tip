@@ -16,6 +16,7 @@ class BlogPost extends Equatable {
 
   final bool isAuthor;
   final bool isUpliked;
+  final bool isSaved;
 
   BlogPost({
     DateTime? created,
@@ -31,6 +32,7 @@ class BlogPost extends Equatable {
     this.isAuthor = false,
     this.isUpliked = false,
     this.images,
+    this.isSaved = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -49,6 +51,7 @@ class BlogPost extends Equatable {
       isAuthor,
       images,
       isUpliked,
+      isSaved,
     ];
   }
 
@@ -70,6 +73,7 @@ class BlogPost extends Equatable {
     bool? isPublic,
     bool? isAuthor,
     bool? isUpliked,
+    bool? isSaved,
   }) {
     return BlogPost(
       id: id ?? this.id,
@@ -85,6 +89,7 @@ class BlogPost extends Equatable {
       isPublic: isPublic ?? this.isPublic,
       isAuthor: isAuthor ?? this.isAuthor,
       isUpliked: isUpliked ?? this.isUpliked,
+      isSaved: isSaved ?? this.isSaved,
     );
   }
 

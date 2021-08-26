@@ -107,6 +107,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         blog = blog.copyWith(
           isAuthor: _userId! == blog.authorId,
           isUpliked: false, //TODO with hydrated bloc
+          isSaved: false, //TODO with hydrated bloc
         );
       }
 
