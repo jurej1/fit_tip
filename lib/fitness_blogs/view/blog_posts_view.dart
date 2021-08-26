@@ -13,16 +13,17 @@ class BlogPostsView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => BlogPostsListBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                blogRepository: RepositoryProvider.of<BlogRepository>(context),
-              )..add(BlogPostsListLoadRequested()),
-            ),
-            BlocProvider(
               create: (context) => SavedBlogPostsBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
-            )
+            ),
+            BlocProvider(
+              create: (context) => BlogPostsListBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
+              )..add(BlogPostsListLoadRequested()),
+            ),
           ],
           child: BlogPostsView(),
         );

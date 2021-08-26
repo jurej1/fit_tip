@@ -7,6 +7,15 @@ abstract class BlogPostsListEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class _BlogPostsListSavedBlogsUpdated extends BlogPostsListEvent {
+  final List<String> ids;
+
+  const _BlogPostsListSavedBlogsUpdated(this.ids);
+
+  @override
+  List<Object?> get props => [ids];
+}
+
 class BlogPostsListLoadRequested extends BlogPostsListEvent {}
 
 class BlogPostsListLoadMore extends BlogPostsListEvent {}

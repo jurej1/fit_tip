@@ -19,6 +19,12 @@ class BlogPostDetailView extends StatelessWidget {
           providers: [
             BlocProvider.value(value: savedBlogPostsBloc),
             BlocProvider(
+              create: (context) => BlogPostSaveCubit(
+                blogId: blogPost.id,
+                initialValue: blogPost.isSaved,
+              ),
+            ),
+            BlocProvider(
               create: (context) => BlogPostDetailBloc(
                 blogPost: blogPost,
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
@@ -32,12 +38,6 @@ class BlogPostDetailView extends StatelessWidget {
                 likesAmount: blogPost.likes,
               ),
             ),
-            BlocProvider(
-              create: (context) => BlogPostSaveCubit(
-                blogId: blogPost.id,
-                initialValue: blogPost.isSaved,
-              ),
-            )
           ],
           child: const BlogPostDetailView(),
         );

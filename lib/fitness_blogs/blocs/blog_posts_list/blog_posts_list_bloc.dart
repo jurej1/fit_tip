@@ -5,6 +5,7 @@ import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'blog_posts_list_event.dart';
 part 'blog_posts_list_state.dart';
@@ -13,19 +14,29 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   BlogPostsListBloc({
     required AuthenticationBloc authenticationBloc,
     required BlogRepository blogRepository,
+    required SavedBlogPostsBloc savedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
+        _savedBlogsIds = savedBlogPostsBloc.state.blogIds,
+        _isAuth = authenticationBloc.state.isAuthenticated,
+        _userId = authenticationBloc.state.user?.uid,
         super(BlogPostsListLoading()) {
-    add(_BlogPostAuthUpdated(authenticationBloc.state));
     _authSubscription = authenticationBloc.stream.listen((authState) {
       add(_BlogPostAuthUpdated(authState));
       add(BlogPostsListLoadRequested());
     });
+
+    _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
+      add(_BlogPostsListSavedBlogsUpdated(savedBlogsState.blogIds));
+    });
   }
 
   late final StreamSubscription _authSubscription;
+  late final StreamSubscription _savedBlogsSubscription;
   final BlogRepository _blogRepository;
+
   bool _isAuth = false;
   String? _userId;
+  List<String> _savedBlogsIds;
 
   late DocumentSnapshot _lastFetchedDoc;
 
@@ -33,6 +44,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
   @override
   Future<void> close() {
+    _savedBlogsSubscription.cancel();
     _authSubscription.cancel();
     return super.close();
   }
@@ -55,6 +67,8 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       yield* _mapItemRemovedToState(event);
     } else if (event is BlogPostsListItemUpdated) {
       yield* _mapItemUpdatedToState(event);
+    } else if (event is _BlogPostsListSavedBlogsUpdated) {
+      yield* _mapSavedBlogsUpdatedToState(event);
     }
   }
 
@@ -107,7 +121,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         blog = blog.copyWith(
           isAuthor: _userId! == blog.authorId,
           like: Like.no, //TODO with hydrated bloc
-          isSaved: false, //TODO with hydrated bloc
+          isSaved: _savedBlogsIds.contains(blog.id),
         );
       }
 
@@ -149,6 +163,23 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       }).toList();
 
       yield BlogPostsListLoadSuccess(hasReachedMax: currentState.hasReachedMax, blogs: blogs);
+    }
+  }
+
+  Stream<BlogPostsListState> _mapSavedBlogsUpdatedToState(_BlogPostsListSavedBlogsUpdated event) async* {
+    _savedBlogsIds = event.ids;
+    if (state is BlogPostsListLoadSuccess) {
+      final oldState = state as BlogPostsListLoadSuccess;
+
+      List<BlogPost> posts = List.from(oldState.blogs);
+
+      posts = posts
+          .map(
+            (e) => e.copyWith(isSaved: _savedBlogsIds.contains(e.id)),
+          )
+          .toList();
+
+      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
     }
   }
 }
