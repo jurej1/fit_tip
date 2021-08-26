@@ -12,11 +12,23 @@ class BlogPostDetailView extends StatelessWidget {
   ) {
     return MaterialPageRoute(
       builder: (_) {
-        return BlocProvider(
-          create: (context) => BlogPostDetailBloc(
-            blogPost: blogPost,
-            blogRepository: RepositoryProvider.of<BlogRepository>(context),
-          ),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => BlogPostDetailBloc(
+                blogPost: blogPost,
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => BlogPostLikeCubit(
+                blogId: blogPost.id,
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+                initialValue: blogPost.like,
+                likesAmount: blogPost.likes,
+              ),
+            ),
+          ],
           child: const BlogPostDetailView(),
         );
       },
@@ -65,37 +77,52 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
-      builder: (context, state) {
-        return AppBar(
-          title: Text(state.blogPost.title),
-          actions: [
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(state.blogPost.isSaved ? Icons.bookmark : Icons.bookmark_outline),
-                  onPressed: () {
-                    //TODO
-                  },
-                ),
-                IconButton(
-                  icon: Icon(state.blogPost.like.isYes ? Icons.favorite : Icons.favorite_outline),
-                  onPressed: () {
-                    //TODO
-                  },
-                ),
-                Text(
-                  state.blogPost.likes.toString(),
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-              ],
-            ),
-          ],
-        );
+    return BlocListener<BlogPostLikeCubit, BlogPostLikeState>(
+      listener: (context, state) {
+        if (state is BlogPostLikeSuccess) {
+          BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailLikeUpdated(state.like, state.likesAmount));
+        }
       },
+      child: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
+        builder: (context, state) {
+          return AppBar(
+            title: Text(state.blogPost.title),
+            actions: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(state.blogPost.isSaved ? Icons.bookmark : Icons.bookmark_outline),
+                    onPressed: () {
+                      //TODO
+                    },
+                  ),
+                  BlocBuilder<BlogPostLikeCubit, BlogPostLikeState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(state.like.isYes ? Icons.favorite : Icons.favorite_outline),
+                        onPressed: () {
+                          BlocProvider.of<BlogPostLikeCubit>(context).buttonPressed();
+                        },
+                      );
+                    },
+                  ),
+                  BlocBuilder<BlogPostLikeCubit, BlogPostLikeState>(
+                    builder: (context, state) {
+                      return Text(
+                        state.likesAmount.toString(),
+                        style: TextStyle(fontSize: 22),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

@@ -6,3 +6,15 @@ abstract class BlogPostDetailEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class BlogPostDetailLikeUpdated extends BlogPostDetailEvent {
+  final Like newLike;
+  final int newLikesAmount;
+
+  const BlogPostDetailLikeUpdated(this.newLike, this.newLikesAmount);
+  @override
+  List<Object> get props => [
+        newLike,
+        newLikesAmount,
+      ];
+}

@@ -20,6 +20,14 @@ class BlogPostDetailBloc extends Bloc<BlogPostDetailEvent, BlogPostDetailState> 
   Stream<BlogPostDetailState> mapEventToState(
     BlogPostDetailEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if (event is BlogPostDetailLikeUpdated) {
+      final blogPost = state.blogPost;
+      yield BlogPostDetailInitial(
+        blogPost.copyWith(
+          like: event.newLike,
+          likes: event.newLikesAmount,
+        ),
+      );
+    }
   }
 }
