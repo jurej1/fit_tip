@@ -25,8 +25,37 @@ class BlogPostDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: _AppBar(),
+      body: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
+        builder: (context, state) {
+          return ListView(
+            children: [
+              if (state.blogPost.bannerUrl != null)
+                Container(
+                  height: size.width,
+                  width: size.width,
+                  child: Image.network(
+                    state.blogPost.bannerUrl!,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? (loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!)
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              Text('\b\b Hello\b'),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -50,8 +79,10 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
                   },
                 ),
                 IconButton(
-                  onPressed: () {},
                   icon: Icon(state.blogPost.isUpliked ? Icons.favorite : Icons.favorite_outline),
+                  onPressed: () {
+                    //TODO
+                  },
                 ),
                 Text(
                   state.blogPost.likes.toString(),
