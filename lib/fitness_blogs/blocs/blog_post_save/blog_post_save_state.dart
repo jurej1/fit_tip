@@ -1,20 +1,20 @@
 part of 'blog_post_save_cubit.dart';
 
 class BlogPostSaveState extends Equatable {
-  final bool value;
+  final bool isSaved;
   final String blocId;
 
-  const BlogPostSaveState(this.value, this.blocId);
+  const BlogPostSaveState(this.isSaved, this.blocId);
 
   @override
-  List<Object?> get props => [value, blocId];
+  List<Object?> get props => [isSaved, blocId];
 
   BlogPostSaveState copyWith({
-    bool? value,
+    bool? isSaved,
     String? blocId,
   }) {
     return BlogPostSaveState(
-      value ?? this.value,
+      isSaved ?? this.isSaved,
       blocId ?? this.blocId,
     );
   }

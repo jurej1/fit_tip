@@ -15,6 +15,6 @@ class BlogPostSaveCubit extends Cubit<BlogPostSaveState> {
         );
 
   void buttonPressed() {
-    emit(state.copyWith(value: !state.value));
+    emit(state.copyWith(isSaved: !state.isSaved));
   }
 }

@@ -28,6 +28,12 @@ class BlogPostDetailView extends StatelessWidget {
                 likesAmount: blogPost.likes,
               ),
             ),
+            BlocProvider(
+              create: (context) => BlogPostSaveCubit(
+                blogId: blogPost.id,
+                initialValue: blogPost.isSaved,
+              ),
+            )
           ],
           child: const BlogPostDetailView(),
         );
@@ -77,12 +83,21 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BlogPostLikeCubit, BlogPostLikeState>(
-      listener: (context, state) {
-        if (state is BlogPostLikeSuccess) {
-          BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailLikeUpdated(state.like, state.likesAmount));
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BlogPostLikeCubit, BlogPostLikeState>(
+          listener: (context, state) {
+            if (state is BlogPostLikeSuccess) {
+              BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailLikeUpdated(state.like, state.likesAmount));
+            }
+          },
+        ),
+        BlocListener<BlogPostSaveCubit, BlogPostSaveState>(
+          listener: (context, state) {
+            //TODO update the hydrated to save saved blogs
+          },
+        ),
+      ],
       child: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
         builder: (context, state) {
           return AppBar(
@@ -90,10 +105,14 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
             actions: [
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(state.blogPost.isSaved ? Icons.bookmark : Icons.bookmark_outline),
-                    onPressed: () {
-                      //TODO
+                  BlocBuilder<BlogPostSaveCubit, BlogPostSaveState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(state.isSaved ? Icons.bookmark : Icons.bookmark_outline),
+                        onPressed: () {
+                          BlocProvider.of<BlogPostSaveCubit>(context).buttonPressed();
+                        },
+                      );
                     },
                   ),
                   BlocBuilder<BlogPostLikeCubit, BlogPostLikeState>(
