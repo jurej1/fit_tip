@@ -98,6 +98,24 @@ class BlogRepository {
     return query.get();
   }
 
+  Future<QuerySnapshot> getBlogPostsQueryByIds({
+    List<String> blogIds = const [],
+    bool descending = false,
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+  }) {
+    final query = _blogsReference()
+        .orderBy(BlogPostDocKeys.created, descending: descending)
+        .where(FieldPath.documentId, whereIn: blogIds)
+        .limit(limit);
+
+    if (startAfterDoc != null) {
+      return query.startAfterDocument(startAfterDoc).get();
+    }
+
+    return query.get();
+  }
+
   Future<QuerySnapshot> getBlogPostByLikes({
     bool descending = false,
     required int limit,
