@@ -5,14 +5,13 @@ import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'saved_blog_posts_event.dart';
-part 'saved_blog_posts_state.dart';
 
-class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, SavedBlogPostsState> {
+class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>> {
   SavedBlogPostsBloc({
     required AuthenticationBloc authenticationBloc,
   })  : _isAuth = authenticationBloc.state.isAuthenticated,
         _userId = authenticationBloc.state.user?.uid,
-        super(SavedBlogPostsState()) {
+        super([]) {
     _authSubscription = authenticationBloc.stream.listen((authState) {
       _isAuth = authState.isAuthenticated;
       _userId = authState.user?.uid;
@@ -33,7 +32,7 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, SavedBlogPost
   }
 
   @override
-  Stream<SavedBlogPostsState> mapEventToState(
+  Stream<List<String>> mapEventToState(
     SavedBlogPostsEvent event,
   ) async* {
     if (event is SavedBlogPostsItemAdded) {
@@ -42,44 +41,44 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, SavedBlogPost
       yield* _mapItemRemovedToState(event);
     } else if (event is _SavedBlogPostsAuthUpdated) {
       if (_isAuth) {
-        yield SavedBlogPostsState(allIdsJson[_userId!]);
+        yield (allIdsJson[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
       }
     }
   }
 
   @override
-  SavedBlogPostsState? fromJson(Map<String, dynamic> json) {
+  List<String>? fromJson(Map<String, dynamic> json) {
     allIdsJson = json;
     if (_isAuth) {
-      return SavedBlogPostsState(json[_userId]);
+      return json[_userId];
     }
   }
 
   @override
-  Map<String, dynamic>? toJson(SavedBlogPostsState state) {
+  Map<String, dynamic>? toJson(List<String> state) {
     if (_isAuth) {
       return {
-        _userId!: state.blogIds,
+        _userId!: state,
       };
     }
   }
 
-  Stream<SavedBlogPostsState> _mapItemAddedToState(SavedBlogPostsItemAdded event) async* {
-    List<String> currentIds = List<String>.from(state.blogIds);
+  Stream<List<String>> _mapItemAddedToState(SavedBlogPostsItemAdded event) async* {
+    List<String> currentIds = List<String>.from(state);
 
     if (!currentIds.contains(event.blogId)) {
       currentIds.add(event.blogId);
     }
 
-    yield state.copyWith(blogIds: currentIds);
+    yield currentIds;
   }
 
-  Stream<SavedBlogPostsState> _mapItemRemovedToState(SavedBlogPostsItemRemoved event) async* {
-    List<String> currentIds = List<String>.from(state.blogIds);
+  Stream<List<String>> _mapItemRemovedToState(SavedBlogPostsItemRemoved event) async* {
+    List<String> currentIds = List<String>.from(state);
 
     if (currentIds.contains(event.blogId)) {
       currentIds.remove(event.blogId);
     }
-    yield state.copyWith(blogIds: currentIds);
+    yield currentIds;
   }
 }

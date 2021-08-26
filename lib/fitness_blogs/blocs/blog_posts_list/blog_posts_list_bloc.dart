@@ -16,7 +16,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     required BlogRepository blogRepository,
     required SavedBlogPostsBloc savedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
-        _savedBlogsIds = savedBlogPostsBloc.state.blogIds,
+        _savedBlogsIds = savedBlogPostsBloc.state,
         _isAuth = authenticationBloc.state.isAuthenticated,
         _userId = authenticationBloc.state.user?.uid,
         super(BlogPostsListLoading()) {
@@ -26,7 +26,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     });
 
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
-      add(_BlogPostsListSavedBlogsUpdated(savedBlogsState.blogIds));
+      add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
     });
   }
 
