@@ -50,7 +50,7 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>>
   List<String>? fromJson(Map<String, dynamic> json) {
     allIdsJson = json;
     if (_isAuth) {
-      return json[_userId];
+      return (json[_userId] as List<dynamic>).map((e) => e.toString()).toList();
     }
   }
 
