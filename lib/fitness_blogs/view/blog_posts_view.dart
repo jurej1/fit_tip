@@ -13,6 +13,10 @@ class BlogPostsView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
+              create: (context) => BlogsViewSelectorCubit(),
+              child: Container(),
+            ),
+            BlocProvider(
               create: (context) => SavedBlogPostsBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
@@ -52,29 +56,72 @@ class BlogPostsView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<BlogPostsListBloc, BlogPostsListState>(
+      body: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
         builder: (context, state) {
-          if (state is BlogPostsListLoading) {
+          if (state.isAll) {
+            return _AllBlogPostsListBuilder();
+          }
+
+          if (state.isSaved) {
             return Center(
-              child: const CircularProgressIndicator(),
-            );
-          } else if (state is BlogPostsListLoadSuccess) {
-            return SizedBox(
-              height: size.height,
-              width: size.width,
-              child: BlogPostsListBuilder(
-                blogs: state.blogs,
-                hasReachedMax: state.hasReachedMax,
-              ),
-            );
-          } else if (state is BlogPostsListFail) {
-            return Center(
-              child: const Text('Sorry. There was an error.'),
+              child: Text('Saved'),
             );
           }
+
           return Container();
         },
       ),
+      bottomNavigationBar: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
+        builder: (context, state) {
+          return BottomNavigationBar(
+            currentIndex: BlogsViewSelectorState.values.indexOf(state),
+            items: BlogsViewSelectorState.values.map(
+              (e) {
+                return BottomNavigationBarItem(
+                  icon: Icon(e.toIcon()),
+                  label: e.toBottomNavigationString(),
+                );
+              },
+            ).toList(),
+            onTap: (index) {
+              BlocProvider.of<BlogsViewSelectorCubit>(context).viewUpdateIndex(index);
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _AllBlogPostsListBuilder extends StatelessWidget {
+  const _AllBlogPostsListBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
+    return BlocBuilder<BlogPostsListBloc, BlogPostsListState>(
+      builder: (context, state) {
+        if (state is BlogPostsListLoading) {
+          return Center(
+            child: const CircularProgressIndicator(),
+          );
+        } else if (state is BlogPostsListLoadSuccess) {
+          return SizedBox(
+            height: size.height,
+            width: size.width,
+            child: BlogPostsListBuilder(
+              blogs: state.blogs,
+              hasReachedMax: state.hasReachedMax,
+            ),
+          );
+        } else if (state is BlogPostsListFail) {
+          return Center(
+            child: const Text('Sorry. There was an error.'),
+          );
+        }
+        return Container();
+      },
     );
   }
 }
