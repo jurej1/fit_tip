@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +54,8 @@ class BlogPostDetailView extends StatelessWidget {
             children: [
               if (state.blogPost.bannerUrl != null)
                 Container(
-                  height: size.width,
-                  width: size.width,
+                  height: min(size.height, size.width),
+                  width: min(size.height, size.width),
                   child: Image.network(
                     state.blogPost.bannerUrl!,
                     fit: BoxFit.cover,
