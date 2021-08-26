@@ -1,6 +1,8 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../fitness_blogs.dart';
+
 class BlogPostTile extends StatelessWidget {
   const BlogPostTile({
     Key? key,
@@ -11,7 +13,9 @@ class BlogPostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(BlogPostDetailView.route(context, item));
+      },
       leading: item.bannerUrl != null
           ? Image.network(
               item.bannerUrl!,
