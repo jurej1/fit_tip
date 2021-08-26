@@ -16,6 +16,15 @@ class _BlogPostsListSavedBlogsUpdated extends BlogPostsListEvent {
   List<Object?> get props => [ids];
 }
 
+class _BlogPostsListLikedBlogsUpdated extends BlogPostsListEvent {
+  final List<String> ids;
+
+  const _BlogPostsListLikedBlogsUpdated(this.ids);
+
+  @override
+  List<Object?> get props => [ids];
+}
+
 class BlogPostsListLoadRequested extends BlogPostsListEvent {}
 
 class BlogPostsListLoadMore extends BlogPostsListEvent {}

@@ -15,8 +15,10 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     required AuthenticationBloc authenticationBloc,
     required BlogRepository blogRepository,
     required SavedBlogPostsBloc savedBlogPostsBloc,
+    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
         _savedBlogsIds = savedBlogPostsBloc.state,
+        _likedBlogsIds = likedBlogPostsBloc.state,
         _isAuth = authenticationBloc.state.isAuthenticated,
         _userId = authenticationBloc.state.user?.uid,
         super(BlogPostsListLoading()) {
@@ -28,15 +30,22 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
       add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
     });
+
+    _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
+      add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
+    });
   }
 
   late final StreamSubscription _authSubscription;
   late final StreamSubscription _savedBlogsSubscription;
+  late final StreamSubscription _likedBlogPostsSubscription;
+
   final BlogRepository _blogRepository;
 
   bool _isAuth = false;
   String? _userId;
   List<String> _savedBlogsIds;
+  List<String> _likedBlogsIds;
 
   late DocumentSnapshot _lastFetchedDoc;
 
@@ -44,6 +53,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
   @override
   Future<void> close() {
+    _likedBlogPostsSubscription.cancel();
     _savedBlogsSubscription.cancel();
     _authSubscription.cancel();
     return super.close();
@@ -69,6 +79,8 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       yield* _mapItemUpdatedToState(event);
     } else if (event is _BlogPostsListSavedBlogsUpdated) {
       yield* _mapSavedBlogsUpdatedToState(event);
+    } else if (event is _BlogPostsListLikedBlogsUpdated) {
+      yield* _mapLikedBlogsUpdatedToState(event);
     }
   }
 
@@ -176,6 +188,23 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       posts = posts
           .map(
             (e) => e.copyWith(isSaved: _savedBlogsIds.contains(e.id)),
+          )
+          .toList();
+
+      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
+    }
+  }
+
+  Stream<BlogPostsListState> _mapLikedBlogsUpdatedToState(_BlogPostsListLikedBlogsUpdated event) async* {
+    _likedBlogsIds = event.ids;
+    if (state is BlogPostsListLoadSuccess) {
+      final oldState = state as BlogPostsListLoadSuccess;
+
+      List<BlogPost> posts = List.from(oldState.blogs);
+
+      posts = posts
+          .map(
+            (e) => e.copyWith(like: _likedBlogsIds.contains(e.id) ? Like.yes : Like.no),
           )
           .toList();
 
