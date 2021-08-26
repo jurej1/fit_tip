@@ -79,7 +79,7 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
                   },
                 ),
                 IconButton(
-                  icon: Icon(state.blogPost.isUpliked ? Icons.favorite : Icons.favorite_outline),
+                  icon: Icon(state.blogPost.like.isYes ? Icons.favorite : Icons.favorite_outline),
                   onPressed: () {
                     //TODO
                   },

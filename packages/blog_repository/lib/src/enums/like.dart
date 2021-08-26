@@ -1,6 +1,6 @@
-enum Like { up, down }
+enum Like { yes, no }
 
 extension LikeX on Like {
-  bool get isUp => this == Like.up;
-  bool get isDown => this == Like.down;
+  bool get isYes => this == Like.yes;
+  bool get isNo => this == Like.no;
 }

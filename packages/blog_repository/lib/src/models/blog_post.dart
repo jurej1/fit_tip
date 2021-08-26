@@ -1,3 +1,4 @@
+import 'package:blog_repository/blog_repository.dart';
 import 'package:blog_repository/src/entity/entity.dart';
 import 'package:equatable/equatable.dart';
 
@@ -15,7 +16,7 @@ class BlogPost extends Equatable {
   final bool isPublic;
 
   final bool isAuthor;
-  final bool isUpliked;
+  final Like like;
   final bool isSaved;
 
   BlogPost({
@@ -30,7 +31,7 @@ class BlogPost extends Equatable {
     required this.content,
     required this.isPublic,
     this.isAuthor = false,
-    this.isUpliked = false,
+    this.like = Like.no,
     this.images,
     this.isSaved = false,
   }) : this.created = created ?? DateTime.now();
@@ -46,11 +47,11 @@ class BlogPost extends Equatable {
       likes,
       tags,
       bannerUrl,
+      images,
       content,
       isPublic,
       isAuthor,
-      images,
-      isUpliked,
+      like,
       isSaved,
     ];
   }
@@ -72,7 +73,7 @@ class BlogPost extends Equatable {
     String? content,
     bool? isPublic,
     bool? isAuthor,
-    bool? isUpliked,
+    Like? like,
     bool? isSaved,
   }) {
     return BlogPost(
@@ -88,7 +89,7 @@ class BlogPost extends Equatable {
       content: content ?? this.content,
       isPublic: isPublic ?? this.isPublic,
       isAuthor: isAuthor ?? this.isAuthor,
-      isUpliked: isUpliked ?? this.isUpliked,
+      like: like ?? this.like,
       isSaved: isSaved ?? this.isSaved,
     );
   }

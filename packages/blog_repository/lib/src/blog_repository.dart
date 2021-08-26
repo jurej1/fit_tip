@@ -37,7 +37,7 @@ class BlogRepository {
 
   Future<void> likeBlogPost(String blogId, Like action) async {
     return _blogsReference().doc(blogId).update({
-      BlogPostDocKeys.likes: FieldValue.increment(action.isUp ? 1 : -1),
+      BlogPostDocKeys.likes: FieldValue.increment(action.isYes ? 1 : -1),
     });
   }
 
@@ -182,7 +182,7 @@ class BlogRepository {
 
   Future<void> likeBlogComment(String commentId, Like action) {
     return _commentsReference().doc(commentId).update({
-      BlogCommentDocumentKeys.likes: FieldValue.increment(action.isUp ? 1 : -1),
+      BlogCommentDocumentKeys.likes: FieldValue.increment(action.isYes ? 1 : -1),
     });
   }
 
