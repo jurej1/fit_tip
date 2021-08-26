@@ -98,7 +98,12 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
         ),
         BlocListener<BlogPostSaveCubit, BlogPostSaveState>(
           listener: (context, state) {
-            BlocProvider.of<SavedBlogPostsBloc>(context);
+            if (state.isSaved) {
+              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemAdded(state.blocId));
+            }
+            if (!state.isSaved) {
+              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemRemoved(state.blocId));
+            }
           },
         ),
       ],
