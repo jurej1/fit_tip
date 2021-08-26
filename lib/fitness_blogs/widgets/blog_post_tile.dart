@@ -11,6 +11,7 @@ class BlogPostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {},
       leading: item.bannerUrl != null
           ? Image.network(
               item.bannerUrl!,
