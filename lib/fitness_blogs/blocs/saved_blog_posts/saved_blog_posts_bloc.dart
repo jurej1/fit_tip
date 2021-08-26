@@ -16,11 +16,13 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, SavedBlogPost
     _authSubscription = authenticationBloc.stream.listen((authState) {
       _isAuth = authState.isAuthenticated;
       _userId = authState.user?.uid;
+      add(_SavedBlogPostsAuthUpdated());
     });
   }
 
   String? _userId;
   bool _isAuth;
+  late Map<String, dynamic> allIdsJson;
 
   late final StreamSubscription _authSubscription;
 
@@ -38,11 +40,16 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, SavedBlogPost
       yield* _mapItemAddedToState(event);
     } else if (event is SavedBlogPostsItemRemoved) {
       yield* _mapItemRemovedToState(event);
+    } else if (event is _SavedBlogPostsAuthUpdated) {
+      if (_isAuth) {
+        yield SavedBlogPostsState(allIdsJson[_userId!]);
+      }
     }
   }
 
   @override
   SavedBlogPostsState? fromJson(Map<String, dynamic> json) {
+    allIdsJson = json;
     if (_isAuth) {
       return SavedBlogPostsState(json[_userId]);
     }

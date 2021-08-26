@@ -12,10 +12,12 @@ class BlogPostDetailView extends StatelessWidget {
     BuildContext context,
     BlogPost blogPost,
   ) {
+    final savedBlogPostsBloc = BlocProvider.of<SavedBlogPostsBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
+            BlocProvider.value(value: savedBlogPostsBloc),
             BlocProvider(
               create: (context) => BlogPostDetailBloc(
                 blogPost: blogPost,
@@ -96,7 +98,7 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
         ),
         BlocListener<BlogPostSaveCubit, BlogPostSaveState>(
           listener: (context, state) {
-            //TODO update the hydrated to save saved blogs
+            BlocProvider.of<SavedBlogPostsBloc>(context);
           },
         ),
       ],
