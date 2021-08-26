@@ -132,7 +132,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       if (_isAuth) {
         blog = blog.copyWith(
           isAuthor: _userId! == blog.authorId,
-          like: Like.no, //TODO with hydrated bloc
+          like: _likedBlogsIds.contains(blog.id) ? Like.yes : Like.no,
           isSaved: _savedBlogsIds.contains(blog.id),
         );
       }
