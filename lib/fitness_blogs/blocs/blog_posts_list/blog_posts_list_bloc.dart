@@ -17,10 +17,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     required SavedBlogPostsBloc savedBlogPostsBloc,
     required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
-        // _savedBlogsIds = savedBlogPostsBloc.state,
-        // _likedBlogsIds = likedBlogPostsBloc.state,
-        // _isAuth = authenticationBloc.state.isAuthenticated,
-        // _userId = authenticationBloc.state.user?.uid,
         super(BlogPostsListLoading()) {
     _authSubscription = authenticationBloc.stream.listen((authState) {
       add(_BlogPostAuthUpdated(authState));
@@ -42,11 +38,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
   final BlogRepository _blogRepository;
 
-  // bool _isAuth = false;
-  // String? _userId;
-  // List<String> _savedBlogsIds;
-  // List<String> _likedBlogsIds;
-
   late DocumentSnapshot _lastFetchedDoc;
 
   final int _limit = 12;
@@ -63,11 +54,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   Stream<BlogPostsListState> mapEventToState(
     BlogPostsListEvent event,
   ) async* {
-    // if (event is _BlogPostAuthUpdated) {
-    //   _isAuth = event.value.isAuthenticated;
-    //   _userId = event.value.user?.uid;
-    //   add(BlogPostsListLoadRequested());
-    // } else
     if (event is BlogPostsListLoadRequested) {
       yield* _mapLoadRequestedToState(event);
     } else if (event is BlogPostsListLoadMore) {
@@ -132,22 +118,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       }
     }
   }
-
-  // List<BlogPost> _mapQuerySnapshotToBlogPosts(QuerySnapshot snapshot) {
-  //   return snapshot.docs.map((e) {
-  //     BlogPost blog = BlogPost.fromEntity(BlogPostEntity.fromDocumentSnapshot(e));
-
-  //     if (_isAuth) {
-  //       blog = blog.copyWith(
-  //         isAuthor: _userId! == blog.authorId,
-  //         like: _likedBlogsIds.contains(blog.id) ? Like.yes : Like.no,
-  //         isSaved: _savedBlogsIds.contains(blog.id),
-  //       );
-  //     }
-
-  //     return blog;
-  //   }).toList();
-  // }
 
   Stream<BlogPostsListState> _mapItemAddedToState(BlogPostsListItemAdded event) async* {
     if (state is BlogPostsListLoadSuccess) {
