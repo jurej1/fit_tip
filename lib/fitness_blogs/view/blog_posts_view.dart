@@ -32,7 +32,13 @@ class BlogPostsView extends StatelessWidget {
                 savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
-              )..add(BlogPostsSavedListLoadRequested()),
+              )..add(
+                  BlogPostsSavedListLoadRequested(
+                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+                  ),
+                ),
             ),
             BlocProvider(
               create: (context) => BlogPostsListBloc(
