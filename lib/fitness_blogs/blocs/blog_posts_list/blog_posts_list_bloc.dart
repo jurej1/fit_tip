@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'blog_posts_list_event.dart';
@@ -12,22 +11,11 @@ part 'blog_posts_list_state.dart';
 
 class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   BlogPostsListBloc({
-    required AuthenticationBloc authenticationBloc,
     required BlogRepository blogRepository,
     required SavedBlogPostsBloc savedBlogPostsBloc,
     required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
         super(BlogPostsListLoading()) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      add(
-        BlogPostsListLoadRequested(
-          likedBlogs: likedBlogPostsBloc.state,
-          savedBlogs: savedBlogPostsBloc.state,
-          userId: authState.user?.uid,
-        ),
-      );
-    });
-
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
       add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
     });
@@ -37,7 +25,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     });
   }
 
-  late final StreamSubscription _authSubscription;
   late final StreamSubscription _savedBlogsSubscription;
   late final StreamSubscription _likedBlogPostsSubscription;
 
@@ -49,7 +36,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   Future<void> close() {
     _likedBlogPostsSubscription.cancel();
     _savedBlogsSubscription.cancel();
-    _authSubscription.cancel();
     return super.close();
   }
 

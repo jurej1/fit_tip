@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'blog_posts_saved_list_event.dart';
@@ -14,34 +13,12 @@ part 'blog_posts_saved_list_state.dart';
 class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSavedListState> {
   BlogPostsSavedListBloc({
     required BlogRepository blogRepository,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
-    required AuthenticationBloc authenticationBloc,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
-        super(BlogPostsSavedListLoading()) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      add(
-        BlogPostsSavedListLoadRequested(
-          likedBlogIds: likedBlogPostsBloc.state,
-          savedBlogIds: savedBlogPostsBloc.state,
-          userId: authState.user?.uid,
-        ),
-      );
-    });
-  }
+        super(BlogPostsSavedListLoading());
 
   final BlogRepository _blogRepository;
-  late final StreamSubscription _authSubscription;
-
   final int _limit = 12;
-
   late DocumentSnapshot _lastFetchedDocumentSnapshot;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
 
   @override
   Stream<BlogPostsSavedListState> mapEventToState(
