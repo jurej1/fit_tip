@@ -22,7 +22,7 @@ class BlogPostsListBuilder extends StatefulWidget {
 
 class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
   late final ScrollController _scrollController;
-  final double _loaderSpace = 200;
+  final double _loaderSpace = 100;
 
   @override
   void initState() {
