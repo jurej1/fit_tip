@@ -135,6 +135,15 @@ class _AllBlogPostsListBuilder extends StatelessWidget {
             child: BlogPostsListBuilder(
               blogs: state.blogs,
               hasReachedMax: state.hasReachedMax,
+              onIsBottom: () {
+                BlocProvider.of<BlogPostsListBloc>(context).add(
+                  BlogPostsListLoadMore(
+                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context, listen: true).state,
+                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context, listen: true).state.user?.uid,
+                  ),
+                );
+              },
             ),
           );
         } else if (state is BlogPostsListFail) {
@@ -165,14 +174,17 @@ class _SavedBlogPostsListBuilder extends StatelessWidget {
           return SizedBox(
             height: size.height,
             width: size.width,
-            child: ListView.separated(
-              physics: const ClampingScrollPhysics(),
-              itemCount: state.hasReachedMax ? state.blogs.length : state.blogs.length,
-              itemBuilder: (context, index) {
-                return index >= state.blogs.length ? BottomLoader() : BlogPostTile(item: state.blogs[index]);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 10);
+            child: BlogPostsListBuilder(
+              blogs: state.blogs,
+              hasReachedMax: state.hasReachedMax,
+              onIsBottom: () {
+                BlocProvider.of<BlogPostsSavedListBloc>(context).add(
+                  BlogPostsSavedListLoadMoreRequested(
+                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context, listen: true).state,
+                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context, listen: true).state.user?.uid,
+                  ),
+                );
               },
             ),
           );

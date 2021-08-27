@@ -1,8 +1,6 @@
 import 'package:blog_repository/blog_repository.dart';
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/widgets/blog_post_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../fitness_blogs.dart';
 
@@ -11,10 +9,12 @@ class BlogPostsListBuilder extends StatefulWidget {
     Key? key,
     required this.blogs,
     required this.hasReachedMax,
+    required this.onIsBottom,
   }) : super(key: key);
 
   final List<BlogPost> blogs;
   final bool hasReachedMax;
+  final VoidCallback onIsBottom;
 
   @override
   _BlogPostsListBuilderState createState() => _BlogPostsListBuilderState();
@@ -57,13 +57,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
 
   void _onScroll() {
     if (_isBottom) {
-      BlocProvider.of<BlogPostsListBloc>(context).add(
-        BlogPostsListLoadMore(
-          likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
-          savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
-          userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-        ),
-      );
+      widget.onIsBottom();
     }
   }
 
