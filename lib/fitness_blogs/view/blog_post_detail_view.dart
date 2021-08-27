@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
@@ -76,7 +76,7 @@ class BlogPostDetailView extends StatelessWidget {
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
-          listenWhen: (p, c) => p.blogPost.like == c.blogPost.like,
+          listenWhen: (p, c) => p.blogPost.like != c.blogPost.like,
           listener: (context, state) {
             if (state.blogPost.like.isYes) {
               BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemAdded(state.blogPost.id));
@@ -87,8 +87,13 @@ class BlogPostDetailView extends StatelessWidget {
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
+          listenWhen: (p, c) => p.blogPost.isSaved == c.blogPost.isSaved,
           listener: (context, state) {
             BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state.blogPost));
+          },
+        ),
+        BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
+          listener: (context, state) {
             BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state.blogPost));
           },
         ),
@@ -101,8 +106,8 @@ class BlogPostDetailView extends StatelessWidget {
               children: [
                 if (state.blogPost.bannerUrl != null)
                   Container(
-                    height: min(size.height, size.width),
-                    width: min(size.height, size.width),
+                    height: size.width,
+                    width: size.width,
                     child: Image.network(
                       state.blogPost.bannerUrl!,
                       fit: BoxFit.cover,
