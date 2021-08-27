@@ -118,7 +118,7 @@ class BlogPostDetailView extends StatelessWidget {
                       },
                     ),
                   ),
-                Text('\b\b Hello\b'),
+                Text(state.blogPost.title),
               ],
             );
           },
