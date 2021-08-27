@@ -130,7 +130,7 @@ class BlogPost extends Equatable {
   static List<BlogPost> mapQuerySnapshotToBlogPosts(
     QuerySnapshot snapshot, {
     List<String>? saveBlogIds,
-    List<String>? favouritedBlogIds,
+    List<String>? likedBlogIds,
     String? userId,
   }) {
     return snapshot.docs.map((e) {
@@ -139,7 +139,7 @@ class BlogPost extends Equatable {
       blog = blog.copyWith(
         isAuthor: userId == blog.authorId,
         isSaved: saveBlogIds?.contains(blog.id), // TODO: this may cause issues
-        like: (favouritedBlogIds?.contains(blog.id) ?? false) ? Like.yes : Like.no,
+        like: (likedBlogIds?.contains(blog.id) ?? false) ? Like.yes : Like.no,
       );
 
       return blog;

@@ -27,6 +27,14 @@ class BlogPostsView extends StatelessWidget {
               ),
             ),
             BlocProvider(
+              create: (context) => BlogPostsSavedListBloc(
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
+              )..add(BlogPostsSavedListLoadRequested()),
+            ),
+            BlocProvider(
               create: (context) => BlogPostsListBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
@@ -62,9 +70,7 @@ class BlogPostsView extends StatelessWidget {
           }
 
           if (state.isSaved) {
-            return Center(
-              child: Text('Saved'),
-            );
+            return _SavedBlogPostsListBuilder();
           }
 
           return Container();
@@ -130,8 +136,30 @@ class _SavedBlogPostsListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    final Size size = MediaQuery.of(context).size;
+
+    return BlocBuilder<BlogPostsSavedListBloc, BlogPostsSavedListState>(
+      builder: (context, state) {
+        if (state is BlogPostsSavedListLoading) {
+          return const Center(
+            child: const CircularProgressIndicator(),
+          );
+        } else if (state is BlogPostsSavedListLoadSuccess) {
+          return SizedBox(
+            height: size.height,
+            width: size.width,
+            child: BlogPostsListBuilder(
+              blogs: state.blogs,
+              hasReachedMax: state.hasReachedMax,
+            ),
+          );
+        } else if (state is BlogPostsSavedListFailure) {
+          return Center(
+            child: const Text('Sorry. There was an error.'),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

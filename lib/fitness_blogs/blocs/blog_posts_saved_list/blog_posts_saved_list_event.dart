@@ -7,9 +7,9 @@ abstract class BlogPostsSavedListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BlogPostsSavedListLoadRequested extends BlogPostsListEvent {}
+class BlogPostsSavedListLoadRequested extends BlogPostsSavedListEvent {}
 
-class BlogPostsSavedListLoadMoreRequested extends BlogPostsListEvent {}
+class BlogPostsSavedListLoadMoreRequested extends BlogPostsSavedListEvent {}
 
 class _BlogPostsSavedListSavedBlogsListUpdated extends BlogPostsSavedListEvent {
   final List<String> ids;

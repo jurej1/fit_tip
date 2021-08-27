@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'blog_posts_saved_list_event.dart';
@@ -13,17 +14,34 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
   BlogPostsSavedListBloc({
     required BlogRepository blogRepository,
     required SavedBlogPostsBloc savedBlogPostsBloc,
+    required AuthenticationBloc authenticationBloc,
+    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
         _savedBlogsIds = savedBlogPostsBloc.state,
+        _userId = authenticationBloc.state.user?.uid,
+        _likedBlogIds = likedBlogPostsBloc.state,
         super(BlogPostsSavedListLoading()) {
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _userId = authState.user?.uid;
+      add(BlogPostsSavedListLoadRequested());
+    });
+
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((list) {
       _savedBlogsIds = list;
+    });
+
+    _likedBlogsSubscription = likedBlogPostsBloc.stream.listen((list) {
+      _likedBlogIds = list;
     });
   }
 
   final BlogRepository _blogRepository;
   late final StreamSubscription _savedBlogsSubscription;
+  late final StreamSubscription _authSubscription;
+  late final StreamSubscription _likedBlogsSubscription;
   List<String> _savedBlogsIds;
+  List<String> _likedBlogIds;
+  String? _userId;
 
   final int _limit = 12;
 
@@ -31,6 +49,8 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
 
   @override
   Future<void> close() {
+    _likedBlogsSubscription.cancel();
+    _authSubscription.cancel();
     _savedBlogsSubscription.cancel();
     return super.close();
   }
@@ -126,6 +146,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
       blogs = blogs +
           BlogPost.mapQuerySnapshotToBlogPosts(
             querySnapshot,
+            userId: _userId,
+            saveBlogIds: _savedBlogsIds,
+            likedBlogIds: _likedBlogIds,
           );
 
       yield BlogPostsSavedListLoadSuccess(
@@ -150,7 +173,13 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
           startAfterDoc: _lastFetchedDocumentSnapshot,
         );
 
-        blogPosts = blogPosts + BlogPost.mapQuerySnapshotToBlogPosts(snapshot);
+        blogPosts = blogPosts +
+            BlogPost.mapQuerySnapshotToBlogPosts(
+              snapshot,
+              userId: _userId,
+              likedBlogIds: _likedBlogIds,
+              saveBlogIds: _savedBlogsIds,
+            );
         yield BlogPostsSavedListLoadSuccess(
           blogs: blogPosts,
           hasReachedMax: snapshot.size < _limit,
