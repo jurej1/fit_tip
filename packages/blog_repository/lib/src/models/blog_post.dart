@@ -1,5 +1,6 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:blog_repository/src/entity/entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class BlogPost extends Equatable {
@@ -124,5 +125,24 @@ class BlogPost extends Equatable {
       tags: entity.tags,
       images: entity.images,
     );
+  }
+
+  static List<BlogPost> mapQuerySnapshotToBlogPosts(
+    QuerySnapshot snapshot, {
+    List<String>? saveBlogIds,
+    List<String>? favouritedBlogIds,
+    String? userId,
+  }) {
+    return snapshot.docs.map((e) {
+      BlogPost blog = BlogPost.fromEntity(BlogPostEntity.fromDocumentSnapshot(e));
+
+      blog = blog.copyWith(
+        isAuthor: userId == blog.authorId,
+        isSaved: saveBlogIds?.contains(blog.id), // TODO: this may cause issues
+        like: (favouritedBlogIds?.contains(blog.id) ?? false) ? Like.yes : Like.no,
+      );
+
+      return blog;
+    }).toList();
   }
 }
