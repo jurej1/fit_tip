@@ -4,25 +4,31 @@ import 'package:flutter/material.dart';
 enum BlogsViewSelectorState {
   all,
   saved,
+  yours,
 }
 
 extension BlogsViewSelectorStateX on BlogsViewSelectorState {
   bool get isAll => this == BlogsViewSelectorState.all;
   bool get isSaved => this == BlogsViewSelectorState.saved;
+  bool get isYours => this == BlogsViewSelectorState.yours;
 
   IconData toIcon() {
     if (isAll) {
       return Icons.list;
-    } else {
+    } else if (isSaved) {
       return Icons.bookmark;
+    } else {
+      return Icons.person;
     }
   }
 
   String toBottomNavigationString() {
     if (isAll) {
       return 'All';
-    } else {
+    } else if (isSaved) {
       return 'Saved';
+    } else {
+      return 'Mine';
     }
   }
 }
