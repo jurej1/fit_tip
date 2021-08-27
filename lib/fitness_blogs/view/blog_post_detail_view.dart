@@ -14,15 +14,16 @@ class BlogPostDetailView extends StatelessWidget {
   ) {
     final savedBlogPostsBloc = BlocProvider.of<SavedBlogPostsBloc>(context);
     final likedBlogPostsBloc = BlocProvider.of<LikedBlogPostsBloc>(context);
+    final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
             BlocProvider.value(value: savedBlogPostsBloc),
+            BlocProvider.value(value: blogPostsSavedListBloc),
             BlocProvider.value(value: likedBlogPostsBloc),
             BlocProvider(
               create: (context) => BlogPostSaveCubit(
-                blogId: blogPost.id,
                 initialValue: blogPost.isSaved,
               ),
             ),
@@ -50,35 +51,68 @@ class BlogPostDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: _AppBar(),
-      body: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
-        builder: (context, state) {
-          return ListView(
-            children: [
-              if (state.blogPost.bannerUrl != null)
-                Container(
-                  height: min(size.height, size.width),
-                  width: min(size.height, size.width),
-                  child: Image.network(
-                    state.blogPost.bannerUrl!,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? (loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!)
-                              : null,
-                        ),
-                      );
-                    },
+
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
+          listenWhen: (p, c) => p.blogPost.isSaved == c.blogPost.isSaved,
+          listener: (context, state) {
+            BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state.blogPost));
+          },
+        ),
+        BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
+          listener: (context, state) {
+            if (state.blogPost.isSaved) {
+              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemAdded(state.blogPost.id));
+              BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemAdded(state.blogPost));
+            }
+
+            if (!state.blogPost.isSaved) {
+              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemRemoved(state.blogPost.id));
+              BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemRemoved(state.blogPost));
+            }
+
+            if (state.blogPost.like.isYes) {
+              BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemAdded(state.blogPost.id));
+            }
+            if (state.blogPost.like.isNo) {
+              BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemRemoved(state.blogPost.id));
+            }
+
+            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state.blogPost));
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: _AppBar(),
+        body: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
+          builder: (context, state) {
+            return ListView(
+              children: [
+                if (state.blogPost.bannerUrl != null)
+                  Container(
+                    height: min(size.height, size.width),
+                    width: min(size.height, size.width),
+                    child: Image.network(
+                      state.blogPost.bannerUrl!,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? (loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!)
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              Text('\b\b Hello\b'),
-            ],
-          );
-        },
+                Text('\b\b Hello\b'),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -95,24 +129,12 @@ class _AppBar extends StatelessWidget with PreferredSizeWidget {
           listener: (context, state) {
             if (state is BlogPostLikeSuccess) {
               BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailLikeUpdated(state.like, state.likesAmount));
-
-              if (state.like.isYes) {
-                BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemAdded(state.blogId));
-              }
-              if (state.like.isNo) {
-                BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemRemoved(state.blogId));
-              }
             }
           },
         ),
         BlocListener<BlogPostSaveCubit, BlogPostSaveState>(
           listener: (context, state) {
-            if (state.isSaved) {
-              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemAdded(state.blocId));
-            }
-            if (!state.isSaved) {
-              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemRemoved(state.blocId));
-            }
+            BlocProvider.of<BlogPostDetailBloc>(context).add(BlogPostDetailSaveUpdated(state.isSaved));
           },
         ),
       ],

@@ -28,6 +28,12 @@ class BlogPostDetailBloc extends Bloc<BlogPostDetailEvent, BlogPostDetailState> 
           likes: event.newLikesAmount,
         ),
       );
+    } else if (event is BlogPostDetailSaveUpdated) {
+      final blogPost = state.blogPost;
+
+      yield BlogPostDetailInitial(
+        blogPost.copyWith(isSaved: event.isSaved),
+      );
     }
   }
 }

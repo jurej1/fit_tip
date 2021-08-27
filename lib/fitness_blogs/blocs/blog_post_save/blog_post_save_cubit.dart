@@ -6,11 +6,9 @@ part 'blog_post_save_state.dart';
 class BlogPostSaveCubit extends Cubit<BlogPostSaveState> {
   BlogPostSaveCubit({
     required bool initialValue,
-    required String blogId,
   }) : super(
           BlogPostSaveState(
             initialValue,
-            blogId,
           ),
         );
 

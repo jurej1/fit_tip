@@ -18,3 +18,12 @@ class BlogPostDetailLikeUpdated extends BlogPostDetailEvent {
         newLikesAmount,
       ];
 }
+
+class BlogPostDetailSaveUpdated extends BlogPostDetailEvent {
+  final bool isSaved;
+
+  const BlogPostDetailSaveUpdated(this.isSaved);
+
+  @override
+  List<Object> get props => [isSaved];
+}
