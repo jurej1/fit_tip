@@ -99,7 +99,13 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
           yield BlogPostsListLoadSuccess(
             hasReachedMax: querySnapshot.size < _limit,
-            blogs: oldState.blogs + BlogPost.mapQuerySnapshotToBlogPosts(querySnapshot, likedBlogIds: [], saveBlogIds: [], userId: ''),
+            blogs: oldState.blogs +
+                BlogPost.mapQuerySnapshotToBlogPosts(
+                  querySnapshot,
+                  likedBlogIds: event.likedBlogs,
+                  saveBlogIds: event.savedBlogs,
+                  userId: event.userId,
+                ),
           );
         } catch (error) {
           yield BlogPostsListFail();

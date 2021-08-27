@@ -154,9 +154,9 @@ class _AllBlogPostsListBuilder extends StatelessWidget {
               onIsBottom: () {
                 BlocProvider.of<BlogPostsListBloc>(context).add(
                   BlogPostsListLoadMore(
-                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context, listen: true).state,
-                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context, listen: true).state.user?.uid,
+                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
                   ),
                 );
               },
@@ -196,9 +196,9 @@ class _SavedBlogPostsListBuilder extends StatelessWidget {
               onIsBottom: () {
                 BlocProvider.of<BlogPostsSavedListBloc>(context).add(
                   BlogPostsSavedListLoadMoreRequested(
-                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context, listen: true).state,
-                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context, listen: true).state.user?.uid,
+                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
                   ),
                 );
               },
