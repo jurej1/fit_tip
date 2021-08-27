@@ -19,8 +19,13 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   })  : _blogRepository = blogRepository,
         super(BlogPostsListLoading()) {
     _authSubscription = authenticationBloc.stream.listen((authState) {
-      add(_BlogPostAuthUpdated(authState));
-      add(BlogPostsListLoadRequested());
+      add(
+        BlogPostsListLoadRequested(
+          likedBlogs: likedBlogPostsBloc.state,
+          savedBlogs: savedBlogPostsBloc.state,
+          userId: authState.user?.uid,
+        ),
+      );
     });
 
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
@@ -37,9 +42,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   late final StreamSubscription _likedBlogPostsSubscription;
 
   final BlogRepository _blogRepository;
-
   late DocumentSnapshot _lastFetchedDoc;
-
   final int _limit = 12;
 
   @override
@@ -157,36 +160,34 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   }
 
   Stream<BlogPostsListState> _mapSavedBlogsUpdatedToState(_BlogPostsListSavedBlogsUpdated event) async* {
-    // _savedBlogsIds = event.ids;
-    // if (state is BlogPostsListLoadSuccess) {
-    //   final oldState = state as BlogPostsListLoadSuccess;
+    if (state is BlogPostsListLoadSuccess) {
+      final oldState = state as BlogPostsListLoadSuccess;
 
-    //   List<BlogPost> posts = List.from(oldState.blogs);
+      List<BlogPost> posts = List.from(oldState.blogs);
 
-    //   posts = posts
-    //       .map(
-    //         (e) => e.copyWith(isSaved: _savedBlogsIds.contains(e.id)),
-    //       )
-    //       .toList();
+      posts = posts
+          .map(
+            (e) => e.copyWith(isSaved: event.ids.contains(e.id)),
+          )
+          .toList();
 
-    //   yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
-    // }
+      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
+    }
   }
 
   Stream<BlogPostsListState> _mapLikedBlogsUpdatedToState(_BlogPostsListLikedBlogsUpdated event) async* {
-    // _likedBlogsIds = event.ids;
-    // if (state is BlogPostsListLoadSuccess) {
-    //   final oldState = state as BlogPostsListLoadSuccess;
+    if (state is BlogPostsListLoadSuccess) {
+      final oldState = state as BlogPostsListLoadSuccess;
 
-    //   List<BlogPost> posts = List.from(oldState.blogs);
+      List<BlogPost> posts = List.from(oldState.blogs);
 
-    //   posts = posts
-    //       .map(
-    //         (e) => e.copyWith(like: _likedBlogsIds.contains(e.id) ? Like.yes : Like.no),
-    //       )
-    //       .toList();
+      posts = posts
+          .map(
+            (e) => e.copyWith(like: event.ids.contains(e.id) ? Like.yes : Like.no),
+          )
+          .toList();
 
-    //   yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
-    // }
+      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
+    }
   }
 }

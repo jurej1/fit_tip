@@ -78,12 +78,3 @@ class BlogPostsListItemUpdated extends BlogPostsListEvent {
   @override
   List<Object> get props => [value];
 }
-
-class _BlogPostAuthUpdated extends BlogPostsListEvent {
-  final AuthenticationState value;
-
-  const _BlogPostAuthUpdated(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
