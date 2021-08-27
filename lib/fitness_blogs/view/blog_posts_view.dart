@@ -40,7 +40,13 @@ class BlogPostsView extends StatelessWidget {
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
                 likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
-              )..add(BlogPostsListLoadRequested()),
+              )..add(
+                  BlogPostsListLoadRequested(
+                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+                  ),
+                ),
             ),
           ],
           child: BlogPostsView(),
@@ -148,9 +154,15 @@ class _SavedBlogPostsListBuilder extends StatelessWidget {
           return SizedBox(
             height: size.height,
             width: size.width,
-            child: BlogPostsListBuilder(
-              blogs: state.blogs,
-              hasReachedMax: state.hasReachedMax,
+            child: ListView.separated(
+              physics: const ClampingScrollPhysics(),
+              itemCount: state.hasReachedMax ? state.blogs.length : state.blogs.length,
+              itemBuilder: (context, index) {
+                return index >= state.blogs.length ? BottomLoader() : BlogPostTile(item: state.blogs[index]);
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 10);
+              },
             ),
           );
         } else if (state is BlogPostsSavedListFailure) {

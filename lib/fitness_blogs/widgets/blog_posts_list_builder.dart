@@ -1,4 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/widgets/blog_post_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
       controller: _scrollController,
       itemCount: length,
       itemBuilder: (context, index) {
-        return index >= length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
+        return index >= widget.blogs.length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
@@ -55,7 +56,15 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
   }
 
   void _onScroll() {
-    if (_isBottom) BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListLoadMore());
+    if (_isBottom) {
+      BlocProvider.of<BlogPostsListBloc>(context).add(
+        BlogPostsListLoadMore(
+          likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+          savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
+          userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+        ),
+      );
+    }
   }
 
   bool get _isBottom {
