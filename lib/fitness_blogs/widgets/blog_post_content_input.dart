@@ -10,6 +10,7 @@ class BlogPostContentInput extends StatelessWidget {
     return BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
       builder: (context, state) {
         return TextFormField(
+          enableInteractiveSelection: true,
           initialValue: state.content.value,
           textAlignVertical: TextAlignVertical.top,
           minLines: 5,
