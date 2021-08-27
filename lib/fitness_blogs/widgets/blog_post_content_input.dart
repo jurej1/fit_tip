@@ -18,7 +18,7 @@ class BlogPostContentInput extends StatelessWidget {
             alignLabelWithHint: true,
             labelText: 'Content',
             errorText: state.content.invalid ? 'Invalid' : null,
-            border: OutlineInputBorder(),
+            border: InputBorder.none,
           ),
           onChanged: (value) {
             BlocProvider.of<AddBlogPostBloc>(context).add(AddBlogPostContentUpdated(value));
