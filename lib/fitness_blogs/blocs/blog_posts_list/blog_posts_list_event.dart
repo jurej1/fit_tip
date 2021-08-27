@@ -25,9 +25,32 @@ class _BlogPostsListLikedBlogsUpdated extends BlogPostsListEvent {
   List<Object?> get props => [ids];
 }
 
-class BlogPostsListLoadRequested extends BlogPostsListEvent {}
+class BlogPostsListLoadRequested extends BlogPostsListEvent {
+  final List<String> likedBlogs;
+  final List<String> savedBlogs;
+  final String? userId;
 
-class BlogPostsListLoadMore extends BlogPostsListEvent {}
+  const BlogPostsListLoadRequested({
+    this.likedBlogs = const [],
+    this.savedBlogs = const [],
+    this.userId,
+  });
+
+  @override
+  List<Object?> get props => [userId, likedBlogs, savedBlogs];
+}
+
+class BlogPostsListLoadMore extends BlogPostsListEvent {
+  final List<String> likedBlogs;
+  final List<String> savedBlogs;
+  final String? userId;
+
+  const BlogPostsListLoadMore({
+    this.likedBlogs = const [],
+    this.savedBlogs = const [],
+    this.userId,
+  });
+}
 
 class BlogPostsListItemAdded extends BlogPostsListEvent {
   final BlogPost value;
@@ -51,15 +74,6 @@ class BlogPostsListItemUpdated extends BlogPostsListEvent {
   final BlogPost value;
 
   const BlogPostsListItemUpdated(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
-
-class _BlogPostAuthUpdated extends BlogPostsListEvent {
-  final AuthenticationState value;
-
-  const _BlogPostAuthUpdated(this.value);
 
   @override
   List<Object> get props => [value];

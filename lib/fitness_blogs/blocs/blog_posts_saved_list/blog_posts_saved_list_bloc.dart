@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'blog_posts_saved_list_event.dart';
@@ -14,47 +13,12 @@ part 'blog_posts_saved_list_state.dart';
 class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSavedListState> {
   BlogPostsSavedListBloc({
     required BlogRepository blogRepository,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
-    required AuthenticationBloc authenticationBloc,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
-        _savedBlogsIds = savedBlogPostsBloc.state,
-        _userId = authenticationBloc.state.user?.uid,
-        _likedBlogIds = likedBlogPostsBloc.state,
-        super(BlogPostsSavedListLoading()) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _userId = authState.user?.uid;
-      add(BlogPostsSavedListLoadRequested());
-    });
-
-    _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((list) {
-      _savedBlogsIds = list;
-    });
-
-    _likedBlogsSubscription = likedBlogPostsBloc.stream.listen((list) {
-      _likedBlogIds = list;
-    });
-  }
+        super(BlogPostsSavedListLoading());
 
   final BlogRepository _blogRepository;
-  late final StreamSubscription _savedBlogsSubscription;
-  late final StreamSubscription _authSubscription;
-  late final StreamSubscription _likedBlogsSubscription;
-  List<String> _savedBlogsIds;
-  List<String> _likedBlogIds;
-  String? _userId;
-
   final int _limit = 12;
-
   late DocumentSnapshot _lastFetchedDocumentSnapshot;
-
-  @override
-  Future<void> close() {
-    _likedBlogsSubscription.cancel();
-    _authSubscription.cancel();
-    _savedBlogsSubscription.cancel();
-    return super.close();
-  }
 
   @override
   Stream<BlogPostsSavedListState> mapEventToState(
@@ -67,9 +31,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     } else if (event is BlogPostsSavedListItemUpdated) {
       yield* _mapItemUpdatedToState(event);
     } else if (event is BlogPostsSavedListLoadRequested) {
-      yield* _mapLoadRequestedToState();
+      yield* _mapLoadRequestedToState(event);
     } else if (event is BlogPostsSavedListLoadMoreRequested) {
-      yield* _mapLoadMoreRequestedToState();
+      yield* _mapLoadMoreRequestedToState(event);
     }
   }
 
@@ -125,14 +89,14 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     }
   }
 
-  Stream<BlogPostsSavedListState> _mapLoadRequestedToState() async* {
+  Stream<BlogPostsSavedListState> _mapLoadRequestedToState(BlogPostsSavedListLoadRequested event) async* {
     List<BlogPost> blogs = const [];
-    List<String> savedBlogIds = List<String>.from(_savedBlogsIds);
+    List<String> savedBlogIds = List<String>.from(event.savedBlogIds);
 
     if (state is BlogPostsListLoadSuccess) {
       final oldState = state as BlogPostsListLoadSuccess;
       blogs = oldState.blogs;
-      savedBlogIds = _mapBlogPostsToNotFetchedBlogIds(blogs);
+      savedBlogIds = _mapBlogPostsToNotFetchedBlogIds(savedBlogIds, blogs);
     }
 
     yield BlogPostsSavedListLoading();
@@ -147,9 +111,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
       blogs = blogs +
           BlogPost.mapQuerySnapshotToBlogPosts(
             querySnapshot,
-            userId: _userId,
-            saveBlogIds: _savedBlogsIds,
-            likedBlogIds: _likedBlogIds,
+            userId: event.userId,
+            saveBlogIds: savedBlogIds,
+            likedBlogIds: event.likedBlogIds,
           );
 
       yield BlogPostsSavedListLoadSuccess(
@@ -162,11 +126,11 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     }
   }
 
-  Stream<BlogPostsSavedListState> _mapLoadMoreRequestedToState() async* {
+  Stream<BlogPostsSavedListState> _mapLoadMoreRequestedToState(BlogPostsSavedListLoadMoreRequested event) async* {
     if (state is BlogPostsSavedListLoadSuccess) {
       final oldState = state as BlogPostsSavedListLoadSuccess;
       List<BlogPost> blogPosts = oldState.blogs;
-      List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(blogPosts);
+      List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(event.savedBlogIds, blogPosts);
 
       try {
         QuerySnapshot snapshot = await _blogRepository.getBlogPostsQueryByIds(
@@ -178,9 +142,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
         blogPosts = blogPosts +
             BlogPost.mapQuerySnapshotToBlogPosts(
               snapshot,
-              userId: _userId,
-              likedBlogIds: _likedBlogIds,
-              saveBlogIds: _savedBlogsIds,
+              userId: event.userId,
+              likedBlogIds: event.likedBlogIds,
+              saveBlogIds: event.likedBlogIds,
             );
         yield BlogPostsSavedListLoadSuccess(
           blogs: blogPosts,
@@ -192,7 +156,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     }
   }
 
-  List<String> _mapBlogPostsToNotFetchedBlogIds(List<BlogPost> posts) {
-    return List<String>.from(_savedBlogsIds)..removeWhere((savedId) => posts.any((element) => element.id == savedId));
+  List<String> _mapBlogPostsToNotFetchedBlogIds(List<String> savedBlogIds, List<BlogPost> posts) {
+    return List<String>.from(savedBlogIds)..removeWhere((savedId) => posts.any((element) => element.id == savedId));
   }
 }

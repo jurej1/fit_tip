@@ -1,7 +1,6 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/fitness_blogs/widgets/blog_post_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../fitness_blogs.dart';
 
@@ -10,10 +9,12 @@ class BlogPostsListBuilder extends StatefulWidget {
     Key? key,
     required this.blogs,
     required this.hasReachedMax,
+    required this.onIsBottom,
   }) : super(key: key);
 
   final List<BlogPost> blogs;
   final bool hasReachedMax;
+  final VoidCallback onIsBottom;
 
   @override
   _BlogPostsListBuilderState createState() => _BlogPostsListBuilderState();
@@ -21,7 +22,7 @@ class BlogPostsListBuilder extends StatefulWidget {
 
 class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
   late final ScrollController _scrollController;
-  final double _loaderSpace = 200;
+  final double _loaderSpace = 100;
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
       controller: _scrollController,
       itemCount: length,
       itemBuilder: (context, index) {
-        return index >= length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
+        return index >= widget.blogs.length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
@@ -55,7 +56,9 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
   }
 
   void _onScroll() {
-    if (_isBottom) BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListLoadMore());
+    if (_isBottom) {
+      widget.onIsBottom();
+    }
   }
 
   bool get _isBottom {

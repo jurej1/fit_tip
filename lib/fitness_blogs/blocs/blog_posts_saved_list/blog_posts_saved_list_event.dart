@@ -4,20 +4,44 @@ abstract class BlogPostsSavedListEvent extends Equatable {
   const BlogPostsSavedListEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class BlogPostsSavedListLoadRequested extends BlogPostsSavedListEvent {}
+class BlogPostsSavedListLoadRequested extends BlogPostsSavedListEvent {
+  final List<String> savedBlogIds;
+  final String? userId;
+  final List<String> likedBlogIds;
 
-class BlogPostsSavedListLoadMoreRequested extends BlogPostsSavedListEvent {}
-
-class _BlogPostsSavedListSavedBlogsListUpdated extends BlogPostsSavedListEvent {
-  final List<String> ids;
-
-  const _BlogPostsSavedListSavedBlogsListUpdated(this.ids);
+  const BlogPostsSavedListLoadRequested({
+    this.savedBlogIds = const [],
+    this.userId,
+    this.likedBlogIds = const [],
+  });
 
   @override
-  List<Object> get props => [ids];
+  List<Object?> get props => [
+        userId,
+        savedBlogIds,
+        likedBlogIds,
+      ];
+}
+
+class BlogPostsSavedListLoadMoreRequested extends BlogPostsSavedListEvent {
+  final List<String> savedBlogIds;
+  final String? userId;
+  final List<String> likedBlogIds;
+
+  const BlogPostsSavedListLoadMoreRequested({
+    this.savedBlogIds = const [],
+    this.userId,
+    this.likedBlogIds = const [],
+  });
+  @override
+  List<Object?> get props => [
+        userId,
+        savedBlogIds,
+        likedBlogIds,
+      ];
 }
 
 class BlogPostsSavedListItemAdded extends BlogPostsSavedListEvent {

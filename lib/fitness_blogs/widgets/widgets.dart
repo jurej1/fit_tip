@@ -8,3 +8,4 @@ export 'blog_title_input.dart';
 export 'blog_post_tile.dart';
 export 'blog_posts_list_builder.dart';
 export 'bottom_loader.dart';
+export 'detail_blog_post_app_bar.dart';
