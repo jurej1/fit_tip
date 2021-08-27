@@ -12,10 +12,13 @@ class BlogPostsView extends StatelessWidget {
       builder: (_) {
         return MultiBlocProvider(
           providers: [
+            // view selector cubit
             BlocProvider(
               create: (context) => BlogsViewSelectorCubit(),
               child: Container(),
             ),
+
+            //Hydrated blocs
             BlocProvider(
               create: (context) => SavedBlogPostsBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -26,6 +29,8 @@ class BlogPostsView extends StatelessWidget {
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
             ),
+
+            // Blog lists blocs
             BlocProvider(
               create: (context) => BlogPostsSavedListBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
