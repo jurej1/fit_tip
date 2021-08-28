@@ -90,9 +90,7 @@ class AuthenticationRepository {
   }
 
   Future<void> updatedUserData(model.User user) async {
-    return _firebaseFirestore.collection('users').doc(user.id).update(
-          user.toEntity().toDocumentSnapshot(),
-        );
+    return _firebaseFirestore.collection('users').doc(user.id).update(user.toEntity().toDocumentSnapshot());
   }
 
   Future<void> updateUserEmail(String email) async {
