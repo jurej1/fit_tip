@@ -57,14 +57,17 @@ class DetailBlogPostAppBar extends StatelessWidget with PreferredSizeWidget {
                       );
                     },
                   ),
-                  BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
+                  BlocBuilder<BlogPostDeleteBloc, BlogPostDeleteState>(
                     builder: (context, state) {
-                      if (state.blogPost.isAuthor) {
+                      if (state is BlogPostDeleteLoading) {
+                        return CircularProgressIndicator();
+                      }
+
+                      if (state.isAuthor) {
                         return PopupMenuButton<BlogPostDetailOption>(
                           onSelected: (option) {
                             if (option.isDelete) {
-                              //BLOC TODO DELETE
-
+                              BlocProvider.of<BlogPostDeleteBloc>(context).add(BlogPostDeleteRequested());
                             } else if (option.isEdit) {
                               //TODO
                             }

@@ -28,7 +28,7 @@ class BlogPostDetailView extends StatelessWidget {
             BlocProvider.value(value: blogPostsSavedListBloc),
             BlocProvider.value(value: blogPostsListBloc),
             BlocProvider.value(value: userBlogPostsBloc),
-            //Save and like feature blocs
+            //Save, like and delete feature blocs
             BlocProvider(
               create: (context) => BlogPostSaveCubit(
                 initialValue: blogPost.isSaved,
@@ -40,6 +40,13 @@ class BlogPostDetailView extends StatelessWidget {
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 initialValue: blogPost.like,
                 likesAmount: blogPost.likes,
+              ),
+            ),
+            BlocProvider(
+              create: (context) => BlogPostDeleteBloc(
+                blogId: blogPost.id,
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+                isAuthor: blogPost.isAuthor,
               ),
             ),
             //Detail blog view bloc
@@ -107,7 +114,7 @@ class BlogPostDetailView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: DetailBlogPostAppBar(),
+        appBar: const DetailBlogPostAppBar(),
         body: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
           builder: (context, state) {
             return ListView(
