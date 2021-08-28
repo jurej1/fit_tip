@@ -48,7 +48,12 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
       QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(event.userId!, limit: _limit);
       _lastFetchedDoc = snapshot.docs.last;
 
-      List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(snapshot, userId: event.userId!);
+      List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
+        snapshot,
+        userId: event.userId!,
+        likedBlogIds: event.likedBlogs,
+        saveBlogIds: event.savedBlogs,
+      );
       yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
     } catch (error) {
       yield UserBlogPostsListFail();
@@ -65,10 +70,20 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
       }
 
       try {
-        QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(event.userId!, limit: _limit, startAfterDoc: _lastFetchedDoc);
+        QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(
+          event.userId!,
+          limit: _limit,
+          startAfterDoc: _lastFetchedDoc,
+        );
         _lastFetchedDoc = snapshot.docs.last;
 
-        List<BlogPost> blogs = oldBlogs + BlogPost.mapQuerySnapshotToBlogPosts(snapshot, userId: event.userId!);
+        List<BlogPost> blogs = oldBlogs +
+            BlogPost.mapQuerySnapshotToBlogPosts(
+              snapshot,
+              userId: event.userId!,
+              likedBlogIds: event.likedBlogs,
+              saveBlogIds: event.savedBlogs,
+            );
         yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
       } catch (error) {
         yield UserBlogPostsListFail();
