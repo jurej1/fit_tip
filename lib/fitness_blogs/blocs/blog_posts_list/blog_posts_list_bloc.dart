@@ -95,18 +95,22 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       if (!oldState.hasReachedMax) {
         try {
           QuerySnapshot querySnapshot = await _blogRepository.getBlogPostByCreated(limit: _limit, startAfterDoc: _lastFetchedDoc);
-          _lastFetchedDoc = querySnapshot.docs.last;
+          if (querySnapshot.docs.isEmpty) {
+            yield BlogPostsListLoadSuccess(hasReachedMax: querySnapshot.size < _limit, blogs: oldState.blogs);
+          } else {
+            _lastFetchedDoc = querySnapshot.docs.last;
 
-          yield BlogPostsListLoadSuccess(
-            hasReachedMax: querySnapshot.size < _limit,
-            blogs: oldState.blogs +
-                BlogPost.mapQuerySnapshotToBlogPosts(
-                  querySnapshot,
-                  likedBlogIds: event.likedBlogs,
-                  saveBlogIds: event.savedBlogs,
-                  userId: event.userId,
-                ),
-          );
+            yield BlogPostsListLoadSuccess(
+              hasReachedMax: querySnapshot.size < _limit,
+              blogs: oldState.blogs +
+                  BlogPost.mapQuerySnapshotToBlogPosts(
+                    querySnapshot,
+                    likedBlogIds: event.likedBlogs,
+                    saveBlogIds: event.savedBlogs,
+                    userId: event.userId,
+                  ),
+            );
+          }
         } catch (error) {
           yield BlogPostsListFail();
         }

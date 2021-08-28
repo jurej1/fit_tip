@@ -106,20 +106,25 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
         limit: _limit,
         blogIds: savedBlogIds,
       );
-      _lastFetchedDocumentSnapshot = querySnapshot.docs.last;
 
-      blogs = blogs +
-          BlogPost.mapQuerySnapshotToBlogPosts(
-            querySnapshot,
-            userId: event.userId,
-            saveBlogIds: savedBlogIds,
-            likedBlogIds: event.likedBlogIds,
-          );
+      if (querySnapshot.docs.isEmpty) {
+        yield BlogPostsSavedListLoadSuccess(blogs: blogs, hasReachedMax: querySnapshot.docs.length < _limit);
+      } else {
+        _lastFetchedDocumentSnapshot = querySnapshot.docs.last;
 
-      yield BlogPostsSavedListLoadSuccess(
-        blogs: blogs,
-        hasReachedMax: querySnapshot.docs.length < _limit,
-      );
+        blogs = blogs +
+            BlogPost.mapQuerySnapshotToBlogPosts(
+              querySnapshot,
+              userId: event.userId,
+              saveBlogIds: savedBlogIds,
+              likedBlogIds: event.likedBlogIds,
+            );
+
+        yield BlogPostsSavedListLoadSuccess(
+          blogs: blogs,
+          hasReachedMax: querySnapshot.docs.length < _limit,
+        );
+      }
     } catch (error) {
       log(error.toString());
       yield BlogPostsSavedListFailure();
