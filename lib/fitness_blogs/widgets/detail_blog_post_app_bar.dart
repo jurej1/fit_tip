@@ -26,7 +26,6 @@ class DetailBlogPostAppBar extends StatelessWidget with PreferredSizeWidget {
       child: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
         builder: (context, state) {
           return AppBar(
-            title: Text(state.blogPost.title),
             actions: [
               Row(
                 children: [
@@ -54,8 +53,21 @@ class DetailBlogPostAppBar extends StatelessWidget with PreferredSizeWidget {
                     builder: (context, state) {
                       return Text(
                         state.likesAmount.toString(),
-                        style: TextStyle(fontSize: 22),
+                        style: TextStyle(fontSize: 20),
                       );
+                    },
+                  ),
+                  BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
+                    builder: (context, state) {
+                      if (state.blogPost.isAuthor) {
+                        return PopupMenuButton(
+                          icon: const Icon(Icons.more_vert),
+                          itemBuilder: (context) {
+                            return [];
+                          },
+                        );
+                      }
+                      return Container();
                     },
                   ),
                   SizedBox(
