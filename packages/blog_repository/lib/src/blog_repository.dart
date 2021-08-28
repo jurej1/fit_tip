@@ -22,6 +22,10 @@ class BlogRepository {
     return _firebaseFirestore.collection('blogs');
   }
 
+  CollectionReference _usersReference() {
+    return _firebaseFirestore.collection('users');
+  }
+
   CollectionReference _commentsReference() {
     return _firebaseFirestore.collection('blog_comments');
   }
@@ -179,6 +183,10 @@ class BlogRepository {
     } else if (task.state == TaskState.success) {
       return await task.ref.getDownloadURL();
     }
+  }
+
+  Future<DocumentSnapshot> getAuthorData(String userId) async {
+    return _usersReference().doc(userId).get();
   }
 
 ///////////////////////////////////////
