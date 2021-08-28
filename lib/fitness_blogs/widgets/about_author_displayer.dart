@@ -11,7 +11,7 @@ class AboutAuthorDisplayer extends StatelessWidget {
       builder: (context, state) {
         if (state is AboutAuthorLoading) {
           return Container(
-            height: 100,
+            height: 50,
             child: const Center(
               child: const CircularProgressIndicator(),
             ),
@@ -23,7 +23,9 @@ class AboutAuthorDisplayer extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
+              onTap: () {
+                //TODO
+              },
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
