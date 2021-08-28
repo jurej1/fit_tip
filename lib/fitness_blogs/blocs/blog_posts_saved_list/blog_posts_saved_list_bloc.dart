@@ -99,6 +99,11 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
       savedBlogIds = _mapBlogPostsToNotFetchedBlogIds(savedBlogIds, blogs);
     }
 
+    if (savedBlogIds.isEmpty) {
+      yield BlogPostsSavedListLoadSuccess(blogs: [], hasReachedMax: true);
+      return;
+    }
+
     yield BlogPostsSavedListLoading();
 
     try {
@@ -137,6 +142,10 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
       List<BlogPost> blogPosts = oldState.blogs;
       List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(event.savedBlogIds, blogPosts);
 
+      if (_allIds.isEmpty) {
+        return;
+      }
+
       try {
         QuerySnapshot snapshot = await _blogRepository.getBlogPostsQueryByIds(
           limit: _limit,
@@ -144,17 +153,23 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
           startAfterDoc: _lastFetchedDocumentSnapshot,
         );
 
-        blogPosts = blogPosts +
-            BlogPost.mapQuerySnapshotToBlogPosts(
-              snapshot,
-              userId: event.userId,
-              likedBlogIds: event.likedBlogIds,
-              saveBlogIds: event.likedBlogIds,
-            );
-        yield BlogPostsSavedListLoadSuccess(
-          blogs: blogPosts,
-          hasReachedMax: snapshot.size < _limit,
-        );
+        if (snapshot.docs.isEmpty) {
+          yield BlogPostsSavedListLoadSuccess(blogs: blogPosts, hasReachedMax: snapshot.docs.length < _limit);
+        } else {
+          _lastFetchedDocumentSnapshot = snapshot.docs.last;
+
+          blogPosts = blogPosts +
+              BlogPost.mapQuerySnapshotToBlogPosts(
+                snapshot,
+                userId: event.userId,
+                likedBlogIds: event.likedBlogIds,
+                saveBlogIds: event.likedBlogIds,
+              );
+          yield BlogPostsSavedListLoadSuccess(
+            blogs: blogPosts,
+            hasReachedMax: snapshot.size < _limit,
+          );
+        }
       } catch (error) {
         yield BlogPostsSavedListFailure();
       }
