@@ -14,3 +14,4 @@ export 'saved_blogs_builder.dart';
 export 'users_blogs_builder.dart';
 export 'blog_post_tags_displayer.dart';
 export 'about_author_displayer.dart';
+export 'blogs_view_app_bar.dart';

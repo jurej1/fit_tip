@@ -95,17 +95,7 @@ class BlogPostsView extends StatelessWidget {
         );
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Blogs view'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).push(AddBlogPostFormView.route(context));
-              },
-            ),
-          ],
-        ),
+        appBar: BlogsViewAppBar(),
         body: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
           builder: (context, state) {
             if (state.isAll) {
