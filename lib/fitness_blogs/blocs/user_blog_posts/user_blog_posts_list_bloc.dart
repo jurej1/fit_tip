@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
@@ -77,15 +78,20 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
         );
         _lastFetchedDoc = snapshot.docs.last;
 
-        List<BlogPost> blogs = oldBlogs +
-            BlogPost.mapQuerySnapshotToBlogPosts(
-              snapshot,
-              userId: event.userId!,
-              likedBlogIds: event.likedBlogs,
-              saveBlogIds: event.savedBlogs,
-            );
-        yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
+        if (snapshot.docs.isEmpty) {
+          yield UserBlogPostsListLoadSuccess(blogs: oldBlogs, hasReachedMax: snapshot.size < _limit);
+        } else {
+          List<BlogPost> blogs = oldBlogs +
+              BlogPost.mapQuerySnapshotToBlogPosts(
+                snapshot,
+                userId: event.userId!,
+                likedBlogIds: event.likedBlogs,
+                saveBlogIds: event.savedBlogs,
+              );
+          yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
+        }
       } catch (error) {
+        log(error.toString());
         yield UserBlogPostsListFail();
       }
     }
