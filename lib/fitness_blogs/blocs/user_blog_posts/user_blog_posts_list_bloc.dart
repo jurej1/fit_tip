@@ -76,11 +76,10 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
           limit: _limit,
           startAfterDoc: _lastFetchedDoc,
         );
-        _lastFetchedDoc = snapshot.docs.last;
-
         if (snapshot.docs.isEmpty) {
           yield UserBlogPostsListLoadSuccess(blogs: oldBlogs, hasReachedMax: snapshot.size < _limit);
         } else {
+          _lastFetchedDoc = snapshot.docs.last;
           List<BlogPost> blogs = oldBlogs +
               BlogPost.mapQuerySnapshotToBlogPosts(
                 snapshot,
