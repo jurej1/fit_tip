@@ -49,7 +49,12 @@ class BlogPostDetailView extends StatelessWidget {
                 isAuthor: blogPost.isAuthor,
               ),
             ),
-            //Detail blog view bloc
+            //About author bloc
+            BlocProvider(
+              create: (context) => AboutAuthorBloc(
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+              )..add(AboutAuthorLoadRequested(blogPost.authorId)),
+            ), //Detail blog view bloc
             BlocProvider(
               create: (context) => BlogPostDetailBloc(
                 blogPost: blogPost,
