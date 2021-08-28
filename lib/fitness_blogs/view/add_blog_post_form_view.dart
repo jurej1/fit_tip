@@ -48,6 +48,12 @@ class AddBlogPostFormView extends StatelessWidget {
       body: BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
         listener: (context, state) {
           if (state.status.isSubmissionSuccess) {
+            BlocProvider.of<UserBlogPostsListBloc>(context).add(
+              UserBlogPostsListItemAdded(
+                state.blogPost!,
+                BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+              ),
+            );
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
             Navigator.of(context).pop();
           } else if (state.status.isSubmissionFailure) {
