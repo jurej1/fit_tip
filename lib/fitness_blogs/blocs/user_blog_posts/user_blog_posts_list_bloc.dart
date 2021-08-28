@@ -47,15 +47,19 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
 
     try {
       QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(event.userId!, limit: _limit);
-      _lastFetchedDoc = snapshot.docs.last;
+      if (snapshot.docs.isEmpty) {
+        yield UserBlogPostsListLoadSuccess(blogs: [], hasReachedMax: true);
+      } else {
+        _lastFetchedDoc = snapshot.docs.last;
 
-      List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
-        snapshot,
-        userId: event.userId!,
-        likedBlogIds: event.likedBlogs,
-        saveBlogIds: event.savedBlogs,
-      );
-      yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
+        List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
+          snapshot,
+          userId: event.userId!,
+          likedBlogIds: event.likedBlogs,
+          saveBlogIds: event.savedBlogs,
+        );
+        yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
+      }
     } catch (error) {
       yield UserBlogPostsListFail();
     }
