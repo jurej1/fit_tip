@@ -11,10 +11,13 @@ class AddBlogPostFormView extends StatelessWidget {
   const AddBlogPostFormView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context) {
+    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
+
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
           providers: [
+            BlocProvider.value(value: userBlogPostsBloc),
             BlocProvider(
               create: (context) => AddBlogPostBloc(
                 userDataBloc: BlocProvider.of<UserDataBloc>(context),
