@@ -127,7 +127,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
   }
 
   Stream<UserBlogPostsListState> _mapItemUpdatedToState(UserBlogPostsListItemUpdated event) async* {
-    if (state is UserBlogPostsListLoadSuccess) {
+    if (state is UserBlogPostsListLoadSuccess && event.blog.authorId == event.userId) {
       final oldState = state as UserBlogPostsListLoadSuccess;
 
       List<BlogPost> blogs = oldState.blogs;

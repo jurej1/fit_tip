@@ -1,4 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
+import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class BlogPostDetailView extends StatelessWidget {
     final likedBlogPostsBloc = BlocProvider.of<LikedBlogPostsBloc>(context);
     final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedListBloc>(context);
     final blogPostsListBloc = BlocProvider.of<BlogPostsListBloc>(context);
+    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -25,6 +27,7 @@ class BlogPostDetailView extends StatelessWidget {
             //Blogs with blogPosts
             BlocProvider.value(value: blogPostsSavedListBloc),
             BlocProvider.value(value: blogPostsListBloc),
+            BlocProvider.value(value: userBlogPostsBloc),
             //Save and like feature blocs
             BlocProvider(
               create: (context) => BlogPostSaveCubit(
@@ -93,6 +96,13 @@ class BlogPostDetailView extends StatelessWidget {
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listener: (context, state) {
             BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state.blogPost));
+
+            BlocProvider.of<UserBlogPostsListBloc>(context).add(
+              UserBlogPostsListItemUpdated(
+                state.blogPost,
+                BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+              ),
+            );
           },
         ),
       ],
