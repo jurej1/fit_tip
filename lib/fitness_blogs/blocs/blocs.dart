@@ -7,3 +7,4 @@ export 'saved_blog_posts/saved_blog_posts_bloc.dart';
 export 'liked_blog_posts/liked_blog_posts_bloc.dart';
 export 'blogs_view_selector/blogs_view_selector_cubit.dart';
 export 'blog_posts_saved_list/blog_posts_saved_list_bloc.dart';
+export 'user_blog_posts/user_blog_posts_list_bloc.dart';
