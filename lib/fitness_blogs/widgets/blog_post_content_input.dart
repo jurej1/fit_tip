@@ -14,6 +14,7 @@ class BlogPostContentInput extends StatelessWidget {
           textAlignVertical: TextAlignVertical.top,
           minLines: 5,
           maxLines: 10,
+          textInputAction: TextInputAction.newline,
           decoration: InputDecoration(
             alignLabelWithHint: true,
             labelText: 'Content',

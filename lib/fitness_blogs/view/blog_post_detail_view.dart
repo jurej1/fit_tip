@@ -139,6 +139,7 @@ class BlogPostDetailView extends StatelessWidget {
                     ),
                   ),
                 Text(state.blogPost.title),
+                const BlogPostTagsDisplayer(),
               ],
             );
           },

@@ -86,7 +86,7 @@ class _ViewBuilder extends StatelessWidget {
               BlogPostContentInput(),
               IsPublicTile(),
               TagsInputField(),
-              TagsDisplayer(),
+              TagsInputDisplayer(),
               BannerPicker(),
               BannerDisplayer(),
             ],

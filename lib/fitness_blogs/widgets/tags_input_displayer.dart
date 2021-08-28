@@ -2,8 +2,8 @@ import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TagsDisplayer extends StatelessWidget {
-  const TagsDisplayer({Key? key}) : super(key: key);
+class TagsInputDisplayer extends StatelessWidget {
+  const TagsInputDisplayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
