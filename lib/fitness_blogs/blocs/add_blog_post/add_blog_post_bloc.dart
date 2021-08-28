@@ -18,8 +18,9 @@ class AddBlogPostBloc extends Bloc<AddBlogPostEvent, AddBlogPostState> {
   AddBlogPostBloc({
     required UserDataBloc userDataBloc,
     required BlogRepository blogRepository,
+    BlogPost? blog,
   })  : _blogRepository = blogRepository,
-        super(AddBlogPostState.initial(userDataBloc.state.user)) {
+        super(AddBlogPostState.initial(userDataBloc.state.user, blog)) {
     _userSubscription = userDataBloc.stream.listen((userState) {
       add(_AddBlogPostUserUpdated(userState.user));
     });

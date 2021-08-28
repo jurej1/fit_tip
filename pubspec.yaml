@@ -24,6 +24,7 @@ dependencies:
   fl_chart: ^0.36.0
   flutter:
     sdk: flutter
+  flutter_absolute_path: ^1.0.6
   flutter_bloc: ^7.0.0
   flutter_hooks: ^0.18.0
   food_repository:

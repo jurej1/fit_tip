@@ -12,8 +12,8 @@ class BlogPostDetailInitial extends BlogPostDetailState {
   const BlogPostDetailInitial(BlogPost blogPost) : super(blogPost);
 }
 
-class BlogPostDetailLoading extends BlogPostDetailState {
-  const BlogPostDetailLoading(BlogPost blogPost) : super(blogPost);
+class BlogPostDetailDeleteLoading extends BlogPostDetailState {
+  BlogPostDetailDeleteLoading(BlogPost blogPost) : super(blogPost);
 }
 
 class BlogPostDetailFailure extends BlogPostDetailState {

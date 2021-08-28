@@ -51,8 +51,9 @@ class AddBlogPostState {
     );
   }
 
-  factory AddBlogPostState.initial(User? user) {
+  factory AddBlogPostState.initial(User? user, BlogPost? blogPost) {
     final author = BlogAuthor.dirty(user?.displayName);
+
     return AddBlogPostState(
       userId: user?.id,
       author: author,

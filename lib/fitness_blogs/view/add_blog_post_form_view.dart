@@ -10,7 +10,7 @@ import '../fitness_blogs.dart';
 class AddBlogPostFormView extends StatelessWidget {
   const AddBlogPostFormView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(BuildContext context) {
+  static MaterialPageRoute route(BuildContext context, {BlogPost? blog}) {
     final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
 
     return MaterialPageRoute(
@@ -33,6 +33,31 @@ class AddBlogPostFormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<AddBlogPostBloc, AddBlogPostState>(
+      listener: (context, state) {
+        if (state.status.isSubmissionSuccess) {
+          BlocProvider.of<UserBlogPostsListBloc>(context).add(
+            UserBlogPostsListItemAdded(
+              state.blogPost!,
+              BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
+          Navigator.of(context).pop();
+        } else if (state.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failure')));
+        }
+      },
+      child: const _ViewBuilder(),
+    );
+  }
+}
+
+class _ViewBuilder extends StatelessWidget {
+  const _ViewBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add blog post'),
@@ -45,21 +70,7 @@ class AddBlogPostFormView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<AddBlogPostBloc, AddBlogPostState>(
-        listener: (context, state) {
-          if (state.status.isSubmissionSuccess) {
-            BlocProvider.of<UserBlogPostsListBloc>(context).add(
-              UserBlogPostsListItemAdded(
-                state.blogPost!,
-                BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
-            Navigator.of(context).pop();
-          } else if (state.status.isSubmissionFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failure')));
-          }
-        },
+      body: BlocBuilder<AddBlogPostBloc, AddBlogPostState>(
         builder: (context, state) {
           if (state.status.isSubmissionInProgress) {
             return const Center(

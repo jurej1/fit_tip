@@ -60,10 +60,25 @@ class DetailBlogPostAppBar extends StatelessWidget with PreferredSizeWidget {
                   BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
                     builder: (context, state) {
                       if (state.blogPost.isAuthor) {
-                        return PopupMenuButton(
+                        return PopupMenuButton<BlogPostDetailOption>(
+                          onSelected: (option) {
+                            if (option.isDelete) {
+                              //BLOC TODO DELETE
+
+                            } else if (option.isEdit) {
+                              //TODO
+                            }
+                          },
                           icon: const Icon(Icons.more_vert),
                           itemBuilder: (context) {
-                            return [];
+                            return BlogPostDetailOption.values
+                                .map(
+                                  (e) => PopupMenuItem(
+                                    child: Text(e.toStringReadable()),
+                                    value: e,
+                                  ),
+                                )
+                                .toList();
                           },
                         );
                       }
