@@ -55,6 +55,15 @@ class BlogPostsView extends StatelessWidget {
                   ),
                 ),
             ),
+            BlocProvider(
+              create: (context) => UserBlogPostsListBloc(
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+              )..add(
+                  UserBlogPostsListLoadRequested(
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+                  ),
+                ),
+            )
           ],
           child: BlogPostsView(),
         );

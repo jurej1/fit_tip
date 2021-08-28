@@ -1,3 +1,4 @@
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +24,13 @@ class UserBlogsBuilder extends StatelessWidget {
             child: BlogPostsListBuilder(
               blogs: state.blogs,
               hasReachedMax: state.hasReachedMax,
-              onIsBottom: () {},
+              onIsBottom: () {
+                BlocProvider.of<UserBlogPostsListBloc>(context).add(
+                  UserBlogPostsListLoadMoreRequested(
+                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+                  ),
+                );
+              },
             ),
           );
         } else if (state is UserBlogPostsListFail) {
