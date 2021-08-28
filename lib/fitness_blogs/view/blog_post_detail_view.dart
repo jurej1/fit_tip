@@ -123,6 +123,7 @@ class BlogPostDetailView extends StatelessWidget {
         body: BlocBuilder<BlogPostDetailBloc, BlogPostDetailState>(
           builder: (context, state) {
             return ListView(
+              padding: EdgeInsets.all(10),
               children: [
                 if (state.blogPost.bannerUrl != null)
                   Container(
@@ -145,6 +146,7 @@ class BlogPostDetailView extends StatelessWidget {
                   ),
                 Text(state.blogPost.title),
                 const BlogPostTagsDisplayer(),
+                const AboutAuthorDisplayer(),
               ],
             );
           },
