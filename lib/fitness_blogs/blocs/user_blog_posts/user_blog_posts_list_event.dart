@@ -9,20 +9,28 @@ abstract class UserBlogPostsListEvent extends Equatable {
 
 class UserBlogPostsListLoadRequested extends UserBlogPostsListEvent {
   final String? userId;
+  final List<String> likedBlogs;
+  final List<String> savedBlogs;
 
-  const UserBlogPostsListLoadRequested({required this.userId});
+  const UserBlogPostsListLoadRequested({
+    required this.userId,
+    required this.likedBlogs,
+    required this.savedBlogs,
+  });
 
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [userId, savedBlogs, likedBlogs];
 }
 
 class UserBlogPostsListLoadMoreRequested extends UserBlogPostsListEvent {
   final String? userId;
+  final List<String> likedBlogs;
+  final List<String> savedBlogs;
 
-  const UserBlogPostsListLoadMoreRequested({required this.userId});
+  const UserBlogPostsListLoadMoreRequested({required this.userId, required this.likedBlogs, required this.savedBlogs});
 
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [userId, savedBlogs, likedBlogs];
 }
 
 class UserBlogPostsListItemAdded extends UserBlogPostsListEvent {

@@ -28,6 +28,8 @@ class UserBlogsBuilder extends StatelessWidget {
                 BlocProvider.of<UserBlogPostsListBloc>(context).add(
                   UserBlogPostsListLoadMoreRequested(
                     userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
+                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
                   ),
                 );
               },
