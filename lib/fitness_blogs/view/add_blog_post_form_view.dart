@@ -25,7 +25,7 @@ class AddBlogPostFormView extends StatelessWidget {
               ),
             ),
           ],
-          child: AddBlogPostFormView(),
+          child: const AddBlogPostFormView(),
         );
       },
     );
