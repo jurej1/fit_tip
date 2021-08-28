@@ -144,8 +144,11 @@ class BlogPostDetailView extends StatelessWidget {
                       },
                     ),
                   ),
+                const SizedBox(height: 10),
                 Text(state.blogPost.title),
+                const SizedBox(height: 10),
                 const BlogPostTagsDisplayer(),
+                const SizedBox(height: 10),
                 const AboutAuthorDisplayer(),
               ],
             );
