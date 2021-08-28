@@ -6,7 +6,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"  
 
 dependencies:
   another_flushbar: ^1.10.18
@@ -24,7 +24,6 @@ dependencies:
   fl_chart: ^0.36.0
   flutter:
     sdk: flutter
-  flutter_absolute_path: ^1.0.6
   flutter_bloc: ^7.0.0
   flutter_hooks: ^0.18.0
   food_repository:
