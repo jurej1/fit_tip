@@ -105,7 +105,9 @@ class BlogPostsView extends StatelessWidget {
               return SavedBlogsBuilder();
             }
 
-            if (state.isUsers) {}
+            if (state.isUsers) {
+              return UserBlogsBuilder();
+            }
 
             return Container();
           },
