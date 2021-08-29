@@ -1,3 +1,4 @@
+import 'package:fit_tip/fitness_blogs/view/blogs_search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
-                  //TODO serach
+                  Navigator.of(context).push<String?>(BlogsSearchView.route<String?>(context));
                 },
               ),
             },
