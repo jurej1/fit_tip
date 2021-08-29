@@ -25,12 +25,14 @@ class BlogSearchView extends StatelessWidget {
           BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               return SliverSearchAppBar(
+                value: state.search.value,
                 hintText: 'Search...',
                 onChanged: (value) {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryUpdated(value));
                 },
-                onSubmitted: (value) {},
-                value: state.search.value,
+                onSubmitted: (value) {
+                  //TODO when the value is submitted
+                },
                 onTrailingTap: () {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryClerRequested());
                 },
