@@ -1,4 +1,3 @@
-import 'package:fit_tip/fitness_blogs/view/blogs_search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +17,9 @@ class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
               if (state.isInfo) {
                 return _InfoAppBar();
               } else {
-                return SearchAppBar();
+                return SearchAppBar(
+                  onSubmitted: (value) {},
+                );
               }
             },
           );

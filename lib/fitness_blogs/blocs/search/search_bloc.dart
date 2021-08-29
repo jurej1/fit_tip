@@ -7,6 +7,14 @@ import 'package:fit_tip/fitness_blogs/models/models.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
+enum SearchBy { title, tags, author }
+
+extension SearchByX on SearchBy {
+  bool get isTitle => this == SearchBy.title;
+  bool get isTags => this == SearchBy.tags;
+  bool get isAuthor => this == SearchBy.author;
+}
+
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchState());
 
@@ -18,6 +26,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield* _mapQueryUpdatedToState(event);
     } else if (event is SearchQueryUpdated) {
       yield* _mapClearRequestedToState();
+    } else if (event is SearchByUpdated) {
+      yield state.copyWith(searchBy: event.value);
     }
   }
 
