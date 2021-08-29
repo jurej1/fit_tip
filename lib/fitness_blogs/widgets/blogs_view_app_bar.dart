@@ -9,6 +9,33 @@ class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => BlogsViewAppBarCubit(),
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<BlogsViewAppBarCubit, BlogsViewAppBarState>(
+            builder: (context, state) {
+              if (state.isInfo) {
+                return _InfoAppBar();
+              } else {
+                return SearchAppBar();
+              }
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _InfoAppBar extends StatelessWidget {
+  const _InfoAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
       builder: (context, state) {
         return AppBar(
@@ -18,7 +45,7 @@ class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
-                  Navigator.of(context).push<String?>(BlogsSearchView.route<String?>(context));
+                  BlocProvider.of<BlogsViewAppBarCubit>(context).searchIconButtonPressed();
                 },
               ),
             },
@@ -35,7 +62,4 @@ class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
       },
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

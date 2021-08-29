@@ -1,4 +1,4 @@
-import 'package:fit_tip/settings/settings.dart';
+import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,36 +7,38 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EdgeInsets padding = MediaQuery.of(context).padding;
-
-    return Material(
-      color: BlocProvider.of<ThemeBloc>(context, listen: true).state.accentColor,
-      child: Padding(
-        padding: EdgeInsets.only(top: padding.top),
-        child: Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none,
+    return BlocProvider(
+      create: (context) => SearchBloc(),
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              return AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    BlocProvider.of<BlogsViewAppBarCubit>(context).backIconButtonPressed();
+                  },
                 ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                //TODO the icon is only going to be displayed when the query is not going to be null
-              },
-            ),
-          ],
-        ),
+                title: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                  ),
+                ),
+                actions: [
+                  if (!state.isQueryEmpty)
+                    IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        //TODO the icon is only going to be displayed when the query is not going to be null
+                      },
+                    ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
