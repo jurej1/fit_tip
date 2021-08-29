@@ -15,3 +15,4 @@ export 'users_blogs_builder.dart';
 export 'blog_post_tags_displayer.dart';
 export 'about_author_displayer.dart';
 export 'info_app_bar.dart';
+export 'sliver_search_app_bar.dart';
