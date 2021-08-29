@@ -1,4 +1,5 @@
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
+import 'package:fit_tip/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,41 +13,43 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EdgeInsets padding = MediaQuery.of(context).padding;
     return BlocProvider(
       create: (context) => SearchBloc(),
       child: Builder(
         builder: (context) {
           return BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
-              return AppBar(
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    BlocProvider.of<BlogsViewAppBarCubit>(context).backIconButtonPressed();
-                  },
-                ),
-                title: TextFormField(
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (value) {
-                    BlocProvider.of<SearchBloc>(context).add(SearchQueryUpdated(value));
-                  },
-                  onFieldSubmitted: (value) {
-                    onSubmitted(value);
-                  },
-                ),
-                actions: [
-                  if (!state.isQueryEmpty)
+              return Container(
+                color: BlocProvider.of<ThemeBloc>(context, listen: true).state.accentColor,
+                padding: EdgeInsets.only(top: padding.top),
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
                     IconButton(
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.arrow_back),
                       onPressed: () {
-                        //TODO the icon is only going to be displayed when the query is not going to be null
+                        BlocProvider.of<BlogsViewAppBarCubit>(context).backIconButtonPressedOnSearch();
                       },
                     ),
-                ],
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Search...',
+                        ),
+                      ),
+                    ),
+                    if (!state.isQueryEmpty)
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          //TODO the icon is only going to be displayed when the query is not going to be null
+                        },
+                      )
+                  ],
+                ),
               );
             },
           );

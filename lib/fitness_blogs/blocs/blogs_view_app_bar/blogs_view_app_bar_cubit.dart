@@ -17,7 +17,7 @@ class BlogsViewAppBarCubit extends Cubit<BlogsViewAppBarState> {
     emit(BlogsViewAppBarState.search);
   }
 
-  void backIconButtonPressed() {
+  void backIconButtonPressedOnSearch() {
     emit(BlogsViewAppBarState.info);
   }
 }

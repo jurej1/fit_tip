@@ -13,6 +13,14 @@ extension SearchByX on SearchBy {
   bool get isTitle => this == SearchBy.title;
   bool get isTags => this == SearchBy.tags;
   bool get isAuthor => this == SearchBy.author;
+
+  String toStringReadable() {
+    if (isTitle) return 'Title';
+    if (isTags) return 'Tag';
+    if (isAuthor) return 'Author';
+
+    return '';
+  }
 }
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {

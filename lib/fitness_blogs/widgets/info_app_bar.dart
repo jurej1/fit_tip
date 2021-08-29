@@ -3,37 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../fitness_blogs.dart';
 
-class BlogsViewAppBar extends StatelessWidget with PreferredSizeWidget {
-  const BlogsViewAppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BlogsViewAppBarCubit(),
-      child: Builder(
-        builder: (context) {
-          return BlocBuilder<BlogsViewAppBarCubit, BlogsViewAppBarState>(
-            builder: (context, state) {
-              if (state.isInfo) {
-                return _InfoAppBar();
-              } else {
-                return SearchAppBar(
-                  onSubmitted: (value) {},
-                );
-              }
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-}
-
-class _InfoAppBar extends StatelessWidget {
-  const _InfoAppBar({Key? key}) : super(key: key);
+class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
+  const InfoAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,5 +33,10 @@ class _InfoAppBar extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  Size get preferredSize {
+    return Size.fromHeight(kToolbarHeight);
   }
 }
