@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_blogs/models/models.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -25,6 +25,18 @@ extension SearchByX on SearchBy {
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchState());
+
+  @override
+  Stream<Transition<SearchEvent, SearchState>> transformEvents(
+    Stream<SearchEvent> events,
+    TransitionFunction<SearchEvent, SearchState> transitionFn,
+  ) {
+    final nonDebounceStream = events.where((event) => event is! SearchQueryUpdated);
+
+    final debounceStream = events.where((event) => event is SearchQueryUpdated).debounceTime(const Duration(milliseconds: 300));
+
+    return super.transformEvents(MergeStream([nonDebounceStream, debounceStream]), transitionFn);
+  }
 
   @override
   Stream<SearchState> mapEventToState(
