@@ -10,3 +10,4 @@ export 'blog_posts_saved_list/blog_posts_saved_list_bloc.dart';
 export 'user_blog_posts/user_blog_posts_list_bloc.dart';
 export 'blog_post_delete/blog_post_delete_bloc.dart';
 export 'about_author/about_author_bloc.dart';
+export 'search/search_bloc.dart';
