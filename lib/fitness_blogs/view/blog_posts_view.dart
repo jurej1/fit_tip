@@ -66,10 +66,6 @@ class BlogPostsView extends StatelessWidget {
                   ),
                 ),
             ),
-            //App Bar bloc
-            BlocProvider(
-              create: (context) => BlogsViewAppBarCubit(),
-            )
           ],
           child: BlogPostsView(),
         );
@@ -99,9 +95,7 @@ class BlogPostsView extends StatelessWidget {
         );
       },
       child: Scaffold(
-        appBar: SearchAppBar(
-          onSubmitted: (value) {},
-        ),
+        appBar: InfoAppBar(),
         body: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
           builder: (context, state) {
             if (state.isAll) {

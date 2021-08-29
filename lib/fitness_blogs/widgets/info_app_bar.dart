@@ -17,7 +17,7 @@ class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () {
-                  BlocProvider.of<BlogsViewAppBarCubit>(context).searchIconButtonPressed();
+                  //TODO search icon pressed
                 },
               ),
             },
