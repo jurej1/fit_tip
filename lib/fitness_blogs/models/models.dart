@@ -5,3 +5,4 @@ export 'blog_tags.dart';
 export 'blog_author.dart';
 export 'blog_tag.dart';
 export 'blog_images.dart';
+export 'search.dart';
