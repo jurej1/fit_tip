@@ -54,14 +54,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> _mapQueryUpdatedToState(SearchQueryUpdated event) async* {
     final search = Search.dirty(event.query);
 
-    yield SearchState(search: search);
+    yield state.copyWith(search: search);
   }
 
   Stream<SearchState> _mapClearRequestedToState() async* {
     final currentQuery = state.search.value;
 
     if (currentQuery.isNotEmpty) {
-      yield SearchState();
+      yield state.copyWith(search: Search.pure());
     }
   }
 }
