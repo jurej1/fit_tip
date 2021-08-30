@@ -21,7 +21,7 @@ class BlogSearchView extends StatelessWidget {
             BlocProvider(
               create: (context) => FilteredBlogSearchHistoryBloc(
                 blogSearchHistoryBloc: BlocProvider.of<BlogSearchHistoryBloc>(context),
-                searchBy: BlocProvider.of<SearchBloc>(context).state.searchBy,
+                searchBloc: BlocProvider.of<SearchBloc>(context),
               ),
             )
           ],
@@ -104,7 +104,11 @@ class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchState>(
+    return BlocConsumer<SearchBloc, SearchState>(
+      listenWhen: (p, c) => p.searchBy != c.searchBy,
+      listener: (context, state) {
+        BlocProvider.of<FilteredBlogSearchHistoryBloc>(context).add(FilteredBlogSearchHistorySearchByUpdated(state.searchBy));
+      },
       builder: (context, state) {
         return SizedBox(
           height: preferredSize.height,

@@ -16,10 +16,10 @@ class FilteredBlogSearchHistorySearchByUpdated extends FilteredBlogSearchHistory
   List<Object> get props => [searchBy];
 }
 
-class FilteredBlogSearchHistoryQueryUpdated extends FilteredBlogSearchHistoryEvent {
+class _FilteredBlogSearchHistoryQueryUpdated extends FilteredBlogSearchHistoryEvent {
   final String value;
 
-  const FilteredBlogSearchHistoryQueryUpdated(this.value);
+  const _FilteredBlogSearchHistoryQueryUpdated(this.value);
 
   @override
   List<Object> get props => [value];
