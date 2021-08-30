@@ -67,7 +67,9 @@ class BlogSearchHistoryBloc extends HydratedBloc<BlogSearchHistoryEvent, BlogSea
       return history;
     }
 
-    history.add(value);
+    if (!history.contains(value)) {
+      history.add(value);
+    }
     return history;
   }
 }
