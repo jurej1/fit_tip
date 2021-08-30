@@ -107,7 +107,7 @@ class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
     return BlocConsumer<SearchBloc, SearchState>(
       listenWhen: (p, c) => p.searchBy != c.searchBy,
       listener: (context, state) {
-        BlocProvider.of<FilteredBlogSearchHistoryBloc>(context).add(FilteredBlogSearchHistorySearchByUpdated(state.searchBy));
+        BlocProvider.of<FilteredBlogSearchHistoryBloc>(context).add(FilteredBlogSearchHistorySearchByUpdated());
       },
       builder: (context, state) {
         return SizedBox(

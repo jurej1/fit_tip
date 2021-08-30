@@ -64,6 +64,7 @@ class FilteredBlogSearchHistoryBloc extends Bloc<FilteredBlogSearchHistoryEvent,
   }
 
   Stream<FilteredBlogSearchHistoryState> _mapSearchByUpdatedToState(FilteredBlogSearchHistorySearchByUpdated event) async* {
-    yield FilteredBlogSearchHistoryState(values: _blogSearchHistoryBloc.state.getValuesBySearchBy(event.searchBy));
+    yield FilteredBlogSearchHistoryState(values: _blogSearchHistoryBloc.state.getValuesBySearchBy(_searchBloc.state.searchBy));
+    add(_FilteredBlogSearchHistoryQueryUpdated(_searchBloc.state.search.value));
   }
 }
