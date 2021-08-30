@@ -75,7 +75,7 @@ class SliverSearchAppBar extends StatelessWidget {
           ),
         ),
       ),
-      bottom: _SelectByBuilder(),
+      bottom: const _SelectByBuilder(),
     );
   }
 }
@@ -108,7 +108,7 @@ class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
               );
             },
             separatorBuilder: (context, index) {
-              return SizedBox(width: 5);
+              return const SizedBox(width: 8);
             },
           ),
         );
