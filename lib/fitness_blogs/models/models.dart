@@ -6,3 +6,4 @@ export 'blog_author.dart';
 export 'blog_tag.dart';
 export 'blog_images.dart';
 export 'search.dart';
+export 'blog_search_result.dart';

@@ -7,7 +7,7 @@ import '../fitness_blogs.dart';
 class BlogSearchView extends StatelessWidget {
   const BlogSearchView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute<String?> route(BuildContext context) {
+  static MaterialPageRoute<BlogSearchResult?> route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
         return BlocProvider(
@@ -33,7 +33,12 @@ class BlogSearchView extends StatelessWidget {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryUpdated(value));
                 },
                 onSubmitted: (value) {
-                  Navigator.of(context).pop(state.search.value);
+                  Navigator.of(context).pop(
+                    BlogSearchResult(
+                      query: state.search.value,
+                      searchBy: state.searchBy,
+                    ),
+                  );
                 },
                 onTrailingTap: () {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryClerRequested());

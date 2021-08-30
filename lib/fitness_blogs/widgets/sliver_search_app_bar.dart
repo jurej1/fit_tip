@@ -67,13 +67,13 @@ class SliverSearchAppBar extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   child: value.isNotEmpty
                       ? IconButton(
-                          key: ValueKey('Icon'),
+                          key: const ValueKey('Icon'),
                           icon: const Icon(Icons.close),
                           color: accentColor,
                           onPressed: onTrailingTap,
                         )
                       : Container(
-                          key: ValueKey('empty_space'),
+                          key: const ValueKey('empty_space'),
                         ),
                 ),
               ],
