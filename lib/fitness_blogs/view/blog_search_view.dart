@@ -39,18 +39,7 @@ class BlogSearchView extends StatelessWidget {
               );
             },
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, indext) {
-                return Container(
-                  height: 30,
-                  margin: EdgeInsets.all(4),
-                  color: Colors.red,
-                );
-              },
-              childCount: 59,
-            ),
-          ),
+          //TODO build the search history
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,7 +36,7 @@ class SliverSearchAppBar extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 19),
+            padding: const EdgeInsets.symmetric(horizontal: 19),
             child: Row(
               children: [
                 Icon(
@@ -74,6 +75,44 @@ class SliverSearchAppBar extends StatelessWidget {
           ),
         ),
       ),
+      bottom: _SelectByBuilder(),
     );
   }
+}
+
+class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
+  const _SelectByBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return SizedBox(
+          height: preferredSize.height,
+          width: preferredSize.width,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            scrollDirection: Axis.horizontal,
+            itemCount: SearchBy.values.length,
+            itemBuilder: (context, index) {
+              final item = SearchBy.values[index];
+              final bool isSelected = item == state.searchBy;
+
+              return Chip(
+                label: Text(item.toStringReadable()),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                backgroundColor: isSelected ? BlocProvider.of<ThemeBloc>(context).state.accentColor : Colors.grey.shade300,
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(width: 5);
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(35);
 }
