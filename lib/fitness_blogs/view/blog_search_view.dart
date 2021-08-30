@@ -10,8 +10,15 @@ class BlogSearchView extends StatelessWidget {
   static MaterialPageRoute<BlogSearchResult?> route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return BlocProvider(
-          create: (context) => SearchBloc(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => SearchBloc(),
+            ),
+            BlocProvider(
+              create: (context) => BlogSearchHistoryBloc(),
+            ),
+          ],
           child: BlogSearchView(),
         );
       },

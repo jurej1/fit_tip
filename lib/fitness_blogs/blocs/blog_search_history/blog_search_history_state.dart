@@ -29,4 +29,14 @@ class BlogSearchHistoryState extends Equatable {
   factory BlogSearchHistoryState.initial() {
     return BlogSearchHistoryState(byTags: [], byAuthor: [], byTitle: []);
   }
+
+  List<String> getValuesBySearchBy(SearchBy searcBy) {
+    if (searcBy.isAuthor) {
+      return byAuthor;
+    } else if (searcBy.isTags) {
+      return byTags;
+    } else {
+      return byTitle;
+    }
+  }
 }
