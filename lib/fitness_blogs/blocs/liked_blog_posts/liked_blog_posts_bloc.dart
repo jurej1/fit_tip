@@ -25,6 +25,12 @@ class LikedBlogPostsBloc extends HydratedBloc<LikedBlogPostsEvent, List<String>>
   late Map<String, dynamic> allIds;
 
   @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
+
+  @override
   Stream<List<String>> mapEventToState(
     LikedBlogPostsEvent event,
   ) async* {
