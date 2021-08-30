@@ -11,11 +11,11 @@ part 'filtered_blog_search_history_state.dart';
 class FilteredBlogSearchHistoryBloc extends Bloc<FilteredBlogSearchHistoryEvent, FilteredBlogSearchHistoryState> {
   FilteredBlogSearchHistoryBloc({
     required BlogSearchHistoryBloc blogSearchHistoryBloc,
-    required SearchBloc searchBloc,
+    required SearchBy searchBy,
   })  : _blogSearchHistoryBloc = blogSearchHistoryBloc,
         super(
           FilteredBlogSearchHistoryState(
-            values: blogSearchHistoryBloc.state.getValuesBySearchBy(searchBloc.state.searchBy),
+            values: blogSearchHistoryBloc.state.getValuesBySearchBy(searchBy),
           ),
         );
 

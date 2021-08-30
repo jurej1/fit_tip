@@ -18,6 +18,12 @@ class BlogSearchView extends StatelessWidget {
             BlocProvider(
               create: (context) => BlogSearchHistoryBloc(),
             ),
+            BlocProvider(
+              create: (context) => FilteredBlogSearchHistoryBloc(
+                blogSearchHistoryBloc: BlocProvider.of<BlogSearchHistoryBloc>(context),
+                searchBy: BlocProvider.of<SearchBloc>(context).state.searchBy,
+              ),
+            )
           ],
           child: BlogSearchView(),
         );
@@ -53,17 +59,20 @@ class BlogSearchView extends StatelessWidget {
               );
             },
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, indext) {
-                return Container(
-                  height: 30,
-                  margin: EdgeInsets.all(4),
-                  color: Colors.red,
-                );
-              },
-              childCount: 40,
-            ),
+          BlocBuilder<FilteredBlogSearchHistoryBloc, FilteredBlogSearchHistoryState>(
+            builder: (context, state) {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(4),
+                      child: Text(state.values[index]),
+                    );
+                  },
+                  childCount: state.values.length,
+                ),
+              );
+            },
           ),
         ],
       ),
