@@ -39,15 +39,16 @@ class BlogSearchView extends StatelessWidget {
               );
             },
           ),
-          SliverFillRemaining(
-            child: ListView.custom(
-              physics: ClampingScrollPhysics(),
-              childrenDelegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Container();
-                },
-                childCount: 20,
-              ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, indext) {
+                return Container(
+                  height: 30,
+                  margin: EdgeInsets.all(4),
+                  color: Colors.red,
+                );
+              },
+              childCount: 59,
             ),
           ),
         ],

@@ -23,6 +23,8 @@ class SliverSearchAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final accentColor = BlocProvider.of<ThemeBloc>(context, listen: true).state.accentColor;
     return SliverAppBar(
+      elevation: 0,
+      floating: true,
       automaticallyImplyLeading: false,
       toolbarHeight: kToolbarHeight + 10,
       backgroundColor: Colors.transparent,
