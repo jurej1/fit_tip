@@ -6,7 +6,7 @@ import '../fitness_blogs.dart';
 class BlogSearchView extends StatelessWidget {
   const BlogSearchView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route<String>(BuildContext context) {
+  static MaterialPageRoute<String?> route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
         return BlocProvider(

@@ -16,8 +16,9 @@ class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
             if (state.isAll || state.isSaved) ...{
               IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: () {
-                  Navigator.of(context).push(BlogSearchView.route(context));
+                onPressed: () async {
+                  String? value = await Navigator.of(context).push<String?>(BlogSearchView.route(context));
+                  //TODO update the blocs dynamicaly based on wich view the user ist
                 },
               ),
             },
