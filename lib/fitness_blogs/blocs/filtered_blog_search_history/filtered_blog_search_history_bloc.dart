@@ -13,6 +13,7 @@ class FilteredBlogSearchHistoryBloc extends Bloc<FilteredBlogSearchHistoryEvent,
     required BlogSearchHistoryBloc blogSearchHistoryBloc,
     required SearchBloc searchBloc,
   })  : _blogSearchHistoryBloc = blogSearchHistoryBloc,
+        _searchBloc = searchBloc,
         super(
           FilteredBlogSearchHistoryState(
             values: blogSearchHistoryBloc.state.getValuesBySearchBy(searchBloc.state.searchBy),
@@ -23,6 +24,7 @@ class FilteredBlogSearchHistoryBloc extends Bloc<FilteredBlogSearchHistoryEvent,
     });
   }
 
+  final SearchBloc _searchBloc;
   final BlogSearchHistoryBloc _blogSearchHistoryBloc;
   late final StreamSubscription _searchSubscription;
 
@@ -44,6 +46,11 @@ class FilteredBlogSearchHistoryBloc extends Bloc<FilteredBlogSearchHistoryEvent,
   }
 
   Stream<FilteredBlogSearchHistoryState> _mapQueryUpdatedToState(_FilteredBlogSearchHistoryQueryUpdated event) async* {
+    if (event.value.isEmpty) {
+      yield FilteredBlogSearchHistoryState(values: _blogSearchHistoryBloc.state.getValuesBySearchBy(_searchBloc.state.searchBy));
+      return;
+    }
+
     List<String> currentValues = List.from(state.values);
 
     String lowerQuery = event.value.toLowerCase();
