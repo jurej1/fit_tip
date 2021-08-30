@@ -12,6 +12,7 @@ class SliverSearchAppBar extends StatelessWidget {
     required this.value,
     required this.hintText,
     required this.onTrailingTap,
+    this.bottom,
   }) : super(key: key);
 
   final Function(String value) onChanged;
@@ -19,6 +20,7 @@ class SliverSearchAppBar extends StatelessWidget {
   final VoidCallback onTrailingTap;
   final String value;
   final String hintText;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +46,22 @@ class SliverSearchAppBar extends StatelessWidget {
                   color: accentColor,
                 ),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    initialValue: value,
-                    cursorColor: accentColor,
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      border: InputBorder.none,
-                    ),
-                    textInputAction: TextInputAction.search,
-                    onChanged: onChanged,
-                    onFieldSubmitted: onSubmitted,
-                  ),
+                BlocBuilder<SearchBloc, SearchState>(
+                  builder: (context, state) {
+                    return Expanded(
+                      child: TextFormField(
+                        initialValue: value,
+                        cursorColor: accentColor,
+                        decoration: InputDecoration(
+                          hintText: hintText,
+                          border: InputBorder.none,
+                        ),
+                        textInputAction: TextInputAction.search,
+                        onChanged: onChanged,
+                        onFieldSubmitted: onSubmitted,
+                      ),
+                    );
+                  },
                 ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
@@ -75,47 +81,7 @@ class SliverSearchAppBar extends StatelessWidget {
           ),
         ),
       ),
-      bottom: const _SelectByBuilder(),
+      bottom: bottom,
     );
   }
-}
-
-class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
-  const _SelectByBuilder({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchState>(
-      builder: (context, state) {
-        return SizedBox(
-          height: preferredSize.height,
-          width: preferredSize.width,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            scrollDirection: Axis.horizontal,
-            itemCount: SearchBy.values.length,
-            itemBuilder: (context, index) {
-              final item = SearchBy.values[index];
-              final bool isSelected = item == state.searchBy;
-
-              return RawChip(
-                selected: isSelected,
-                label: Text(item.toStringReadable()),
-                selectedColor: BlocProvider.of<ThemeBloc>(context).state.accentColor,
-                onPressed: () {
-                  BlocProvider.of<SearchBloc>(context).add(SearchByUpdated(item));
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(width: 8);
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(35);
 }
