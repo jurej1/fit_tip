@@ -46,19 +46,7 @@ class BlogSearchView extends StatelessWidget {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryUpdated(value));
                 },
                 onSubmitted: (value) {
-                  BlocProvider.of<BlogSearchHistoryBloc>(context).add(
-                    BlogSearchHistoryItemAdded(
-                      searchBy: state.searchBy,
-                      value: state.search.value,
-                    ),
-                  );
-
-                  Navigator.of(context).pop(
-                    BlogSearchResult(
-                      query: state.search.value,
-                      searchBy: state.searchBy,
-                    ),
-                  );
+                  _submit(context, searchBy: state.searchBy, value: state.search.value);
                 },
                 onTrailingTap: () {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryClerRequested());
@@ -71,9 +59,17 @@ class BlogSearchView extends StatelessWidget {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(4),
-                      child: Text(state.values[index]),
+                    final value = state.values[index];
+                    return ListTile(
+                      leading: Icon(Icons.history),
+                      title: Text(value),
+                      onTap: () {
+                        _submit(
+                          context,
+                          searchBy: BlocProvider.of<SearchBloc>(context).state.searchBy,
+                          value: value,
+                        );
+                      },
                     );
                   },
                   childCount: state.values.length,
@@ -82,6 +78,22 @@ class BlogSearchView extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _submit(BuildContext context, {required SearchBy searchBy, required String value}) {
+    BlocProvider.of<BlogSearchHistoryBloc>(context).add(
+      BlogSearchHistoryItemAdded(
+        searchBy: searchBy,
+        value: value,
+      ),
+    );
+
+    Navigator.of(context).pop(
+      BlogSearchResult(
+        query: value,
+        searchBy: searchBy,
       ),
     );
   }
