@@ -98,10 +98,13 @@ class _SelectByBuilder extends StatelessWidget with PreferredSizeWidget {
               final item = SearchBy.values[index];
               final bool isSelected = item == state.searchBy;
 
-              return Chip(
+              return RawChip(
+                selected: isSelected,
                 label: Text(item.toStringReadable()),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                backgroundColor: isSelected ? BlocProvider.of<ThemeBloc>(context).state.accentColor : Colors.grey.shade300,
+                selectedColor: BlocProvider.of<ThemeBloc>(context).state.accentColor,
+                onPressed: () {
+                  BlocProvider.of<SearchBloc>(context).add(SearchByUpdated(item));
+                },
               );
             },
             separatorBuilder: (context, index) {
