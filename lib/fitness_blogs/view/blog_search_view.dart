@@ -46,6 +46,13 @@ class BlogSearchView extends StatelessWidget {
                   BlocProvider.of<SearchBloc>(context).add(SearchQueryUpdated(value));
                 },
                 onSubmitted: (value) {
+                  BlocProvider.of<BlogSearchHistoryBloc>(context).add(
+                    BlogSearchHistoryItemAdded(
+                      searchBy: state.searchBy,
+                      value: state.search.value,
+                    ),
+                  );
+
                   Navigator.of(context).pop(
                     BlogSearchResult(
                       query: state.search.value,
