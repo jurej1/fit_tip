@@ -10,6 +10,8 @@ import '../blocs.dart';
 part 'focused_workout_day_event.dart';
 part 'focused_workout_day_state.dart';
 
+//TODO clean this bloc
+
 class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutDayState> {
   FocusedWorkoutDayBloc({
     required ActiveWorkoutBloc activeWorkoutBloc,
@@ -18,6 +20,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
     required AuthenticationBloc authenticationBloc,
   })  : _activeWorkoutBloc = activeWorkoutBloc,
         _fitnessRepository = fitnessRepository,
+        _authenticationBloc = authenticationBloc,
         super(FocusedWorkoutDayLoading()) {
     if (tableCalendarBloc.state is TableCalendarLoadSuccess) {
       add(FocusedWorkoutDayDateUpdated((tableCalendarBloc.state as TableCalendarLoadSuccess).focusedDay));
@@ -28,25 +31,12 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
         add(_FocusedWorkoutDayFailRequested());
       }
     });
-
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
   }
 
   final ActiveWorkoutBloc _activeWorkoutBloc;
   final FitnessRepository _fitnessRepository;
   late final StreamSubscription _activeWorkoutSubscription;
-  late final StreamSubscription _authSubscription;
-
-  bool _isAuth = false;
-  String? _userId;
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<FocusedWorkoutDayState> mapEventToState(
@@ -60,7 +50,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   }
 
   Stream<FocusedWorkoutDayState> _mapDateUpdatedToState(FocusedWorkoutDayDateUpdated event) async* {
-    if (_activeWorkoutBloc.state is ActiveWorkoutLoadSuccess && _isAuth) {
+    if (_activeWorkoutBloc.state is ActiveWorkoutLoadSuccess && _authenticationBloc.state.isAuthenticated) {
       final activeState = _activeWorkoutBloc.state as ActiveWorkoutLoadSuccess;
 
       if (!activeState.workout.workouts.any((element) => element.day == event.value.weekday)) {
@@ -69,7 +59,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
         yield FocusedWorkoutDayLoading();
         WorkoutDay workoutDay = activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday);
 
-        List<WorkoutDayLog> logs = await _fitnessRepository.getWorkoutDayLogByDate(_userId!, event.value);
+        List<WorkoutDayLog> logs = await _fitnessRepository.getWorkoutDayLogByDate(_authenticationBloc.state.user!.uid!, event.value);
 
         yield FocusedWorkoutDayLoadSuccess(
           date: event.value,
@@ -86,7 +76,6 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
   @override
   Future<void> close() {
     _activeWorkoutSubscription.cancel();
-    _authSubscription.cancel();
     return super.close();
   }
 }
