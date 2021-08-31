@@ -13,12 +13,24 @@ class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
         return AppBar(
           title: const Text('Blogs'),
           actions: [
-            if (state.isAll || state.isSaved) ...{
+            if (state.isAll) ...{
+              BlocBuilder<BlogPostsSearchFilterBloc, BlogSearchResult?>(
+                builder: (context, state) {
+                  return Visibility(
+                    visible: state != null,
+                    child: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        BlocProvider.of<BlogPostsSearchFilterBloc>(context).add(BlogPostsSearchFilterClearRequested());
+                      },
+                    ),
+                  );
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () async {
                   BlogSearchResult? value = await Navigator.of(context).push<BlogSearchResult?>(BlogSearchView.route(context));
-
                   BlocProvider.of<BlogPostsSearchFilterBloc>(context).add(BlogPostsSearchFilterUpdated(value));
                 },
               ),
