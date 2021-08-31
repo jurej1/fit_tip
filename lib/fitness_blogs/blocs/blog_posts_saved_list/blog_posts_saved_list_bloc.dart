@@ -107,7 +107,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     yield BlogPostsSavedListLoading();
 
     try {
-      QuerySnapshot querySnapshot = await _blogRepository.getBlogPostsQueryByIds(
+      QuerySnapshot querySnapshot = await _blogRepository.getBlogPostsByBlogIds(
         limit: _limit,
         blogIds: savedBlogIds,
       );
@@ -147,7 +147,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
       }
 
       try {
-        QuerySnapshot snapshot = await _blogRepository.getBlogPostsQueryByIds(
+        QuerySnapshot snapshot = await _blogRepository.getBlogPostsByBlogIds(
           limit: _limit,
           blogIds: _allIds,
           startAfterDoc: _lastFetchedDocumentSnapshot,

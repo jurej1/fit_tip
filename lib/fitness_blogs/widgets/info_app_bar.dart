@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,8 +18,9 @@ class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
                 icon: const Icon(Icons.search),
                 onPressed: () async {
                   BlogSearchResult? value = await Navigator.of(context).push<BlogSearchResult?>(BlogSearchView.route(context));
-                  //TODO update the blocs dynamicaly based on wich view the user ist
-                  log(value.toString());
+
+                  if (state.isAll) {}
+                  if (state.isSaved) {}
                 },
               ),
             },

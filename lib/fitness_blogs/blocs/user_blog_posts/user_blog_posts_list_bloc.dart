@@ -46,7 +46,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
     yield UserBlogPostsListLoading();
 
     try {
-      QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(event.userId!, limit: _limit);
+      QuerySnapshot snapshot = await _blogRepository.getBlogPostsByOwnerId(event.userId!, limit: _limit);
       if (snapshot.docs.isEmpty) {
         yield UserBlogPostsListLoadSuccess(blogs: [], hasReachedMax: true);
       } else {
@@ -75,7 +75,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
       }
 
       try {
-        QuerySnapshot snapshot = await _blogRepository.getBlogPostByOwnerId(
+        QuerySnapshot snapshot = await _blogRepository.getBlogPostsByOwnerId(
           event.userId!,
           limit: _limit,
           startAfterDoc: _lastFetchedDoc,

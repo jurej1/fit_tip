@@ -45,33 +45,7 @@ class BlogRepository {
     });
   }
 
-  Future<QuerySnapshot> getBlogPostsWithSpecificDateCreated({
-    required DateTime firstDate,
-    required DateTime lastDate,
-    required int limit,
-    DocumentSnapshot? startAfterDoc,
-  }) async {
-    final lowerBound = DateTime(firstDate.year, firstDate.month, firstDate.day);
-    final upperBound = DateTime(firstDate.year, firstDate.month, firstDate.day, 23, 59, 59);
-
-    Query query = _blogsReference()
-        .orderBy(BlogPostDocKeys.created)
-        .where(
-          BlogPostDocKeys.created,
-          isGreaterThanOrEqualTo: Timestamp.fromDate(lowerBound),
-          isLessThanOrEqualTo: Timestamp.fromDate(upperBound),
-        )
-        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
-        .limit(limit);
-
-    if (startAfterDoc != null) {
-      return query.startAfterDocument(startAfterDoc).get();
-    }
-
-    return query.get();
-  }
-
-  Future<QuerySnapshot> getBlogPostByOwnerId(
+  Future<QuerySnapshot> getBlogPostsByOwnerId(
     String uid, {
     required int limit,
     DocumentSnapshot? startAfterDoc,
@@ -85,7 +59,7 @@ class BlogRepository {
     return query.get();
   }
 
-  Future<QuerySnapshot> getBlogPostByCreated({
+  Future<QuerySnapshot> getBlogPostsByCreated({
     bool descending = false,
     required int limit,
     DocumentSnapshot? startAfterDoc,
@@ -102,7 +76,7 @@ class BlogRepository {
     return query.get();
   }
 
-  Future<QuerySnapshot> getBlogPostsQueryByIds({
+  Future<QuerySnapshot> getBlogPostsByBlogIds({
     List<String> blogIds = const [],
     required int limit,
     DocumentSnapshot? startAfterDoc,
@@ -116,14 +90,15 @@ class BlogRepository {
     return query.get();
   }
 
-  Future<QuerySnapshot> getBlogPostByLikes({
-    bool descending = false,
+  Future<QuerySnapshot> getBlogPostsByTag(
+    String value, {
     required int limit,
     DocumentSnapshot? startAfterDoc,
-  }) {
+  }) async {
     final query = _blogsReference()
-        .orderBy(BlogPostDocKeys.likes, descending: descending)
+        .where(BlogPostDocKeys.tags, arrayContains: value)
         .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .orderBy(BlogPostDocKeys.created)
         .limit(limit);
 
     if (startAfterDoc != null) {
@@ -133,13 +108,31 @@ class BlogRepository {
     return query.get();
   }
 
-  Future<QuerySnapshot> getBlogPostByTag(
-    List<String> tags, {
+  Future<QuerySnapshot> getBlogPostsByTitle(
+    String value, {
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) async {
     final query = _blogsReference()
-        .where(BlogPostDocKeys.tags, arrayContains: tags)
+        .where(BlogPostDocKeys.title, isEqualTo: value)
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .orderBy(BlogPostDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDoc != null) {
+      return query.startAfterDocument(startAfterDoc).get();
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getBlogPostsByAuthor(
+    String value, {
+    required int limit,
+    DocumentSnapshot? startAfterDoc,
+  }) async {
+    final query = _blogsReference()
+        .where(BlogPostDocKeys.author, isEqualTo: value)
         .where(BlogPostDocKeys.isPublic, isEqualTo: true)
         .orderBy(BlogPostDocKeys.created)
         .limit(limit);

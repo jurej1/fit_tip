@@ -4,7 +4,7 @@ abstract class BlogPostsListState extends Equatable {
   const BlogPostsListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class BlogPostsListLoading extends BlogPostsListState {}
@@ -19,7 +19,7 @@ class BlogPostsListLoadSuccess extends BlogPostsListState {
   });
 
   @override
-  List<Object> get props => [blogs, hasReachedMax];
+  List<Object?> get props => [blogs, hasReachedMax];
 }
 
 class BlogPostsListFail extends BlogPostsListState {}

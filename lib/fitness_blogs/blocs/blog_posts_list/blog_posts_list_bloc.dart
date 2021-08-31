@@ -5,6 +5,7 @@ import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
+import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 
 part 'blog_posts_list_event.dart';
 part 'blog_posts_list_state.dart';
@@ -57,6 +58,8 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       yield* _mapSavedBlogsUpdatedToState(event);
     } else if (event is _BlogPostsListLikedBlogsUpdated) {
       yield* _mapLikedBlogsUpdatedToState(event);
+    } else if (event is BlogPostsListBlogSearchClosed) {
+      yield* _mapSearchClosedToState(event);
     }
   }
 
@@ -64,7 +67,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     yield BlogPostsListLoading();
 
     try {
-      QuerySnapshot snapshot = await _blogRepository.getBlogPostByCreated(limit: _limit);
+      QuerySnapshot snapshot = await _blogRepository.getBlogPostsByCreated(limit: _limit);
       _lastFetchedDoc = snapshot.docs.last;
 
       if (snapshot.size == 0) {
@@ -94,7 +97,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
       if (!oldState.hasReachedMax) {
         try {
-          QuerySnapshot querySnapshot = await _blogRepository.getBlogPostByCreated(limit: _limit, startAfterDoc: _lastFetchedDoc);
+          QuerySnapshot querySnapshot = await _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: _lastFetchedDoc);
           if (querySnapshot.docs.isEmpty) {
             yield BlogPostsListLoadSuccess(hasReachedMax: querySnapshot.size < _limit, blogs: oldState.blogs);
           } else {
@@ -184,6 +187,24 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
           .toList();
 
       yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
+    }
+  }
+
+  Stream<BlogPostsListState> _mapSearchClosedToState(BlogPostsListBlogSearchClosed event) async* {
+    if (event.result != null) {
+      SearchBy searchBy = event.result!.searchBy;
+      String value = event.result!.query;
+      QuerySnapshot querySnapshot;
+
+      if (searchBy.isAuthor) {
+        querySnapshot = await _blogRepository.getBlogPostsByAuthor(value, limit: _limit);
+      }
+      if (searchBy.isTags) {
+        querySnapshot = await _blogRepository.getBlogPostsByTag(value, limit: _limit);
+      }
+      if (searchBy.isTitle) {
+        querySnapshot = await _blogRepository.getBlogPostsByTitle(value, limit: _limit);
+      }
     }
   }
 }
