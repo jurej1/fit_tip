@@ -10,8 +10,6 @@ import '../blocs.dart';
 part 'focused_workout_day_event.dart';
 part 'focused_workout_day_state.dart';
 
-//TODO clean this bloc
-
 class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutDayState> {
   FocusedWorkoutDayBloc({
     required ActiveWorkoutBloc activeWorkoutBloc,
@@ -27,7 +25,7 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
     }
 
     _activeWorkoutSubscription = activeWorkoutBloc.stream.listen((activeState) {
-      if (activeState is ActiveWorkoutFail) {
+      if (activeState is ActiveWorkoutFail || activeState is ActiveWorkoutNone) {
         add(_FocusedWorkoutDayFailRequested());
       }
     });
