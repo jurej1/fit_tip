@@ -32,8 +32,6 @@ class WaterLogView extends StatelessWidget {
         ),
       ];
 
-  static List<BlocProvider> providers() => [..._providers()];
-
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {

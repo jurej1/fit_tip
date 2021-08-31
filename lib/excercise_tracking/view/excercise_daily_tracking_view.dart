@@ -28,8 +28,6 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
         ),
       ];
 
-  static List<BlocProvider> providers() => [..._providers()];
-
   static route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
