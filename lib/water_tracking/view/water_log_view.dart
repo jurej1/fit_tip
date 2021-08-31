@@ -8,7 +8,17 @@ import 'package:water_repository/water_repository.dart';
 class WaterLogView extends StatelessWidget {
   const WaterLogView();
 
-  static List<BlocProvider> _providers() => [
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return WaterLogView.widget(context);
+      },
+    );
+  }
+
+  static Widget widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
         BlocProvider<DaySelectorBloc>(
           create: (context) => DaySelectorBloc(),
         ),
@@ -30,21 +40,7 @@ class WaterLogView extends StatelessWidget {
             waterLogDayBloc: BlocProvider.of<WaterLogDayBloc>(context),
           ),
         ),
-      ];
-
-  static List<BlocProvider> providers() => [..._providers()];
-
-  static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(
-      builder: (_) {
-        return WaterLogView.widget(context);
-      },
-    );
-  }
-
-  static Widget widget(BuildContext context) {
-    return MultiBlocProvider(
-      providers: _providers(),
+      ],
       child: WaterLogView(),
     );
   }

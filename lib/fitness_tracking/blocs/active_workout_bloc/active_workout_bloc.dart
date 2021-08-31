@@ -11,17 +11,8 @@ part 'active_workout_state.dart';
 class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
   ActiveWorkoutBloc({
     required WorkoutsListBloc workoutsListBloc,
-  })  : _workoutsListBloc = workoutsListBloc,
-        super(ActiveWorkoutLoading()) {
-    final listState = workoutsListBloc.state;
-
-    if (listState is WorkoutsListLoadSuccess) {
-      add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
-    } else if (listState is WorkoutsListFail) {
-      add(_ActiveWorkoutFailureRquested());
-    }
-
-    _streamSubscription = _workoutsListBloc.stream.listen(
+  }) : super(ActiveWorkoutState.initial(workoutsListBloc)) {
+    _streamSubscription = workoutsListBloc.stream.listen(
       (listState) {
         if (listState is WorkoutsListLoadSuccess) {
           add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
@@ -33,7 +24,6 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
   }
 
   late final StreamSubscription _streamSubscription;
-  final WorkoutsListBloc _workoutsListBloc;
 
   @override
   Stream<ActiveWorkoutState> mapEventToState(

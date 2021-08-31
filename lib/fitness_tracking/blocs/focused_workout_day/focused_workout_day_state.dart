@@ -5,6 +5,10 @@ abstract class FocusedWorkoutDayState extends Equatable {
 
   @override
   List<Object?> get props => [];
+
+  factory FocusedWorkoutDayState.initial(TableCalendarBloc tableCalendarBloc) {
+    return FocusedWorkoutDayLoading();
+  }
 }
 
 class FocusedWorkoutDayLoading extends FocusedWorkoutDayState {}

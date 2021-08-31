@@ -8,7 +8,17 @@ import 'package:food_repository/food_repository.dart';
 class FoodDailyLogsView extends StatelessWidget {
   const FoodDailyLogsView({Key? key}) : super(key: key);
 
-  static List<BlocProvider> _providers() => [
+  static MaterialPageRoute route(BuildContext context) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return FoodDailyLogsView.widget(context);
+      },
+    );
+  }
+
+  static Widget widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
         BlocProvider<DaySelectorBloc>(
           create: (context) => DaySelectorBloc(),
         ),
@@ -24,21 +34,7 @@ class FoodDailyLogsView extends StatelessWidget {
             foodRepository: RepositoryProvider.of<FoodRepository>(context),
           )..add(FoodDailyLogsFocusedDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
         )
-      ];
-
-  static List<BlocProvider> providers() => [..._providers()];
-
-  static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(
-      builder: (_) {
-        return FoodDailyLogsView.widget(context);
-      },
-    );
-  }
-
-  static Widget widget(BuildContext context) {
-    return MultiBlocProvider(
-      providers: _providers(),
+      ],
       child: FoodDailyLogsView(),
     );
   }

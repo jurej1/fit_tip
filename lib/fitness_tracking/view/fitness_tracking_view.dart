@@ -22,6 +22,9 @@ class FitnessTrackingView extends StatelessWidget {
           create: (context) => FitnessTrackingViewCubit(),
         ),
         BlocProvider(
+          create: (context) => ActiveWorkoutViewSelectorCubit(),
+        ),
+        BlocProvider(
           create: (context) => WorkoutsListBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
@@ -33,14 +36,11 @@ class FitnessTrackingView extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => ActiveWorkoutViewSelectorCubit(),
-        ),
-        BlocProvider(
           create: (context) => WorkoutDayLogsBloc(
             activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          ),
+          )..add(WorkoutDayLogsLoadRequested()),
         )
       ],
       child: FitnessTrackingView(),

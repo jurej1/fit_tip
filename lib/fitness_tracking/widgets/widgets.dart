@@ -24,3 +24,4 @@ export 'active_workout_overview_builder.dart';
 export 'workout_day_logs_builder.dart';
 export 'workout_excercise_card.dart';
 export 'workout_day_log_card.dart';
+export 'calendar_and_workout_day_builder.dart';
