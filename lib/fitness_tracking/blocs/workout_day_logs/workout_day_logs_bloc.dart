@@ -17,30 +17,12 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     required ActiveWorkoutBloc activeWorkoutBloc,
   })  : _fitnessRepository = fitnessRepository,
         _activeWorkoutBloc = activeWorkoutBloc,
-        super(WorkoutDayLogsLoading()) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
+        _authenticationBloc = authenticationBloc,
+        super(WorkoutDayLogsLoading());
 
   final FitnessRepository _fitnessRepository;
   final ActiveWorkoutBloc _activeWorkoutBloc;
-  late final StreamSubscription _authSubscription;
-
-  bool _isAuth = false;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<WorkoutDayLogsState> mapEventToState(
@@ -60,12 +42,12 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
   Stream<WorkoutDayLogsState> _mapWorkoutUpdatedToState() async* {
     if (state is WorkoutDayLogsLoadSuccess) return;
 
-    if (_isAuth && _activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
+    if (_authenticationBloc.state.isAuthenticated && _activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
       yield WorkoutDayLogsLoading();
 
       try {
         List<WorkoutDayLog>? logs = await _fitnessRepository.getWorkoutDayLogByWorkoutId(
-          _userId!,
+          _authenticationBloc.state.user!.uid!,
           (_activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.id,
         );
 
