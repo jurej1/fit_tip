@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -19,15 +18,30 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
     Workout? workout,
-  })  : _authenticationBloc = authenticationBloc,
-        _fitnessRepository = fitnessRepository,
-        super(AddWorkoutFormState.initial(workout));
+  })  : _fitnessRepository = fitnessRepository,
+        super(AddWorkoutFormState.initial(workout)) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<AddWorkoutFormState> mapEventToState(
@@ -359,7 +373,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
 
       try {
         if (state.formMode == FormMode.add) {
-          DocumentReference ref = await _fitnessRepository.addWorkout(_user!.id!, state.workout);
+          DocumentReference ref = await _fitnessRepository.addWorkout(_userId!, state.workout);
           yield state.copyWith(
             status: FormzStatus.submissionSuccess,
             id: ref.id,
@@ -370,7 +384,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
             ),
           );
         } else {
-          await _fitnessRepository.updateWorkout(_user!.id!, state.workout);
+          await _fitnessRepository.updateWorkout(_userId!, state.workout);
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         }
       } catch (e) {

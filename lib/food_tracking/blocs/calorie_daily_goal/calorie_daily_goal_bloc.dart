@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
 
 part 'calorie_daily_goal_event.dart';
@@ -14,14 +14,29 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
-        super(CalorieDailyGoalLoading());
+        super(CalorieDailyGoalLoading()) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FoodRepository _foodRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get user => _authenticationBloc.state.user;
+  String? _userId;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<CalorieDailyGoalState> mapEventToState(
@@ -41,7 +56,7 @@ class CalorieDailyGoalBloc extends Bloc<CalorieDailyGoalEvent, CalorieDailyGoalS
       yield CalorieDailyGoalLoading();
 
       try {
-        CalorieDailyGoal calorieDailyGoal = await _foodRepository.getCalorieDailyGoalForSpecificDate(user!.id!, event.date!);
+        CalorieDailyGoal calorieDailyGoal = await _foodRepository.getCalorieDailyGoalForSpecificDate(_userId!, event.date!);
 
         yield CalorieDailyGoalLoadSuccess(calorieDailyGoal: calorieDailyGoal);
       } catch (e) {

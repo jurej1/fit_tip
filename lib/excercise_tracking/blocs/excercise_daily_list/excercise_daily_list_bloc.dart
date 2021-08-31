@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -16,22 +15,25 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
         super(ExcerciseDailyListLoading()) {
+    final authState = authenticationBloc.state;
+
+    _userId = authState.user?.uid;
+    _isAuth = authState.isAuthenticated;
+
     _authSubscription = authenticationBloc.stream.listen((event) {
-      if (event.isAuthenticated) {
-        add(ExcerciseDailyListDateUpdated(DateTime.now()));
-      }
+      add(ExcerciseDailyListDateUpdated(DateTime.now()));
+
+      _userId = event.user?.uid;
+      _isAuth = event.isAuthenticated;
     });
   }
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
-
   late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
 
   @override
   Stream<ExcerciseDailyListState> mapEventToState(
@@ -56,7 +58,7 @@ class ExcerciseDailyListBloc extends Bloc<ExcerciseDailyListEvent, ExcerciseDail
     yield ExcerciseDailyListLoading();
 
     try {
-      QuerySnapshot snapshot = await _fitnessRepository.getExcerciseLogsForDay(_user!.id!, event.date);
+      QuerySnapshot snapshot = await _fitnessRepository.getExcerciseLogsForDay(_userId!, event.date);
 
       yield ExcerciseDailyListLoadSuccess(ExcerciseLog.fromQuerySnapshot(snapshot));
     } catch (error) {

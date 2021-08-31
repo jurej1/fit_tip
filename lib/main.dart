@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ import 'utilities/fit_tip_bloc_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await path.getApplicationDocumentsDirectory(),
   );
@@ -28,6 +29,7 @@ Future<void> main() async {
       waterRepository: WaterRepository(),
       foodRepository: FoodRepository(),
       fitnessRepository: FitnessRepository(),
+      blogRepository: BlogRepository(),
     ),
   );
 }

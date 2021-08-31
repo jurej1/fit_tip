@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -17,8 +16,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
     required DateTime date,
-  })  : _authenticationBloc = authenticationBloc,
-        _fitnessRepository = fitnessRepository,
+  })  : _fitnessRepository = fitnessRepository,
         super(
           RunningWorkoutDayInitial(
             WorkoutDayLog(
@@ -31,13 +29,28 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
             ),
             0,
           ),
-        );
+        ) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<RunningWorkoutDayState> mapEventToState(
@@ -87,7 +100,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         );
 
         DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(
-          _user!.id!,
+          _userId!,
           state.log,
         );
         yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);

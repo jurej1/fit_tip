@@ -16,7 +16,7 @@ class ProfileSettingsView extends StatelessWidget {
       builder: (_) {
         return BlocProvider(
           create: (context) => ProfileSettingsBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userDataBloc: BlocProvider.of<UserDataBloc>(context),
             authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
           ),
           child: ProfileSettingsView(),

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -16,15 +15,30 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
     required WaterLog waterLog,
     required AuthenticationBloc authenticationBloc,
     required WaterRepository waterRepository,
-  })   : _authenticationBloc = authenticationBloc,
-        _waterRepository = waterRepository,
-        super(WaterGridTileInitial(waterLog));
+  })  : _waterRepository = waterRepository,
+        super(WaterGridTileInitial(waterLog)) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final WaterRepository _waterRepository;
+  late final StreamSubscription _authSubscription;
 
-  rep.User? get user => _authenticationBloc.state.user;
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WaterGridTileState> mapEventToState(
@@ -37,8 +51,8 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
 
       yield WaterGridTileDirty(state.waterLog.copyWith(cup: waterCup.copyWith(amount: event.val)));
     } else if (event is WaterGridTileDialogClosed) {
-      if (isAuth && !(state is WaterGridTileDeletingSuccess) && (state is WaterGridTileDirty)) {
-        _waterRepository.updateWaterLog(user!.id!, state.waterLog);
+      if (_isAuth && !(state is WaterGridTileDeletingSuccess) && (state is WaterGridTileDirty)) {
+        _waterRepository.updateWaterLog(_userId!, state.waterLog);
       }
     } else if (event is WaterGridTileTimeUpdated) {
       yield WaterGridTileInitial(state.waterLog.copyWith(time: event.time));
@@ -46,12 +60,12 @@ class WaterGridTileBloc extends Bloc<WaterGridTileEvent, WaterGridTileState> {
   }
 
   Stream<WaterGridTileState> _mapDeleteRequestedToState() async* {
-    if (!isAuth) return;
+    if (!_isAuth) return;
 
     yield WaterGridTileLoading(state.waterLog);
 
     try {
-      await _waterRepository.deleteWaterLog(user!.id!, state.waterLog);
+      await _waterRepository.deleteWaterLog(_userId!, state.waterLog);
       yield WaterGridTileDeletingSuccess(state.waterLog);
     } catch (error) {
       yield WaterGridTileFailure(state.waterLog);

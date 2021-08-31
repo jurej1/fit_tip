@@ -18,22 +18,29 @@ class AuthenticationRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<AuthenticationStatus> get authenticationStatus {
+  Stream<AuthenticationUser?> get authenticationUser {
     return _firebaseAuth.authStateChanges().map(
       (user) {
-        if (user == null) return AuthenticationStatus.unauthenticated;
-        return AuthenticationStatus.authenticated;
+        if (user == null) return null;
+        return AuthenticationUser(
+          UserInfo(
+            {
+              'uid': user.uid,
+              'displayName': user.displayName,
+              'email': user.email,
+              'phoneNumber': user.phoneNumber,
+              'photoURL': user.photoURL,
+              'providerId': user.providerData.first.providerId,
+            },
+          ),
+        ); // Test this user info
       },
     );
   }
 
   String? get _currentUserId => _firebaseAuth.currentUser?.uid;
 
-  Stream<model.User>? get user {
-    final String? id = _currentUserId;
-
-    if (id == null) return null;
-
+  Stream<model.User> user(String id) {
     return _firebaseFirestore
         .collection('users')
         .doc(id)
@@ -83,9 +90,7 @@ class AuthenticationRepository {
   }
 
   Future<void> updatedUserData(model.User user) async {
-    return _firebaseFirestore.collection('users').doc(user.id).update(
-          user.toEntity().toDocumentSnapshot(),
-        );
+    return _firebaseFirestore.collection('users').doc(user.id).update(user.toEntity().toDocumentSnapshot());
   }
 
   Future<void> updateUserEmail(String email) async {

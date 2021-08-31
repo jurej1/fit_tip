@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
   final WaterRepository _waterRepository;
   final FoodRepository _foodRepository;
   final FitnessRepository _fitnessRepository;
+  final BlogRepository _blogRepository;
 
   App({
     Key? key,
@@ -25,11 +27,13 @@ class App extends StatelessWidget {
     required WaterRepository waterRepository,
     required FoodRepository foodRepository,
     required FitnessRepository fitnessRepository,
+    required BlogRepository blogRepository,
   })  : _authenticationRepository = authenticationRepository,
         _waterRepository = waterRepository,
         _weightRepository = weightRepository,
         _foodRepository = foodRepository,
         _fitnessRepository = fitnessRepository,
+        _blogRepository = blogRepository,
         super(key: key);
 
   final _navigatorState = GlobalKey<NavigatorState>();
@@ -42,13 +46,20 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: _weightRepository),
         RepositoryProvider.value(value: _waterRepository),
         RepositoryProvider.value(value: _foodRepository),
-        RepositoryProvider.value(value: _fitnessRepository)
+        RepositoryProvider.value(value: _fitnessRepository),
+        RepositoryProvider.value(value: _blogRepository),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthenticationBloc>(
             lazy: false,
             create: (context) => AuthenticationBloc(
+              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => UserDataBloc(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
             ),
           ),
@@ -60,7 +71,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => BirthdayMessengerBloc(
-              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              userDataBloc: BlocProvider.of<UserDataBloc>(context),
             ),
           )
         ],
@@ -68,6 +79,7 @@ class App extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               navigatorKey: _navigatorState,
+              debugShowCheckedModeBanner: false,
               title: 'FitTip',
               themeMode: state.themeMode,
               darkTheme: ThemeData.dark(),
@@ -91,7 +103,7 @@ class App extends StatelessWidget {
                         }
                       },
                     ),
-                    BlocListener<AuthenticationBloc, AuthenticationState>(
+                    BlocListener<UserDataBloc, UserDataState>(
                       listener: (context, state) {
                         BlocProvider.of<MeasurmentSystemBloc>(context).add(MeasurmentSystemUpdated(system: state.user?.measurmentSystem));
                       },

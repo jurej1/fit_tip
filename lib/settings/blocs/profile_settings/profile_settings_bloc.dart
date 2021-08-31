@@ -14,14 +14,14 @@ part 'profile_settings_state.dart';
 
 class ProfileSettingsBloc extends Bloc<ProfileSettingsEvent, ProfileSettingsState> {
   ProfileSettingsBloc({
-    required AuthenticationBloc authenticationBloc,
+    required UserDataBloc userDataBloc,
     required AuthenticationRepository authenticationRepository,
   })  : _authenticationRepository = authenticationRepository,
-        super(ProfileSettingsState.fromUser(authenticationBloc.state.user)) {
-    _streamSubscription = authenticationBloc.stream.listen(
-      (authState) {
-        if (authState.isAuthenticated) {
-          add(_ProfileSettingsUserUpdated(authState.user));
+        super(ProfileSettingsState.fromUser(userDataBloc.state.user)) {
+    _streamSubscription = userDataBloc.stream.listen(
+      (userData) {
+        if (userData.user != null) {
+          add(_ProfileSettingsUserUpdated(userData.user));
         } else {
           add(_ProfileSettingsUserFail());
         }

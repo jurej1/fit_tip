@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
@@ -14,14 +13,29 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
     required FoodRepository foodRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
-        super(FoodDailyLogsLoading());
+        super(FoodDailyLogsLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FoodRepository _foodRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<FoodDailyLogsState> mapEventToState(
@@ -102,7 +116,7 @@ class FoodDailyLogsBloc extends Bloc<FoodDailyLogsEvent, FoodDailyLogsState> {
       yield FoodDailyLogsLoading();
 
       try {
-        MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_user!.id!, event.date!);
+        MealDay? mealDay = await _foodRepository.getMealDayForSpecificDay(_userId!, event.date!);
 
         yield FoodDailyLogsLoadSuccess(mealDay: mealDay == null ? MealDay() : mealDay);
       } on Exception catch (e) {

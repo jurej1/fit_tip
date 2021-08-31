@@ -2,7 +2,7 @@ part of 'authentication_bloc.dart';
 
 class AuthenticationState extends Equatable {
   final AuthenticationStatus status;
-  final User? user;
+  final AuthenticationUser? user;
 
   const AuthenticationState({
     this.status = AuthenticationStatus.unknown,
@@ -18,7 +18,7 @@ class AuthenticationState extends Equatable {
 
   AuthenticationState copyWith({
     AuthenticationStatus? status,
-    User? user,
+    AuthenticationUser? user,
   }) {
     return AuthenticationState(
       status: status ?? this.status,

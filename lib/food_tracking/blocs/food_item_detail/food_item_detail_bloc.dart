@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -14,15 +13,30 @@ class FoodItemDetailBloc extends Bloc<FoodItemDetailEvent, FoodItemDetailState> 
     required FoodItem foodItem,
     required AuthenticationBloc authenticationBloc,
     required FoodRepository foodRepository,
-  })   : _foodRepository = foodRepository,
-        _authenticationBloc = authenticationBloc,
-        super(FoodItemDetailInitial(foodItem));
+  })  : _foodRepository = foodRepository,
+        super(FoodItemDetailInitial(foodItem)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FoodRepository _foodRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<FoodItemDetailState> mapEventToState(
@@ -40,7 +54,7 @@ class FoodItemDetailBloc extends Bloc<FoodItemDetailEvent, FoodItemDetailState> 
       try {
         yield FoodItemDetailLoading(state.item);
 
-        await _foodRepository.deleteFoodItem(_user!.id!, state.item);
+        await _foodRepository.deleteFoodItem(_userId!, state.item);
 
         yield FoodItemDetailDeleteSuccess(state.item);
       } catch (e) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
@@ -15,15 +14,29 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
     required Workout workout,
-  })  : this._authenticationBloc = authenticationBloc,
-        this._fitnessRepository = fitnessRepository,
-        super(WorkoutDetailViewInitial(workout));
+  })  : this._fitnessRepository = fitnessRepository,
+        super(WorkoutDetailViewInitial(workout)) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutDetailViewState> mapEventToState(
@@ -43,7 +56,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       yield WorkoutDetailViewLoading(state.workout);
 
       try {
-        await _fitnessRepository.deleteWorkout(_user!.id!, state.workout);
+        await _fitnessRepository.deleteWorkout(_userId!, state.workout);
         yield WorkoutDetailViewDeleteSuccess(state.workout);
       } on Exception catch (_) {
         yield WorkoutDetailViewFail(state.workout);
@@ -56,7 +69,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       yield WorkoutDetailViewLoading(state.workout);
 
       try {
-        Workout workout = await _fitnessRepository.setWorkoutAsActive(_user!.id!, state.workout);
+        Workout workout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
 
         yield WorkoutDetailViewSetAsActiveSuccess(workout);
       } catch (e) {

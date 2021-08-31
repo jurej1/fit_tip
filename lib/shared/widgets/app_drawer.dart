@@ -1,9 +1,6 @@
-import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
+import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:fit_tip/fitness_tracking/view/fitness_tracking_view.dart';
-import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/settings/settings.dart';
-import 'package:fit_tip/water_tracking/view/view.dart';
-import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -42,6 +39,13 @@ class AppDrawer extends StatelessWidget {
             //     Navigator.of(context).push(ExcerciseDailyTrackingView.route(context));
             //   },
             // ),
+            ListTile(
+              title: const Text('Blog'),
+              leading: const Icon(Icons.document_scanner_outlined),
+              onTap: () {
+                Navigator.of(context).push(BlogPostsView.route(context));
+              },
+            ),
             ListTile(
               leading: Icon(Icons.sports),
               title: Text('Fitness tracking'),

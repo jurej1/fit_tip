@@ -13,12 +13,30 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
     required WeightRepository weightRepository,
     required Weight weight,
     required AuthenticationBloc authenticationBloc,
-  })   : _weightRepository = weightRepository,
-        _authenticationBloc = authenticationBloc,
-        super(WeightTileInitial(weight));
+  })  : _weightRepository = weightRepository,
+        super(WeightTileInitial(weight)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WeightRepository _weightRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
+
+  String? _userId;
+  bool _isAuth = false;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WeightTileState> mapEventToState(
@@ -30,18 +48,20 @@ class WeightTileBloc extends Bloc<WeightTileEvent, WeightTileState> {
   }
 
   Stream<WeightTileState> _mapSnackbarClosedToState(WeightTileDeleteRequested event) async* {
-    yield WeightTileDeleteLoading(state.weight);
+    if (_isAuth) {
+      yield WeightTileDeleteLoading(state.weight);
 
-    try {
-      if (state.weight.id == null) {
+      try {
+        if (state.weight.id == null) {
+          yield WeightTileDeleteFail(state.weight);
+          return;
+        }
+        await _weightRepository.deleteWeight(_userId!, state.weight.id!);
+
+        yield WeightTileDeletedSuccessfully(state.weight);
+      } catch (error) {
         yield WeightTileDeleteFail(state.weight);
-        return;
       }
-      await _weightRepository.deleteWeight(_authenticationBloc.state.user!.id!, state.weight.id!);
-
-      yield WeightTileDeletedSuccessfully(state.weight);
-    } catch (errpr) {
-      yield WeightTileDeleteFail(state.weight);
     }
   }
 }

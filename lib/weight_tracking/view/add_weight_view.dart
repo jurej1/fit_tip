@@ -10,16 +10,25 @@ import 'package:weight_repository/weight_repository.dart' as weight_rep;
 
 class AddWeightView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context, [weight_rep.Weight? weight]) {
-    return MaterialPageRoute(builder: (_) {
-      return BlocProvider<AddWeightFormBloc>(
-        create: (context) => AddWeightFormBloc(
-          authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-          weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-          weight: weight,
-        ),
-        child: AddWeightView(),
-      );
-    });
+    final WeightHistoryBloc weightHistoryBloc = BlocProvider.of<WeightHistoryBloc>(context);
+    return MaterialPageRoute(
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<AddWeightFormBloc>(
+              create: (context) => AddWeightFormBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+                weight: weight,
+              ),
+              child: AddWeightView(),
+            ),
+            BlocProvider.value(value: weightHistoryBloc),
+          ],
+          child: AddWeightView(),
+        );
+      },
+    );
   }
 
   @override

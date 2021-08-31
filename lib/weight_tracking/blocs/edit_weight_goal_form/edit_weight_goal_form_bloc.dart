@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -17,19 +16,35 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
     required WeightGoalBloc weightGoalBloc,
     required WeightRepository weightRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _weightRepository = weightRepository,
-        _authenticationBloc = authenticationBloc,
+  })  : _weightRepository = weightRepository,
         super(
           weightGoalBloc.state is WeightGoalLoadSuccess
               ? EditWeightGoalFormState.pure((weightGoalBloc.state as WeightGoalLoadSuccess).goal)
               : EditWeightGoalFormState.pure(WeightGoal()),
-        );
+        ) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WeightRepository _weightRepository;
-  final AuthenticationBloc _authenticationBloc;
 
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get user => _authenticationBloc.state.user;
+  late final StreamSubscription _authSubscription;
+
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<EditWeightGoalFormState> mapEventToState(
@@ -104,7 +119,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
       status: Formz.validate([startWeight, startDate, targetDate, targetWeight]),
     );
 
-    if (state.status.isValidated && isAuth) {
+    if (state.status.isValidated && _isAuth) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
@@ -116,7 +131,7 @@ class EditWeightGoalFormBloc extends Bloc<EditWeightGoalFormEvent, EditWeightGoa
           weeklyGoal: state.weeklyGoal,
         );
 
-        await _weightRepository.updateWeightGoal(user!.id!, weightGoal);
+        await _weightRepository.updateWeightGoal(_userId!, weightGoal);
 
         yield state.copyWith(weightGoal: weightGoal, status: FormzStatus.submissionSuccess);
       } on Exception catch (_) {

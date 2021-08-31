@@ -20,8 +20,7 @@ class ExcerciseDaySelector extends StatelessWidget {
           arrowBackPressed: () => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorPreviousDayRequested()),
           arrowFowardPressed: () => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorNextDayRequested()),
           dayChoosed: (DateTime? date) => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorDatePicked(date)),
-          firstDate:
-              BlocProvider.of<AuthenticationBloc>(context).state.user?.dateJoined ?? DateTime.now().subtract(const Duration(days: 365)),
+          firstDate: BlocProvider.of<UserDataBloc>(context).state.user?.dateJoined ?? DateTime.now().subtract(const Duration(days: 365)),
           selectedDate: state.selectedDate,
         );
       },

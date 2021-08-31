@@ -69,7 +69,7 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
   }
 
   static Widget body() {
-    return ListView(
+    return Column(
       children: [
         ExcerciseDaySelector(),
         ExcerciseDailyListBuilder(),

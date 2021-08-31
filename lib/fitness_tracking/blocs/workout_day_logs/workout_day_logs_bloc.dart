@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -17,16 +16,31 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     required AuthenticationBloc authenticationBloc,
     required ActiveWorkoutBloc activeWorkoutBloc,
   })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
         _activeWorkoutBloc = activeWorkoutBloc,
-        super(WorkoutDayLogsLoading());
+        super(WorkoutDayLogsLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
   final ActiveWorkoutBloc _activeWorkoutBloc;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutDayLogsState> mapEventToState(
@@ -51,7 +65,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
 
       try {
         List<WorkoutDayLog>? logs = await _fitnessRepository.getWorkoutDayLogByWorkoutId(
-          _user!.id!,
+          _userId!,
           (_activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.id,
         );
 

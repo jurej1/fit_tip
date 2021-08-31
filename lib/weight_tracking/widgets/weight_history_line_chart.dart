@@ -32,7 +32,7 @@ class WeightHistoryLineChart extends StatelessWidget {
             showTitles: true,
             reservedSize: 16,
             margin: 15,
-            getTextStyles: (val) => TextStyle(
+            getTextStyles: (val, d) => TextStyle(
               color: Colors.blue,
               fontWeight: FontWeight.bold,
               fontSize: 14,
@@ -51,7 +51,7 @@ class WeightHistoryLineChart extends StatelessWidget {
           ),
           leftTitles: SideTitles(
             showTitles: true,
-            getTextStyles: (value) => const TextStyle(
+            getTextStyles: (value, d) => const TextStyle(
               color: Colors.blue,
               fontWeight: FontWeight.bold,
               fontSize: 12,
@@ -70,9 +70,7 @@ class WeightHistoryLineChart extends StatelessWidget {
           show: true,
           border: const Border(
             bottom: BorderSide(),
-            left:  BorderSide(
-              
-            ),
+            left: BorderSide(),
           ),
         ),
         gridData: FlGridData(show: false),

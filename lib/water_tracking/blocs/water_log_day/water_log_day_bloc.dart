@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart' as rep;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
@@ -14,15 +13,30 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   WaterLogDayBloc({
     required WaterRepository waterRepository,
     required AuthenticationBloc authenticationBloc,
-  })   : _waterRepository = waterRepository,
-        _authenticationBloc = authenticationBloc,
-        super(WaterLogDayLoading());
+  })  : _waterRepository = waterRepository,
+        super(WaterLogDayLoading()) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final WaterRepository _waterRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late final StreamSubscription _authSubscription;
 
-  rep.User? get user => _authenticationBloc.state.user;
-  bool get isAuth => _authenticationBloc.state.isAuthenticated;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WaterLogDayState> mapEventToState(
@@ -40,7 +54,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   }
 
   Stream<WaterLogDayState> _mapWaterLogFocusedDayUpdatedToState(WaterLogFocusedDayUpdated event) async* {
-    if (!_authenticationBloc.state.isAuthenticated) {
+    if (!_isAuth) {
       yield WaterLogDayFailure();
       return;
     }
@@ -48,7 +62,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
     yield WaterLogDayLoading();
 
     try {
-      List<WaterLog> waterLogs = (await _waterRepository.getWaterLogForDay(user!.id!, event.dateTime));
+      List<WaterLog> waterLogs = (await _waterRepository.getWaterLogForDay(_userId!, event.dateTime));
 
       yield WaterLogDayLoadSuccess(waterLogs: waterLogs);
     } catch (error) {
@@ -58,7 +72,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   }
 
   Stream<WaterLogDayState> _mapWaterLogAddedToState(WaterLogAddede event) async* {
-    if (state is WaterLogDayLoadSuccess && _authenticationBloc.state.isAuthenticated) {
+    if (state is WaterLogDayLoadSuccess && _isAuth) {
       final currentState = state as WaterLogDayLoadSuccess;
 
       List<WaterLog> logsCopy = List.from(currentState.waterLogs);
@@ -70,7 +84,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   }
 
   Stream<WaterLogDayState> _mapWaterLogRemovedToState(WaterLogRemoved event) async* {
-    if (state is WaterLogDayLoadSuccess && _authenticationBloc.state.isAuthenticated) {
+    if (state is WaterLogDayLoadSuccess && _isAuth) {
       final currentState = state as WaterLogDayLoadSuccess;
 
       List<WaterLog> logsCopy = List.from(currentState.waterLogs);
@@ -82,7 +96,7 @@ class WaterLogDayBloc extends Bloc<WaterLogDayEvent, WaterLogDayState> {
   }
 
   Stream<WaterLogDayState> _mapWaterLogUpdatedToState(WaterLogUpdated event) async* {
-    if (state is WaterLogDayLoadSuccess && _authenticationBloc.state.isAuthenticated) {
+    if (state is WaterLogDayLoadSuccess && _isAuth) {
       final currentState = state as WaterLogDayLoadSuccess;
 
       List<WaterLog> logsCopy = List.from(currentState.waterLogs);

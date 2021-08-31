@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -16,14 +15,29 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
-        super(WorkoutsListCardInitial(workout, false));
+        super(WorkoutsListCardInitial(workout, false)) {
+    final authState = authenticationBloc.state;
 
-  final AuthenticationBloc _authenticationBloc;
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutsListCardState> mapEventToState(
@@ -43,7 +57,7 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
       yield WorkoutsListCardLoading(state.workout, state.isExpanded);
 
       try {
-        await _fitnessRepository.deleteWorkout(_user!.id!, state.workout);
+        await _fitnessRepository.deleteWorkout(_userId!, state.workout);
 
         yield WorkoutsListCardDeleteSuccess(state.workout, state.isExpanded);
       } catch (e) {
@@ -63,7 +77,7 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
       yield WorkoutsListCardLoading(state.workout, state.isExpanded);
 
       try {
-        Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_user!.id!, state.workout);
+        Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
 
         yield WorkoutsListCardSetAsActiveSuccess(newWorkout, state.isExpanded);
       } catch (e) {

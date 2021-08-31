@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -14,14 +13,30 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
-        super(ExcerciseDailyGoalLoading());
+        super(ExcerciseDailyGoalLoading()) {
+    final authState = authenticationBloc.state;
+    _userId = authState.user?.uid;
+    _isAuth = authState.isAuthenticated;
 
-  final AuthenticationBloc _authenticationBloc;
+    _authSubscription = authenticationBloc.stream.listen((event) {
+      add(ExcerciseDailyGoalDateUpdated(DateTime.now()));
+
+      _userId = event.user?.uid;
+      _isAuth = event.isAuthenticated;
+    });
+  }
+
   final FitnessRepository _fitnessRepository;
+  late final StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<ExcerciseDailyGoalState> mapEventToState(
@@ -50,7 +65,7 @@ class ExcerciseDailyGoalBloc extends Bloc<ExcerciseDailyGoalEvent, ExcerciseDail
       yield ExcerciseDailyGoalLoading();
 
       try {
-        ExcerciseDailyGoal goal = await _fitnessRepository.getExcerciseDailyGoal(_user!.id!, event.date);
+        ExcerciseDailyGoal goal = await _fitnessRepository.getExcerciseDailyGoal(_userId!, event.date);
 
         yield ExcerciseDailyGoalLoadSuccess(goal);
       } on Exception catch (e) {

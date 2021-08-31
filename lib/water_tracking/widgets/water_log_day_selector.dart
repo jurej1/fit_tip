@@ -18,7 +18,7 @@ class WaterLogDaySelector extends StatelessWidget {
           arrowBackPressed: () => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorPreviousDayRequested()),
           arrowFowardPressed: () => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorNextDayRequested()),
           selectedDate: state.selectedDate,
-          firstDate: BlocProvider.of<AuthenticationBloc>(context).state.user!.dateJoined!,
+          firstDate: BlocProvider.of<UserDataBloc>(context).state.user!.dateJoined!,
           dayChoosed: (DateTime? date) => BlocProvider.of<DaySelectorBloc>(context).add(DaySelectorDatePicked(date)),
         );
       },

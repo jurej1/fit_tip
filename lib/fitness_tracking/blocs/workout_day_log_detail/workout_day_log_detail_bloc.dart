@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -14,15 +13,30 @@ class WorkoutDayLogDetailBloc extends Bloc<WorkoutDayLogDetailEvent, WorkoutDayL
     required WorkoutDayLog dayLog,
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
-  })  : this._authenticationBloc = authenticationBloc,
-        this._fitnessRepository = fitnessRepository,
-        super(WorkoutDayLogDetailInitial(dayLog));
+  })  : this._fitnessRepository = fitnessRepository,
+        super(WorkoutDayLogDetailInitial(dayLog)) {
+    final authState = authenticationBloc.state;
+
+    _isAuth = authState.isAuthenticated;
+    _userId = authState.user?.uid;
+
+    _authSubscription = authenticationBloc.stream.listen((authState) {
+      _isAuth = authState.isAuthenticated;
+      _userId = authState.user?.uid;
+    });
+  }
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
+  late StreamSubscription _authSubscription;
 
-  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
-  User? get _user => _authenticationBloc.state.user;
+  bool _isAuth = false;
+  String? _userId;
+
+  @override
+  Future<void> close() {
+    _authSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutDayLogDetailState> mapEventToState(
@@ -38,7 +52,7 @@ class WorkoutDayLogDetailBloc extends Bloc<WorkoutDayLogDetailEvent, WorkoutDayL
       yield WorkoutDayLogDetailLoading(state.dayLog);
 
       try {
-        await _fitnessRepository.deleteWorkoutDayLog(_user!.id!, state.dayLog);
+        await _fitnessRepository.deleteWorkoutDayLog(_userId!, state.dayLog);
         yield WorkoutDayLogDetailDeleteSuccess(state.dayLog);
       } catch (error) {
         yield WorkoutDayLogDetailFail(state.dayLog);
