@@ -6,30 +6,15 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'saved_blog_posts_event.dart';
 
+//TODO do it with authentication
+
 class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>> {
   SavedBlogPostsBloc({
     required AuthenticationBloc authenticationBloc,
-  })  : _isAuth = authenticationBloc.state.isAuthenticated,
-        _userId = authenticationBloc.state.user?.uid,
-        super([]) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-      add(_SavedBlogPostsAuthUpdated());
-    });
-  }
+  })  : _authenticationBloc = authenticationBloc,
+        super([]);
 
-  String? _userId;
-  bool _isAuth;
-  late Map<String, dynamic> _allIdsJson;
-
-  late final StreamSubscription _authSubscription;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<List<String>> mapEventToState(
@@ -39,28 +24,18 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>>
       yield* _mapItemAddedToState(event);
     } else if (event is SavedBlogPostsItemRemoved) {
       yield* _mapItemRemovedToState(event);
-    } else if (event is _SavedBlogPostsAuthUpdated) {
-      if (_isAuth) {
-        yield (_allIdsJson[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
-      }
     }
   }
 
   @override
   List<String>? fromJson(Map<String, dynamic> json) {
-    _allIdsJson = json;
-    if (_isAuth) {
-      return (json[_userId] as List<dynamic>).map((e) => e.toString()).toList();
-    }
+    if (json['values'] == null) return [];
+    return json['values'];
   }
 
   @override
   Map<String, dynamic>? toJson(List<String> state) {
-    if (_isAuth) {
-      return {
-        _userId!: state,
-      };
-    }
+    return {'values': state};
   }
 
   Stream<List<String>> _mapItemAddedToState(SavedBlogPostsItemAdded event) async* {

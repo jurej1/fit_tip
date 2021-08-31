@@ -6,27 +6,15 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'liked_blog_posts_event.dart';
 
+//TODO do it with authentication bloc
+
 class LikedBlogPostsBloc extends HydratedBloc<LikedBlogPostsEvent, List<String>> {
-  LikedBlogPostsBloc({required AuthenticationBloc authenticationBloc})
-      : _isAuth = authenticationBloc.state.isAuthenticated,
-        _userId = authenticationBloc.state.user?.uid,
-        super([]) {
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authenticationBloc.state.isAuthenticated;
-      _userId = authenticationBloc.state.user?.uid;
-    });
-  }
+  LikedBlogPostsBloc({
+    required AuthenticationBloc authenticationBloc,
+  })  : _authenticationBloc = authenticationBloc,
+        super([]);
 
-  late final StreamSubscription _authSubscription;
-
-  bool _isAuth;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<List<String>> mapEventToState(
@@ -41,18 +29,12 @@ class LikedBlogPostsBloc extends HydratedBloc<LikedBlogPostsEvent, List<String>>
 
   @override
   List<String>? fromJson(Map<String, dynamic> json) {
-    if (_isAuth) {
-      return (json[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
-    }
+    return json['values'];
   }
 
   @override
   Map<String, dynamic>? toJson(List<String> state) {
-    if (_isAuth) {
-      return {
-        _userId!: state,
-      };
-    }
+    return {'values': state};
   }
 
   Stream<List<String>> _mapItemAddedToState(LikedBlogPostsItemAdded event) async* {

@@ -24,5 +24,3 @@ class SavedBlogPostsItemRemoved extends SavedBlogPostsEvent {
   @override
   List<Object> get props => [blogId];
 }
-
-class _SavedBlogPostsAuthUpdated extends SavedBlogPostsEvent {}
