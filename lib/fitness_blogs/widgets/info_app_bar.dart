@@ -19,10 +19,7 @@ class InfoAppBar extends StatelessWidget with PreferredSizeWidget {
                 onPressed: () async {
                   BlogSearchResult? value = await Navigator.of(context).push<BlogSearchResult?>(BlogSearchView.route(context));
 
-                  if (state.isAll) {
-                    BlocProvider.of<BlogPostsSearchFilterBloc>(context).add(BlogPostsSearchFilterUpdated(value));
-                  }
-                  if (state.isSaved) {}
+                  BlocProvider.of<BlogPostsSearchFilterBloc>(context).add(BlogPostsSearchFilterUpdated(value));
                 },
               ),
             },

@@ -36,13 +36,11 @@ class BlogPostsView extends StatelessWidget {
             BlocProvider(
               create: (context) => BlogPostsSavedListBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
-              )..add(
-                  BlogPostsSavedListLoadRequested(
-                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context).state,
-                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-                  ),
-                ),
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                blogPostsSearchFilterBloc: BlocProvider.of<BlogPostsSearchFilterBloc>(context),
+                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
+                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
+              )..add(BlogPostsSavedListLoadRequested()),
             ),
             BlocProvider(
               create: (context) => BlogPostsListBloc(
@@ -73,54 +71,42 @@ class BlogPostsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listenWhen: (p, c) => p.status != c.status,
-      listener: (context, state) {
-        BlocProvider.of<BlogPostsSavedListBloc>(context).add(
-          BlogPostsSavedListLoadRequested(
-            likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context, listen: true).state,
-            savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
-            userId: state.user?.uid,
-          ),
-        );
-      },
-      child: Scaffold(
-        appBar: InfoAppBar(),
-        body: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
-          builder: (context, state) {
-            if (state.isAll) {
-              return AllBlogsBuilder();
-            }
+    return Scaffold(
+      appBar: InfoAppBar(),
+      body: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
+        builder: (context, state) {
+          if (state.isAll) {
+            return AllBlogsBuilder();
+          }
 
-            if (state.isSaved) {
-              return SavedBlogsBuilder();
-            }
+          if (state.isSaved) {
+            return SavedBlogsBuilder();
+          }
 
-            if (state.isUsers) {
-              return UserBlogsBuilder();
-            }
+          if (state.isUsers) {
+            return UserBlogsBuilder();
+          }
 
-            return Container();
-          },
-        ),
-        bottomNavigationBar: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
-          builder: (context, state) {
-            return BottomNavigationBar(
-              currentIndex: BlogsViewSelectorState.values.indexOf(state),
-              items: BlogsViewSelectorState.values.map(
-                (e) {
-                  return BottomNavigationBarItem(
-                    icon: Icon(e.toIcon()),
-                    label: e.toBottomNavigationString(),
-                  );
-                },
-              ).toList(),
-              onTap: (index) {
-                BlocProvider.of<BlogsViewSelectorCubit>(context).viewUpdateIndex(index);
+          return Container();
+        },
+      ),
+      bottomNavigationBar: BlocBuilder<BlogsViewSelectorCubit, BlogsViewSelectorState>(
+        builder: (context, state) {
+          return BottomNavigationBar(
+            currentIndex: BlogsViewSelectorState.values.indexOf(state),
+            items: BlogsViewSelectorState.values.map(
+              (e) {
+                return BottomNavigationBarItem(
+                  icon: Icon(e.toIcon()),
+                  label: e.toBottomNavigationString(),
+                );
               },
-            );
-          },
-        ),
+            ).toList(),
+            onTap: (index) {
+              BlocProvider.of<BlogsViewSelectorCubit>(context).viewUpdateIndex(index);
+            },
+          );
+        },
       ),
     );
   }

@@ -5,7 +5,10 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
+
+import '../../fitness_blogs.dart';
 
 part 'blog_posts_saved_list_event.dart';
 part 'blog_posts_saved_list_state.dart';
@@ -13,12 +16,25 @@ part 'blog_posts_saved_list_state.dart';
 class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSavedListState> {
   BlogPostsSavedListBloc({
     required BlogRepository blogRepository,
+    required LikedBlogPostsBloc likedBlogPostsBloc,
+    required SavedBlogPostsBloc savedBlogPostsBloc,
+    required AuthenticationBloc authenticationBloc,
+    required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
   })  : _blogRepository = blogRepository,
+        _savedBlogPostsBloc = savedBlogPostsBloc,
+        _likedBlogPostsBloc = likedBlogPostsBloc,
+        _blogPostsSearchFilterBloc = blogPostsSearchFilterBloc,
+        _authenticationBloc = authenticationBloc,
         super(BlogPostsSavedListLoading());
 
   final BlogRepository _blogRepository;
   final int _limit = 12;
   late DocumentSnapshot _lastFetchedDocumentSnapshot;
+
+  final SavedBlogPostsBloc _savedBlogPostsBloc;
+  final LikedBlogPostsBloc _likedBlogPostsBloc;
+  final AuthenticationBloc _authenticationBloc;
+  final BlogPostsSearchFilterBloc _blogPostsSearchFilterBloc;
 
   @override
   Stream<BlogPostsSavedListState> mapEventToState(
@@ -31,7 +47,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     } else if (event is BlogPostsSavedListItemUpdated) {
       yield* _mapItemUpdatedToState(event);
     } else if (event is BlogPostsSavedListLoadRequested) {
-      yield* _mapLoadRequestedToState(event);
+      yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsSavedListLoadMoreRequested) {
       yield* _mapLoadMoreRequestedToState(event);
     }
@@ -89,9 +105,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     }
   }
 
-  Stream<BlogPostsSavedListState> _mapLoadRequestedToState(BlogPostsSavedListLoadRequested event) async* {
+  Stream<BlogPostsSavedListState> _mapLoadRequestedToState() async* {
     List<BlogPost> blogs = const [];
-    List<String> savedBlogIds = List<String>.from(event.savedBlogIds);
+    List<String> savedBlogIds = List<String>.from(_savedBlogPostsBloc.state);
 
     if (state is BlogPostsListLoadSuccess) {
       final oldState = state as BlogPostsListLoadSuccess;
@@ -120,9 +136,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
         blogs = blogs +
             BlogPost.mapQuerySnapshotToBlogPosts(
               querySnapshot,
-              userId: event.userId,
+              userId: _authenticationBloc.state.user?.uid,
               saveBlogIds: savedBlogIds,
-              likedBlogIds: event.likedBlogIds,
+              likedBlogIds: _likedBlogPostsBloc.state,
             );
 
         yield BlogPostsSavedListLoadSuccess(
@@ -178,5 +194,19 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
 
   List<String> _mapBlogPostsToNotFetchedBlogIds(List<String> savedBlogIds, List<BlogPost> posts) {
     return List<String>.from(savedBlogIds)..removeWhere((savedId) => posts.any((element) => element.id == savedId));
+  }
+
+  Future<QuerySnapshot> _mapSearchFilterToQuerySnapshot({DocumentSnapshot? lastFetchedDoc}) {
+    BlogSearchResult? result = _blogPostsSearchFilterBloc.state;
+
+    if (result?.searchBy.isAuthor ?? false) {
+      return _blogRepository.getBlogPostsByAuthor(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
+    } else if (result?.searchBy.isTags ?? false) {
+      return _blogRepository.getBlogPostsByTag(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
+    } else if (result?.searchBy.isTitle ?? false) {
+      return _blogRepository.getBlogPostsByTitle(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
+    } else {
+      return _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: lastFetchedDoc);
+    }
   }
 }

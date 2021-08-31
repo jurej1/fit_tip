@@ -22,7 +22,7 @@ class LikedBlogPostsBloc extends HydratedBloc<LikedBlogPostsEvent, List<String>>
   bool _isAuth;
   String? _userId;
 
-  late Map<String, dynamic> allIds;
+  late Map<String, dynamic> _allIds;
 
   @override
   Future<void> close() {
@@ -43,7 +43,7 @@ class LikedBlogPostsBloc extends HydratedBloc<LikedBlogPostsEvent, List<String>>
 
   @override
   List<String>? fromJson(Map<String, dynamic> json) {
-    allIds = json;
+    _allIds = json;
     if (_isAuth) {
       return (json[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
     }
