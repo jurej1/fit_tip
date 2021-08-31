@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 
@@ -16,8 +17,12 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     required SavedBlogPostsBloc savedBlogPostsBloc,
     required LikedBlogPostsBloc likedBlogPostsBloc,
     required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
+    required AuthenticationBloc authenticationBloc,
   })  : _blogRepository = blogRepository,
         _searchFilterBloc = blogPostsSearchFilterBloc,
+        _likedBlogPostsBloc = likedBlogPostsBloc,
+        _savedBlogPostsBloc = savedBlogPostsBloc,
+        _authenticationBloc = authenticationBloc,
         super(BlogPostsListLoading()) {
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
       add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
@@ -28,7 +33,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     });
 
     _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
-      add(BlogPostsListLoadRequested(likedBlogs: likedBlogPostsBloc.state, savedBlogs: savedBlogPostsBloc.state));
+      add(BlogPostsListLoadRequested());
     });
   }
 
@@ -37,6 +42,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   late final StreamSubscription _searchFilterSubscription;
 
   final BlogPostsSearchFilterBloc _searchFilterBloc;
+  final LikedBlogPostsBloc _likedBlogPostsBloc;
+  final SavedBlogPostsBloc _savedBlogPostsBloc;
+  final AuthenticationBloc _authenticationBloc;
 
   final BlogRepository _blogRepository;
   late DocumentSnapshot _lastFetchedDoc;
@@ -55,7 +63,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     BlogPostsListEvent event,
   ) async* {
     if (event is BlogPostsListLoadRequested) {
-      yield* _mapLoadRequestedToState(event);
+      yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsListLoadMore) {
       yield* _mapLoadMoreToState(event);
     } else if (event is BlogPostsListItemAdded) {
@@ -71,29 +79,30 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     }
   }
 
-  Stream<BlogPostsListState> _mapLoadRequestedToState(BlogPostsListLoadRequested event) async* {
+  Stream<BlogPostsListState> _mapLoadRequestedToState() async* {
     yield BlogPostsListLoading();
 
     try {
-      QuerySnapshot snapshot = await _blogRepository.getBlogPostsByCreated(limit: _limit);
-      _lastFetchedDoc = snapshot.docs.last;
+      QuerySnapshot snapshot = await _mapSearchFilterToQuerySnapshot();
 
       if (snapshot.size == 0) {
         yield BlogPostsListLoadSuccess(hasReachedMax: true);
         return;
+      } else {
+        _lastFetchedDoc = snapshot.docs.last;
+
+        List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
+          snapshot,
+          likedBlogIds: _likedBlogPostsBloc.state,
+          saveBlogIds: _savedBlogPostsBloc.state,
+          userId: _authenticationBloc.state.user?.uid,
+        );
+
+        yield BlogPostsListLoadSuccess(
+          blogs: blogs,
+          hasReachedMax: snapshot.size < _limit,
+        );
       }
-
-      List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
-        snapshot,
-        likedBlogIds: event.likedBlogs,
-        saveBlogIds: event.savedBlogs,
-        userId: event.userId,
-      );
-
-      yield BlogPostsListLoadSuccess(
-        blogs: blogs,
-        hasReachedMax: snapshot.size < _limit,
-      );
     } catch (e) {
       yield BlogPostsListFail();
     }
@@ -105,7 +114,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
       if (!oldState.hasReachedMax) {
         try {
-          QuerySnapshot querySnapshot = await _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: _lastFetchedDoc);
+          QuerySnapshot querySnapshot = await _mapSearchFilterToQuerySnapshot(lastFetchedDoc: _lastFetchedDoc);
           if (querySnapshot.docs.isEmpty) {
             yield BlogPostsListLoadSuccess(hasReachedMax: querySnapshot.size < _limit, blogs: oldState.blogs);
           } else {
@@ -116,9 +125,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
               blogs: oldState.blogs +
                   BlogPost.mapQuerySnapshotToBlogPosts(
                     querySnapshot,
-                    likedBlogIds: event.likedBlogs,
-                    saveBlogIds: event.savedBlogs,
-                    userId: event.userId,
+                    likedBlogIds: _likedBlogPostsBloc.state,
+                    saveBlogIds: _savedBlogPostsBloc.state,
+                    userId: _authenticationBloc.state.user?.uid,
                   ),
             );
           }
@@ -198,17 +207,17 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     }
   }
 
-  Future<QuerySnapshot> _mapSearchFilterToQuerySnapshot() {
+  Future<QuerySnapshot> _mapSearchFilterToQuerySnapshot({DocumentSnapshot? lastFetchedDoc}) {
     BlogSearchResult? result = _searchFilterBloc.state;
 
     if (result?.searchBy.isAuthor ?? false) {
-      return _blogRepository.getBlogPostsByAuthor(result!.query, limit: _limit);
+      return _blogRepository.getBlogPostsByAuthor(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
     } else if (result?.searchBy.isTags ?? false) {
-      return _blogRepository.getBlogPostsByTag(result!.query, limit: _limit);
+      return _blogRepository.getBlogPostsByTag(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
     } else if (result?.searchBy.isTitle ?? false) {
-      return _blogRepository.getBlogPostsByTitle(result!.query, limit: _limit);
+      return _blogRepository.getBlogPostsByTitle(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
     } else {
-      return _blogRepository.getBlogPostsByCreated(limit: _limit);
+      return _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: lastFetchedDoc);
     }
   }
 }

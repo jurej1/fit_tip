@@ -26,31 +26,10 @@ class _BlogPostsListLikedBlogsUpdated extends BlogPostsListEvent {
 }
 
 class BlogPostsListLoadRequested extends BlogPostsListEvent {
-  final List<String> likedBlogs;
-  final List<String> savedBlogs;
-  final String? userId;
-
-  const BlogPostsListLoadRequested({
-    this.likedBlogs = const [],
-    this.savedBlogs = const [],
-    this.userId,
-  });
-
-  @override
-  List<Object?> get props => [userId, likedBlogs, savedBlogs];
+  const BlogPostsListLoadRequested();
 }
 
-class BlogPostsListLoadMore extends BlogPostsListEvent {
-  final List<String> likedBlogs;
-  final List<String> savedBlogs;
-  final String? userId;
-
-  const BlogPostsListLoadMore({
-    this.likedBlogs = const [],
-    this.savedBlogs = const [],
-    this.userId,
-  });
-}
+class BlogPostsListLoadMore extends BlogPostsListEvent {}
 
 class BlogPostsListItemAdded extends BlogPostsListEvent {
   final BlogPost value;
