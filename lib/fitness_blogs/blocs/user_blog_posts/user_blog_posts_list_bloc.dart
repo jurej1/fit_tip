@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'user_blog_posts_list_event.dart';
 part 'user_blog_posts_list_state.dart';
@@ -12,10 +14,20 @@ part 'user_blog_posts_list_state.dart';
 class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsListState> {
   UserBlogPostsListBloc({
     required BlogRepository blogRepository,
+    required AuthenticationBloc authenticationBloc,
+    required SavedBlogPostsBloc savedBlogPostsBloc,
+    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
+        _authenticationBloc = authenticationBloc,
+        _likedBlogPostsBloc = likedBlogPostsBloc,
+        _savedBlogPostsBloc = savedBlogPostsBloc,
         super(UserBlogPostsListLoading());
 
   final BlogRepository _blogRepository;
+  final AuthenticationBloc _authenticationBloc;
+  final SavedBlogPostsBloc _savedBlogPostsBloc;
+  final LikedBlogPostsBloc _likedBlogPostsBloc;
+
   final int _limit = 12;
 
   late DocumentSnapshot _lastFetchedDoc;
@@ -38,7 +50,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
   }
 
   Stream<UserBlogPostsListState> _mapLoadRequestToState(UserBlogPostsListLoadRequested event) async* {
-    if (event.userId == null) {
+    if (_authenticationBloc.state.user?.uid == null) {
       yield UserBlogPostsListFail();
       return;
     }
@@ -46,7 +58,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
     yield UserBlogPostsListLoading();
 
     try {
-      QuerySnapshot snapshot = await _blogRepository.getBlogPostsByOwnerId(event.userId!, limit: _limit);
+      QuerySnapshot snapshot = await _blogRepository.getBlogPostsByOwnerId(_authenticationBloc.state.user!.uid!, limit: _limit);
       if (snapshot.docs.isEmpty) {
         yield UserBlogPostsListLoadSuccess(blogs: [], hasReachedMax: true);
       } else {
@@ -54,9 +66,9 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
 
         List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
           snapshot,
-          userId: event.userId!,
-          likedBlogIds: event.likedBlogs,
-          saveBlogIds: event.savedBlogs,
+          userId: _authenticationBloc.state.user!.uid,
+          likedBlogIds: _likedBlogPostsBloc.state,
+          saveBlogIds: _savedBlogPostsBloc.state,
         );
         yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
       }
@@ -69,14 +81,14 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
     if (state is UserBlogPostsListLoadSuccess) {
       final oldState = state as UserBlogPostsListLoadSuccess;
       List<BlogPost> oldBlogs = oldState.blogs;
-      if (event.userId == null) {
+      if (_authenticationBloc.state.user?.uid == null) {
         yield UserBlogPostsListFail();
         return;
       }
 
       try {
         QuerySnapshot snapshot = await _blogRepository.getBlogPostsByOwnerId(
-          event.userId!,
+          _authenticationBloc.state.user!.uid!,
           limit: _limit,
           startAfterDoc: _lastFetchedDoc,
         );
@@ -87,9 +99,9 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
           List<BlogPost> blogs = oldBlogs +
               BlogPost.mapQuerySnapshotToBlogPosts(
                 snapshot,
-                userId: event.userId!,
-                likedBlogIds: event.likedBlogs,
-                saveBlogIds: event.savedBlogs,
+                userId: _authenticationBloc.state.user!.uid!,
+                likedBlogIds: _likedBlogPostsBloc.state,
+                saveBlogIds: _savedBlogPostsBloc.state,
               );
           yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
         }
