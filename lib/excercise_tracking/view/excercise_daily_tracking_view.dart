@@ -10,7 +10,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ExcerciseDailyTrackingView extends StatelessWidget {
   const ExcerciseDailyTrackingView({Key? key}) : super(key: key);
 
-  static List<BlocProvider> _providers() => [
+  static route(BuildContext context) {
+    return MaterialPageRoute(
+      builder: (_) {
+        return ExcerciseDailyTrackingView.widget(context);
+      },
+    );
+  }
+
+  static widget(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
         BlocProvider(
           create: (context) => DaySelectorBloc(),
         ),
@@ -26,19 +36,7 @@ class ExcerciseDailyTrackingView extends StatelessWidget {
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
           )..add(ExcerciseDailyGoalDateUpdated(BlocProvider.of<DaySelectorBloc>(context).state.selectedDate)),
         ),
-      ];
-
-  static route(BuildContext context) {
-    return MaterialPageRoute(
-      builder: (_) {
-        return ExcerciseDailyTrackingView.widget(context);
-      },
-    );
-  }
-
-  static widget(BuildContext context) {
-    return MultiBlocProvider(
-      providers: _providers(),
+      ],
       child: ExcerciseDailyTrackingView(),
     );
   }
