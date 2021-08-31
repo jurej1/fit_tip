@@ -124,23 +124,16 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             child: const CircularProgressIndicator(),
           );
         } else if (state is ActiveWorkoutLoadSuccess) {
-          return BlocListener<ActiveWorkoutViewSelectorCubit, ActiveWorkoutView>(
-            listener: (context, state) {
-              if (state == ActiveWorkoutView.workoutLogs) {
-                BlocProvider.of<WorkoutDayLogsBloc>(context).add(WorkoutDayLogsLoadRequested());
-              }
+          return PageView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              const ActiveWorkoutOverviewBuilder(),
+              const Page2(),
+              const WorkoutDayLogsBuilder(),
+            ],
+            onPageChanged: (index) {
+              BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
             },
-            child: PageView(
-              physics: const ClampingScrollPhysics(),
-              children: [
-                const ActiveWorkoutOverviewBuilder(),
-                const Page2(),
-                const WorkoutDayLogsBuilder(),
-              ],
-              onPageChanged: (index) {
-                BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
-              },
-            ),
           );
         } else if (state is ActiveWorkoutNone) {
           return Center(
