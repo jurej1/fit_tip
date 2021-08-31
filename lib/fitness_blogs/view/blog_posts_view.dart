@@ -34,15 +34,6 @@ class BlogPostsView extends StatelessWidget {
 
             // Blog lists blocs
             BlocProvider(
-              create: (context) => BlogPostsSavedListBloc(
-                blogRepository: RepositoryProvider.of<BlogRepository>(context),
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                blogPostsSearchFilterBloc: BlocProvider.of<BlogPostsSearchFilterBloc>(context),
-                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
-                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
-              )..add(BlogPostsSavedListLoadRequested()),
-            ),
-            BlocProvider(
               create: (context) => BlogPostsListBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
@@ -50,6 +41,14 @@ class BlogPostsView extends StatelessWidget {
                 blogPostsSearchFilterBloc: BlocProvider.of<BlogPostsSearchFilterBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               )..add(BlogPostsListLoadRequested()),
+            ),
+            BlocProvider(
+              create: (context) => BlogPostsSavedListBloc(
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
+                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
+              )..add(BlogPostsSavedListLoadRequested()),
             ),
             BlocProvider(
               create: (context) => UserBlogPostsListBloc(

@@ -19,11 +19,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     required LikedBlogPostsBloc likedBlogPostsBloc,
     required SavedBlogPostsBloc savedBlogPostsBloc,
     required AuthenticationBloc authenticationBloc,
-    required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
   })  : _blogRepository = blogRepository,
         _savedBlogPostsBloc = savedBlogPostsBloc,
         _likedBlogPostsBloc = likedBlogPostsBloc,
-        _blogPostsSearchFilterBloc = blogPostsSearchFilterBloc,
         _authenticationBloc = authenticationBloc,
         super(BlogPostsSavedListLoading());
 
@@ -34,7 +32,6 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
   final SavedBlogPostsBloc _savedBlogPostsBloc;
   final LikedBlogPostsBloc _likedBlogPostsBloc;
   final AuthenticationBloc _authenticationBloc;
-  final BlogPostsSearchFilterBloc _blogPostsSearchFilterBloc;
 
   @override
   Stream<BlogPostsSavedListState> mapEventToState(
@@ -194,19 +191,5 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
 
   List<String> _mapBlogPostsToNotFetchedBlogIds(List<String> savedBlogIds, List<BlogPost> posts) {
     return List<String>.from(savedBlogIds)..removeWhere((savedId) => posts.any((element) => element.id == savedId));
-  }
-
-  Future<QuerySnapshot> _mapSearchFilterToQuerySnapshot({DocumentSnapshot? lastFetchedDoc}) {
-    BlogSearchResult? result = _blogPostsSearchFilterBloc.state;
-
-    if (result?.searchBy.isAuthor ?? false) {
-      return _blogRepository.getBlogPostsByAuthor(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
-    } else if (result?.searchBy.isTags ?? false) {
-      return _blogRepository.getBlogPostsByTag(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
-    } else if (result?.searchBy.isTitle ?? false) {
-      return _blogRepository.getBlogPostsByTitle(result!.query, limit: _limit, startAfterDoc: lastFetchedDoc);
-    } else {
-      return _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: lastFetchedDoc);
-    }
   }
 }

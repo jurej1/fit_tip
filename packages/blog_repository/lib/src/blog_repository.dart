@@ -110,6 +110,7 @@ class BlogRepository {
 
   Future<QuerySnapshot> getBlogPostsByTitle(
     String value, {
+    List<String>? blogIds,
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) async {
