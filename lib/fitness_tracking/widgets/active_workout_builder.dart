@@ -84,35 +84,39 @@ class ActiveWorkoutBuilder extends StatelessWidget {
         ),
         body: _bodyBuilder(),
         bottomNavigationBar: FitnessTrackingViewSelector(),
-        floatingActionButton: BlocBuilder<FocusedWorkoutDayBloc, FocusedWorkoutDayState>(
-          builder: (context, state) {
-            if (state is FocusedWorkoutDayLoadSuccess) {
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  if (state.workoutDay == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('You do not have any workouts today')));
-                  } else {
-                    if (state.isWorkoutCompleted == false) {
-                      Navigator.of(context).push(
-                        RunningWorkoutDayView.route(
-                          context,
-                          state.workoutDay!,
-                          state.date,
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('You allready completed a workout')));
-                    }
-                  }
-                },
-                label: Text('Start Workout'),
-              );
-            }
-
-            return Container();
-          },
-        ),
+        floatingActionButton: _fabBuilder(),
       ),
+    );
+  }
+
+  Widget _fabBuilder() {
+    return BlocBuilder<FocusedWorkoutDayBloc, FocusedWorkoutDayState>(
+      builder: (context, state) {
+        if (state is FocusedWorkoutDayLoadSuccess) {
+          return FloatingActionButton.extended(
+            onPressed: () {
+              if (state.workoutDay == null) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('You do not have any workouts today')));
+              } else {
+                if (state.isWorkoutCompleted == false) {
+                  Navigator.of(context).push(
+                    RunningWorkoutDayView.route(
+                      context,
+                      state.workoutDay!,
+                      state.date,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text('You allready completed a workout')));
+                }
+              }
+            },
+            label: const Text('Start Workout'),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
@@ -128,7 +132,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             children: [
               const ActiveWorkoutOverviewBuilder(),
-              const Page2(),
+              const CalanderAndWokroutDayBuilder(),
               const WorkoutDayLogsBuilder(),
             ],
             onPageChanged: (index) {
@@ -141,30 +145,6 @@ class ActiveWorkoutBuilder extends StatelessWidget {
           );
         }
 
-        return Container();
-      },
-    );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  const Page2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
-      builder: (context, state) {
-        if (state is ActiveWorkoutLoadSuccess) {
-          return Container(
-            child: ListView(
-              children: [
-                TableCalendarBuilder(),
-                const SizedBox(height: 10),
-                FocusedWorkoutDayBuilder(),
-              ],
-            ),
-          );
-        }
         return Container();
       },
     );
