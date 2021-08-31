@@ -1,4 +1,3 @@
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,13 +24,7 @@ class AllBlogsBuilder extends StatelessWidget {
               blogs: state.blogs,
               hasReachedMax: state.hasReachedMax,
               onIsBottom: () {
-                BlocProvider.of<BlogPostsListBloc>(context).add(
-                  BlogPostsListLoadMore(
-                    likedBlogs: BlocProvider.of<LikedBlogPostsBloc>(context).state,
-                    savedBlogs: BlocProvider.of<SavedBlogPostsBloc>(context).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-                  ),
-                );
+                BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListLoadMore());
               },
             ),
           );

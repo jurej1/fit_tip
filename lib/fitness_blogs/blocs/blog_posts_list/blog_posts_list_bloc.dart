@@ -65,7 +65,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     if (event is BlogPostsListLoadRequested) {
       yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsListLoadMore) {
-      yield* _mapLoadMoreToState(event);
+      yield* _mapLoadMoreToState();
     } else if (event is BlogPostsListItemAdded) {
       yield* _mapItemAddedToState(event);
     } else if (event is BlogPostsListItemRemoved) {
@@ -108,7 +108,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     }
   }
 
-  Stream<BlogPostsListState> _mapLoadMoreToState(BlogPostsListLoadMore event) async* {
+  Stream<BlogPostsListState> _mapLoadMoreToState() async* {
     if (this.state is BlogPostsListLoadSuccess) {
       final oldState = state as BlogPostsListLoadSuccess;
 
