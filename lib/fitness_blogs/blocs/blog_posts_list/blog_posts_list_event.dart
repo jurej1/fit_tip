@@ -31,15 +31,6 @@ class BlogPostsListLoadRequested extends BlogPostsListEvent {
 
 class BlogPostsListLoadMore extends BlogPostsListEvent {}
 
-class BlogPostsListItemAdded extends BlogPostsListEvent {
-  final BlogPost value;
-
-  const BlogPostsListItemAdded(this.value);
-
-  @override
-  List<Object> get props => [value];
-}
-
 class BlogPostsListItemRemoved extends BlogPostsListEvent {
   final BlogPost value;
 

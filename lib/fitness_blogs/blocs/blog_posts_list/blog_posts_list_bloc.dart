@@ -66,8 +66,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       yield* _mapLoadRequestedToState();
     } else if (event is BlogPostsListLoadMore) {
       yield* _mapLoadMoreToState();
-    } else if (event is BlogPostsListItemAdded) {
-      yield* _mapItemAddedToState(event);
     } else if (event is BlogPostsListItemRemoved) {
       yield* _mapItemRemovedToState(event);
     } else if (event is BlogPostsListItemUpdated) {
@@ -135,18 +133,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
           yield BlogPostsListFail();
         }
       }
-    }
-  }
-
-  Stream<BlogPostsListState> _mapItemAddedToState(BlogPostsListItemAdded event) async* {
-    if (state is BlogPostsListLoadSuccess) {
-      final currentState = state as BlogPostsListLoadSuccess;
-
-      List<BlogPost> blogs = currentState.blogs
-        ..add(event.value)
-        ..sort((a, b) => b.created.compareTo(a.created));
-
-      yield BlogPostsListLoadSuccess(hasReachedMax: currentState.hasReachedMax, blogs: blogs);
     }
   }
 
