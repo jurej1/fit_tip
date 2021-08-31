@@ -17,6 +17,9 @@ class BlogPostsView extends StatelessWidget {
               create: (context) => BlogsViewSelectorCubit(),
               child: Container(),
             ),
+            BlocProvider(
+              create: (context) => BlogPostsSearchFilterBloc(),
+            ),
             //Hydrated blocs
             BlocProvider(
               create: (context) => SavedBlogPostsBloc(
@@ -29,7 +32,6 @@ class BlogPostsView extends StatelessWidget {
               ),
             ),
 
-            //Fil
             // Blog lists blocs
             BlocProvider(
               create: (context) => BlogPostsSavedListBloc(
@@ -49,9 +51,7 @@ class BlogPostsView extends StatelessWidget {
                 likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
                 blogPostsSearchFilterBloc: BlocProvider.of<BlogPostsSearchFilterBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              )..add(
-                  BlogPostsListLoadRequested(),
-                ),
+              )..add(BlogPostsListLoadRequested()),
             ),
             BlocProvider(
               create: (context) => UserBlogPostsListBloc(
@@ -82,10 +82,6 @@ class BlogPostsView extends StatelessWidget {
             savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context, listen: true).state,
             userId: state.user?.uid,
           ),
-        );
-
-        BlocProvider.of<BlogPostsListBloc>(context).add(
-          BlogPostsListLoadRequested(),
         );
       },
       child: Scaffold(
