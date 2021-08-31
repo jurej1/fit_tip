@@ -15,7 +15,9 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     required BlogRepository blogRepository,
     required SavedBlogPostsBloc savedBlogPostsBloc,
     required LikedBlogPostsBloc likedBlogPostsBloc,
+    required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
   })  : _blogRepository = blogRepository,
+        _searchFilterBloc = blogPostsSearchFilterBloc,
         super(BlogPostsListLoading()) {
     _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
       add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
@@ -24,10 +26,17 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
       add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
     });
+
+    _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
+      add(BlogPostsListLoadRequested(likedBlogs: likedBlogPostsBloc.state, savedBlogs: savedBlogPostsBloc.state));
+    });
   }
 
   late final StreamSubscription _savedBlogsSubscription;
   late final StreamSubscription _likedBlogPostsSubscription;
+  late final StreamSubscription _searchFilterSubscription;
+
+  final BlogPostsSearchFilterBloc _searchFilterBloc;
 
   final BlogRepository _blogRepository;
   late DocumentSnapshot _lastFetchedDoc;
@@ -37,6 +46,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   Future<void> close() {
     _likedBlogPostsSubscription.cancel();
     _savedBlogsSubscription.cancel();
+    _searchFilterSubscription.cancel();
     return super.close();
   }
 
@@ -185,6 +195,20 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
           .toList();
 
       yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
+    }
+  }
+
+  Future<QuerySnapshot> _mapSearchFilterToQuerySnapshot() {
+    BlogSearchResult? result = _searchFilterBloc.state;
+
+    if (result?.searchBy.isAuthor ?? false) {
+      return _blogRepository.getBlogPostsByAuthor(result!.query, limit: _limit);
+    } else if (result?.searchBy.isTags ?? false) {
+      return _blogRepository.getBlogPostsByTag(result!.query, limit: _limit);
+    } else if (result?.searchBy.isTitle ?? false) {
+      return _blogRepository.getBlogPostsByTitle(result!.query, limit: _limit);
+    } else {
+      return _blogRepository.getBlogPostsByCreated(limit: _limit);
     }
   }
 }

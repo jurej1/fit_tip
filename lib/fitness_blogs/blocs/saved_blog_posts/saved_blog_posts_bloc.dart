@@ -21,7 +21,7 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>>
 
   String? _userId;
   bool _isAuth;
-  late Map<String, dynamic> allIdsJson;
+  late Map<String, dynamic> _allIdsJson;
 
   late final StreamSubscription _authSubscription;
 
@@ -41,14 +41,14 @@ class SavedBlogPostsBloc extends HydratedBloc<SavedBlogPostsEvent, List<String>>
       yield* _mapItemRemovedToState(event);
     } else if (event is _SavedBlogPostsAuthUpdated) {
       if (_isAuth) {
-        yield (allIdsJson[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
+        yield (_allIdsJson[_userId!] as List<dynamic>).map((e) => e.toString()).toList();
       }
     }
   }
 
   @override
   List<String>? fromJson(Map<String, dynamic> json) {
-    allIdsJson = json;
+    _allIdsJson = json;
     if (_isAuth) {
       return (json[_userId] as List<dynamic>).map((e) => e.toString()).toList();
     }
