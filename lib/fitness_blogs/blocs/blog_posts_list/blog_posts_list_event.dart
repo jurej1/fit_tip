@@ -78,12 +78,3 @@ class BlogPostsListItemUpdated extends BlogPostsListEvent {
   @override
   List<Object> get props => [value];
 }
-
-class BlogPostsListBlogSearchClosed extends BlogPostsListEvent {
-  final BlogSearchResult? result;
-
-  const BlogPostsListBlogSearchClosed(this.result);
-
-  @override
-  List<Object?> get props => [result];
-}

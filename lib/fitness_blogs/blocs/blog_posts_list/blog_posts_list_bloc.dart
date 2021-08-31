@@ -58,8 +58,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       yield* _mapSavedBlogsUpdatedToState(event);
     } else if (event is _BlogPostsListLikedBlogsUpdated) {
       yield* _mapLikedBlogsUpdatedToState(event);
-    } else if (event is BlogPostsListBlogSearchClosed) {
-      yield* _mapSearchClosedToState(event);
     }
   }
 
@@ -187,24 +185,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
           .toList();
 
       yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
-    }
-  }
-
-  Stream<BlogPostsListState> _mapSearchClosedToState(BlogPostsListBlogSearchClosed event) async* {
-    if (event.result != null) {
-      SearchBy searchBy = event.result!.searchBy;
-      String value = event.result!.query;
-      QuerySnapshot querySnapshot;
-
-      if (searchBy.isAuthor) {
-        querySnapshot = await _blogRepository.getBlogPostsByAuthor(value, limit: _limit);
-      }
-      if (searchBy.isTags) {
-        querySnapshot = await _blogRepository.getBlogPostsByTag(value, limit: _limit);
-      }
-      if (searchBy.isTitle) {
-        querySnapshot = await _blogRepository.getBlogPostsByTitle(value, limit: _limit);
-      }
     }
   }
 }
