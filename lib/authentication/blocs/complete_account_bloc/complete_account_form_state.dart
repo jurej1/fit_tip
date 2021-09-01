@@ -4,7 +4,7 @@ class CompleteAccountFormState extends Equatable {
   const CompleteAccountFormState({
     this.firstName = const NameInput.pure(),
     this.lastName = const NameInput.pure(),
-    this.displayName = const NameInput.pure(),
+    this.displayName = const DisplayNameInput.pure(),
     this.gender = const GenderInput.pure(),
     this.birthday = const BirthdayInput.pure(),
     this.introduction = const IntroductionLineInput.pure(),
@@ -16,7 +16,7 @@ class CompleteAccountFormState extends Equatable {
 
   final NameInput firstName;
   final NameInput lastName;
-  final NameInput displayName;
+  final DisplayNameInput displayName;
   final GenderInput gender;
   final BirthdayInput birthday;
   final IntroductionLineInput introduction;
@@ -44,7 +44,7 @@ class CompleteAccountFormState extends Equatable {
   CompleteAccountFormState copyWith({
     NameInput? firstName,
     NameInput? lastName,
-    NameInput? displayName,
+    DisplayNameInput? displayName,
     GenderInput? gender,
     BirthdayInput? birthday,
     IntroductionLineInput? introduction,
@@ -61,7 +61,7 @@ class CompleteAccountFormState extends Equatable {
       birthday: birthday ?? this.birthday,
       introduction: introduction ?? this.introduction,
       status: status ?? this.status,
-      user: user ?? this.getNewUser() ?? this.user,
+      user: user ?? this.user,
       measurmentSystem: measurmentSystem ?? this.measurmentSystem,
       height: height ?? this.height,
     );
@@ -71,7 +71,7 @@ class CompleteAccountFormState extends Equatable {
     if (user != null) {
       return CompleteAccountFormState(
         birthday: BirthdayInput.pure(user.birthdate),
-        displayName: NameInput.pure(user.displayName ?? ''),
+        displayName: DisplayNameInput.pure(user.displayName ?? ''),
         firstName: NameInput.pure(user.firstName ?? ''),
         gender: GenderInput.pure(user.gender),
         introduction: IntroductionLineInput.pure(user.introduction ?? ''),

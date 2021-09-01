@@ -17,7 +17,7 @@ class DisplayNameInputField extends StatelessWidget {
             labelText: 'Display name',
             border: InputBorder.none,
           ),
-          enabled: profileState.isEditMode ? true : false,
+          enabled: profileState.isEditMode ? (profileState.displayName.canEdit) : false,
           onChanged: (value) {
             BlocProvider.of<ProfileSettingsBloc>(context).add(ProfileSettingsDisplayNameUpdated(value));
           },

@@ -80,6 +80,7 @@ class _DisplayNameInput extends StatelessWidget {
     return BlocBuilder<CompleteAccountFormBloc, CompleteAccountFormState>(
       builder: (context, state) {
         return TextFormField(
+          enabled: state.displayName.canEdit,
           initialValue: state.displayName.value,
           decoration: InputDecoration(
             labelText: 'Display name',
