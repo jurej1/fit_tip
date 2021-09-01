@@ -9,6 +9,7 @@ import 'package:fit_tip/settings/models/birthday_input.dart';
 import 'package:fit_tip/settings/models/gender_input.dart';
 import 'package:fit_tip/settings/models/height_input.dart';
 import 'package:fit_tip/settings/models/introduction_line_input.dart';
+import 'package:fit_tip/settings/settings.dart';
 import 'package:formz/formz.dart';
 
 part 'complete_account_form_event.dart';
@@ -64,7 +65,7 @@ class CompleteAccountFormBloc extends Bloc<CompleteAccountFormEvent, CompleteAcc
   }
 
   Stream<CompleteAccountFormState> _mapDisplayNameUpdatedToState(CompleteAccountFormDisplayNameUpdated event) async* {
-    final displayName = NameInput.dirty(event.value);
+    final displayName = DisplayNameInput.dirty(event.value);
     yield state.copyWith(
       displayName: displayName,
       status: Formz.validate([
@@ -179,7 +180,7 @@ class CompleteAccountFormBloc extends Bloc<CompleteAccountFormEvent, CompleteAcc
       final birthday = BirthdayInput.dirty(state.birthday.value);
       final lastName = NameInput.dirty(state.lastName.value);
       final firstName = NameInput.dirty(state.firstName.value);
-      final displayName = NameInput.dirty(state.displayName.value);
+      final displayName = DisplayNameInput.dirty(state.displayName.value);
       final gender = GenderInput.dirty(state.gender.value);
       final measurmentSystem = MeasurmentSystemInput.dirty(state.measurmentSystem.value);
       final height = HeightInput.dirty(state.height.value);
