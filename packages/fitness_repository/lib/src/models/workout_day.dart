@@ -4,24 +4,21 @@ import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class WorkoutDay extends Equatable {
+abstract class WorkoutDayRaw extends Equatable {
   final String id;
   final String workoutId;
   final String? note;
-  final int day;
-  final List<MuscleGroup>? musclesTargeted;
-  final List<WorkoutExcercise> excercises;
 
-  WorkoutDay({
-    String? id,
-    int? day,
-    int? numberOfExcercises,
+  final List<MuscleGroup>? muscles;
+  final List<WorkoutExcercise>? excercises;
+
+  const WorkoutDayRaw({
+    required this.id,
     required this.workoutId,
     this.note,
-    this.musclesTargeted,
-    this.excercises = const [],
-  })  : this.day = day ?? 0,
-        this.id = id ?? UniqueKey().toString();
+    this.muscles,
+    this.excercises,
+  });
 
   @override
   List<Object?> get props {
@@ -29,17 +26,40 @@ class WorkoutDay extends Equatable {
       id,
       workoutId,
       note,
-      day,
-      musclesTargeted,
+      muscles,
       excercises,
     ];
   }
 
-  int get numberOfMusclesTargeted => this.musclesTargeted?.length ?? 0;
-  int get numberOfExcercises => this.excercises.length;
+  int get numberOfMusclesTargeted => this.muscles?.length ?? 0;
+  int get numberOfExcercises => this.excercises?.length ?? 0;
+}
+
+class WorkoutDay extends WorkoutDayRaw {
+  final int weekday;
+  WorkoutDay({
+    int? weekday,
+    String? id,
+    required String workoutId,
+    String? note,
+    List<MuscleGroup>? muscles,
+    List<WorkoutExcercise>? excercises,
+  })  : weekday = weekday ?? 0,
+        super(
+          id: id ?? UniqueKey().toString(),
+          workoutId: workoutId,
+          excercises: excercises,
+          muscles: muscles,
+          note: note,
+        );
+
+  @override
+  List<Object?> get props {
+    return [weekday];
+  }
 
   String get mapDayToText {
-    return DateFormat('EEEE').format(DateTime(2021, 3, this.day));
+    return DateFormat('EEEE').format(DateTime(2021, 3, this.weekday));
   }
 
   static String mapListIndexToText(int index) {
@@ -55,48 +75,111 @@ class WorkoutDay extends Equatable {
     String? id,
     String? workoutId,
     String? note,
-    int? day,
-    List<MuscleGroup>? musclesTargeted,
+    int? weekday,
+    List<MuscleGroup>? muscles,
     List<WorkoutExcercise>? excercises,
   }) {
     return WorkoutDay(
       id: id ?? this.id,
       workoutId: workoutId ?? this.workoutId,
       note: note ?? this.note,
-      day: day ?? this.day,
-      musclesTargeted: musclesTargeted ?? this.musclesTargeted,
+      weekday: weekday ?? this.weekday,
+      muscles: muscles ?? this.muscles,
       excercises: excercises ?? this.excercises,
     );
   }
 
-  static WorkoutDay fromEntity(WorkoutDayEntity entity) {
-    return WorkoutDay(
-      day: entity.day,
-      id: entity.id,
-      numberOfExcercises: entity.numberOfExcercises,
-      excercises: entity.excercises.map((e) => WorkoutExcercise.fromEntity(e)).toList(),
-      musclesTargeted: entity.musclesTargeted,
-      note: entity.note,
-      workoutId: entity.workoutId,
-    );
+  String getDayText() {
+    return 'Day: $weekday';
   }
 
-  String getDayText() {
-    return 'Day: $day';
+  static WorkoutDay fromListIndexToPure(int index) {
+    return WorkoutDay(weekday: _calculateDayFromIndex(index), workoutId: '');
+  }
+
+  static WorkoutDay fromEntity(WorkoutDayEntity entity) {
+    return WorkoutDay(
+      workoutId: entity.workoutId,
+      excercises: entity.excercises?.map((e) => WorkoutExcercise.fromEntity(e)).toList() ?? null,
+      id: entity.id,
+      muscles: entity.muscles,
+      note: entity.note,
+      weekday: entity.weekday,
+    );
   }
 
   WorkoutDayEntity toEntity() {
     return WorkoutDayEntity(
       id: id,
-      day: day,
-      excercises: excercises.map((e) => e.toEntity()).toList(),
-      musclesTargeted: musclesTargeted,
-      note: note,
       workoutId: workoutId,
+      excercises: excercises?.map((e) => e.toEntity()).toList() ?? null,
+      muscles: muscles,
+      note: note,
+      weekday: weekday,
+    );
+  }
+}
+
+class WorkoutDayLog extends WorkoutDayRaw {
+  final String userId;
+  final DateTime created;
+  final Duration duration;
+
+  WorkoutDayLog({
+    required String id,
+    required String workoutId,
+    List<WorkoutExcercise>? excercises,
+    List<MuscleGroup>? muscles,
+    String? note,
+    required this.userId,
+    required this.created,
+    required this.duration,
+  }) : super(
+          id: id,
+          workoutId: workoutId,
+          excercises: excercises,
+          muscles: muscles,
+          note: note,
+        );
+
+  WorkoutDayLog copyWith({
+    String? userId,
+    DateTime? created,
+    Duration? duration,
+    String? workoutId,
+    List<WorkoutExcercise>? excercises,
+    List<MuscleGroup>? muscles,
+    String? id,
+    String? note,
+  }) {
+    return WorkoutDayLog(
+      userId: userId ?? this.userId,
+      created: created ?? this.created,
+      duration: duration ?? this.duration,
+      workoutId: workoutId ?? this.workoutId,
+      excercises: excercises ?? this.excercises,
+      muscles: muscles ?? this.muscles,
+      id: id ?? this.id,
+      note: note,
     );
   }
 
-  static WorkoutDay fromListIndexToPure(int index) {
-    return WorkoutDay(day: _calculateDayFromIndex(index), workoutId: '');
+  static WorkoutDayLog fromEntity(WorkoutDayLogEntity entity) {
+    return WorkoutDayLog(
+      workoutId: entity.workoutId,
+      userId: entity.userId,
+      created: entity.created,
+      duration: entity.duration,
+      excercises: entity.excercises?.map((e) => WorkoutExcercise.fromEntity(e)).toList() ?? null,
+      id: entity.id,
+      muscles: entity.muscles,
+      note: entity.note,
+    );
   }
+
+  int get hours => this.duration.inHours.remainder(24).toInt();
+  int get minutes => this.duration.inMinutes.remainder(60).toInt();
+  int get seconds => this.duration.inSeconds.remainder(60).toInt();
+
+  DateTime get endTime => this.created.add(duration);
 }

@@ -1,5 +1,5 @@
 export 'rep_unit.dart';
-export 'musscle_group.dart';
+export 'muscle_group.dart';
 export 'level.dart';
 export 'workout_goal.dart';
 export 'equipment_category.dart';

@@ -1,37 +1,46 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../../fitness_repository.dart';
+import 'workout_excercise_entity.dart';
 
-class _DocKeys {
+class WorkoutDayRawDocKeys {
+  static String workoutId = 'workoutId';
   static String note = 'note';
-  static String day = 'day';
-  static String musclesTargeted = 'musclesTargeted';
+  static String muscles = 'muscles';
   static String excercises = 'excercises';
-  static String id = 'id';
 }
 
-class WorkoutDayEntity extends Equatable {
+class WorkoutDayDocKeys {
+  static String weekday = 'weekday';
+}
+
+class WorkoutDayLogDocKeys {
+  static String userId = 'userId';
+  static String created = 'created';
+  static String duration = 'duration';
+}
+
+abstract class WorkoutDayRawEntity extends Equatable {
   final String id;
   final String workoutId;
   final String? note;
-  final int day;
-  final List<MuscleGroup>? musclesTargeted;
-  final List<WorkoutExcerciseEntity> excercises;
 
-  const WorkoutDayEntity({
+  final List<MuscleGroup>? muscles;
+  final List<WorkoutExcerciseEntity>? excercises;
+
+  const WorkoutDayRawEntity({
     required this.id,
     required this.workoutId,
     this.note,
-    required this.day,
-    this.musclesTargeted,
-    this.excercises = const [],
+    this.muscles,
+    this.excercises,
   });
-
-  int get numberOfExcercises => excercises.length;
 
   @override
   List<Object?> get props {
@@ -39,70 +48,161 @@ class WorkoutDayEntity extends Equatable {
       id,
       workoutId,
       note,
-      day,
-      musclesTargeted,
+      muscles,
       excercises,
     ];
+  }
+
+  int get numberOfMusclesTargeted => this.muscles?.length ?? 0;
+  int get numberOfExcercises => this.excercises?.length ?? 0;
+}
+
+class WorkoutDayEntity extends WorkoutDayRawEntity {
+  final int weekday;
+  WorkoutDayEntity({
+    int? weekday,
+    required String id,
+    required String workoutId,
+    String? note,
+    List<MuscleGroup>? muscles,
+    List<WorkoutExcerciseEntity>? excercises,
+  })  : weekday = weekday ?? 0,
+        super(
+          id: id,
+          workoutId: workoutId,
+          excercises: excercises,
+          muscles: muscles,
+          note: note,
+        );
+
+  @override
+  List<Object?> get props {
+    return [weekday];
   }
 
   WorkoutDayEntity copyWith({
     String? id,
     String? workoutId,
     String? note,
-    int? day,
-    List<MuscleGroup>? musclesTargeted,
+    int? weekday,
+    List<MuscleGroup>? muscles,
     List<WorkoutExcerciseEntity>? excercises,
   }) {
     return WorkoutDayEntity(
       id: id ?? this.id,
       workoutId: workoutId ?? this.workoutId,
       note: note ?? this.note,
-      day: day ?? this.day,
-      musclesTargeted: musclesTargeted ?? this.musclesTargeted,
+      weekday: weekday ?? this.weekday,
+      muscles: muscles ?? this.muscles,
       excercises: excercises ?? this.excercises,
-    );
-  }
-
-  static WorkoutDayEntity fromDocumentSnapshot(DocumentSnapshot snap) {
-    final data = snap.data() as Map<String, dynamic>;
-
-    return WorkoutDayEntity(
-      workoutId: '',
-      id: snap.id,
-      day: data[_DocKeys.day],
-      note: data[_DocKeys.note],
-      musclesTargeted: (data[_DocKeys.musclesTargeted] as List<String>)
-          .map(
-            (e) => MuscleGroup.values.firstWhere(
-              (element) => describeEnum(element) == e,
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  static WorkoutDayEntity fromMap(Map<String, dynamic> map, String workoutId) {
-    return WorkoutDayEntity(
-      workoutId: workoutId,
-      id: map[_DocKeys.id],
-      day: map[_DocKeys.day],
-      musclesTargeted: map.containsKey(_DocKeys.musclesTargeted)
-          ? (map[_DocKeys.musclesTargeted] as List<dynamic>).map((e) {
-              return MuscleGroup.values.firstWhere((element) => describeEnum(element) == e);
-            }).toList()
-          : [],
-      excercises: (map[_DocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList(),
-      note: map[_DocKeys.note],
     );
   }
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      _DocKeys.id: this.id,
-      _DocKeys.day: this.day,
-      if (this.musclesTargeted != null) _DocKeys.musclesTargeted: this.musclesTargeted?.map((e) => describeEnum(e)).toList(),
-      if (this.note != null) _DocKeys.note: this.note,
-      _DocKeys.excercises: excercises.isEmpty ? [] : this.excercises.map((e) => e.toMap()).toList(),
+      WorkoutDayDocKeys.weekday: this.weekday,
+      if (this.excercises != null) WorkoutDayRawDocKeys.excercises: this.excercises!.map((e) => e..toMap()).toList(),
+      if (this.muscles != null) WorkoutDayRawDocKeys.muscles: this.muscles!.map((e) => describeEnum(e)).toList(),
+      if (this.note != null) WorkoutDayRawDocKeys.note: this.note,
+      WorkoutDayRawDocKeys.workoutId: this.workoutId,
     };
+  }
+
+  static WorkoutDayEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+
+    return WorkoutDayEntity(
+      workoutId: data[WorkoutDayRawDocKeys.workoutId],
+      id: snapshot.id,
+      note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
+      weekday: data[WorkoutDayDocKeys.weekday],
+      excercises: data.containsKey(WorkoutDayRawDocKeys.excercises)
+          ? (data[WorkoutDayRawDocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList()
+          : null,
+      muscles: data.containsKey(WorkoutDayRawDocKeys.muscles)
+          ? (data[WorkoutDayRawDocKeys.muscles] as List<dynamic>)
+              .map((e) => MuscleGroup.values.firstWhere((element) => describeEnum(element) == e))
+              .toList()
+          : null,
+    );
+  }
+}
+
+class WorkoutDayLogEntity extends WorkoutDayRawEntity {
+  final String userId;
+  final DateTime created;
+  final Duration duration;
+
+  WorkoutDayLogEntity({
+    required String id,
+    required String workoutId,
+    List<WorkoutExcerciseEntity>? excercises,
+    List<MuscleGroup>? muscles,
+    String? note,
+    required this.userId,
+    required this.created,
+    required this.duration,
+  }) : super(
+          id: id,
+          workoutId: workoutId,
+          excercises: excercises,
+          muscles: muscles,
+          note: note,
+        );
+
+  WorkoutDayLogEntity copyWith({
+    String? userId,
+    DateTime? created,
+    Duration? duration,
+    String? workoutId,
+    List<WorkoutExcerciseEntity>? excercises,
+    List<MuscleGroup>? muscles,
+    String? id,
+    String? note,
+  }) {
+    return WorkoutDayLogEntity(
+      userId: userId ?? this.userId,
+      created: created ?? this.created,
+      duration: duration ?? this.duration,
+      workoutId: workoutId ?? this.workoutId,
+      excercises: excercises ?? this.excercises,
+      muscles: muscles ?? this.muscles,
+      id: id ?? this.id,
+      note: note,
+    );
+  }
+
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      WorkoutDayLogDocKeys.created: Timestamp.fromDate(this.created),
+      WorkoutDayLogDocKeys.duration: this.duration.inMilliseconds,
+      WorkoutDayLogDocKeys.userId: this.userId,
+      if (this.excercises != null) WorkoutDayRawDocKeys.excercises: this.excercises!.map((e) => e..toMap()).toList(),
+      if (this.muscles != null) WorkoutDayRawDocKeys.muscles: this.muscles!.map((e) => describeEnum(e)).toList(),
+      if (this.note != null) WorkoutDayRawDocKeys.note: this.note,
+      WorkoutDayRawDocKeys.workoutId: this.workoutId,
+    };
+  }
+
+  static WorkoutDayLogEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+
+    final timestamp = data[WorkoutDayLogDocKeys.created] as Timestamp;
+    return WorkoutDayLogEntity(
+      created: timestamp.toDate(),
+      workoutId: data[WorkoutDayRawDocKeys.workoutId],
+      id: snapshot.id,
+      userId: data[WorkoutDayLogDocKeys.userId],
+      duration: Duration(milliseconds: data[WorkoutDayLogDocKeys.duration]),
+      note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
+      excercises: data.containsKey(WorkoutDayRawDocKeys.excercises)
+          ? (data[WorkoutDayRawDocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList()
+          : null,
+      muscles: data.containsKey(WorkoutDayRawDocKeys.muscles)
+          ? (data[WorkoutDayRawDocKeys.muscles] as List<dynamic>)
+              .map((e) => MuscleGroup.values.firstWhere((element) => describeEnum(element) == e))
+              .toList()
+          : null,
+    );
   }
 }
