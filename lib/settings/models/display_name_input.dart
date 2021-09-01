@@ -6,7 +6,7 @@ class DisplayNameInput extends FormzInput<String?, DisplayNameInputValidationErr
   const DisplayNameInput.dirty([String? value]) : super.dirty(value);
   const DisplayNameInput.pure([String? value]) : super.pure(value);
 
-  bool get canEdit => this.value != null;
+  bool get canEdit => this.value != null && this.value!.isNotEmpty;
 
   @override
   DisplayNameInputValidationError? validator(String? value) {
