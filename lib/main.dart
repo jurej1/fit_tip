@@ -20,6 +20,8 @@ Future<void> main() async {
 
   Directory docDirectory = await path.getApplicationDocumentsDirectory();
 
+  Hive.init(docDirectory.path);
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: docDirectory,
   );
