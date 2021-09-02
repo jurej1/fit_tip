@@ -30,7 +30,7 @@ class WorkoutDayLogCard extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Wrap(
-                children: item.musclesTargeted
+                children: item.muscles
                         ?.map(
                           (e) => Chip(
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

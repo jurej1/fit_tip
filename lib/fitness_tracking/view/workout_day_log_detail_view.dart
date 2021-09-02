@@ -98,9 +98,9 @@ class WorkoutDayLogDetailView extends StatelessWidget {
                   const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: state.dayLog.excercises.length,
+                    itemCount: state.dayLog.excercises?.length,
                     itemBuilder: (context, index) {
-                      final item = state.dayLog.excercises[index];
+                      final item = state.dayLog.excercises![index];
                       return WorkoutExcerciseCard.provider(item);
                     },
                   ),

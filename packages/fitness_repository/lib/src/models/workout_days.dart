@@ -26,7 +26,7 @@ class WorkoutDays extends Equatable {
   WorkoutDaysEntity toEntity() {
     return WorkoutDaysEntity(
       workoutId: workoutId,
-      workoutDays: this.workoutDays?.map((e) => e.toEntity()).toList() ?? null,
+      workoutDays: this.workoutDays.map((e) => e.toEntity()).toList(),
     );
   }
 

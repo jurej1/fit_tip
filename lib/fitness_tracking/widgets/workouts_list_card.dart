@@ -57,7 +57,7 @@ class WorkoutsListCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(state.workout.title),
+                          Text(state.workout.info.title),
                           Spacer(),
                           const _ExpandableIconButton(),
                           const _OptionsButton(),
@@ -174,10 +174,9 @@ class _DataContainer extends StatelessWidget {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             children: [
-              Text(state.workout.mapDaysPerWeekToText),
-              Text('Estimate program duration: ${state.workout.mapDurationToText}'),
-              Text('Goal: ${mapWorkoutGoalToText(state.workout.goal)}'),
-              Text('Start date ${state.workout.mapStartDateToText}'),
+              Text(state.workout.info.mapDaysPerWeekToText),
+              Text('Goal: ${mapWorkoutGoalToText(state.workout.info.goal)}'),
+              // Text('Start date ${state.workout.mapStartDateToText}'), // TODO start date
             ],
           ),
         );
