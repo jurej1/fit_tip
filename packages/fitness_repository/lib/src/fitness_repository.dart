@@ -20,7 +20,7 @@ class FitnessRepository {
   }
 
   CollectionReference _fitnessTrackingPlanRef() {
-    return _firebaseFirestore.collection('fitness_tracking_plan');
+    return _firebaseFirestore.collection('fitness_tracking_plans');
   }
 
   DocumentReference _fitnessTrackingPlanWorkoutDaysRef(String workoutId) {

@@ -21,9 +21,9 @@ class AddWorkoutDayFormState {
     return WorkoutDay(
       workoutId: '',
       id: id,
-      day: day.value,
+      weekday: day.value,
       excercises: getExcercisesList(),
-      musclesTargeted: getMuscleGroupList(),
+      muscles: getMuscleGroupList(),
       note: note.value,
     );
   }
@@ -31,10 +31,10 @@ class AddWorkoutDayFormState {
   factory AddWorkoutDayFormState.initial(WorkoutDay workoutDay) {
     return AddWorkoutDayFormState(
       id: workoutDay.id,
-      day: WorkoutDayDay.pure(workoutDay.day),
-      muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.musclesTargeted),
+      day: WorkoutDayDay.pure(workoutDay.weekday),
+      muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.muscles),
       note: WorkoutDayNote.pure(workoutDay.note),
-      workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
+      workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises ?? []),
     );
   }
 
