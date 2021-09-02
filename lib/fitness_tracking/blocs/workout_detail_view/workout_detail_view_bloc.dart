@@ -15,28 +15,11 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
     required FitnessRepository fitnessRepository,
     required Workout workout,
   })  : this._fitnessRepository = fitnessRepository,
-        super(WorkoutDetailViewInitial(workout)) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
+        _authenticationBloc = authenticationBloc,
+        super(WorkoutDetailViewInitial(workout));
 
   final FitnessRepository _fitnessRepository;
-  late final StreamSubscription _authSubscription;
-
-  bool _isAuth = false;
-  String? _userId;
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<WorkoutDetailViewState> mapEventToState(
@@ -52,11 +35,11 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
   }
 
   Stream<WorkoutDetailViewState> _mapDeleteRequestedToState(WorkoutDetailViewDeleteRequested event) async* {
-    if (_isAuth) {
+    if (_authenticationBloc.state.isAuthenticated) {
       yield WorkoutDetailViewLoading(state.workout);
 
       try {
-        await _fitnessRepository.deleteWorkout(_userId!, state.workout);
+        await _fitnessRepository.deleteWorkout(state.workout.info.id);
         yield WorkoutDetailViewDeleteSuccess(state.workout);
       } on Exception catch (_) {
         yield WorkoutDetailViewFail(state.workout);
@@ -65,13 +48,14 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
   }
 
   Stream<WorkoutDetailViewState> _mapSetAsActiveRequestedToState(WorkoutDetailViewSetAsActiveRequested event) async* {
-    if (_isAuth) {
+    if (_authenticationBloc.state.isAuthenticated) {
       yield WorkoutDetailViewLoading(state.workout);
 
       try {
-        Workout workout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
+        //TODO set workout as active
+        // Workout workout = await _fitnessRepository.setWorkoutAsActive(state.workout);
 
-        yield WorkoutDetailViewSetAsActiveSuccess(workout);
+        // yield WorkoutDetailViewSetAsActiveSuccess(workout);
       } catch (e) {
         yield WorkoutDetailViewFail(state.workout);
       }
@@ -79,6 +63,6 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
   }
 
   Stream<WorkoutDetailViewState> _mapWorkoutUpdatedToState(WorkoutDetailViewWorkoutUpdated event) async* {
-    if (_isAuth) yield WorkoutDetailViewInitial(event.workout);
+    if (_authenticationBloc.state.isAuthenticated) yield WorkoutDetailViewInitial(event.workout);
   }
 }
