@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:intl/intl.dart';
@@ -127,5 +128,14 @@ class WorkoutInfo extends Equatable {
       note: entity.note,
       type: entity.type,
     );
+  }
+
+  static List<WorkoutInfo> fromQuerySnapshot(QuerySnapshot snapshot) {
+    //TODO, likes and it is saved,
+    return snapshot.docs.map((e) {
+      final info = WorkoutInfo.fromEntiy(WorkoutInfoEntity.fromDocumentSnapshot(e));
+
+      return info;
+    }).toList();
   }
 }

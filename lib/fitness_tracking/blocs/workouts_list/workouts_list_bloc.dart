@@ -15,29 +15,13 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
-        super(WorkoutsListLoading()) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
-
+        _authenticationBloc = authenticationBloc,
+        super(WorkoutsListLoading());
   final FitnessRepository _fitnessRepository;
-  late final StreamSubscription _authSubscription;
+  final AuthenticationBloc _authenticationBloc;
 
-  bool _isAuth = false;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final int _limit = 12;
+  late DocumentSnapshot _lastFetchedDoc;
 
   @override
   Stream<WorkoutsListState> mapEventToState(
@@ -53,24 +37,30 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       yield* _mapItemUpdatedToState(event);
     } else if (event is WorkoutsListItemSetAsActive) {
       yield* _mapItemSetAsActive(event);
+    } else if (event is WorkoutsListLoadMoreRequested) {
+      yield* _mapLoadMoreRequested();
     }
   }
 
   Stream<WorkoutsListState> _mapLoadRequestToState() async* {
     if (!(state is WorkoutsListLoading)) return;
 
-    if (!_isAuth) {
-      yield WorkoutsListFail();
-      return;
-    }
     yield WorkoutsListLoading();
 
     try {
-      // QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_userId!);
+      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutInfosByCreated(limit: _limit);
 
-      // List<Workout> workouts = Workout.fromQuerySnapshot(querySnapshot);
+      if (querySnapshot.docs.isEmpty) {
+        yield WorkoutsListLoadSuccess([], true);
+      } else {
+        _lastFetchedDoc = querySnapshot.docs.last;
 
-      yield WorkoutsListLoadSuccess([]);
+        List<WorkoutInfo> infos = WorkoutInfo.fromQuerySnapshot(querySnapshot);
+        yield WorkoutsListLoadSuccess(
+          infos,
+          querySnapshot.docs.length < _limit,
+        );
+      }
     } catch (e) {
       log(e.toString());
       yield WorkoutsListFail();
@@ -78,60 +68,83 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   }
 
   Stream<WorkoutsListState> _mapItemAddedToState(WorkoutsListItemAdded event) async* {
-    if (state is WorkoutsListLoadSuccess && _isAuth) {
-      final currentState = state as WorkoutsListLoadSuccess;
+    final currentState = state as WorkoutsListLoadSuccess;
 
-      List<Workout> workouts = List.from(currentState.workouts);
+    List<WorkoutInfo> workouts = List.from(currentState.workoutInfos);
 
-      workouts.add(event.workout);
+    workouts.add(event.info);
 
-      yield WorkoutsListLoadSuccess(workouts);
-    }
+    yield WorkoutsListLoadSuccess(workouts, currentState.hasReachedMax);
   }
 
   Stream<WorkoutsListState> _mapItemRemovedToState(WorkoutsListItemRemoved event) async* {
-    if (state is WorkoutsListLoadSuccess) {
-      final currentState = state as WorkoutsListLoadSuccess;
+    final currentState = state as WorkoutsListLoadSuccess;
 
-      List<Workout> workouts = List.from(currentState.workouts);
+    List<WorkoutInfo> workouts = List.from(currentState.workoutInfos);
 
-      workouts.remove(event.workout);
+    workouts.removeWhere((element) => element.id == event.info.id);
 
-      yield WorkoutsListLoadSuccess(workouts);
-    }
+    yield WorkoutsListLoadSuccess(workouts, currentState.hasReachedMax);
   }
 
   Stream<WorkoutsListState> _mapItemUpdatedToState(WorkoutsListItemUpdated event) async* {
     if (state is WorkoutsListLoadSuccess) {
       final currentState = state as WorkoutsListLoadSuccess;
 
-      List<Workout> workouts = List.from(currentState.workouts);
+      List<WorkoutInfo> workouts = List.from(currentState.workoutInfos);
 
       workouts = workouts.map((e) {
-        if (e.info.id == event.workout.info.id) {
-          return event.workout;
+        if (e.id == event.info.id) {
+          return event.info;
         }
 
         return e;
       }).toList();
 
-      yield WorkoutsListLoadSuccess(workouts);
+      yield WorkoutsListLoadSuccess(workouts, currentState.hasReachedMax);
     }
   }
 
   Stream<WorkoutsListState> _mapItemSetAsActive(WorkoutsListItemSetAsActive event) async* {
+    //TODO
+    // if (state is WorkoutsListLoadSuccess) {
+    //   final currentState = state as WorkoutsListLoadSuccess;
+
+    //   List<Workout> workouts = List.from(currentState.workouts);
+
+    //   workouts = workouts.map((e) {
+    //     if (e.info.id == event.workout.info.id) return event.workout;
+    //     if (e.isActive) return e.copyWith(isActive: false);
+    //     return e;
+    //   }).toList();
+
+    //   yield WorkoutsListLoadSuccess(workouts);
+    // }
+  }
+
+  Stream<WorkoutsListState> _mapLoadMoreRequested() async* {
     if (state is WorkoutsListLoadSuccess) {
-      final currentState = state as WorkoutsListLoadSuccess;
+      final oldState = state as WorkoutsListLoadSuccess;
 
-      List<Workout> workouts = List.from(currentState.workouts);
+      try {
+        QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutInfosByCreated(
+          limit: _limit,
+          startAfterDocument: _lastFetchedDoc,
+        );
 
-      workouts = workouts.map((e) {
-        if (e.info.id == event.workout.info.id) return event.workout;
-        if (e.isActive) return e.copyWith(isActive: false);
-        return e;
-      }).toList();
+        if (querySnapshot.docs.isEmpty) {
+          yield WorkoutsListLoadSuccess(oldState.workoutInfos, true);
+        } else {
+          List<WorkoutInfo> infos = WorkoutInfo.fromQuerySnapshot(querySnapshot);
 
-      yield WorkoutsListLoadSuccess(workouts);
+          yield WorkoutsListLoadSuccess(
+            oldState.workoutInfos + infos,
+            querySnapshot.docs.length < _limit,
+          );
+        }
+      } catch (error) {
+        yield WorkoutsListFail();
+      }
     }
   }
 }

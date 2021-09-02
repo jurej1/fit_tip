@@ -7,9 +7,13 @@ abstract class WorkoutsListState {
 class WorkoutsListLoading extends WorkoutsListState {}
 
 class WorkoutsListLoadSuccess extends WorkoutsListState {
-  final List<Workout> workouts;
+  final List<WorkoutInfo> workoutInfos;
+  final bool hasReachedMax;
 
-  const WorkoutsListLoadSuccess(this.workouts);
+  const WorkoutsListLoadSuccess(
+    this.workoutInfos,
+    this.hasReachedMax,
+  );
 }
 
 class WorkoutsListFail extends WorkoutsListState {}
