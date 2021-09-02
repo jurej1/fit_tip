@@ -67,12 +67,12 @@ class _FormBuilder extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.add) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Workout added')));
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemAdded(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemAdded(state.workout.info));
           Navigator.of(context).pop();
         }
 
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.edit) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout.info));
           Navigator.of(context).pop();
         }
       },
@@ -89,7 +89,7 @@ class _FormFromDetailPageBuilder extends StatelessWidget {
     return BlocListener<AddWorkoutFormBloc, AddWorkoutFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.edit) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout.info));
           BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewWorkoutUpdated(state.workout));
           Navigator.of(context).pop();
         }
