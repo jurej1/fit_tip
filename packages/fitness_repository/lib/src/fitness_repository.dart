@@ -103,12 +103,16 @@ class FitnessRepository {
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
 
+  Stream<BoxEvent> listenToActiveWorkoutValue(String userId) {
+    return _activeWorkoutBox.watch(key: userId);
+  }
+
   Future<void> setActiveWorkoutStatus(String userId, String? workoutId) {
     return _activeWorkoutBox.put(userId, workoutId);
   }
 
   String? getActiveWorkoutId(String userId) {
-    return _activeWorkoutBox.get(userId);
+    return _activeWorkoutBox.get(userId, defaultValue: null);
   }
 
   Future<void> deleteWorkout(String workoutId) {
