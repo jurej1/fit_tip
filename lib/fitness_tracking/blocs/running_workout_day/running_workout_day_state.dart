@@ -9,7 +9,7 @@ abstract class RunningWorkoutDayState extends Equatable {
   final WorkoutDayLog log;
   final int pageViewIndex;
 
-  int get pageViewLength => log.excercises.length + 1 + 1;
+  int get pageViewLength => (log.excercises?.length ?? 0) + 1 + 1;
 
   @override
   List<Object> get props => [log, pageViewIndex];

@@ -15,9 +15,11 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
           activeWorkoutBloc.state is ActiveWorkoutLoadSuccess
               ? TableCalendarLoadSuccess(
                   focusedDay: DateTime.now(),
-                  firstDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.created,
-                  lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.lastDay,
-                  workouts: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.workouts,
+                  firstDay:
+                      (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.created, // TODO: Hier should be the start date
+                  // lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.lastDay,
+                  workouts: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.workoutDays!.workoutDays, //TODO
+                  lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.created.add(Duration(days: 50)), //TODO
                 )
               : TableCalendarLoading(),
         );
@@ -35,16 +37,20 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         final current = state as TableCalendarLoadSuccess;
 
         yield current.copyWith(
-          firstDay: event.value.created,
-          lastDay: event.value.lastDay,
-          workouts: event.value.workouts,
+          //TODO
+          firstDay: event.value.info.created,
+          // lastDay: event.value.lastDay,
+          workouts: event.value.workoutDays!.workoutDays, //TODO
+          lastDay: event.value.info.created.add(Duration(days: 50)),
         );
       }
       yield TableCalendarLoadSuccess(
+        //TODO
         focusedDay: DateTime.now(),
-        firstDay: event.value.created,
-        lastDay: event.value.lastDay,
-        workouts: event.value.workouts,
+        firstDay: event.value.info.created,
+        // lastDay: event.value.lastDay,
+        workouts: event.value.workoutDays!.workoutDays,
+        lastDay: event.value.info.created.add(Duration(days: 50)), // TODO
       );
     }
   }
