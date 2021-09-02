@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../fitness_repository.dart';
 
@@ -27,7 +29,7 @@ class WorkoutInfoEntity extends Equatable {
   final String? note;
 
   final bool isPublic;
-  final int likes;
+  final int? likes;
 
   final DateTime created;
 
@@ -87,6 +89,45 @@ class WorkoutInfoEntity extends Equatable {
       isPublic: isPublic ?? this.isPublic,
       likes: likes ?? this.likes,
       created: created ?? this.created,
+    );
+  }
+
+  Map<String, dynamic> toDocumentSnapshot() {
+    return {
+      WorkoutInfoDocKeys.created: Timestamp.fromDate(this.created),
+      if (this.likes != null) WorkoutInfoDocKeys.likes: this.likes,
+      WorkoutInfoDocKeys.title: this.title,
+      WorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
+      if (this.duration != null) WorkoutInfoDocKeys.duration: this.duration,
+      if (this.goal != null) WorkoutInfoDocKeys.goal: describeEnum(goal!),
+      if (this.type != null) WorkoutInfoDocKeys.type: describeEnum(type!),
+      WorkoutInfoDocKeys.isPublic: this.isPublic,
+      if (this.note != null) WorkoutInfoDocKeys.note: this.note,
+      WorkoutInfoDocKeys.uid: this.uid,
+    };
+  }
+
+  static WorkoutInfoEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+
+    final timestamp = data[WorkoutInfoDocKeys.created] as Timestamp;
+
+    return WorkoutInfoEntity(
+      id: snapshot.id,
+      uid: data[WorkoutInfoDocKeys.uid],
+      title: data[WorkoutInfoDocKeys.title],
+      daysPerWeek: data[WorkoutInfoDocKeys.daysPerWeek],
+      created: timestamp.toDate(),
+      note: data.containsKey(WorkoutInfoDocKeys.note) ? data[WorkoutInfoDocKeys.note] : null,
+      duration: data.containsKey(WorkoutInfoDocKeys.duration) ? data[WorkoutInfoDocKeys.duration] : null,
+      goal: data.containsKey(WorkoutInfoDocKeys.goal)
+          ? WorkoutGoal.values.firstWhere((e) => data[WorkoutInfoDocKeys.goal] == describeEnum(e))
+          : null,
+      isPublic: data[WorkoutInfoDocKeys.isPublic],
+      likes: data.containsKey(WorkoutInfoDocKeys.likes) ? data[WorkoutInfoDocKeys.likes] : 0,
+      type: data.containsKey(WorkoutInfoDocKeys.type)
+          ? WorkoutType.values.firstWhere((e) => data[WorkoutInfoDocKeys.type] == describeEnum(e))
+          : null,
     );
   }
 }

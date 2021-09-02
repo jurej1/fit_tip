@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:fitness_repository/src/enums/enums.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 import '../../fitness_repository.dart';
 import 'workout_excercise_entity.dart';
@@ -14,6 +13,7 @@ class WorkoutDayRawDocKeys {
   static String note = 'note';
   static String muscles = 'muscles';
   static String excercises = 'excercises';
+  static String id = 'id';
 }
 
 class WorkoutDayDocKeys {
@@ -34,13 +34,13 @@ abstract class WorkoutDayRawEntity extends Equatable {
   final List<MuscleGroup>? muscles;
   final List<WorkoutExcerciseEntity>? excercises;
 
-  const WorkoutDayRawEntity({
-    required this.id,
+  WorkoutDayRawEntity({
+    String? id,
     required this.workoutId,
     this.note,
     this.muscles,
     this.excercises,
-  });
+  }) : this.id = id ?? UniqueKey().toString();
 
   @override
   List<Object?> get props {
@@ -61,7 +61,7 @@ class WorkoutDayEntity extends WorkoutDayRawEntity {
   final int weekday;
   WorkoutDayEntity({
     int? weekday,
-    required String id,
+    String? id,
     required String workoutId,
     String? note,
     List<MuscleGroup>? muscles,
@@ -105,6 +105,7 @@ class WorkoutDayEntity extends WorkoutDayRawEntity {
       if (this.muscles != null) WorkoutDayRawDocKeys.muscles: this.muscles!.map((e) => describeEnum(e)).toList(),
       if (this.note != null) WorkoutDayRawDocKeys.note: this.note,
       WorkoutDayRawDocKeys.workoutId: this.workoutId,
+      WorkoutDayRawDocKeys.id: this.id,
     };
   }
 
@@ -113,7 +114,24 @@ class WorkoutDayEntity extends WorkoutDayRawEntity {
 
     return WorkoutDayEntity(
       workoutId: data[WorkoutDayRawDocKeys.workoutId],
-      id: snapshot.id,
+      id: data[WorkoutDayRawDocKeys.id],
+      note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
+      weekday: data[WorkoutDayDocKeys.weekday],
+      excercises: data.containsKey(WorkoutDayRawDocKeys.excercises)
+          ? (data[WorkoutDayRawDocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList()
+          : null,
+      muscles: data.containsKey(WorkoutDayRawDocKeys.muscles)
+          ? (data[WorkoutDayRawDocKeys.muscles] as List<dynamic>)
+              .map((e) => MuscleGroup.values.firstWhere((element) => describeEnum(element) == e))
+              .toList()
+          : null,
+    );
+  }
+
+  static WorkoutDayEntity fromMap(Map<String, dynamic> data) {
+    return WorkoutDayEntity(
+      workoutId: data[WorkoutDayRawDocKeys.workoutId],
+      id: data[WorkoutDayRawDocKeys.id],
       note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
       weekday: data[WorkoutDayDocKeys.weekday],
       excercises: data.containsKey(WorkoutDayRawDocKeys.excercises)
@@ -134,7 +152,7 @@ class WorkoutDayLogEntity extends WorkoutDayRawEntity {
   final Duration duration;
 
   WorkoutDayLogEntity({
-    required String id,
+    String? id,
     required String workoutId,
     List<WorkoutExcerciseEntity>? excercises,
     List<MuscleGroup>? muscles,

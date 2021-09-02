@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:flutter/foundation.dart';
 
 import 'entity/entity.dart';
@@ -18,13 +19,20 @@ class FitnessRepository {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_goal_tracking');
   }
 
-  CollectionReference _fitnessTrackingPlanRef(String userId) {
-    return _firebaseFirestore.collection('users').doc(userId).collection('fitness_tracking_plan');
+  CollectionReference _fitnessTrackingPlanRef() {
+    return _firebaseFirestore.collection('fitness_tracking_plan');
   }
 
-  CollectionReference _fitnessTrackingWorkoutRef(String userId) {
-    return _firebaseFirestore.collection('users').doc(userId).collection('fitness_tracking_workouts');
+  DocumentReference _fitnessTrackingPlanWorkoutDaysRef(String workoutId) {
+    return _fitnessTrackingPlanRef().doc(workoutId).collection('data').doc('workout_days');
   }
+
+  CollectionReference _fitnessTrackingWorkoutLogsRef() {
+    return _firebaseFirestore.collection('fitness_tracking_workout_logs');
+  }
+
+//EXCERCISE FUNCTIONS
+///////////////////////////////////////////////////////////////////
 
   Future<void> deleteExcerciseLog(String userId, ExcerciseLog log) {
     return _activityTrackingRef(userId).doc(log.id).delete();
@@ -84,96 +92,221 @@ class FitnessRepository {
     }
   }
 
-  Future<void> deleteWorkout(String userId, Workout workout) {
-    return _fitnessTrackingPlanRef(userId).doc(workout.id).delete();
+  //FITNESS WORKOUTS
+///////////////////////////////////////////////////////////////////
+
+  Future<void> deleteWorkout(String workoutId) {
+    return _fitnessTrackingPlanRef().doc(workoutId).delete();
   }
 
-  Future<void> updateWorkout(String userId, Workout workout) {
-    return _fitnessTrackingPlanRef(userId).doc(workout.id).update(workout.toEntity().toDocumentSnapshot());
+  Future<void> updateWorkoutInfo(WorkoutInfo info) {
+    return _fitnessTrackingPlanRef().doc(info.id).update(info.toEntity().toDocumentSnapshot());
   }
 
-  Future<DocumentReference> addWorkout(String userId, Workout workout) async {
-    return _fitnessTrackingPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+  Future<void> updateWorkoutDays(WorkoutDays days) {
+    return _fitnessTrackingPlanWorkoutDaysRef(days.workoutId).update(days.toEntity().toDocumentSnapshot());
   }
 
-  Future<QuerySnapshot> getWorkouts(String userId) {
-    return _fitnessTrackingPlanRef(userId).orderBy('created', descending: true).get();
+  Future<DocumentReference> addWorkoutInfo(WorkoutInfo info) async {
+    return _fitnessTrackingPlanRef().add(info.toEntity().toDocumentSnapshot());
   }
 
-  Future<Workout> setWorkoutAsActive(String userId, Workout workout) async {
-    QuerySnapshot snapshot = await _fitnessTrackingPlanRef(userId).where('isActive', isEqualTo: true).get();
-
-    List<Workout> workouts = Workout.fromQuerySnapshot(snapshot);
-
-    workouts.forEach((element) {
-      _fitnessTrackingPlanRef(userId).doc(element.id).update({'isActive': false});
-    });
-
-    await _fitnessTrackingPlanRef(userId).doc(workout.id).update({'isActive': true});
-
-    return workout.copyWith(isActive: true);
+  Future<void> addWorkoutDays(WorkoutDays days) async {
+    return _fitnessTrackingPlanWorkoutDaysRef(days.workoutId).set(days.toEntity().toDocumentSnapshot());
   }
 
-  Future<DocumentReference> addWorkoutDayLog(String userId, WorkoutDayLog log) async {
-    return _fitnessTrackingWorkoutRef(userId).add(log.toEntity().toDocumentSnapshot());
+  Future<DocumentSnapshot> getWorkoutInfoById(String id) {
+    return _fitnessTrackingPlanRef().doc(id).get();
   }
 
-  Future<void> deleteWorkoutDayLog(String userId, WorkoutDayLog log) async {
-    return _fitnessTrackingWorkoutRef(userId).doc(log.id).delete();
+  Future<DocumentSnapshot> getWorkoutDaysById(String id) {
+    return _fitnessTrackingPlanWorkoutDaysRef(id).get();
   }
 
-  Future<void> updateWorkoutDayLog(String userId, WorkoutDayLog log) async {
-    return _fitnessTrackingWorkoutRef(userId).doc(log.id).update(log.toEntity().toDocumentSnapshot());
+  ///It returns twoo document snapshots where the first one is going to be the [WorkoutInfo]
+  /// and the second one is [WorkoutDays]
+  Future<List<DocumentSnapshot>> getWorkoutById(String workoutId) {
+    return Future.wait<DocumentSnapshot>([
+      _fitnessTrackingPlanRef().doc(workoutId).get(),
+      _fitnessTrackingPlanWorkoutDaysRef(workoutId).get(),
+    ]);
   }
 
-  Future<List<WorkoutDayLog>> getWorkoutDayLogByDate(String userId, DateTime date) async {
+  Future<QuerySnapshot> getWorkoutInfosByCreated({
+    required int limit,
+    DocumentSnapshot? startAfterDocument,
+  }) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(
+          WorkoutInfoDocKeys.isPublic,
+          isEqualTo: true,
+        )
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getWorkoutInfosByUserId(
+    String userId, {
+    required bool isAuthUserData,
+    required int limit,
+    DocumentSnapshot? startAfterDocument,
+  }) {
+    Query query = _fitnessTrackingPlanRef()
+        .limit(limit)
+        .where(
+          WorkoutInfoDocKeys.uid,
+          isEqualTo: userId,
+        )
+        .orderBy(WorkoutInfoDocKeys.created);
+
+    if (!isAuthUserData) {
+      query = query.where(WorkoutInfoDocKeys.isPublic, isEqualTo: true);
+    }
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getWorkoutInfosByTitle(
+    String value, {
+    required int limit,
+    DocumentSnapshot? startAfterDocument,
+  }) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(WorkoutInfoDocKeys.isPublic, isEqualTo: true)
+        .where(
+          WorkoutInfoDocKeys.title,
+          isEqualTo: value,
+          isGreaterThanOrEqualTo: value,
+          isLessThanOrEqualTo: value + '\uf8ff',
+        )
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getWorkoutInfosByType(WorkoutType type, {required int limit, DocumentSnapshot? startAfterDocument}) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(WorkoutInfoDocKeys.isPublic, isEqualTo: true)
+        .where(WorkoutInfoDocKeys.type, isEqualTo: true)
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  Future<QuerySnapshot> getWorkoutInfosByGoal(WorkoutGoal goal, {required int limit, DocumentSnapshot? startAfterDocument}) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(WorkoutInfoDocKeys.isPublic, isEqualTo: true)
+        .where(WorkoutInfoDocKeys.goal, isEqualTo: describeEnum(goal))
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  ///The duration parameter should be in weeks
+  Future<QuerySnapshot> getWorkoutInfosByDuration(int duration, {required int limit, DocumentSnapshot? startAfterDocument}) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(WorkoutInfoDocKeys.isPublic, isEqualTo: true)
+        .where(WorkoutInfoDocKeys.duration, isEqualTo: duration)
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  /// the first parameter (daysPerWeek) should be the value between including 1-7
+  Future<QuerySnapshot> getWorkoutInfosByDaysPerWeek(int daysPerWeek, {required int limit, DocumentSnapshot? startAfterDocument}) {
+    Query query = _fitnessTrackingPlanRef()
+        .where(WorkoutInfoDocKeys.isPublic, isEqualTo: true)
+        .where(WorkoutInfoDocKeys.daysPerWeek, isEqualTo: daysPerWeek)
+        .orderBy(WorkoutInfoDocKeys.created)
+        .limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
+  // WORKOUT DAY LOGS
+  ///////////////////////////////////////////////////////
+
+  Future<DocumentReference> addWorkoutDayLog(WorkoutDayLog log) async {
+    return _fitnessTrackingWorkoutLogsRef().add(log.toEntity().toDocumentSnapshot());
+  }
+
+  Future<void> deleteWorkoutDayLog(WorkoutDayLog log) async {
+    return _fitnessTrackingWorkoutLogsRef().doc(log.id).delete();
+  }
+
+  Future<void> updateWorkoutDayLog(WorkoutDayLog log) async {
+    return _fitnessTrackingWorkoutLogsRef().doc(log.id).update(log.toEntity().toDocumentSnapshot());
+  }
+
+  Future<QuerySnapshot> getWorkoutDayLogByDate(String userId, DateTime date) async {
     final lowerBound = DateTime(date.year, date.month, date.day);
     final upperBound = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
-    QuerySnapshot querySnapshot = await _fitnessTrackingWorkoutRef(userId)
+    return _fitnessTrackingWorkoutLogsRef()
         .where(
-          'created',
+          WorkoutDayLogDocKeys.userId,
+          isEqualTo: userId,
+        )
+        .where(
+          WorkoutDayLogDocKeys.created,
           isGreaterThanOrEqualTo: Timestamp.fromDate(lowerBound),
           isLessThanOrEqualTo: Timestamp.fromDate(upperBound),
         )
         .get();
-
-    if (querySnapshot.size == 0) {
-      return [];
-    } else {
-      return querySnapshot.docs
-          .map(
-            (e) => WorkoutDayLog.fromEntity(
-              WorkoutDayLogEntity.fromDocumentSnapshot(e),
-            ),
-          )
-          .toList();
-    }
   }
 
-  Future<WorkoutDayLog?> getWorkoutDayLogById(String userId, String id) async {
-    DocumentSnapshot snap = await _fitnessTrackingWorkoutRef(userId).doc(id).get();
-
-    if (snap.exists) {
-      return WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(snap));
-    }
-
-    return null;
+  Future<DocumentSnapshot> getWorkoutDayLogById(String id) async {
+    return _fitnessTrackingWorkoutLogsRef().doc(id).get();
   }
 
-  Future<List<WorkoutDayLog>?> getWorkoutDayLogByWorkoutId(String userId, String workoutId) async {
-    QuerySnapshot snap = await _fitnessTrackingWorkoutRef(userId)
+  Future<QuerySnapshot> getWorkoutDayLogByWorkoutId(String userId, String workoutId) async {
+    return _fitnessTrackingWorkoutLogsRef()
         .where(
-          'workoutId',
+          WorkoutDayLogDocKeys.userId,
+          isEqualTo: userId,
+        )
+        .where(
+          WorkoutDayRawDocKeys.workoutId,
           isEqualTo: workoutId,
         )
-        .orderBy('created', descending: true)
+        .orderBy(
+          WorkoutDayLogDocKeys.created,
+          descending: true,
+        )
         .get();
-
-    if (snap.size != 0) {
-      return snap.docs.map((e) => WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(e))).toList();
-    }
-
-    return null;
   }
 }

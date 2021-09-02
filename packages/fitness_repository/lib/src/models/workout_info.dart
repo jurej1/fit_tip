@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:intl/intl.dart';
 
 import '../../fitness_repository.dart';
@@ -10,6 +11,8 @@ class WorkoutInfo extends Equatable {
   final String title;
   final WorkoutGoal? goal;
   final WorkoutType? type;
+
+  ///The duration is in weeks
   final int? duration;
   final int daysPerWeek;
   final String? note;
@@ -92,5 +95,37 @@ class WorkoutInfo extends Equatable {
 
   String get mapCreatedToText {
     return _formatDate(created);
+  }
+
+  WorkoutInfoEntity toEntity() {
+    return WorkoutInfoEntity(
+      id: id,
+      uid: uid,
+      title: title,
+      daysPerWeek: daysPerWeek,
+      created: this.created,
+      duration: this.duration,
+      goal: this.goal,
+      isPublic: this.isPublic,
+      likes: this.likes,
+      note: this.note,
+      type: this.type,
+    );
+  }
+
+  static WorkoutInfo fromEntiy(WorkoutInfoEntity entity) {
+    return WorkoutInfo(
+      id: entity.id,
+      uid: entity.uid,
+      title: entity.title,
+      daysPerWeek: entity.daysPerWeek,
+      created: entity.created,
+      duration: entity.duration,
+      goal: entity.goal,
+      isPublic: entity.isPublic,
+      likes: entity.likes ?? 0,
+      note: entity.note,
+      type: entity.type,
+    );
   }
 }

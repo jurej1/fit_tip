@@ -177,6 +177,19 @@ class WorkoutDayLog extends WorkoutDayRaw {
     );
   }
 
+  WorkoutDayLogEntity toEntity() {
+    return WorkoutDayLogEntity(
+      id: id,
+      workoutId: workoutId,
+      userId: userId,
+      created: created,
+      duration: duration,
+      excercises: excercises?.map((e) => e.toEntity()).toList() ?? null,
+      muscles: muscles,
+      note: note,
+    );
+  }
+
   int get hours => this.duration.inHours.remainder(24).toInt();
   int get minutes => this.duration.inMinutes.remainder(60).toInt();
   int get seconds => this.duration.inSeconds.remainder(60).toInt();

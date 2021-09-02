@@ -384,7 +384,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
             ),
           );
         } else {
-          await _fitnessRepository.updateWorkout(_userId!, state.workout);
+          await _fitnessRepository.updateWorkoutInfo(_userId!, state.workout);
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         }
       } catch (e) {
