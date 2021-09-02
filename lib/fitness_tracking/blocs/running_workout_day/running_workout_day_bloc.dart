@@ -24,8 +24,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
               workoutId: workoutDay.workoutId,
               excercises: workoutDay.excercises,
               id: UniqueKey().toString(),
-              workoutDayId: workoutDay.id,
-              musclesTargeted: workoutDay.musclesTargeted,
+              duration: Duration(days: 0), // TODO
+              userId: '', //TODO
             ),
             0,
           ),
@@ -69,7 +69,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
 
   Stream<RunningWorkoutDayState> _mapExcerciseUpdatetToState(RunningWorkoutDayWorkoutExcerciseUpdated event) async* {
     WorkoutDayLog log = this.state.log;
-    List<WorkoutExcercise> excercises = log.excercises;
+    List<WorkoutExcercise> excercises = log.excercises ?? []; //TODO
 
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) {
@@ -99,10 +99,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           state.pageViewIndex,
         );
 
-        DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(
-          _userId!,
-          state.log,
-        );
+        DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(state.log);
         yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);
       } catch (error) {
         yield RunningWorkoutDayFail(state.log, state.pageViewIndex);
