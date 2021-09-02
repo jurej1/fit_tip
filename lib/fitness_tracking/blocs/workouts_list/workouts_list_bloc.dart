@@ -66,11 +66,11 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     yield WorkoutsListLoading();
 
     try {
-      QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_userId!);
+      // QuerySnapshot querySnapshot = await _fitnessRepository.getWorkouts(_userId!);
 
-      List<Workout> workouts = Workout.fromQuerySnapshot(querySnapshot);
+      // List<Workout> workouts = Workout.fromQuerySnapshot(querySnapshot);
 
-      yield WorkoutsListLoadSuccess(workouts);
+      yield WorkoutsListLoadSuccess([]);
     } catch (e) {
       log(e.toString());
       yield WorkoutsListFail();
@@ -108,7 +108,7 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       List<Workout> workouts = List.from(currentState.workouts);
 
       workouts = workouts.map((e) {
-        if (e.id == event.workout.id) {
+        if (e.info.id == event.workout.info.id) {
           return event.workout;
         }
 
@@ -126,7 +126,7 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       List<Workout> workouts = List.from(currentState.workouts);
 
       workouts = workouts.map((e) {
-        if (e.id == event.workout.id) return event.workout;
+        if (e.info.id == event.workout.info.id) return event.workout;
         if (e.isActive) return e.copyWith(isActive: false);
         return e;
       }).toList();
