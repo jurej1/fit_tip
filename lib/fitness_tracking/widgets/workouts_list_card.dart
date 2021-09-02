@@ -12,13 +12,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class WorkoutsListCard extends StatelessWidget {
   const WorkoutsListCard({Key? key}) : super(key: key);
 
-  static Widget route(BuildContext context, Workout item) {
+  static Widget route(BuildContext context, WorkoutInfo item) {
     return BlocProvider(
       key: ValueKey(item),
       create: (context) => WorkoutsListCardBloc(
         authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
         fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-        workout: item,
+        info: item,
       ),
       child: WorkoutsListCard(
         key: ValueKey(item),
@@ -31,10 +31,10 @@ class WorkoutsListCard extends StatelessWidget {
     return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
       listener: (context, state) {
         if (state is WorkoutsListCardDeleteSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.info));
         }
         if (state is WorkoutsListCardSetAsActiveSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemSetAsActive(state.workout));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemSetAsActive(state.info));
         }
       },
       builder: (context, state) {
@@ -49,7 +49,8 @@ class WorkoutsListCard extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(WorkoutDetailView.route(context, workout: state.workout));
+                  //TODO
+                  // Navigator.of(context).push(WorkoutDetailView.route(context, workout: state.info));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -57,7 +58,7 @@ class WorkoutsListCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(state.workout.info.title),
+                          Text(state.info.title),
                           Spacer(),
                           const _ExpandableIconButton(),
                           const _OptionsButton(),
@@ -108,7 +109,8 @@ class _OptionsButton extends StatelessWidget {
             if (option == WorkoutsListCardOptions.delete) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardDeleteRequested());
             } else if (option == WorkoutsListCardOptions.edit) {
-              Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+              //TODO
+              // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.info));
             } else if (option == WorkoutsListCardOptions.setAsActive) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
             }
@@ -174,8 +176,8 @@ class _DataContainer extends StatelessWidget {
             shrinkWrap: true,
             physics: const ClampingScrollPhysics(),
             children: [
-              Text(state.workout.info.mapDaysPerWeekToText),
-              Text('Goal: ${mapWorkoutGoalToText(state.workout.info.goal)}'),
+              Text(state.info.mapDaysPerWeekToText),
+              Text('Goal: ${mapWorkoutGoalToText(state.info.goal)}'),
               // Text('Start date ${state.workout.mapStartDateToText}'), // TODO start date
             ],
           ),

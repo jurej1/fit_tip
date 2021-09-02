@@ -2,28 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 part 'active_workout_event.dart';
 part 'active_workout_state.dart';
 
 class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
-  ActiveWorkoutBloc({
-    required WorkoutsListBloc workoutsListBloc,
-  }) : super(ActiveWorkoutState.initial(workoutsListBloc)) {
-    _streamSubscription = workoutsListBloc.stream.listen(
-      (listState) {
-        if (listState is WorkoutsListLoadSuccess) {
-          add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
-        } else if (listState is WorkoutsListFail) {
-          add(_ActiveWorkoutFailureRquested());
-        }
-      },
-    );
-  }
-
-  late final StreamSubscription _streamSubscription;
+  ActiveWorkoutBloc() : super(ActiveWorkoutLoading());
 
   @override
   Stream<ActiveWorkoutState> mapEventToState(
@@ -50,11 +35,5 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     } else {
       yield ActiveWorkoutNone();
     }
-  }
-
-  @override
-  Future<void> close() {
-    _streamSubscription.cancel();
-    return super.close();
   }
 }

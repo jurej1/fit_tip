@@ -44,10 +44,10 @@ class WorkoutsListBuilder extends StatelessWidget {
         } else if (state is WorkoutsListLoadSuccess) {
           return ListView.separated(
             padding: const EdgeInsets.all(10),
-            itemCount: state.workouts.length,
+            itemCount: state.workoutInfos.length,
             physics: const ClampingScrollPhysics(),
             itemBuilder: (context, index) {
-              final item = state.workouts[index];
+              final item = state.workoutInfos[index];
               return WorkoutsListCard.route(context, item);
             },
             separatorBuilder: (context, index) {

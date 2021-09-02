@@ -11,12 +11,12 @@ part 'workouts_list_card_state.dart';
 
 class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardState> {
   WorkoutsListCardBloc({
-    required Workout workout,
+    required WorkoutInfo info,
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(WorkoutsListCardInitial(workout, false));
+        super(WorkoutsListCardInitial(info, false));
 
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
@@ -36,36 +36,37 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
 
   Stream<WorkoutsListCardState> _mapDeleteRequestedToState(WorkoutsListCardDeleteRequested event) async* {
     if (_authenticationBloc.state.isAuthenticated) {
-      yield WorkoutsListCardLoading(state.workout, state.isExpanded);
+      yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
       try {
-        await _fitnessRepository.deleteWorkout(state.workout.info.id);
+        await _fitnessRepository.deleteWorkout(state.info.id);
 
-        yield WorkoutsListCardDeleteSuccess(state.workout, state.isExpanded);
+        yield WorkoutsListCardDeleteSuccess(state.info, state.isExpanded);
       } catch (e) {
-        yield WorkoutsListCardFail(state.workout, state.isExpanded);
+        yield WorkoutsListCardFail(state.info, state.isExpanded);
       }
     }
   }
 
   Stream<WorkoutsListCardState> _mapExpandedButtonPressedToState() async* {
-    yield WorkoutsListCardInitial(state.workout, !state.isExpanded);
+    yield WorkoutsListCardInitial(state.info, !state.isExpanded);
   }
 
   Stream<WorkoutsListCardState> _mapSetAsActiveRequested() async* {
-    if (state.workout.isActive) return;
+    //TODO set as active
+    // if (state.info.isActive) return;
 
-    if (_authenticationBloc.state.isAuthenticated) {
-      yield WorkoutsListCardLoading(state.workout, state.isExpanded);
+    // if (_authenticationBloc.state.isAuthenticated) {
+    //   yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
-      try {
-        //TODO set workout as active
-        // Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
+    //   try {
+    //     //TODO set workout as active
+    //     // Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
 
-        // yield WorkoutsListCardSetAsActiveSuccess(newWorkout, state.isExpanded);
-      } catch (e) {
-        yield WorkoutsListCardFail(state.workout, state.isExpanded);
-      }
-    }
+    //     // yield WorkoutsListCardSetAsActiveSuccess(newWorkout, state.isExpanded);
+    //   } catch (e) {
+    //     yield WorkoutsListCardFail(state.info, state.isExpanded);
+    //   }
+    // }
   }
 }
