@@ -3,6 +3,7 @@ part of 'add_workout_form_bloc.dart';
 class AddWorkoutFormState {
   const AddWorkoutFormState({
     this.id,
+    this.uid,
     this.status = FormzStatus.pure,
     this.goal = const WorkoutGoalFormz.pure(),
     this.type = const WorkoutTypeFormz.pure(),
@@ -16,22 +17,25 @@ class AddWorkoutFormState {
     required this.formMode,
     this.title = const WorkoutTitle.pure(),
     this.isActive = false,
+    this.isPublic = true, // TODO: this needs events ans bloc functions
   });
 
   final String? id;
+  final String? uid;
   final WorkoutNote note;
   final FormzStatus status;
   final WorkoutGoalFormz goal;
   final WorkoutTypeFormz type;
   final WorkoutIntFormz duration;
   final WorkoutIntFormz daysPerWeek;
-  final WorkoutIntFormz timePerWorkout;
+  final WorkoutIntFormz timePerWorkout; // TODO this field should be deleted
   final WorkoutDateFormz startDate;
   final WorkoutDaysList workoutDays;
   final DateTime created;
   final FormMode formMode;
   final WorkoutTitle title;
   final bool isActive;
+  final bool isPublic;
 
   factory AddWorkoutFormState.initial(Workout? workout) {
     if (workout == null) {
@@ -42,21 +46,21 @@ class AddWorkoutFormState {
       );
     }
 
-    final daysPerWeek = WorkoutIntFormz.pure(workout.daysPerWeek.toStringAsFixed(0));
+    final daysPerWeek = WorkoutIntFormz.pure(workout.info.daysPerWeek.toStringAsFixed(0));
 
     return AddWorkoutFormState(
       startDate: WorkoutDateFormz.pure(workout.startDate),
-      created: workout.created,
+      created: workout.info.created,
       daysPerWeek: daysPerWeek,
-      duration: WorkoutIntFormz.pure(workout.duration.toStringAsFixed(0)),
-      goal: WorkoutGoalFormz.pure(workout.goal),
-      id: workout.id,
-      note: WorkoutNote.pure(workout.note),
-      timePerWorkout: WorkoutIntFormz.pure(workout.timePerWorkout.toStringAsFixed(0)),
-      type: WorkoutTypeFormz.pure(workout.type),
-      workoutDays: WorkoutDaysList.dirty(value: workout.workouts, workoutsPerWeekend: daysPerWeek.getIntValue()),
+      duration: WorkoutIntFormz.pure(workout.info.duration?.toStringAsFixed(0) ?? ''),
+      goal: WorkoutGoalFormz.pure(workout.info.goal),
+      id: workout.info.id,
+      note: WorkoutNote.pure(workout.info.note),
+      timePerWorkout: WorkoutIntFormz.pure('null'), // TODO this field should be
+      type: WorkoutTypeFormz.pure(workout.info.type),
+      workoutDays: WorkoutDaysList.dirty(value: workout.workoutDays?.workoutDays ?? [], workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
-      title: WorkoutTitle.pure(workout.title),
+      title: WorkoutTitle.pure(workout.info.title),
       isActive: workout.isActive,
     );
   }
@@ -97,18 +101,22 @@ class AddWorkoutFormState {
 
   Workout get workout {
     return Workout(
-      note: this.note.value,
-      id: id ?? UniqueKey().toString(),
-      goal: this.goal.value,
-      type: this.type.value,
-      duration: this.duration.getIntValue(),
-      daysPerWeek: this.daysPerWeek.getIntValue(),
-      timePerWorkout: this.timePerWorkout.getIntValue(),
-      startDate: this.startDate.value,
-      workouts: this.workoutDays.value,
-      created: this.created,
-      title: this.title.value,
-      isActive: this.isActive,
+      info: WorkoutInfo(
+        daysPerWeek: this.daysPerWeek.getIntValue(),
+        id: this.id ?? '',
+        title: this.title.value,
+        uid: this.uid ?? '',
+        created: DateTime.now(),
+        duration: this.duration.getIntValue(),
+        goal: this.goal.value,
+        isPublic: this.isPublic,
+        note: this.note.value,
+        type: this.type.value,
+      ),
+      workoutDays: WorkoutDays(
+        workoutId: this.id ?? '',
+        workoutDays: this.workoutDays.value,
+      ),
     );
   }
 

@@ -95,7 +95,7 @@ class WorkoutInfoEntity extends Equatable {
   Map<String, dynamic> toDocumentSnapshot() {
     return {
       WorkoutInfoDocKeys.created: Timestamp.fromDate(this.created),
-      if (this.likes != null) WorkoutInfoDocKeys.likes: this.likes,
+      if (this.likes != null || likes != 0) WorkoutInfoDocKeys.likes: this.likes,
       WorkoutInfoDocKeys.title: this.title,
       WorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
       if (this.duration != null) WorkoutInfoDocKeys.duration: this.duration,
