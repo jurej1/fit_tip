@@ -45,7 +45,7 @@ class TableCalendarLoadSuccess extends TableCalendarState {
 
   List<int> getEvents(DateTime day) {
     final int length = this.workouts.fold<int>(0, (previousValue, element) {
-      if (element.day == day.weekday) {
+      if (element.weekday == day.weekday) {
         return previousValue + 1;
       }
       return previousValue;
