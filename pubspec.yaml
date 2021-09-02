@@ -29,6 +29,7 @@ dependencies:
   food_repository:
     path: packages/food_repository
   formz: 0.4.0-nullsafety.0
+  hive: ^2.0.4
   hydrated_bloc: ^7.0.1
   image_picker: ^0.8.3+3
   intl: ^0.17.0
