@@ -23,6 +23,8 @@ class WorkoutInfo extends Equatable {
 
   final DateTime created;
 
+  final bool isActive;
+
   WorkoutInfo({
     required this.id,
     required this.uid,
@@ -35,6 +37,7 @@ class WorkoutInfo extends Equatable {
     this.isPublic = false,
     this.likes = 0,
     DateTime? created,
+    this.isActive = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
@@ -51,6 +54,7 @@ class WorkoutInfo extends Equatable {
       isPublic,
       likes,
       created,
+      isActive,
     ];
   }
 
@@ -66,6 +70,7 @@ class WorkoutInfo extends Equatable {
     bool? isPublic,
     int? likes,
     DateTime? created,
+    bool? isActive,
   }) {
     return WorkoutInfo(
       id: id ?? this.id,
@@ -79,6 +84,7 @@ class WorkoutInfo extends Equatable {
       isPublic: isPublic ?? this.isPublic,
       likes: likes ?? this.likes,
       created: created ?? this.created,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -130,10 +136,19 @@ class WorkoutInfo extends Equatable {
     );
   }
 
-  static List<WorkoutInfo> fromQuerySnapshot(QuerySnapshot snapshot) {
+  static List<WorkoutInfo> fromQuerySnapshot(
+    QuerySnapshot snapshot, {
+    String? activeWorkoutId,
+  }) {
     //TODO, likes and it is saved,
     return snapshot.docs.map((e) {
-      final info = WorkoutInfo.fromEntiy(WorkoutInfoEntity.fromDocumentSnapshot(e));
+      WorkoutInfo info = WorkoutInfo.fromEntiy(
+        WorkoutInfoEntity.fromDocumentSnapshot(e),
+      );
+
+      info = info.copyWith(
+        isActive: activeWorkoutId == info.id,
+      );
 
       return info;
     }).toList();

@@ -53,20 +53,16 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
   }
 
   Stream<WorkoutsListCardState> _mapSetAsActiveRequested() async* {
-    //TODO set as active
-    // if (state.info.isActive) return;
+    if (_authenticationBloc.state.isAuthenticated) {
+      yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
-    // if (_authenticationBloc.state.isAuthenticated) {
-    //   yield WorkoutsListCardLoading(state.info, state.isExpanded);
+      try {
+        await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.info.id);
 
-    //   try {
-    //     //TODO set workout as active
-    //     // Workout newWorkout = await _fitnessRepository.setWorkoutAsActive(_userId!, state.workout);
-
-    //     // yield WorkoutsListCardSetAsActiveSuccess(newWorkout, state.isExpanded);
-    //   } catch (e) {
-    //     yield WorkoutsListCardFail(state.info, state.isExpanded);
-    //   }
-    // }
+        yield WorkoutsListCardSetAsActiveSuccess(state.info.copyWith(isActive: true), state.isExpanded);
+      } catch (e) {
+        yield WorkoutsListCardFail(state.info, state.isExpanded);
+      }
+    }
   }
 }

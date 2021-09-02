@@ -52,10 +52,9 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       yield WorkoutDetailViewLoading(state.workout);
 
       try {
-        //TODO set workout as active
-        // Workout workout = await _fitnessRepository.setWorkoutAsActive(state.workout);
+        await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.workout.info.id);
 
-        // yield WorkoutDetailViewSetAsActiveSuccess(workout);
+        yield WorkoutDetailViewSetAsActiveSuccess(state.workout.copyWith(isActive: true));
       } catch (e) {
         yield WorkoutDetailViewFail(state.workout);
       }
