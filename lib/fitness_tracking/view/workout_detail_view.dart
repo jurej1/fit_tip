@@ -54,9 +54,9 @@ class WorkoutDetailView extends StatelessWidget {
                 centerTitle: true,
                 backgroundColor: Colors.green,
                 title: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
-                  buildWhen: (p, c) => p.workout.note != c.workout.note,
+                  buildWhen: (p, c) => p.workout.info.note != c.workout.info.note,
                   builder: (context, state) {
-                    return Text(state.workout.title);
+                    return Text(state.workout.info.title);
                   },
                 ),
                 flexibleSpace: Container(
@@ -66,9 +66,9 @@ class WorkoutDetailView extends StatelessWidget {
                   ),
                   child: FlexibleSpaceBar(
                     background: WorkoutInfoRow(
-                      created: state.workout.mapCreatedToText,
-                      daysPerWeek: state.workout.daysPerWeek.toStringAsFixed(0),
-                      goal: mapWorkoutGoalToText(state.workout.goal),
+                      created: state.workout.info.mapCreatedToText,
+                      daysPerWeek: state.workout.info.daysPerWeek.toStringAsFixed(0),
+                      goal: mapWorkoutGoalToText(state.workout.info.goal),
                     ),
                   ),
                 ),
@@ -103,7 +103,7 @@ class WorkoutDetailView extends StatelessWidget {
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      if (state.workout.note != null) ...{
+                      if (state.workout.info.note != null) ...{
                         Text(
                           'Info',
                           style: TextStyle(
@@ -111,9 +111,9 @@ class WorkoutDetailView extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Text(state.workout.note!),
+                        Text(state.workout.info.note!),
                       },
-                      ...state.workout.workouts.map(
+                      ...state.workout.workoutDays!.workoutDays.map(
                         (e) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),

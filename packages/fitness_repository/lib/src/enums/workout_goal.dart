@@ -4,7 +4,7 @@ enum WorkoutGoal {
   inscreaseStrength,
 }
 
-String mapWorkoutGoalToText(WorkoutGoal goal) {
+String mapWorkoutGoalToText(WorkoutGoal? goal) {
   if (goal == WorkoutGoal.buildMuscle) {
     return 'Build muscle';
   } else if (goal == WorkoutGoal.inscreaseStrength) {
