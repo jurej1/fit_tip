@@ -52,7 +52,7 @@ class RunningWorkoutDayView extends StatelessWidget {
             BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
               builder: (context, state) {
                 return Visibility(
-                  visible: state.log.excercises.length != 0,
+                  visible: state.log.excercises?.length != 0,
                   child: Row(
                     children: [
                       const _SelectedPageDisplayer(),
@@ -93,7 +93,7 @@ class RunningWorkoutDayView extends StatelessWidget {
                         return ListView(
                           children: [
                             Text(
-                              'Excercises ${state.log.excercises.length}',
+                              'Excercises ${state.log.excercises?.length}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
@@ -115,7 +115,7 @@ class RunningWorkoutDayView extends StatelessWidget {
                         );
                       }
 
-                      final item = state.log.excercises[index - 1];
+                      final item = state.log.excercises![index - 1];
                       return ExcercisePageCard.provider(item);
                     },
                     onPageChanged: (index) {
@@ -170,7 +170,7 @@ class _AppBarTextDisplayer extends StatelessWidget {
         if (state.pageViewIndex == state.pageViewLength - 1) return Text('Submit');
 
         final int index = state.pageViewIndex - 1;
-        final item = state.log.excercises[index];
+        final item = state.log.excercises![index];
         return Text('${index + 1}. ${item.name}');
       },
     );
