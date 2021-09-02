@@ -12,3 +12,4 @@ dependencies:
   firebase_storage: ^10.0.2
   flutter:
     sdk: flutter
+  hive: ^2.0.4
