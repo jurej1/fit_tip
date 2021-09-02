@@ -13,27 +13,5 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
   @override
   Stream<ActiveWorkoutState> mapEventToState(
     ActiveWorkoutEvent event,
-  ) async* {
-    if (event is _ActiveWorkoutFailureRquested) {
-      yield ActiveWorkoutFail();
-    } else if (event is _ActiveWorkoutListUpdated) {
-      yield* _mapWorkoutsUpdatedToState(event);
-    }
-  }
-
-  Stream<ActiveWorkoutState> _mapWorkoutsUpdatedToState(_ActiveWorkoutListUpdated event) async* {
-    if (event.workouts.isEmpty) {
-      yield ActiveWorkoutNone();
-      return;
-    }
-
-    final pureWorkout = Workout.pure();
-    final Workout activeWorkout = event.workouts.firstWhere((element) => element.isActive, orElse: () => pureWorkout);
-
-    if (activeWorkout != pureWorkout) {
-      yield ActiveWorkoutLoadSuccess(activeWorkout);
-    } else {
-      yield ActiveWorkoutNone();
-    }
-  }
+  ) async* {}
 }
