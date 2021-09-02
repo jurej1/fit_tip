@@ -125,7 +125,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     int diff = (oldAmount - eventAmount).abs();
 
     final List<WorkoutDay> currentWorkoutDays = state.workoutDays.value;
-    List<WorkoutDay> newList = const [];
+    List<WorkoutDay> newList = [];
 
     if (eventAmount == 0) {
       final workoutDays = WorkoutDaysList.dirty(workoutsPerWeekend: eventAmount, value: newList);
