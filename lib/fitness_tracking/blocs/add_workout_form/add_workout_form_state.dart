@@ -37,18 +37,23 @@ class AddWorkoutFormState {
   final bool isActive;
   final bool isPublic;
 
-  factory AddWorkoutFormState.initial(Workout? workout) {
+  factory AddWorkoutFormState.initial(
+    Workout? workout,
+    String userId,
+  ) {
     if (workout == null) {
       return AddWorkoutFormState(
         startDate: WorkoutDateFormz.pure(),
         created: DateTime.now(),
         formMode: FormMode.add,
+        uid: userId,
       );
     }
 
     final daysPerWeek = WorkoutIntFormz.pure(workout.info.daysPerWeek.toStringAsFixed(0));
 
     return AddWorkoutFormState(
+      uid: workout.info.uid,
       startDate: WorkoutDateFormz.pure(workout.startDate),
       created: workout.info.created,
       daysPerWeek: daysPerWeek,

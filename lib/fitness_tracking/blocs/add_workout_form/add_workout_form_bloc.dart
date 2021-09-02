@@ -19,29 +19,11 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     required FitnessRepository fitnessRepository,
     Workout? workout,
   })  : _fitnessRepository = fitnessRepository,
-        super(AddWorkoutFormState.initial(workout)) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
+        _authenticationBloc = authenticationBloc,
+        super(AddWorkoutFormState.initial(workout, authenticationBloc.state.user!.uid!));
 
   final FitnessRepository _fitnessRepository;
-  late final StreamSubscription _authSubscription;
-
-  bool _isAuth = false;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<AddWorkoutFormState> mapEventToState(
@@ -368,18 +350,13 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate, workoutDays, note, title]),
     );
 
-    if (state.status.isValidated && _isAuth) {
+    if (state.status.isValidated && _authenticationBloc.state.isAuthenticated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
         if (state.formMode == FormMode.add) {
           DocumentReference ref = await _fitnessRepository.addWorkoutInfo(state.workout.info);
-
-          await _fitnessRepository.addWorkoutDays(
-            state.workout.workoutDays!.copyWith(
-              workoutId: ref.id,
-            ),
-          );
+          await _fitnessRepository.addWorkoutDays(state.workout.workoutDays!.copyWith(workoutId: ref.id));
 
           yield state.copyWith(
             status: FormzStatus.submissionSuccess,
