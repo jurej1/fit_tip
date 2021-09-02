@@ -55,7 +55,26 @@ class WorkoutDay extends WorkoutDayRaw {
 
   @override
   List<Object?> get props {
-    return [weekday];
+    return [
+      weekday,
+      id,
+      workoutId,
+      note,
+      muscles,
+      excercises,
+    ];
+  }
+
+  @override
+  String toString() {
+    return '''WorkoutDay: {
+      weekday: $weekday,
+      id: $id,
+      workoutId: $workoutId,
+      note: $note,
+      muscles: ${muscles.toString()},
+      excercises: ${excercises.toString()},
+    }''';
   }
 
   String get mapDayToText {
@@ -141,6 +160,20 @@ class WorkoutDayLog extends WorkoutDayRaw {
           muscles: muscles,
           note: note,
         );
+
+  @override
+  List<Object?> get props {
+    return [
+      userId,
+      created,
+      duration,
+      id,
+      workoutId,
+      note,
+      muscles,
+      excercises,
+    ];
+  }
 
   WorkoutDayLog copyWith({
     String? userId,

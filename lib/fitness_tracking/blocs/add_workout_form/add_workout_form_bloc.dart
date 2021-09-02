@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +8,6 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 
 part 'add_workout_form_event.dart';
@@ -277,7 +277,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
   }
 
   Stream<AddWorkoutFormState> _mapItemUpdatedToState(AddWorkoutFormListItemUpdated event) async* {
-    List<WorkoutDay> items = state.workoutDays.value;
+    List<WorkoutDay> items = List<WorkoutDay>.from(state.workoutDays.value);
 
     items = items.map((e) {
       if (e.id == event.value.id) {
@@ -290,6 +290,10 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       value: items,
       workoutsPerWeekend: state.daysPerWeek.getIntValue(),
     );
+
+    // for (WorkoutDay day in workoutDays.value) {
+    //   log(day.toString());
+    // }
 
     yield state.copyWith(
       workoutDays: workoutDays,
@@ -372,6 +376,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         }
       } catch (e) {
+        log('fail ${e.toString()}');
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }
     }

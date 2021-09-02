@@ -32,7 +32,7 @@ class WorkoutDaysEntity extends Equatable {
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      if (this.workoutDays != null) WorkoutDaysDocKeys.workoutDays: workoutDays,
+      if (this.workoutDays != null) WorkoutDaysDocKeys.workoutDays: workoutDays!.map((e) => e.toDocumentSnapshot()).toList(),
       WorkoutDaysDocKeys.workoutId: this.workoutId,
     };
   }
