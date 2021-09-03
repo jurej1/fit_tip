@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
@@ -101,5 +102,15 @@ class ActiveWorkout extends WorkoutX {
 
   DateTime get lastDate {
     return this.startDate.add(Duration(days: this.info.duration * 7));
+  }
+
+  static List<ActiveWorkout> fromQuerySnapshot(QuerySnapshot querySnapshot) {
+    //TODO: isActive
+    return querySnapshot.docs.map((e) {
+      ActiveWorkout workout = ActiveWorkout.fromEntity(
+        ActiveWorkoutEntity.fromDocumentSnapshot(e),
+      );
+      return workout;
+    }).toList();
   }
 }
