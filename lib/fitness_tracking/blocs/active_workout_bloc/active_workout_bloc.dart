@@ -15,11 +15,15 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(ActiveWorkoutLoading());
+        super(ActiveWorkoutLoading()) {
+    final String uid = _authenticationBloc.state.user!.uid!;
+    add(_ActiveWorkoutLoadRequested(_fitnessRepository.getActiveWorkoutId(uid)));
+  }
 
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
 
+  //TODO when the workout gets updated here should also get updated
   @override
   Stream<ActiveWorkoutState> mapEventToState(
     ActiveWorkoutEvent event,
@@ -30,7 +34,7 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
   }
 
   Stream<ActiveWorkoutState> _mapLoadRequestedToState(_ActiveWorkoutLoadRequested event) async* {
-    if (event.id == null) {
+    if (event.id == null || !_authenticationBloc.state.isAuthenticated) {
       yield ActiveWorkoutNone();
       return;
     }
@@ -38,18 +42,9 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     yield ActiveWorkoutLoading();
 
     try {
-      List<DocumentSnapshot> documents = await _fitnessRepository.getWorkoutById(event.id!);
-
-      WorkoutInfo info = WorkoutInfo.fromEntiy(WorkoutInfoEntity.fromDocumentSnapshot(documents.first));
-      WorkoutDays workoutDays = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(documents.last));
-
-      Workout workout = Workout(
-        info: info,
-        isActive: true,
-        workoutDays: workoutDays,
-      );
-
-      yield ActiveWorkoutLoadSuccess(workout);
+      DocumentSnapshot documentSnapshot = await _fitnessRepository.getActiveWorkoutById(_authenticationBloc.state.user!.uid!, event.id!);
+      ActiveWorkout active = ActiveWorkout.fromEntity(ActiveWorkoutEntity.fromDocumentSnapshot(documentSnapshot));
+      yield ActiveWorkoutLoadSuccess(active);
     } catch (e) {
       yield ActiveWorkoutFail();
     }

@@ -10,7 +10,7 @@ abstract class ActiveWorkoutState extends Equatable {
 class ActiveWorkoutLoading extends ActiveWorkoutState {}
 
 class ActiveWorkoutLoadSuccess extends ActiveWorkoutState {
-  final Workout workout;
+  final ActiveWorkout workout;
 
   const ActiveWorkoutLoadSuccess(this.workout);
 
