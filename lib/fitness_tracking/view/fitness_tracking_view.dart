@@ -69,7 +69,7 @@ class FitnessTrackingView extends StatelessWidget {
       return ActiveWorkoutBuilder.route();
     }
     if (page.isAll) {
-      return WorkoutsListBuilder();
+      return AllWorkoutsListBuilder();
     }
     if (page.isAllActive) {
       return ActiveWorkoutsHistoryBuilder();
