@@ -15,11 +15,10 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
           activeWorkoutBloc.state is ActiveWorkoutLoadSuccess
               ? TableCalendarLoadSuccess(
                   focusedDay: DateTime.now(),
-                  firstDay:
-                      (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.created, // TODO: Hier should be the start date
+                  firstDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.startDate,
                   // lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.lastDay,
                   workouts: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.workoutDays!.workoutDays, //TODO
-                  lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.created.add(Duration(days: 50)), //TODO
+                  lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.lastDate,
                 )
               : TableCalendarLoading(),
         );
@@ -39,9 +38,8 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         yield current.copyWith(
           //TODO
           firstDay: event.value.info.created,
-          // lastDay: event.value.lastDay,
+          lastDay: event.value.lastDate,
           workouts: event.value.workoutDays!.workoutDays, //TODO
-          lastDay: event.value.info.created.add(Duration(days: 50)),
         );
       }
       yield TableCalendarLoadSuccess(

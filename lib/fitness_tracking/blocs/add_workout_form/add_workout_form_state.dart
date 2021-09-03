@@ -1,5 +1,7 @@
 part of 'add_workout_form_bloc.dart';
 
+//TODO updating the active workout and updating the normal Workout
+
 class AddWorkoutFormState {
   const AddWorkoutFormState({
     this.id,
@@ -54,10 +56,10 @@ class AddWorkoutFormState {
 
     return AddWorkoutFormState(
       uid: workout.info.uid,
-      startDate: WorkoutDateFormz.pure(workout.startDate),
+      startDate: WorkoutDateFormz.pure(DateTime.now()), // TODO here can go wron
       created: workout.info.created,
       daysPerWeek: daysPerWeek,
-      duration: WorkoutIntFormz.pure(workout.info.duration?.toStringAsFixed(0) ?? ''),
+      duration: WorkoutIntFormz.pure(workout.info.duration.toStringAsFixed(0)),
       goal: WorkoutGoalFormz.pure(workout.info.goal),
       id: workout.info.id,
       note: WorkoutNote.pure(workout.info.note),
@@ -66,7 +68,6 @@ class AddWorkoutFormState {
       workoutDays: WorkoutDaysList.dirty(value: workout.workoutDays?.workoutDays ?? [], workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
       title: WorkoutTitle.pure(workout.info.title),
-      isActive: workout.isActive,
     );
   }
 

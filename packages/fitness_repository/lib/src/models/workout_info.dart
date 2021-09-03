@@ -14,7 +14,7 @@ class WorkoutInfo extends Equatable {
   final WorkoutType? type;
 
   ///The duration is in weeks
-  final int? duration;
+  final int duration;
   final int daysPerWeek;
   final String? note;
 
@@ -31,7 +31,7 @@ class WorkoutInfo extends Equatable {
     required this.title,
     this.goal,
     this.type,
-    this.duration,
+    required this.duration,
     required this.daysPerWeek,
     this.note,
     this.isPublic = false,

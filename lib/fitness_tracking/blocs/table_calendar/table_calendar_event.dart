@@ -25,7 +25,7 @@ class TableCalendarFormatUpdated extends TableCalendarEvent {
 }
 
 class TableCalendarWorkoutUpdated extends TableCalendarEvent {
-  final Workout value;
+  final ActiveWorkout value;
 
   const TableCalendarWorkoutUpdated(this.value);
   @override

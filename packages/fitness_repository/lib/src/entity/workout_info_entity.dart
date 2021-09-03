@@ -25,7 +25,7 @@ class WorkoutInfoEntity extends Equatable {
   final String title;
   final WorkoutGoal? goal;
   final WorkoutType? type;
-  final int? duration;
+  final int duration;
   final int daysPerWeek;
   final String? note;
 
@@ -40,7 +40,7 @@ class WorkoutInfoEntity extends Equatable {
     required this.title,
     this.goal,
     this.type,
-    this.duration,
+    required this.duration,
     required this.daysPerWeek,
     this.note,
     this.isPublic = false,

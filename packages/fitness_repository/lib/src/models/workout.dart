@@ -35,6 +35,7 @@ class Workout extends WorkoutX {
         id: '',
         daysPerWeek: 0,
         title: '',
+        duration: 0,
       ),
     );
   }
@@ -97,5 +98,9 @@ class ActiveWorkout extends WorkoutX {
       isActive: entity.isActive,
       workoutDays: entity.workoutDays != null ? WorkoutDays.fromEntity(entity.workoutDays!) : null,
     );
+  }
+
+  DateTime get lastDate {
+    return this.startDate.add(Duration(days: this.info.duration * 7));
   }
 }

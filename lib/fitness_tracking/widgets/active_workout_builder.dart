@@ -73,7 +73,8 @@ class ActiveWorkoutBuilder extends StatelessWidget {
                   return IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () {
-                      Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+                      //TODO editing active workout
+                      // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
                     },
                   );
                 }
