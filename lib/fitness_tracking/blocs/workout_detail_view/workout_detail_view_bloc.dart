@@ -48,17 +48,18 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
   }
 
   Stream<WorkoutDetailViewState> _mapSetAsActiveRequestedToState(WorkoutDetailViewSetAsActiveRequested event) async* {
-    if (_authenticationBloc.state.isAuthenticated) {
-      yield WorkoutDetailViewLoading(state.workout);
+    //TODO workout as active
+    // if (_authenticationBloc.state.isAuthenticated) {
+    //   yield WorkoutDetailViewLoading(state.workout);
 
-      try {
-        await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.workout.info.id);
+    //   try {
+    //     await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.workout.info.id);
 
-        yield WorkoutDetailViewSetAsActiveSuccess(state.workout.copyWith(isActive: true));
-      } catch (e) {
-        yield WorkoutDetailViewFail(state.workout);
-      }
-    }
+    //     yield WorkoutDetailViewSetAsActiveSuccess(state.workout.copyWith(isActive: true));
+    //   } catch (e) {
+    //     yield WorkoutDetailViewFail(state.workout);
+    //   }
+    // }
   }
 
   Stream<WorkoutDetailViewState> _mapWorkoutUpdatedToState(WorkoutDetailViewWorkoutUpdated event) async* {

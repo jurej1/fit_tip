@@ -15,24 +15,10 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(ActiveWorkoutLoading()) {
-    final String uid = _authenticationBloc.state.user!.uid!;
-    final String? value = _fitnessRepository.getActiveWorkoutId(uid);
-    add(_ActiveWorkoutLoadRequested(value));
-    _streamSubscription = _fitnessRepository.listenToActiveWorkoutValue(uid).listen((event) {
-      add(_ActiveWorkoutLoadRequested(event.value));
-    });
-  }
+        super(ActiveWorkoutLoading());
 
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
-  late final StreamSubscription _streamSubscription;
-
-  @override
-  Future<void> close() {
-    _streamSubscription.cancel();
-    return super.close();
-  }
 
   @override
   Stream<ActiveWorkoutState> mapEventToState(

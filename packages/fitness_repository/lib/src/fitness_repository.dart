@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 
 import 'entity/entity.dart';
 import 'enums/enums.dart';
@@ -11,13 +10,10 @@ import 'models/models.dart';
 
 class FitnessRepository {
   final FirebaseFirestore _firebaseFirestore;
-  late final Box<String?> _activeWorkoutBox;
 
   FitnessRepository({
     FirebaseFirestore? firebaseFirestore,
-    required Box<String?> activeWorkoutBox,
-  })  : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        _activeWorkoutBox = activeWorkoutBox;
+  }) : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   CollectionReference _activityTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_tracking');
@@ -102,18 +98,6 @@ class FitnessRepository {
 
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
-
-  Stream<BoxEvent> listenToActiveWorkoutValue(String userId) {
-    return _activeWorkoutBox.watch(key: userId);
-  }
-
-  Future<void> setActiveWorkoutStatus(String userId, String? workoutId) {
-    return _activeWorkoutBox.put(userId, workoutId);
-  }
-
-  String? getActiveWorkoutId(String userId) {
-    return _activeWorkoutBox.get(userId, defaultValue: null);
-  }
 
   Future<void> deleteWorkout(String workoutId) {
     return _fitnessTrackingPlanRef().doc(workoutId).delete();
