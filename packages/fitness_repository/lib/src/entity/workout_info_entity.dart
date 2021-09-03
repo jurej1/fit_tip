@@ -15,6 +15,7 @@ class WorkoutInfoDocKeys {
   static String isPublic = 'isPublic';
   static String likes = 'likes';
   static String created = 'created';
+  static String id = 'id';
 }
 
 class WorkoutInfoEntity extends Equatable {
@@ -107,6 +108,21 @@ class WorkoutInfoEntity extends Equatable {
     };
   }
 
+  Map<String, dynamic> toActiveMap() {
+    return {
+      WorkoutInfoDocKeys.id: this.id,
+      WorkoutInfoDocKeys.created: Timestamp.fromDate(this.created),
+      WorkoutInfoDocKeys.title: this.title,
+      WorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
+      if (this.duration != null) WorkoutInfoDocKeys.duration: this.duration,
+      if (this.goal != null) WorkoutInfoDocKeys.goal: describeEnum(goal!),
+      if (this.type != null) WorkoutInfoDocKeys.type: describeEnum(type!),
+      WorkoutInfoDocKeys.isPublic: this.isPublic,
+      if (this.note != null) WorkoutInfoDocKeys.note: this.note,
+      WorkoutInfoDocKeys.uid: this.uid,
+    };
+  }
+
   static WorkoutInfoEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
 
@@ -125,6 +141,27 @@ class WorkoutInfoEntity extends Equatable {
           : null,
       isPublic: data[WorkoutInfoDocKeys.isPublic],
       likes: data.containsKey(WorkoutInfoDocKeys.likes) ? data[WorkoutInfoDocKeys.likes] : 0,
+      type: data.containsKey(WorkoutInfoDocKeys.type)
+          ? WorkoutType.values.firstWhere((e) => data[WorkoutInfoDocKeys.type] == describeEnum(e))
+          : null,
+    );
+  }
+
+  static WorkoutInfoEntity fromActiveMap(Map<String, dynamic> data) {
+    final timestamp = data[WorkoutInfoDocKeys.created] as Timestamp;
+
+    return WorkoutInfoEntity(
+      id: data[WorkoutInfoDocKeys.id],
+      uid: data[WorkoutInfoDocKeys.uid],
+      title: data[WorkoutInfoDocKeys.title],
+      daysPerWeek: data[WorkoutInfoDocKeys.daysPerWeek],
+      created: timestamp.toDate(),
+      note: data.containsKey(WorkoutInfoDocKeys.note) ? data[WorkoutInfoDocKeys.note] : null,
+      duration: data.containsKey(WorkoutInfoDocKeys.duration) ? data[WorkoutInfoDocKeys.duration] : null,
+      goal: data.containsKey(WorkoutInfoDocKeys.goal)
+          ? WorkoutGoal.values.firstWhere((e) => data[WorkoutInfoDocKeys.goal] == describeEnum(e))
+          : null,
+      isPublic: data[WorkoutInfoDocKeys.isPublic],
       type: data.containsKey(WorkoutInfoDocKeys.type)
           ? WorkoutType.values.firstWhere((e) => data[WorkoutInfoDocKeys.type] == describeEnum(e))
           : null,

@@ -27,6 +27,10 @@ class FitnessRepository {
     return _firebaseFirestore.collection('fitness_tracking_plans');
   }
 
+  CollectionReference _activeFitnessPlanRef(String userId) {
+    return _firebaseFirestore.collection('users').doc(userId).collection('active_fitness_plan');
+  }
+
   DocumentReference _fitnessTrackingPlanWorkoutDaysRef(String workoutId) {
     return _fitnessTrackingPlanRef().doc(workoutId).collection('data').doc('workout_days');
   }
@@ -98,6 +102,60 @@ class FitnessRepository {
 
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
+
+  Future<ActiveWorkout> setWorkoutAsActiveFromId(String userId, String id) async {
+    List<DocumentSnapshot> snapshots = await Future.wait<DocumentSnapshot>([
+      _fitnessTrackingPlanRef().doc(id).get(GetOptions(source: Source.cache)),
+      _fitnessTrackingPlanWorkoutDaysRef(id).get(GetOptions(source: Source.cache)),
+    ]);
+
+    WorkoutInfo info = WorkoutInfo.fromEntiy(WorkoutInfoEntity.fromDocumentSnapshot(snapshots.first));
+    WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snapshots.last));
+
+    ActiveWorkout workout = ActiveWorkout(
+      info: info,
+      activeWorkoutId: '',
+      startDate: DateTime.now(),
+      isActive: true,
+      workoutDays: days,
+    );
+
+    DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+
+    return workout.copyWith(activeWorkoutId: ref.id);
+  }
+
+  Future<ActiveWorkout> setWorkoutAsActiveFromWorkoutInfo(String userId, WorkoutInfo info) async {
+    DocumentSnapshot snapshot = await _fitnessTrackingPlanWorkoutDaysRef(info.id).get(GetOptions(source: Source.cache));
+
+    WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snapshot));
+
+    ActiveWorkout workout = ActiveWorkout(
+      info: info,
+      activeWorkoutId: '',
+      startDate: DateTime.now(),
+      isActive: true,
+      workoutDays: days,
+    );
+
+    DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+
+    return workout.copyWith(activeWorkoutId: ref.id);
+  }
+
+  Future<ActiveWorkout> setWorkoutAsActiveFromWorkout(String userId, Workout workout) async {
+    ActiveWorkout activeWorkout = ActiveWorkout(
+      info: workout.info,
+      activeWorkoutId: '',
+      startDate: DateTime.now(),
+      isActive: true,
+      workoutDays: workout.workoutDays,
+    );
+
+    DocumentReference ref = await _activeFitnessPlanRef(userId).add(activeWorkout.toEntity().toDocumentSnapshot());
+
+    return activeWorkout.copyWith(activeWorkoutId: ref.id);
+  }
 
   Future<void> deleteWorkout(String workoutId) {
     return _fitnessTrackingPlanRef().doc(workoutId).delete();

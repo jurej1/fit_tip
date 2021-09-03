@@ -37,6 +37,20 @@ class WorkoutDaysEntity extends Equatable {
     };
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      if (this.workoutDays != null) WorkoutDaysDocKeys.workoutDays: workoutDays!.map((e) => e.toDocumentSnapshot()).toList(),
+      WorkoutDaysDocKeys.workoutId: this.workoutId,
+    };
+  }
+
+  static WorkoutDaysEntity fromMap(Map<String, dynamic> map) {
+    return WorkoutDaysEntity(
+      workoutId: map[WorkoutDaysDocKeys.workoutId],
+      workoutDays: (map[WorkoutDaysDocKeys.workoutDays] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
+    );
+  }
+
   static WorkoutDaysEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     return WorkoutDaysEntity(

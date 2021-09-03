@@ -4,3 +4,4 @@ export 'workout_day_entity.dart';
 export 'workout_excercise_entity.dart';
 export 'workout_info_entity.dart';
 export 'workout_days_entity.dart';
+export 'workout_entity.dart';

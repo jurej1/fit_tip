@@ -1,21 +1,32 @@
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
-class Workout extends Equatable {
+abstract class WorkoutX extends Equatable {
   final WorkoutInfo info;
   final WorkoutDays? workoutDays;
 
-  final bool isActive;
-  final DateTime? startDate;
-
-  Workout({
+  WorkoutX({
     required this.info,
     this.workoutDays,
-    this.isActive = false,
-    DateTime? startDate,
-  }) : this.startDate = startDate;
+  });
 
-  List<Object?> get props => [info, workoutDays, isActive, startDate];
+  List<Object?> get props => [info, workoutDays];
+
+  static String dateTimeToWorkoutLogId(DateTime dateTime) {
+    return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
+  }
+}
+
+class Workout extends WorkoutX {
+  Workout({
+    required WorkoutInfo info,
+    WorkoutDays? workoutDays,
+  }) : super(
+          info: info,
+          workoutDays: workoutDays,
+        );
+
+  List<Object?> get props => [info, workoutDays];
 
   factory Workout.pure() {
     return Workout(
@@ -31,18 +42,60 @@ class Workout extends Equatable {
   Workout copyWith({
     WorkoutInfo? info,
     WorkoutDays? workoutDays,
-    bool? isActive,
-    DateTime? startDate,
   }) {
     return Workout(
       info: info ?? this.info,
       workoutDays: workoutDays ?? this.workoutDays,
+    );
+  }
+}
+
+class ActiveWorkout extends WorkoutX {
+  final bool isActive;
+  final DateTime startDate;
+  final String activeWorkoutId;
+
+  ActiveWorkout({
+    this.isActive = false,
+    required this.startDate,
+    required this.activeWorkoutId,
+    required WorkoutInfo info,
+    WorkoutDays? workoutDays,
+  }) : super(info: info, workoutDays: workoutDays);
+
+  ActiveWorkout copyWith({
+    bool? isActive,
+    DateTime? startDate,
+    WorkoutDays? workoutDays,
+    WorkoutInfo? info,
+    String? activeWorkoutId,
+  }) {
+    return ActiveWorkout(
       isActive: isActive ?? this.isActive,
       startDate: startDate ?? this.startDate,
+      info: info ?? this.info,
+      workoutDays: workoutDays ?? this.workoutDays,
+      activeWorkoutId: activeWorkoutId ?? this.activeWorkoutId,
     );
   }
 
-  static String dateTimeToWorkoutLogId(DateTime dateTime) {
-    return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
+  ActiveWorkoutEntity toEntity() {
+    return ActiveWorkoutEntity(
+      this.info.toEntity(),
+      isActive: this.isActive,
+      workoutDaysEntity: this.workoutDays?.toEntity(),
+      startDate: startDate,
+      activeWorkoutId: activeWorkoutId,
+    );
+  }
+
+  static ActiveWorkout fromEntity(ActiveWorkoutEntity entity) {
+    return ActiveWorkout(
+      startDate: entity.startDate,
+      activeWorkoutId: entity.activeWorkoutId,
+      info: WorkoutInfo.fromEntiy(entity.info),
+      isActive: entity.isActive,
+      workoutDays: entity.workoutDays != null ? WorkoutDays.fromEntity(entity.workoutDays!) : null,
+    );
   }
 }
