@@ -157,6 +157,20 @@ class FitnessRepository {
     return activeWorkout.copyWith(activeWorkoutId: ref.id);
   }
 
+  Future<DocumentSnapshot> getActiveWorkoutById(String userId, String workoutId) async {
+    return _activeFitnessPlanRef(userId).doc(workoutId).get();
+  }
+
+  Future<QuerySnapshot> getActiveWorkouts(String userId, {required int limit, DocumentSnapshot? startAfterDocument}) async {
+    Query query = _activeFitnessPlanRef(userId).limit(limit);
+
+    if (startAfterDocument != null) {
+      query = query.startAfterDocument(startAfterDocument);
+    }
+
+    return query.get();
+  }
+
   Future<void> deleteWorkout(String workoutId) {
     return _fitnessTrackingPlanRef().doc(workoutId).delete();
   }
