@@ -107,7 +107,7 @@ class FitnessRepository {
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
 
-  Future<void> setActiveWorkoutId(String userId, String workoutId) async {
+  Future<void> _setActiveWorkoutId(String userId, String workoutId) async {
     return _activeWorkoutIdsBox.put(userId, workoutId);
   }
 
@@ -134,6 +134,7 @@ class FitnessRepository {
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
 
+    await _setActiveWorkoutId(userId, id);
     return workout.copyWith(activeWorkoutId: ref.id);
   }
 
@@ -151,6 +152,7 @@ class FitnessRepository {
     );
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
+    await _setActiveWorkoutId(userId, info.id);
 
     return workout.copyWith(activeWorkoutId: ref.id);
   }
@@ -165,7 +167,7 @@ class FitnessRepository {
     );
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(activeWorkout.toEntity().toDocumentSnapshot());
-
+    await _setActiveWorkoutId(userId, workout.info.id);
     return activeWorkout.copyWith(activeWorkoutId: ref.id);
   }
 
