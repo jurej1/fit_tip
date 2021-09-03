@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
 import 'entity/entity.dart';
 import 'enums/enums.dart';
@@ -10,10 +11,13 @@ import 'models/models.dart';
 
 class FitnessRepository {
   final FirebaseFirestore _firebaseFirestore;
+  final Box<String?> _activeWorkoutIdsBox;
 
   FitnessRepository({
     FirebaseFirestore? firebaseFirestore,
-  }) : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+    required Box<String?> activeWorkoutIdsBox,
+  })  : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        this._activeWorkoutIdsBox = activeWorkoutIdsBox;
 
   CollectionReference _activityTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_tracking');
@@ -102,6 +106,14 @@ class FitnessRepository {
 
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
+
+  Future<void> setActiveWorkoutId(String userId, String workoutId) async {
+    return _activeWorkoutIdsBox.put(userId, workoutId);
+  }
+
+  String? getActiveWorkoutId(String userId) {
+    return _activeWorkoutIdsBox.get(userId, defaultValue: null);
+  }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromId(String userId, String id) async {
     List<DocumentSnapshot> snapshots = await Future.wait<DocumentSnapshot>([
