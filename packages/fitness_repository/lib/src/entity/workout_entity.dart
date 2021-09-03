@@ -64,30 +64,26 @@ class WorkoutEntity extends WorkoutEntityX {
 }
 
 class ActiveWorkoutDocKeys {
-  static String isActive = 'isActive';
   static String startDate = 'startDate';
   static String ctiveWorkoutId = 'ctiveWorkoutId';
 }
 
 class ActiveWorkoutEntity extends WorkoutEntityX {
-  final bool isActive;
   final DateTime startDate;
   final String activeWorkoutId;
 
   ActiveWorkoutEntity(
     WorkoutInfoEntity info, {
     WorkoutDaysEntity? workoutDaysEntity,
-    this.isActive = false,
     required this.startDate,
     required this.activeWorkoutId,
   }) : super(info, workoutDays: workoutDaysEntity);
 
   @override
-  List<Object?> get props => [isActive, startDate, activeWorkoutId, info, workoutDays];
+  List<Object?> get props => [startDate, activeWorkoutId, info, workoutDays];
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      ActiveWorkoutDocKeys.isActive: this.isActive,
       ActiveWorkoutDocKeys.ctiveWorkoutId: this.activeWorkoutId,
       ActiveWorkoutDocKeys.startDate: Timestamp.fromDate(this.startDate),
       WorkoutDocKeys.info: this.info.toActiveMap(),
@@ -103,7 +99,6 @@ class ActiveWorkoutEntity extends WorkoutEntityX {
       WorkoutInfoEntity.fromActiveMap(data[WorkoutDocKeys.info]),
       startDate: timestamp.toDate(),
       activeWorkoutId: snapshot.id,
-      isActive: data[ActiveWorkoutDocKeys.isActive],
       workoutDaysEntity: WorkoutDaysEntity.fromMap(data[WorkoutDocKeys.workoutDays]),
     );
   }

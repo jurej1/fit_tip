@@ -83,7 +83,6 @@ class ActiveWorkout extends WorkoutX {
   ActiveWorkoutEntity toEntity() {
     return ActiveWorkoutEntity(
       this.info.toEntity(),
-      isActive: this.isActive,
       workoutDaysEntity: this.workoutDays?.toEntity(),
       startDate: startDate,
       activeWorkoutId: activeWorkoutId,
@@ -95,7 +94,7 @@ class ActiveWorkout extends WorkoutX {
       startDate: entity.startDate,
       activeWorkoutId: entity.activeWorkoutId,
       info: WorkoutInfo.fromEntiy(entity.info),
-      isActive: entity.isActive,
+      isActive: false,
       workoutDays: entity.workoutDays != null ? WorkoutDays.fromEntity(entity.workoutDays!) : null,
     );
   }
