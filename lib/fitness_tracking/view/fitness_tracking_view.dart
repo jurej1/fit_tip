@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/fitness_tracking/blocs/active_workouts_history_list/active_workouts_history_list_bloc.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,12 @@ class FitnessTrackingView extends StatelessWidget {
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
           )..add(WorkoutDayLogsLoadRequested()),
+        ),
+        BlocProvider(
+          create: (context) => ActiveWorkoutsHistoryListBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          ),
         )
       ],
       child: FitnessTrackingView(),

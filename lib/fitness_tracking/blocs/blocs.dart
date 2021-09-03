@@ -22,3 +22,4 @@ export 'workout_excercise_card/workout_excercise_card_bloc.dart';
 export 'workout_day_log_detail/workout_day_log_detail_bloc.dart';
 export 'timer/timer_bloc.dart';
 export 'active_workout_id/active_workout_id_bloc.dart';
+export 'active_workouts_history_list/active_workouts_history_list_bloc.dart';
