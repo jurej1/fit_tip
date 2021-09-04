@@ -247,7 +247,6 @@ class FitnessRepository {
   }
 
   Future<void> addWorkoutDays(WorkoutDays days) async {
-    log('adding 2 ${days.workoutId}');
     return _fitnessTrackingPlanWorkoutDaysRef(days.workoutId).set(days.toEntity().toDocumentSnapshot());
   }
 

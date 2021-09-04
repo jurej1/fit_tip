@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 enum WorkoutNoteValidationError { invalid }
 
 class WorkoutNote extends FormzInput<String?, WorkoutNoteValidationError> {
-  final int maxLength = 100;
+  final int maxLength = 1000;
 
   const WorkoutNote.dirty([String? value]) : super.dirty(value);
   const WorkoutNote.pure([String? value]) : super.pure(value);

@@ -60,8 +60,13 @@ class WorkoutInfoListCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(state.info.title),
-                          Spacer(),
+                          Expanded(
+                            child: Text(
+                              state.info.title,
+                              maxLines: 3,
+                              overflow: TextOverflow.fade,
+                            ),
+                          ),
                           const _ExpandableIconButton(),
                           const _OptionsButton(),
                         ],

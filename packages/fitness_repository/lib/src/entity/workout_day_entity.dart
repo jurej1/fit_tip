@@ -101,7 +101,7 @@ class WorkoutDayEntity extends WorkoutDayRawEntity {
   Map<String, dynamic> toDocumentSnapshot() {
     return {
       WorkoutDayDocKeys.weekday: this.weekday,
-      if (this.excercises != null) WorkoutDayRawDocKeys.excercises: this.excercises!.map((e) => e..toMap()).toList(),
+      if (this.excercises != null) WorkoutDayRawDocKeys.excercises: this.excercises!.map((e) => e.toMap()).toList(),
       if (this.muscles != null) WorkoutDayRawDocKeys.muscles: this.muscles!.map((e) => describeEnum(e)).toList(),
       if (this.note != null) WorkoutDayRawDocKeys.note: this.note,
       WorkoutDayRawDocKeys.workoutId: this.workoutId,
