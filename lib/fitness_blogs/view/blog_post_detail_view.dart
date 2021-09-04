@@ -58,7 +58,6 @@ class BlogPostDetailView extends StatelessWidget {
             BlocProvider(
               create: (context) => BlogPostDetailBloc(
                 blogPost: blogPost,
-                blogRepository: RepositoryProvider.of<BlogRepository>(context),
               ),
             ),
           ],
