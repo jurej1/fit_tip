@@ -45,7 +45,7 @@ class WorkoutDetailView extends StatelessWidget {
         if (state is WorkoutDeleteLoadSuccess) {
           BlocProvider.of<WorkoutsListBloc>(context).add(
             WorkoutsListItemRemoved(
-              BlocProvider.of<WorkoutDetailViewBloc>(context).state.workout.info as WorkoutInfo,
+              BlocProvider.of<WorkoutDetailViewBloc>(context).state.workout.info,
             ),
           );
           Navigator.of(context).pop();
@@ -57,93 +57,56 @@ class WorkoutDetailView extends StatelessWidget {
           );
         }
       },
-      child: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
-        builder: (context, state) {
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            body: CustomScrollView(
-              physics: const ClampingScrollPhysics(),
-              slivers: [
-                SliverAppBar(
-                  shape: RoundedRectangleBorder(borderRadius: state.appBarBorderRadius),
-                  centerTitle: true,
-                  backgroundColor: Colors.green,
-                  title: BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
-                    buildWhen: (p, c) => p.workout.info.note != c.workout.info.note,
-                    builder: (context, state) {
-                      return Text(state.workout.info.title);
-                    },
-                  ),
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      gradient: state.appBarLinearGradient,
-                      borderRadius: state.appBarBorderRadius,
-                    ),
-                    child: FlexibleSpaceBar(
-                      background: WorkoutInfoRow(
-                        created: state.workout.info.mapCreatedToText,
-                        daysPerWeek: state.workout.info.daysPerWeek.toStringAsFixed(0),
-                        goal: mapWorkoutGoalToText(state.workout.info.goal),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: CustomScrollView(
+          physics: const ClampingScrollPhysics(),
+          slivers: [
+            WorkoutDetailAppBar(),
+            BlocBuilder<WorkoutDetailViewBloc, WorkoutDetailViewState>(
+              builder: (context, state) {
+                if (state is WorkoutDetailViewLoading) {
+                  return const SliverToBoxAdapter(
+                    child: const LinearProgressIndicator(),
+                  );
+                }
+
+                if (state is WorkoutDetailViewLoadSuccess) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.all(10),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          if (state.workout.info.note != null) ...{
+                            Text(
+                              'Info',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(state.workout.info.note!),
+                          },
+                          if (state.workout.workoutDays != null) ...{
+                            ...state.workout.workoutDays!.workoutDays.map(
+                              (e) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  child: WorkoutDetailItem(workout: e),
+                                );
+                              },
+                            ).toList(),
+                          }
+                        ],
                       ),
                     ),
-                  ),
-                  expandedHeight: 200,
-                  actions: [
-                    PopupMenuButton<WorkoutsListCardOptions>(
-                      icon: const Icon(Icons.more_vert),
-                      itemBuilder: (context) {
-                        return WorkoutsListCardOptions.values.map((e) {
-                          return PopupMenuItem(
-                            child: Text(
-                              mapWorkoutsListCardOptionsToString(e),
-                            ),
-                            value: e,
-                          );
-                        }).toList();
-                      },
-                      onSelected: (option) {
-                        if (option == WorkoutsListCardOptions.delete) {
-                          // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
-                        } else if (option == WorkoutsListCardOptions.setAsActive) {
-                          // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
-                        } else if (option == WorkoutsListCardOptions.edit) {
-                          Navigator.of(context).push(AddWorkoutView.routeFromWorkoutDetailView(context, workout: state.workout));
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(10),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        if (state.workout.info.note != null) ...{
-                          Text(
-                            'Info',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(state.workout.info.note!),
-                        },
-                        ...state.workout.workoutDays!.workoutDays.map(
-                          (e) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: WorkoutDetailItem(workout: e),
-                            );
-                          },
-                        ).toList(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                  );
+                }
+                return SliverToBoxAdapter();
+              },
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
