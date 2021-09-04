@@ -52,7 +52,7 @@ class WorkoutsListCard extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   //TODO next page
-                  Navigator.of(context).push(WorkoutDetailView.route(context, info: state.info));
+                  // Navigator.of(context).push(WorkoutDetailView.route(context, info: state.info));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
