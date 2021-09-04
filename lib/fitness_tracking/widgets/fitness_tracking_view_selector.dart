@@ -17,10 +17,6 @@ class FitnessTrackingViewSelector extends StatelessWidget {
               label: 'Active',
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.list),
-              label: 'All',
-            ),
-            BottomNavigationBarItem(
               icon: const Icon(Icons.history),
               label: 'Active History',
             ),

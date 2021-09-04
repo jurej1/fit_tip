@@ -25,12 +25,12 @@ class FitnessTrackingView extends StatelessWidget {
         BlocProvider(
           create: (context) => ActiveWorkoutViewSelectorCubit(),
         ),
-        BlocProvider(
-          create: (context) => WorkoutsListBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          )..add(WorkoutsListLoadRequested()),
-        ),
+        // BlocProvider(
+        //   create: (context) => WorkoutsListBloc(
+        //     authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+        //     fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+        //   )..add(WorkoutsListLoadRequested()),
+        // ),
         BlocProvider(
           create: (context) => ActiveWorkoutBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
@@ -68,9 +68,9 @@ class FitnessTrackingView extends StatelessWidget {
     if (page.isActive) {
       return ActiveWorkoutBuilder.route();
     }
-    if (page.isAll) {
-      return AllWorkoutsListBuilder();
-    }
+    // if (page.isAll) {
+    //   return AllWorkoutsListBuilder();
+    // }
     if (page.isAllActive) {
       return ActiveWorkoutsHistoryBuilder();
     }
