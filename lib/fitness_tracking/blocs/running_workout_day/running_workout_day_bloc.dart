@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,6 +88,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(state.log);
         yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);
       } catch (error) {
+        log(error.toString());
         yield RunningWorkoutDayFail(state.log, state.pageViewIndex);
       }
     } else {
