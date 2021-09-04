@@ -11,7 +11,7 @@ part 'workouts_list_card_state.dart';
 
 class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardState> {
   WorkoutsListCardBloc({
-    required WorkoutInfoX info,
+    required WorkoutInfoRaw info,
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
   })  : _fitnessRepository = fitnessRepository,

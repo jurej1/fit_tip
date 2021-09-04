@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
-abstract class WorkoutX extends Equatable {
-  final WorkoutInfoX _info;
+abstract class WorkoutRaw extends Equatable {
+  final WorkoutInfoRaw _info;
   final WorkoutDays? workoutDays;
 
-  WorkoutX({
-    required WorkoutInfoX info,
+  WorkoutRaw({
+    required WorkoutInfoRaw info,
     this.workoutDays,
   }) : _info = info;
 
@@ -17,7 +17,7 @@ abstract class WorkoutX extends Equatable {
     return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
   }
 
-  factory WorkoutX.fromInfo(WorkoutInfoX info) {
+  factory WorkoutRaw.fromInfo(WorkoutInfoRaw info) {
     if (info is ActiveWorkoutInfo) {
       return ActiveWorkout(info: info);
     } else {
@@ -26,7 +26,7 @@ abstract class WorkoutX extends Equatable {
   }
 }
 
-class Workout extends WorkoutX {
+class Workout extends WorkoutRaw {
   Workout({
     required WorkoutInfo info,
     WorkoutDays? workoutDays,
@@ -62,7 +62,7 @@ class Workout extends WorkoutX {
   }
 }
 
-class ActiveWorkout extends WorkoutX {
+class ActiveWorkout extends WorkoutRaw {
   ActiveWorkout({
     required ActiveWorkoutInfo info,
     WorkoutDays? workoutDays,

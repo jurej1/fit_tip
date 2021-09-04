@@ -12,7 +12,7 @@ class WorkoutsList extends StatefulWidget {
   }) : super(key: key);
 
   final bool hasReachedMax;
-  final List<WorkoutInfoX> workouts;
+  final List<WorkoutInfoRaw> workouts;
   final VoidCallback isOnBottom;
 
   @override
@@ -52,7 +52,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
             ),
           );
         }
-        final item = widget.workouts[index] as WorkoutInfoX;
+        final item = widget.workouts[index] as WorkoutInfoRaw;
         return WorkoutsListCard.route(context, item); //TODO workout
       },
       separatorBuilder: (context, index) {

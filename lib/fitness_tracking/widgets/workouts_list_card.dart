@@ -12,7 +12,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class WorkoutsListCard extends StatelessWidget {
   const WorkoutsListCard({Key? key}) : super(key: key);
 
-  static Widget route(BuildContext context, WorkoutInfoX item) {
+  static Widget route(BuildContext context, WorkoutInfoRaw item) {
     return BlocProvider(
       key: ValueKey(item),
       create: (context) => WorkoutsListCardBloc(

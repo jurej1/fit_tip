@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../fitness_repository.dart';
 
-abstract class WorkoutInfoX extends Equatable {
+abstract class WorkoutInfoRaw extends Equatable {
   final String id;
   final String uid;
 
@@ -20,7 +20,7 @@ abstract class WorkoutInfoX extends Equatable {
 
   final DateTime created;
 
-  WorkoutInfoX({
+  WorkoutInfoRaw({
     required this.id,
     required this.uid,
     required this.title,
@@ -64,12 +64,12 @@ abstract class WorkoutInfoX extends Equatable {
   }
 }
 
-extension WorkoutInfoXX on WorkoutInfoX {
+extension WorkoutInfoXX on WorkoutInfoRaw {
   bool get isActiveWorkoutInfo => this is ActiveWorkoutInfo;
   bool get isWorkoutInfo => this is WorkoutInfo;
 }
 
-class WorkoutInfo extends WorkoutInfoX {
+class WorkoutInfo extends WorkoutInfoRaw {
   final bool isPublic;
   final int likes;
 
@@ -207,7 +207,7 @@ class WorkoutInfo extends WorkoutInfoX {
   }
 }
 
-class ActiveWorkoutInfo extends WorkoutInfoX {
+class ActiveWorkoutInfo extends WorkoutInfoRaw {
   final DateTime startDate;
   final String activeWorkoutId;
 
