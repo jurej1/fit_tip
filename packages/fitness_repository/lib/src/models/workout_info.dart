@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../fitness_repository.dart';
 
-class WorkoutInfo extends Equatable {
+abstract class WorkoutInfoX extends Equatable {
   final String id;
   final String uid;
 
@@ -18,16 +18,9 @@ class WorkoutInfo extends Equatable {
   final int daysPerWeek;
   final String? note;
 
-  final bool isPublic;
-  final int likes;
-
   final DateTime created;
 
-  final bool isActive;
-  final bool isSaved;
-  final bool isLiked;
-
-  WorkoutInfo({
+  WorkoutInfoX({
     required this.id,
     required this.uid,
     required this.title,
@@ -36,51 +29,22 @@ class WorkoutInfo extends Equatable {
     required this.duration,
     required this.daysPerWeek,
     this.note,
-    this.isPublic = false,
-    this.likes = 0,
     DateTime? created,
-    this.isActive = false,
-    this.isLiked = false,
-    this.isSaved = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
   List<Object?> get props {
-    return [id, uid, title, goal, type, duration, daysPerWeek, note, isPublic, likes, created, isActive, isSaved, isLiked];
-  }
-
-  WorkoutInfo copyWith({
-    String? id,
-    String? uid,
-    String? title,
-    WorkoutGoal? goal,
-    WorkoutType? type,
-    int? duration,
-    int? daysPerWeek,
-    String? note,
-    bool? isPublic,
-    int? likes,
-    DateTime? created,
-    bool? isActive,
-    bool? isSaved,
-    bool? isLiked,
-  }) {
-    return WorkoutInfo(
-      id: id ?? this.id,
-      uid: uid ?? this.uid,
-      title: title ?? this.title,
-      goal: goal ?? this.goal,
-      type: type ?? this.type,
-      duration: duration ?? this.duration,
-      daysPerWeek: daysPerWeek ?? this.daysPerWeek,
-      note: note ?? this.note,
-      isPublic: isPublic ?? this.isPublic,
-      likes: likes ?? this.likes,
-      created: created ?? this.created,
-      isActive: isActive ?? this.isActive,
-      isSaved: isSaved ?? this.isSaved,
-      isLiked: isLiked ?? this.isLiked,
-    );
+    return [
+      id,
+      uid,
+      title,
+      goal,
+      type,
+      duration,
+      daysPerWeek,
+      note,
+      created,
+    ];
   }
 
   String get mapDaysPerWeekToText {
@@ -97,6 +61,112 @@ class WorkoutInfo extends Equatable {
 
   String get mapCreatedToText {
     return _formatDate(created);
+  }
+}
+
+class WorkoutInfo extends WorkoutInfoX {
+  final bool isPublic;
+  final int likes;
+
+  final bool isActive;
+  final bool isSaved;
+  final bool isLiked;
+
+  WorkoutInfo({
+    this.isPublic = false,
+    this.isActive = false,
+    this.isLiked = false,
+    this.isSaved = false,
+    this.likes = 0,
+    required String id,
+    required String uid,
+    required String title,
+    WorkoutGoal? goal,
+    WorkoutType? type,
+    required int duration,
+    required int daysPerWeek,
+    String? note,
+    DateTime? created,
+  }) : super(
+          daysPerWeek: daysPerWeek,
+          duration: duration,
+          id: id,
+          title: title,
+          uid: uid,
+          created: created,
+          goal: goal,
+          note: note,
+          type: type,
+        );
+
+  @override
+  List<Object?> get props => [
+        isPublic,
+        likes,
+        isSaved,
+        isLiked,
+        isActive,
+        daysPerWeek,
+        duration,
+        id,
+        title,
+        uid,
+        created,
+        goal,
+        note,
+        type,
+      ];
+
+  WorkoutInfo copyWith({
+    bool? isPublic,
+    int? likes,
+    bool? isActive,
+    bool? isSaved,
+    bool? isLiked,
+    int? daysPerWeek,
+    int? duration,
+    String? id,
+    String? title,
+    String? uid,
+    DateTime? created,
+    WorkoutGoal? goal,
+    String? note,
+    WorkoutType? type,
+  }) {
+    return WorkoutInfo(
+      isPublic: isPublic ?? this.isPublic,
+      likes: likes ?? this.likes,
+      isActive: isActive ?? this.isActive,
+      isSaved: isSaved ?? this.isSaved,
+      isLiked: isLiked ?? this.isLiked,
+      daysPerWeek: daysPerWeek ?? this.daysPerWeek,
+      duration: duration ?? this.duration,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      uid: uid ?? this.uid,
+      created: created ?? this.created,
+      goal: goal ?? this.goal,
+      note: note ?? this.note,
+      type: type ?? this.type,
+    );
+  }
+
+  static List<WorkoutInfo> fromQuerySnapshot(
+    QuerySnapshot snapshot, {
+    String? activeWorkoutId,
+  }) {
+    //TODO, likes and it is saved,
+    return snapshot.docs.map((e) {
+      WorkoutInfo info = WorkoutInfo.fromEntiy(
+        WorkoutInfoEntity.fromDocumentSnapshot(e),
+      );
+
+      info = info.copyWith(
+        isActive: activeWorkoutId == info.id,
+      );
+
+      return info;
+    }).toList();
   }
 
   WorkoutInfoEntity toEntity() {
@@ -130,22 +200,60 @@ class WorkoutInfo extends Equatable {
       type: entity.type,
     );
   }
+}
 
-  static List<WorkoutInfo> fromQuerySnapshot(
-    QuerySnapshot snapshot, {
-    String? activeWorkoutId,
+class ActiveWorkoutInfo extends WorkoutInfoX {
+  final DateTime startDate;
+
+  ActiveWorkoutInfo({
+    required this.startDate,
+    required String id,
+    required String uid,
+    required String title,
+    WorkoutGoal? goal,
+    WorkoutType? type,
+    required int duration,
+    required int daysPerWeek,
+    String? note,
+    DateTime? created,
+  }) : super(
+          daysPerWeek: daysPerWeek,
+          duration: duration,
+          id: id,
+          title: title,
+          uid: uid,
+          created: created,
+          goal: goal,
+          note: note,
+          type: type,
+        );
+
+  @override
+  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created];
+
+  ActiveWorkoutInfo copyWith({
+    DateTime? startDate,
+    int? daysPerWeek,
+    int? duration,
+    String? id,
+    String? title,
+    String? uid,
+    DateTime? created,
+    WorkoutGoal? goal,
+    String? note,
+    WorkoutType? type,
   }) {
-    //TODO, likes and it is saved,
-    return snapshot.docs.map((e) {
-      WorkoutInfo info = WorkoutInfo.fromEntiy(
-        WorkoutInfoEntity.fromDocumentSnapshot(e),
-      );
-
-      info = info.copyWith(
-        isActive: activeWorkoutId == info.id,
-      );
-
-      return info;
-    }).toList();
+    return ActiveWorkoutInfo(
+      daysPerWeek: daysPerWeek ?? this.daysPerWeek,
+      duration: duration ?? this.duration,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      uid: uid ?? this.uid,
+      created: created ?? this.created,
+      goal: goal ?? this.goal,
+      note: note ?? this.note,
+      type: type ?? this.type,
+      startDate: startDate ?? this.startDate,
+    );
   }
 }

@@ -28,11 +28,10 @@ class WorkoutInfoEntity extends Equatable {
   final int duration;
   final int daysPerWeek;
   final String? note;
+  final DateTime created;
 
   final bool isPublic;
   final int? likes;
-
-  final DateTime created;
 
   WorkoutInfoEntity({
     required this.id,
@@ -99,22 +98,7 @@ class WorkoutInfoEntity extends Equatable {
       if (this.likes != null || likes != 0) WorkoutInfoDocKeys.likes: this.likes,
       WorkoutInfoDocKeys.title: this.title,
       WorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
-      if (this.duration != null) WorkoutInfoDocKeys.duration: this.duration,
-      if (this.goal != null) WorkoutInfoDocKeys.goal: describeEnum(goal!),
-      if (this.type != null) WorkoutInfoDocKeys.type: describeEnum(type!),
-      WorkoutInfoDocKeys.isPublic: this.isPublic,
-      if (this.note != null) WorkoutInfoDocKeys.note: this.note,
-      WorkoutInfoDocKeys.uid: this.uid,
-    };
-  }
-
-  Map<String, dynamic> toActiveMap() {
-    return {
-      WorkoutInfoDocKeys.id: this.id,
-      WorkoutInfoDocKeys.created: Timestamp.fromDate(this.created),
-      WorkoutInfoDocKeys.title: this.title,
-      WorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
-      if (this.duration != null) WorkoutInfoDocKeys.duration: this.duration,
+      WorkoutInfoDocKeys.duration: this.duration,
       if (this.goal != null) WorkoutInfoDocKeys.goal: describeEnum(goal!),
       if (this.type != null) WorkoutInfoDocKeys.type: describeEnum(type!),
       WorkoutInfoDocKeys.isPublic: this.isPublic,
@@ -146,25 +130,121 @@ class WorkoutInfoEntity extends Equatable {
           : null,
     );
   }
+}
+
+class ActiveWorkoutInfoDocKeys {
+  static String uid = 'uid';
+  static String title = 'title';
+  static String goal = 'goal';
+  static String type = 'type';
+  static String duration = 'duration';
+  static String daysPerWeek = 'daysPerWeek';
+  static String note = 'note';
+  static String created = 'created';
+  static String id = 'id';
+  static String startDate = 'startDate';
+}
+
+class ActiveWorkoutInfoEntity extends Equatable {
+  final String id;
+  final String uid;
+
+  final String title;
+  final WorkoutGoal? goal;
+  final WorkoutType? type;
+  final int duration;
+  final int daysPerWeek;
+  final String? note;
+  final DateTime created;
+  final DateTime startDate;
+
+  ActiveWorkoutInfoEntity({
+    required this.id,
+    required this.uid,
+    required this.title,
+    this.goal,
+    this.type,
+    required this.duration,
+    required this.daysPerWeek,
+    this.note,
+    required this.created,
+    required this.startDate,
+  });
+
+  @override
+  List<Object?> get props {
+    return [
+      id,
+      uid,
+      title,
+      goal,
+      type,
+      duration,
+      daysPerWeek,
+      note,
+      created,
+      startDate,
+    ];
+  }
+
+  ActiveWorkoutInfoEntity copyWith({
+    String? id,
+    String? uid,
+    String? title,
+    WorkoutGoal? goal,
+    WorkoutType? type,
+    int? duration,
+    int? daysPerWeek,
+    String? note,
+    DateTime? created,
+    DateTime? startDate,
+  }) {
+    return ActiveWorkoutInfoEntity(
+      id: id ?? this.id,
+      uid: uid ?? this.uid,
+      title: title ?? this.title,
+      goal: goal ?? this.goal,
+      type: type ?? this.type,
+      duration: duration ?? this.duration,
+      daysPerWeek: daysPerWeek ?? this.daysPerWeek,
+      note: note ?? this.note,
+      created: created ?? this.created,
+      startDate: startDate ?? this.startDate,
+    );
+  }
 
   static WorkoutInfoEntity fromActiveMap(Map<String, dynamic> data) {
-    final timestamp = data[WorkoutInfoDocKeys.created] as Timestamp;
+    final timestamp = data[ActiveWorkoutInfoDocKeys.created] as Timestamp;
 
     return WorkoutInfoEntity(
-      id: data[WorkoutInfoDocKeys.id],
-      uid: data[WorkoutInfoDocKeys.uid],
-      title: data[WorkoutInfoDocKeys.title],
-      daysPerWeek: data[WorkoutInfoDocKeys.daysPerWeek],
+      id: data[ActiveWorkoutInfoDocKeys.id],
+      uid: data[ActiveWorkoutInfoDocKeys.uid],
+      title: data[ActiveWorkoutInfoDocKeys.title],
+      daysPerWeek: data[ActiveWorkoutInfoDocKeys.daysPerWeek],
       created: timestamp.toDate(),
-      note: data.containsKey(WorkoutInfoDocKeys.note) ? data[WorkoutInfoDocKeys.note] : null,
-      duration: data.containsKey(WorkoutInfoDocKeys.duration) ? data[WorkoutInfoDocKeys.duration] : null,
-      goal: data.containsKey(WorkoutInfoDocKeys.goal)
-          ? WorkoutGoal.values.firstWhere((e) => data[WorkoutInfoDocKeys.goal] == describeEnum(e))
+      note: data.containsKey(ActiveWorkoutInfoDocKeys.note) ? data[ActiveWorkoutInfoDocKeys.note] : null,
+      duration: data.containsKey(ActiveWorkoutInfoDocKeys.duration) ? data[ActiveWorkoutInfoDocKeys.duration] : null,
+      goal: data.containsKey(ActiveWorkoutInfoDocKeys.goal)
+          ? WorkoutGoal.values.firstWhere((e) => data[ActiveWorkoutInfoDocKeys.goal] == describeEnum(e))
           : null,
-      isPublic: data[WorkoutInfoDocKeys.isPublic],
-      type: data.containsKey(WorkoutInfoDocKeys.type)
-          ? WorkoutType.values.firstWhere((e) => data[WorkoutInfoDocKeys.type] == describeEnum(e))
+      type: data.containsKey(ActiveWorkoutInfoDocKeys.type)
+          ? WorkoutType.values.firstWhere((e) => data[ActiveWorkoutInfoDocKeys.type] == describeEnum(e))
           : null,
     );
+  }
+
+  Map<String, dynamic> toActiveMap() {
+    return {
+      ActiveWorkoutInfoDocKeys.id: this.id,
+      ActiveWorkoutInfoDocKeys.created: Timestamp.fromDate(this.created),
+      ActiveWorkoutInfoDocKeys.title: this.title,
+      ActiveWorkoutInfoDocKeys.daysPerWeek: this.daysPerWeek,
+      ActiveWorkoutInfoDocKeys.duration: this.duration,
+      if (this.goal != null) ActiveWorkoutInfoDocKeys.goal: describeEnum(goal!),
+      if (this.type != null) ActiveWorkoutInfoDocKeys.type: describeEnum(type!),
+      if (this.note != null) ActiveWorkoutInfoDocKeys.note: this.note,
+      ActiveWorkoutInfoDocKeys.uid: this.uid,
+      ActiveWorkoutInfoDocKeys.startDate: Timestamp.fromDate(this.startDate)
+    };
   }
 }
