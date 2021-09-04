@@ -185,7 +185,7 @@ class FitnessRepository {
     return query.get();
   }
 
-  Future<void> deleteWorkout(String workoutId) {
+  Future<void> deleteWorkoutById(String workoutId) {
     return _fitnessTrackingPlanRef().doc(workoutId).delete();
   }
 

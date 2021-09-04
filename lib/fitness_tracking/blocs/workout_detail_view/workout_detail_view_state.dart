@@ -23,22 +23,14 @@ abstract class WorkoutDetailViewState extends Equatable {
   List<Object> get props => [workout];
 }
 
-class WorkoutDetailViewInitial extends WorkoutDetailViewState {
-  const WorkoutDetailViewInitial(Workout workout) : super(workout);
-}
-
 class WorkoutDetailViewLoading extends WorkoutDetailViewState {
   const WorkoutDetailViewLoading(Workout workout) : super(workout);
-}
-
-class WorkoutDetailViewDeleteSuccess extends WorkoutDetailViewState {
-  const WorkoutDetailViewDeleteSuccess(Workout workout) : super(workout);
 }
 
 class WorkoutDetailViewFail extends WorkoutDetailViewState {
   const WorkoutDetailViewFail(Workout workout) : super(workout);
 }
 
-class WorkoutDetailViewSetAsActiveSuccess extends WorkoutDetailViewState {
-  const WorkoutDetailViewSetAsActiveSuccess(Workout workout) : super(workout);
+class WorkoutDetailViewLoadSuccess extends WorkoutDetailViewState {
+  const WorkoutDetailViewLoadSuccess(Workout workout) : super(workout);
 }

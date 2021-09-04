@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -11,58 +12,51 @@ part 'workout_detail_view_state.dart';
 
 class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailViewState> {
   WorkoutDetailViewBloc({
-    required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
-    required Workout workout,
+    required WorkoutInfo info,
   })  : this._fitnessRepository = fitnessRepository,
-        _authenticationBloc = authenticationBloc,
-        super(WorkoutDetailViewInitial(workout));
+        super(WorkoutDetailViewLoading(Workout(info: info)));
 
   final FitnessRepository _fitnessRepository;
-  final AuthenticationBloc _authenticationBloc;
-
   @override
   Stream<WorkoutDetailViewState> mapEventToState(
     WorkoutDetailViewEvent event,
   ) async* {
-    if (event is WorkoutDetailViewDeleteRequested) {
-      yield* _mapDeleteRequestedToState(event);
-    } else if (event is WorkoutDetailViewSetAsActiveRequested) {
-      yield* _mapSetAsActiveRequestedToState(event);
-    } else if (event is WorkoutDetailViewWorkoutUpdated) {
+    if (event is WorkoutDetailViewWorkoutUpdated) {
       yield* _mapWorkoutUpdatedToState(event);
+    } else if (event is WorkoutDetailViewDaysLoadRequested) {
+      yield* _mapWorkoutDaysLoadRequestedToState();
     }
-  }
-
-  Stream<WorkoutDetailViewState> _mapDeleteRequestedToState(WorkoutDetailViewDeleteRequested event) async* {
-    if (_authenticationBloc.state.isAuthenticated) {
-      yield WorkoutDetailViewLoading(state.workout);
-
-      try {
-        await _fitnessRepository.deleteWorkout(state.workout.info.id);
-        yield WorkoutDetailViewDeleteSuccess(state.workout);
-      } on Exception catch (_) {
-        yield WorkoutDetailViewFail(state.workout);
-      }
-    }
-  }
-
-  Stream<WorkoutDetailViewState> _mapSetAsActiveRequestedToState(WorkoutDetailViewSetAsActiveRequested event) async* {
-    //TODO workout as active
-    // if (_authenticationBloc.state.isAuthenticated) {
-    //   yield WorkoutDetailViewLoading(state.workout);
-
-    //   try {
-    //     await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.workout.info.id);
-
-    //     yield WorkoutDetailViewSetAsActiveSuccess(state.workout.copyWith(isActive: true));
-    //   } catch (e) {
-    //     yield WorkoutDetailViewFail(state.workout);
-    //   }
-    // }
   }
 
   Stream<WorkoutDetailViewState> _mapWorkoutUpdatedToState(WorkoutDetailViewWorkoutUpdated event) async* {
-    if (_authenticationBloc.state.isAuthenticated) yield WorkoutDetailViewInitial(event.workout);
+    if (event is WorkoutDetailViewLoadSuccess) {
+      final oldState = state as WorkoutDetailViewLoadSuccess;
+
+      Workout workout = oldState.workout;
+
+      workout = workout.copyWith(
+        info: event.workout.info,
+        workoutDays: event.workout.workoutDays,
+      );
+
+      yield WorkoutDetailViewLoadSuccess(workout);
+    }
+  }
+
+  Stream<WorkoutDetailViewState> _mapWorkoutDaysLoadRequestedToState() async* {
+    yield WorkoutDetailViewLoading(this.state.workout);
+
+    try {
+      final WorkoutInfo info = state.workout.info;
+
+      DocumentSnapshot snap = await _fitnessRepository.getWorkoutDaysById(info.id);
+
+      WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snap));
+
+      yield WorkoutDetailViewLoadSuccess(this.state.workout.copyWith(workoutDays: days));
+    } catch (error) {
+      yield WorkoutDetailViewFail(this.state.workout);
+    }
   }
 }

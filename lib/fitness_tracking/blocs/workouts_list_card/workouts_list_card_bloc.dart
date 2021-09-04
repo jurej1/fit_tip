@@ -39,7 +39,7 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
       yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
       try {
-        await _fitnessRepository.deleteWorkout(state.info.id);
+        await _fitnessRepository.deleteWorkoutById(state.info.id);
 
         yield WorkoutsListCardDeleteSuccess(state.info, state.isExpanded);
       } catch (e) {
