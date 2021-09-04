@@ -204,6 +204,7 @@ class WorkoutInfo extends WorkoutInfoX {
 
 class ActiveWorkoutInfo extends WorkoutInfoX {
   final DateTime startDate;
+  final String activeWorkoutId;
 
   ActiveWorkoutInfo({
     required this.startDate,
@@ -216,6 +217,7 @@ class ActiveWorkoutInfo extends WorkoutInfoX {
     required int daysPerWeek,
     String? note,
     DateTime? created,
+    required this.activeWorkoutId,
   }) : super(
           daysPerWeek: daysPerWeek,
           duration: duration,
@@ -229,7 +231,7 @@ class ActiveWorkoutInfo extends WorkoutInfoX {
         );
 
   @override
-  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created];
+  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created, activeWorkoutId];
 
   ActiveWorkoutInfo copyWith({
     DateTime? startDate,
@@ -242,6 +244,7 @@ class ActiveWorkoutInfo extends WorkoutInfoX {
     WorkoutGoal? goal,
     String? note,
     WorkoutType? type,
+    String? activeWorkoutId,
   }) {
     return ActiveWorkoutInfo(
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
@@ -254,6 +257,39 @@ class ActiveWorkoutInfo extends WorkoutInfoX {
       note: note ?? this.note,
       type: type ?? this.type,
       startDate: startDate ?? this.startDate,
+      activeWorkoutId: activeWorkoutId ?? this.activeWorkoutId,
+    );
+  }
+
+  ActiveWorkoutInfoEntity toEntity() {
+    return ActiveWorkoutInfoEntity(
+      created: this.created,
+      daysPerWeek: this.daysPerWeek,
+      duration: this.duration,
+      id: this.id,
+      startDate: this.startDate,
+      title: this.title,
+      uid: this.uid,
+      goal: this.goal,
+      note: this.note,
+      type: this.type,
+      activeWorkoutId: activeWorkoutId,
+    );
+  }
+
+  static ActiveWorkoutInfo fromEntity(ActiveWorkoutInfoEntity entity) {
+    return ActiveWorkoutInfo(
+      startDate: entity.startDate,
+      id: entity.id,
+      uid: entity.uid,
+      title: entity.title,
+      duration: entity.duration,
+      daysPerWeek: entity.daysPerWeek,
+      created: entity.created,
+      goal: entity.goal,
+      note: entity.note,
+      type: entity.type,
+      activeWorkoutId: entity.activeWorkoutId,
     );
   }
 }

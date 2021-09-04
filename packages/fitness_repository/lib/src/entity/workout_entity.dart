@@ -8,59 +8,35 @@ class WorkoutDocKeys {
   static String workoutDays = 'workoutDays';
 }
 
-abstract class WorkoutEntityX extends Equatable {
-  final WorkoutInfoEntity info;
-  final WorkoutDaysEntity? workoutDays;
+class WorkoutEntity extends Equatable {
+  final bool isActive;
+  final DateTime? startDate;
+  final WorkoutInfoEntity workoutInfoEntity;
+  final WorkoutDaysEntity? workoutDaysEntity;
 
-  const WorkoutEntityX(
-    this.info, {
-    this.workoutDays,
+  const WorkoutEntity(
+    this.workoutInfoEntity, {
+    this.workoutDaysEntity,
+    this.isActive = false,
+    this.startDate,
   });
 
   @override
-  List<Object?> get props => [info, workoutDays];
-}
-
-class WorkoutEntity extends WorkoutEntityX {
-  final bool isActive;
-  final DateTime? startDate;
-
-  const WorkoutEntity(
-    WorkoutInfoEntity info, {
-    WorkoutDaysEntity? workoutDays,
-    this.isActive = false,
-    this.startDate,
-  }) : super(info, workoutDays: workoutDays);
-
-  @override
-  List<Object?> get props => [info, workoutDays, isActive, startDate];
+  List<Object?> get props => [workoutInfoEntity, workoutDaysEntity, isActive, startDate];
 
   WorkoutEntity copyWith({
-    WorkoutInfoEntity? info,
-    WorkoutDaysEntity? workoutDays,
+    WorkoutInfoEntity? workoutInfoEntity,
+    WorkoutDaysEntity? workoutDaysEntity,
     bool? isActive,
     DateTime? startDate,
   }) {
     return WorkoutEntity(
-      info ?? this.info,
-      workoutDays: workoutDays ?? this.workoutDays,
+      workoutInfoEntity ?? this.workoutInfoEntity,
+      workoutDaysEntity: workoutDaysEntity ?? this.workoutDaysEntity,
       isActive: isActive ?? this.isActive,
       startDate: startDate ?? this.startDate,
     );
   }
-
-  // Map<String, dynamic> toDocumentSnapshot() {
-  //   return {
-  //     WorkoutDocKeys.info: this.info.toDocumentSnapshot(),
-  //     WorkoutDocKeys.isActive: this.isActive,
-  //     if (this.startDate != null) WorkoutDocKeys.startDate: Timestamp.fromDate(this.startDate!),
-  //     if (this.workoutDays != null) WorkoutDocKeys.workoutDays: this.workoutDays?.toDocumentSnapshot()
-  //   };
-  // }
-
-  // WorkoutEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
-  //   return WorkoutEntity(info);
-  // }
 }
 
 class ActiveWorkoutDocKeys {
@@ -68,37 +44,29 @@ class ActiveWorkoutDocKeys {
   static String ctiveWorkoutId = 'ctiveWorkoutId';
 }
 
-class ActiveWorkoutEntity extends WorkoutEntityX {
-  final DateTime startDate;
-  final String activeWorkoutId;
+class ActiveWorkoutEntity extends Equatable {
+  final ActiveWorkoutInfoEntity activeWorkoutInfoEntity;
+  final WorkoutDaysEntity? workoutDaysEntity;
 
   ActiveWorkoutEntity(
-    WorkoutInfoEntity info, {
-    WorkoutDaysEntity? workoutDaysEntity,
-    required this.startDate,
-    required this.activeWorkoutId,
-  }) : super(info, workoutDays: workoutDaysEntity);
+    this.activeWorkoutInfoEntity, {
+    this.workoutDaysEntity,
+  });
 
   @override
-  List<Object?> get props => [startDate, activeWorkoutId, info, workoutDays];
+  List<Object?> get props => [activeWorkoutInfoEntity, workoutDaysEntity];
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      ActiveWorkoutDocKeys.ctiveWorkoutId: this.activeWorkoutId,
-      ActiveWorkoutDocKeys.startDate: Timestamp.fromDate(this.startDate),
-      WorkoutDocKeys.info: this.info.toActiveMap(),
-      if (this.workoutDays != null) WorkoutDocKeys.workoutDays: this.workoutDays!.toMap(),
+      WorkoutDocKeys.info: this.activeWorkoutInfoEntity.toActiveMap(),
+      if (this.workoutDaysEntity != null) WorkoutDocKeys.workoutDays: this.workoutDaysEntity!.toMap(),
     };
   }
 
   static ActiveWorkoutEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
-
-    final timestamp = data[ActiveWorkoutDocKeys.startDate] as Timestamp;
     return ActiveWorkoutEntity(
-      WorkoutInfoEntity.fromActiveMap(data[WorkoutDocKeys.info]),
-      startDate: timestamp.toDate(),
-      activeWorkoutId: snapshot.id,
+      ActiveWorkoutInfoEntity.fromActiveMap(data[WorkoutDocKeys.info], snapshot.id),
       workoutDaysEntity: WorkoutDaysEntity.fromMap(data[WorkoutDocKeys.workoutDays]),
     );
   }

@@ -45,7 +45,7 @@ class WorkoutDetailView extends StatelessWidget {
         if (state is WorkoutDeleteLoadSuccess) {
           BlocProvider.of<WorkoutsListBloc>(context).add(
             WorkoutsListItemRemoved(
-              BlocProvider.of<WorkoutDetailViewBloc>(context).state.workout.info,
+              BlocProvider.of<WorkoutDetailViewBloc>(context).state.workout.info as WorkoutInfo,
             ),
           );
           Navigator.of(context).pop();

@@ -35,7 +35,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       Workout workout = oldState.workout;
 
       workout = workout.copyWith(
-        info: event.workout.info,
+        info: event.workout.info as WorkoutInfo,
         workoutDays: event.workout.workoutDays,
       );
 
@@ -47,7 +47,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
     yield WorkoutDetailViewLoading(this.state.workout);
 
     try {
-      final WorkoutInfo info = state.workout.info;
+      final WorkoutInfo info = state.workout.info as WorkoutInfo;
 
       DocumentSnapshot snap = await _fitnessRepository.getWorkoutDaysById(info.id);
 

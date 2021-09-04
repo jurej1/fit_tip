@@ -148,6 +148,7 @@ class ActiveWorkoutInfoDocKeys {
 class ActiveWorkoutInfoEntity extends Equatable {
   final String id;
   final String uid;
+  final String activeWorkoutId;
 
   final String title;
   final WorkoutGoal? goal;
@@ -169,6 +170,7 @@ class ActiveWorkoutInfoEntity extends Equatable {
     this.note,
     required this.created,
     required this.startDate,
+    required this.activeWorkoutId,
   });
 
   @override
@@ -198,6 +200,7 @@ class ActiveWorkoutInfoEntity extends Equatable {
     String? note,
     DateTime? created,
     DateTime? startDate,
+    String? activeWorkoutId,
   }) {
     return ActiveWorkoutInfoEntity(
       id: id ?? this.id,
@@ -210,18 +213,21 @@ class ActiveWorkoutInfoEntity extends Equatable {
       note: note ?? this.note,
       created: created ?? this.created,
       startDate: startDate ?? this.startDate,
+      activeWorkoutId: activeWorkoutId ?? this.activeWorkoutId,
     );
   }
 
-  static WorkoutInfoEntity fromActiveMap(Map<String, dynamic> data) {
-    final timestamp = data[ActiveWorkoutInfoDocKeys.created] as Timestamp;
+  static ActiveWorkoutInfoEntity fromActiveMap(Map<String, dynamic> data, String snapshotId) {
+    final createdTimestamp = data[ActiveWorkoutInfoDocKeys.created] as Timestamp;
+    final startDateTimestamp = data[ActiveWorkoutInfoDocKeys.startDate] as Timestamp;
 
-    return WorkoutInfoEntity(
+    return ActiveWorkoutInfoEntity(
+      activeWorkoutId: snapshotId,
       id: data[ActiveWorkoutInfoDocKeys.id],
       uid: data[ActiveWorkoutInfoDocKeys.uid],
       title: data[ActiveWorkoutInfoDocKeys.title],
       daysPerWeek: data[ActiveWorkoutInfoDocKeys.daysPerWeek],
-      created: timestamp.toDate(),
+      created: createdTimestamp.toDate(),
       note: data.containsKey(ActiveWorkoutInfoDocKeys.note) ? data[ActiveWorkoutInfoDocKeys.note] : null,
       duration: data.containsKey(ActiveWorkoutInfoDocKeys.duration) ? data[ActiveWorkoutInfoDocKeys.duration] : null,
       goal: data.containsKey(ActiveWorkoutInfoDocKeys.goal)
@@ -230,6 +236,7 @@ class ActiveWorkoutInfoEntity extends Equatable {
       type: data.containsKey(ActiveWorkoutInfoDocKeys.type)
           ? WorkoutType.values.firstWhere((e) => data[ActiveWorkoutInfoDocKeys.type] == describeEnum(e))
           : null,
+      startDate: startDateTimestamp.toDate(),
     );
   }
 

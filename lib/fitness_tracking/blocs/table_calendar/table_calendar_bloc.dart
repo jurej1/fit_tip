@@ -15,7 +15,7 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
           activeWorkoutBloc.state is ActiveWorkoutLoadSuccess
               ? TableCalendarLoadSuccess(
                   focusedDay: DateTime.now(),
-                  firstDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.startDate,
+                  firstDay: ((activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info as ActiveWorkoutInfo).startDate,
                   // lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.lastDay,
                   workouts: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.workoutDays!.workoutDays, //TODO
                   lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.lastDate,
