@@ -392,7 +392,6 @@ class FitnessRepository {
 
   // WORKOUT DAY LOGS
   ///////////////////////////////////////////////////////
-
   Future<DocumentReference> addWorkoutDayLog(WorkoutDayLog log) async {
     return _fitnessTrackingWorkoutLogsRef().add(log.toEntity().toDocumentSnapshot());
   }

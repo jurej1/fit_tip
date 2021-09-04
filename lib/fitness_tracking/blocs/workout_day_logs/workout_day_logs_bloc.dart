@@ -30,7 +30,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     WorkoutDayLogsEvent event,
   ) async* {
     if (event is WorkoutDayLogsLoadRequested) {
-      yield* _mapWorkoutUpdatedToState();
+      yield* _mapLoadRequestedToState();
     } else if (event is WorkoutDayLogsLogAdded) {
       yield* _mapLogAddedToState(event);
     } else if (event is WorkoutDayLogsLogRemoved) {
@@ -40,7 +40,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     }
   }
 
-  Stream<WorkoutDayLogsState> _mapWorkoutUpdatedToState() async* {
+  Stream<WorkoutDayLogsState> _mapLoadRequestedToState() async* {
     if (state is WorkoutDayLogsLoadSuccess) return;
 
     if (_authenticationBloc.state.isAuthenticated && _activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
