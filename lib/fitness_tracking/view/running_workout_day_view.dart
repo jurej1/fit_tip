@@ -159,11 +159,6 @@ class __SelectedPageDisplayerState extends State<_SelectedPageDisplayer> {
 
   @override
   Widget build(BuildContext context) {
-    // final _controller = useAnimationController(
-    //   initialValue: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewIndex.toDouble(),
-    //   upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
-    //   duration: const Duration(milliseconds: 300),
-    // );
     return BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       listener: (context, state) {
         _scrollController.animateTo(
@@ -173,13 +168,6 @@ class __SelectedPageDisplayerState extends State<_SelectedPageDisplayer> {
         );
       },
       builder: (context, state) {
-        // return SelectedViewDisplayer(
-        //   dotSize: 10,
-        //   length: state.pageViewLength,
-        //   controller: _controller,
-        //   width: 40,
-        //   selectedColor: Colors.blue,
-        // );
         return SizedBox(
           width: boxWidt,
           child: ListView.separated(
