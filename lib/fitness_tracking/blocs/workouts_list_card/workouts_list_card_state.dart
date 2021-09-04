@@ -3,7 +3,7 @@ part of 'workouts_list_card_bloc.dart';
 abstract class WorkoutsListCardState extends Equatable {
   const WorkoutsListCardState(this.info, this.isExpanded);
 
-  final WorkoutInfo info;
+  final WorkoutInfoX info;
   final bool isExpanded;
 
   Color get backgroundColor {
@@ -19,21 +19,21 @@ abstract class WorkoutsListCardState extends Equatable {
 }
 
 class WorkoutsListCardInitial extends WorkoutsListCardState {
-  const WorkoutsListCardInitial(WorkoutInfo info, bool isExpanded) : super(info, isExpanded);
+  const WorkoutsListCardInitial(WorkoutInfoX info, bool isExpanded) : super(info, isExpanded);
 }
 
 class WorkoutsListCardLoading extends WorkoutsListCardState {
-  const WorkoutsListCardLoading(WorkoutInfo info, bool isExpanded) : super(info, isExpanded);
+  const WorkoutsListCardLoading(WorkoutInfoX info, bool isExpanded) : super(info, isExpanded);
 }
 
 class WorkoutsListCardDeleteSuccess extends WorkoutsListCardState {
-  const WorkoutsListCardDeleteSuccess(WorkoutInfo info, bool isExpanded) : super(info, isExpanded);
+  const WorkoutsListCardDeleteSuccess(WorkoutInfoX info, bool isExpanded) : super(info, isExpanded);
 }
 
 class WorkoutsListCardFail extends WorkoutsListCardState {
-  const WorkoutsListCardFail(WorkoutInfo info, bool isExpanded) : super(info, isExpanded);
+  const WorkoutsListCardFail(WorkoutInfoX info, bool isExpanded) : super(info, isExpanded);
 }
 
 class WorkoutsListCardSetAsActiveSuccess extends WorkoutsListCardState {
-  const WorkoutsListCardSetAsActiveSuccess(WorkoutInfo info, bool isExpanded) : super(info, isExpanded);
+  const WorkoutsListCardSetAsActiveSuccess(WorkoutInfoX info, bool isExpanded) : super(info, isExpanded);
 }

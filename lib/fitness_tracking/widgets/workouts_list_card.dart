@@ -12,7 +12,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class WorkoutsListCard extends StatelessWidget {
   const WorkoutsListCard({Key? key}) : super(key: key);
 
-  static Widget route(BuildContext context, WorkoutInfo item) {
+  static Widget route(BuildContext context, WorkoutInfoX item) {
     return BlocProvider(
       key: ValueKey(item),
       create: (context) => WorkoutsListCardBloc(
@@ -31,10 +31,12 @@ class WorkoutsListCard extends StatelessWidget {
     return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
       listener: (context, state) {
         if (state is WorkoutsListCardDeleteSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.info));
+          //TODO
+          // BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.info));
         }
         if (state is WorkoutsListCardSetAsActiveSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.info));
+          //TODO
+          // BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.info));
         }
       },
       builder: (context, state) {

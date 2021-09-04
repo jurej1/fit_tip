@@ -12,9 +12,9 @@ part 'workout_detail_view_state.dart';
 class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailViewState> {
   WorkoutDetailViewBloc({
     required FitnessRepository fitnessRepository,
-    required WorkoutInfo info,
+    required WorkoutInfoX info,
   })  : this._fitnessRepository = fitnessRepository,
-        super(WorkoutDetailViewLoading(Workout(info: info)));
+        super(WorkoutDetailViewLoading(WorkoutX.fromInfo(info)));
 
   final FitnessRepository _fitnessRepository;
   @override

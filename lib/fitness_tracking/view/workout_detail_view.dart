@@ -10,7 +10,7 @@ import '../fitness_tracking.dart';
 class WorkoutDetailView extends StatelessWidget {
   const WorkoutDetailView({Key? key}) : super(key: key);
 
-  static MaterialPageRoute route(BuildContext context, {required WorkoutInfo info}) {
+  static MaterialPageRoute route(BuildContext context, {required WorkoutInfoX info}) {
     final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
 
     return MaterialPageRoute(
