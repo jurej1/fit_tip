@@ -183,10 +183,7 @@ class FitnessRepository {
       workoutDays: days,
     );
 
-    DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
-
-    await _setActiveWorkoutId(userId, id);
-    return workout.copyWith(info: workout.info.copyWith(activeWorkoutId: ref.id));
+    return _writeActiveWorkoutToFB(userId, workout);
   }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromWorkoutInfo(String userId, WorkoutInfo info) async {
@@ -199,10 +196,7 @@ class FitnessRepository {
       workoutDays: days,
     );
 
-    DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
-    await _setActiveWorkoutId(userId, info.id);
-
-    return workout.copyWith(info: workout.info.copyWith(activeWorkoutId: ref.id));
+    return _writeActiveWorkoutToFB(userId, workout);
   }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromWorkout(String userId, Workout workout) async {
@@ -211,9 +205,13 @@ class FitnessRepository {
       workoutDays: workout.workoutDays,
     );
 
-    DocumentReference ref = await _activeFitnessPlanRef(userId).add(activeWorkout.toEntity().toDocumentSnapshot());
+    return _writeActiveWorkoutToFB(userId, activeWorkout);
+  }
+
+  Future<ActiveWorkout> _writeActiveWorkoutToFB(String userId, ActiveWorkout workout) async {
+    _activeFitnessPlanRef(userId).doc(workout.info.id).set(workout.toEntity().toDocumentSnapshot());
     await _setActiveWorkoutId(userId, workout.info.id);
-    return activeWorkout.copyWith(info: activeWorkout.info.copyWith(activeWorkoutId: ref.id));
+    return workout.copyWith(info: workout.info);
   }
 
   Future<DocumentSnapshot> getActiveWorkoutById(String userId, String workoutId) async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,10 +43,12 @@ class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
     yield ActiveWorkoutLoading();
 
     try {
+      log(event.id!);
       DocumentSnapshot documentSnapshot = await _fitnessRepository.getActiveWorkoutById(_authenticationBloc.state.user!.uid!, event.id!);
       ActiveWorkout active = ActiveWorkout.fromEntity(ActiveWorkoutEntity.fromDocumentSnapshot(documentSnapshot));
       yield ActiveWorkoutLoadSuccess(active);
     } catch (e) {
+      log(e.toString());
       yield ActiveWorkoutFail();
     }
   }

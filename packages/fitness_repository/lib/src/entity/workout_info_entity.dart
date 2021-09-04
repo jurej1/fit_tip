@@ -148,7 +148,6 @@ class ActiveWorkoutInfoDocKeys {
 class ActiveWorkoutInfoEntity extends Equatable {
   final String id;
   final String uid;
-  final String activeWorkoutId;
 
   final String title;
   final WorkoutGoal? goal;
@@ -170,7 +169,6 @@ class ActiveWorkoutInfoEntity extends Equatable {
     this.note,
     required this.created,
     required this.startDate,
-    required this.activeWorkoutId,
   });
 
   @override
@@ -200,7 +198,6 @@ class ActiveWorkoutInfoEntity extends Equatable {
     String? note,
     DateTime? created,
     DateTime? startDate,
-    String? activeWorkoutId,
   }) {
     return ActiveWorkoutInfoEntity(
       id: id ?? this.id,
@@ -213,7 +210,6 @@ class ActiveWorkoutInfoEntity extends Equatable {
       note: note ?? this.note,
       created: created ?? this.created,
       startDate: startDate ?? this.startDate,
-      activeWorkoutId: activeWorkoutId ?? this.activeWorkoutId,
     );
   }
 
@@ -222,7 +218,6 @@ class ActiveWorkoutInfoEntity extends Equatable {
     final startDateTimestamp = data[ActiveWorkoutInfoDocKeys.startDate] as Timestamp;
 
     return ActiveWorkoutInfoEntity(
-      activeWorkoutId: snapshotId,
       id: data[ActiveWorkoutInfoDocKeys.id],
       uid: data[ActiveWorkoutInfoDocKeys.uid],
       title: data[ActiveWorkoutInfoDocKeys.title],

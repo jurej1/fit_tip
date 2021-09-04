@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -64,6 +66,8 @@ class ActiveWorkoutEntity extends Equatable {
   }
 
   static ActiveWorkoutEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    log(snapshot.data().toString());
+
     final data = snapshot.data() as Map<String, dynamic>;
     return ActiveWorkoutEntity(
       ActiveWorkoutInfoEntity.fromActiveMap(data[WorkoutDocKeys.info], snapshot.id),

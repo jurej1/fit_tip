@@ -212,7 +212,6 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
 class ActiveWorkoutInfo extends WorkoutInfoRaw {
   final DateTime startDate;
-  final String activeWorkoutId;
 
   ActiveWorkoutInfo({
     required this.startDate,
@@ -225,7 +224,6 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
     required int daysPerWeek,
     String? note,
     DateTime? created,
-    required this.activeWorkoutId,
   }) : super(
           daysPerWeek: daysPerWeek,
           duration: duration,
@@ -239,7 +237,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
         );
 
   @override
-  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created, activeWorkoutId];
+  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created];
 
   ActiveWorkoutInfo copyWith({
     DateTime? startDate,
@@ -252,7 +250,6 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
     WorkoutGoal? goal,
     String? note,
     WorkoutType? type,
-    String? activeWorkoutId,
   }) {
     return ActiveWorkoutInfo(
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
@@ -265,7 +262,6 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
       note: note ?? this.note,
       type: type ?? this.type,
       startDate: startDate ?? this.startDate,
-      activeWorkoutId: activeWorkoutId ?? this.activeWorkoutId,
     );
   }
 
@@ -281,7 +277,6 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
       goal: this.goal,
       note: this.note,
       type: this.type,
-      activeWorkoutId: activeWorkoutId,
     );
   }
 
@@ -297,13 +292,11 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
       goal: entity.goal,
       note: entity.note,
       type: entity.type,
-      activeWorkoutId: entity.activeWorkoutId,
     );
   }
 
   factory ActiveWorkoutInfo.fromInfo(WorkoutInfo info, [String? activeWorkoutId]) {
     return ActiveWorkoutInfo(
-      activeWorkoutId: activeWorkoutId ?? '',
       startDate: DateTime.now(),
       id: info.id,
       uid: info.uid,

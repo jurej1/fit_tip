@@ -126,7 +126,7 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
 
       List<ActiveWorkout> workouts = List.from(oldState.workouts);
 
-      workouts.removeWhere((element) => element.info.activeWorkoutId == event.activeWorkout.info.id);
+      workouts.removeWhere((element) => element.info.id == event.activeWorkout.info.id);
 
       yield ActiveWorkoutsHistoryListLoadSuccess(hasReachedMax: oldState.hasReachedMax, workouts: workouts);
     }
@@ -139,7 +139,7 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
       List<ActiveWorkout> workouts = List.from(oldState.workouts);
 
       workouts = workouts.map((e) {
-        if (e.info.activeWorkoutId == event.activeWorkout.info.activeWorkoutId) {
+        if (e.info.id == event.activeWorkout.info.id) {
           return event.activeWorkout;
         }
 
