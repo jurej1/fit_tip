@@ -113,7 +113,11 @@ class FitnessRepository {
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
 
-  List<String> getSavedWorkoutIdsList(String userId) {
+  Stream<BoxEvent> savedWorkoutIdsStream(String userId) {
+    return _savedWorkoutIdsBox.watch(key: userId);
+  }
+
+  List<String> getSavedWorkoutIds(String userId) {
     return _savedWorkoutIdsBox.get(userId, defaultValue: [])!;
   }
 
@@ -122,15 +126,19 @@ class FitnessRepository {
   }
 
   Future<void> addSavedWorkoutId(String userId, String workoutId) async {
-    List<String> ids = getSavedWorkoutIdsList(userId);
+    List<String> ids = getSavedWorkoutIds(userId);
     ids.add(workoutId);
     return _updateSavedWorkoutIdsList(userId, ids);
   }
 
   Future<void> removeSavedWorkoutId(String userId, String workoutId) async {
-    List<String> ids = getSavedWorkoutIdsList(userId);
+    List<String> ids = getSavedWorkoutIds(userId);
     ids.remove(workoutId);
     return _updateSavedWorkoutIdsList(userId, ids);
+  }
+
+  Stream<BoxEvent> likedWorkoutIdsStream(String userId) {
+    return _likedWorkoutIdsBox.watch(key: userId);
   }
 
   List<String> getLikedWorkoutIds(String userId) {

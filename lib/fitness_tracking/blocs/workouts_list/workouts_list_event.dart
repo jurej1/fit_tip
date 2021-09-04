@@ -7,6 +7,18 @@ abstract class WorkoutsListEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class _WorkoutsListSavedUpdated extends WorkoutsListEvent {
+  final List<String> ids;
+
+  const _WorkoutsListSavedUpdated(this.ids);
+}
+
+class _WorkoutsListLikedUpdated extends WorkoutsListEvent {
+  final List<String> ids;
+
+  const _WorkoutsListLikedUpdated(this.ids);
+}
+
 class WorkoutsListLoadMoreRequested extends WorkoutsListEvent {}
 
 class WorkoutsListLoadRequested extends WorkoutsListEvent {}

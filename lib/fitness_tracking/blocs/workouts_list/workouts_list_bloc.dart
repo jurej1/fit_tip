@@ -16,16 +16,37 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     required AuthenticationBloc authenticationBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
-        super(WorkoutsListLoading());
+        super(WorkoutsListLoading()) {
+    if (authenticationBloc.state.isAuthenticated) {
+      String uid = authenticationBloc.state.user!.uid!;
+      _likedSubscription = fitnessRepository.likedWorkoutIdsStream(uid).listen((event) {
+        add(_WorkoutsListLikedUpdated(event.value as List<String>));
+      });
+
+      _savedSubscription = fitnessRepository.savedWorkoutIdsStream(uid).listen((event) {
+        add(_WorkoutsListSavedUpdated(event.value));
+      });
+    }
+  }
 
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
+
+  StreamSubscription? _likedSubscription;
+  StreamSubscription? _savedSubscription;
 
   final int _limit = 12;
   late DocumentSnapshot _lastFetchedDoc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   String? get _userId => _authenticationBloc.state.user?.uid;
+
+  @override
+  Future<void> close() {
+    _likedSubscription?.cancel();
+    _savedSubscription?.cancel();
+    return super.close();
+  }
 
   @override
   Stream<WorkoutsListState> mapEventToState(
@@ -41,6 +62,10 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       yield* _mapItemUpdatedToState(event);
     } else if (event is WorkoutsListLoadMoreRequested) {
       yield* _mapLoadMoreRequested();
+    } else if (event is _WorkoutsListLikedUpdated) {
+      yield* _mapLikesUpdatedToState(event);
+    } else if (event is _WorkoutsListSavedUpdated) {
+      yield* _mapSavesUpdatedToState(event);
     }
   }
 
@@ -142,6 +167,30 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       );
     } else {
       return WorkoutInfo.fromQuerySnapshot(snapshot);
+    }
+  }
+
+  Stream<WorkoutsListState> _mapLikesUpdatedToState(_WorkoutsListLikedUpdated event) async* {
+    if (state is WorkoutsListLoadSuccess) {
+      final oldState = state as WorkoutsListLoadSuccess;
+
+      List<WorkoutInfo> workoutInfos = List.from(oldState.workoutInfos);
+
+      workoutInfos = workoutInfos.map((e) => e.copyWith(isLiked: event.ids.contains(e.id))).toList();
+
+      yield WorkoutsListLoadSuccess(workoutInfos, oldState.hasReachedMax);
+    }
+  }
+
+  Stream<WorkoutsListState> _mapSavesUpdatedToState(_WorkoutsListSavedUpdated event) async* {
+    if (state is WorkoutsListLoadSuccess) {
+      final oldState = state as WorkoutsListLoadSuccess;
+
+      List<WorkoutInfo> workoutInfos = List.from(oldState.workoutInfos);
+
+      workoutInfos = workoutInfos.map((e) => e.copyWith(isSaved: event.ids.contains(e.id))).toList();
+
+      yield WorkoutsListLoadSuccess(workoutInfos, oldState.hasReachedMax);
     }
   }
 }
