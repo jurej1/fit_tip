@@ -11,7 +11,7 @@ export 'rep_unit_value_selector.dart';
 export 'excercise_name_search_delegate.dart';
 export 'workout_day_card.dart';
 export 'workouts_list_builder.dart';
-export 'workouts_list_card.dart';
+export 'workout_info_list_card.dart';
 export 'workout_sliver_app_bar_info_row.dart';
 export 'workout_excercise_row_data.dart';
 export 'workout_detail_item.dart';

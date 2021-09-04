@@ -53,7 +53,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
           );
         }
         final item = widget.workouts[index];
-        return WorkoutsListCard.route(context, item); //TODO workout
+        return WorkoutInfoListCard.route(context, item); //TODO workout
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);

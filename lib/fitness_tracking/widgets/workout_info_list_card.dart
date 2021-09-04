@@ -9,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class WorkoutsListCard extends StatelessWidget {
-  const WorkoutsListCard({Key? key}) : super(key: key);
+class WorkoutInfoListCard extends StatelessWidget {
+  const WorkoutInfoListCard({Key? key}) : super(key: key);
 
   static Widget route(BuildContext context, WorkoutInfoRaw item) {
     return BlocProvider(
@@ -20,7 +20,7 @@ class WorkoutsListCard extends StatelessWidget {
         fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
         info: item,
       ),
-      child: WorkoutsListCard(
+      child: WorkoutInfoListCard(
         key: ValueKey(item),
       ),
     );
@@ -31,7 +31,6 @@ class WorkoutsListCard extends StatelessWidget {
     return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
       listener: (context, state) {
         if (state is WorkoutsListCardDeleteSuccess) {
-          //TODO
           // BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.info));
         }
         if (state is WorkoutsListCardSetAsActiveSuccess) {
@@ -51,8 +50,9 @@ class WorkoutsListCard extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  //TODO next page
-                  // Navigator.of(context).push(WorkoutDetailView.route(context, info: state.info));
+                  if (state.info.isWorkoutInfo) {
+                    Navigator.of(context).push(WorkoutDetailView.route(context, info: state.info as WorkoutInfo));
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -111,8 +111,9 @@ class _OptionsButton extends StatelessWidget {
             if (option == WorkoutsListCardOptions.delete) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardDeleteRequested());
             } else if (option == WorkoutsListCardOptions.edit) {
-              //TODO
-              // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.info));
+              if (state.info.isWorkoutInfo) {
+                Navigator.of(context).push(AddWorkoutView.route(context, workout: Workout(info: state.info as WorkoutInfo)));
+              }
             } else if (option == WorkoutsListCardOptions.setAsActive) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
             }

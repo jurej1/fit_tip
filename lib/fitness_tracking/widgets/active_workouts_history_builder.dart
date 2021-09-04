@@ -25,7 +25,7 @@ class ActiveWorkoutsHistoryBuilder extends StatelessWidget {
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 final item = state.workouts[index];
-                return WorkoutsListCard.route(context, item.info);
+                return WorkoutInfoListCard.route(context, item.info);
               },
               separatorBuilder: (context, index) {
                 return const SizedBox(height: 10);
