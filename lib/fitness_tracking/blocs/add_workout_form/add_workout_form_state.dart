@@ -12,7 +12,6 @@ class AddWorkoutFormState {
     this.duration = const WorkoutIntFormz.pure(),
     this.daysPerWeek = const WorkoutIntFormz.pure(),
     this.timePerWorkout = const WorkoutIntFormz.pure(),
-    required this.startDate,
     this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
     required this.created,
@@ -31,7 +30,6 @@ class AddWorkoutFormState {
   final WorkoutIntFormz duration;
   final WorkoutIntFormz daysPerWeek;
   final WorkoutIntFormz timePerWorkout; // TODO this field should be deleted
-  final WorkoutDateFormz startDate;
   final WorkoutDaysList workoutDays;
   final DateTime created;
   final FormMode formMode;
@@ -45,7 +43,6 @@ class AddWorkoutFormState {
   ) {
     if (workout == null) {
       return AddWorkoutFormState(
-        startDate: WorkoutDateFormz.pure(),
         created: DateTime.now(),
         formMode: FormMode.add,
         uid: userId,
@@ -56,7 +53,6 @@ class AddWorkoutFormState {
 
     return AddWorkoutFormState(
       uid: workout.info.uid,
-      startDate: WorkoutDateFormz.pure(DateTime.now()), // TODO here can go wron
       created: workout.info.created,
       daysPerWeek: daysPerWeek,
       duration: WorkoutIntFormz.pure(workout.info.duration.toStringAsFixed(0)),
@@ -99,7 +95,6 @@ class AddWorkoutFormState {
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       timePerWorkout: timePerWorkout ?? this.timePerWorkout,
-      startDate: startDate ?? this.startDate,
       workoutDays: workoutDays ?? this.workoutDays,
       created: created ?? this.created,
       formMode: formMode ?? this.formMode,
