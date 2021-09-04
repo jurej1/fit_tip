@@ -54,8 +54,9 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseUpdatetToState(RunningWorkoutDayWorkoutExcerciseUpdated event) async* {
-    WorkoutDayLog log = this.state.log;
-    List<WorkoutExcercise> excercises = log.excercises ?? []; //TODO
+    WorkoutDayLog workoutLog = this.state.log;
+    log(workoutLog.workoutId);
+    List<WorkoutExcercise> excercises = workoutLog.excercises ?? []; //TODO
 
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) {
@@ -64,7 +65,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
       return e;
     }).toList();
 
-    yield RunningWorkoutDayInitial(log.copyWith(excercises: excercises), state.pageViewIndex);
+    yield RunningWorkoutDayInitial(workoutLog.copyWith(excercises: excercises), state.pageViewIndex);
   }
 
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
@@ -79,11 +80,13 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           now.minute,
           now.second,
         );
-        final log = state.log.copyWith(created: dateCreated);
+        final workoutLog = state.log.copyWith(created: dateCreated);
         yield RunningWorkoutDayLoading(
-          log,
+          workoutLog,
           state.pageViewIndex,
         );
+
+        log(workoutLog.workoutId);
 
         DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(state.log);
         yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);

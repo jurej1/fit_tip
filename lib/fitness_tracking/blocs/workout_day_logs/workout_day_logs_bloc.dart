@@ -49,7 +49,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
       try {
         QuerySnapshot snapshots = await _fitnessRepository.getWorkoutDayLogByWorkoutId(
           _authenticationBloc.state.user!.uid!,
-          (_activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.info.id,
+          _fitnessRepository.getActiveWorkoutId(_authenticationBloc.state.user!.uid!)!,
         );
 
         List<WorkoutDayLog> logs = snapshots.docs
