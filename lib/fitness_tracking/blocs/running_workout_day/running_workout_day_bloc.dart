@@ -17,6 +17,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     required FitnessRepository fitnessRepository,
     required DateTime date,
   })  : _fitnessRepository = fitnessRepository,
+        _authenticationBloc = authenticationBloc,
         super(
           RunningWorkoutDayInitial(
             WorkoutDayLog(
@@ -24,33 +25,17 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
               workoutId: workoutDay.workoutId,
               excercises: workoutDay.excercises,
               id: UniqueKey().toString(),
-              duration: Duration(days: 0), // TODO
-              userId: '', //TODO
+              duration: Duration.zero,
+              userId: authenticationBloc.state.user?.uid ?? '',
             ),
             0,
           ),
-        ) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
-
+        );
   final FitnessRepository _fitnessRepository;
-  late final StreamSubscription _authSubscription;
+  final AuthenticationBloc _authenticationBloc;
 
-  bool _isAuth = false;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  String? get _userId => _authenticationBloc.state.user?.uid;
 
   @override
   Stream<RunningWorkoutDayState> mapEventToState(
