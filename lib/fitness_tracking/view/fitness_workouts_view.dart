@@ -31,6 +31,14 @@ class FitnessWorkoutsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fitness Workouts View'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(AddWorkoutView.route(context));
+            },
+          )
+        ],
       ),
       body: AllWorkoutsListBuilder(),
     );
