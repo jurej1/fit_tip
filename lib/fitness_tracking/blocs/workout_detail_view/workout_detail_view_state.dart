@@ -5,7 +5,7 @@ abstract class WorkoutDetailViewState extends Equatable {
     this.workout,
   );
 
-  final WorkoutX workout;
+  final Workout workout;
 
   BorderRadius get appBarBorderRadius => BorderRadius.only(
         bottomLeft: Radius.circular(30),
@@ -24,13 +24,13 @@ abstract class WorkoutDetailViewState extends Equatable {
 }
 
 class WorkoutDetailViewLoading extends WorkoutDetailViewState {
-  const WorkoutDetailViewLoading(WorkoutX workout) : super(workout);
+  const WorkoutDetailViewLoading(Workout workout) : super(workout);
 }
 
 class WorkoutDetailViewFail extends WorkoutDetailViewState {
-  const WorkoutDetailViewFail(WorkoutX workout) : super(workout);
+  const WorkoutDetailViewFail(Workout workout) : super(workout);
 }
 
 class WorkoutDetailViewLoadSuccess extends WorkoutDetailViewState {
-  const WorkoutDetailViewLoadSuccess(WorkoutX workout) : super(workout);
+  const WorkoutDetailViewLoadSuccess(Workout workout) : super(workout);
 }

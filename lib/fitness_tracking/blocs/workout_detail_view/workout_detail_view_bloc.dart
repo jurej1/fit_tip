@@ -12,9 +12,9 @@ part 'workout_detail_view_state.dart';
 class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailViewState> {
   WorkoutDetailViewBloc({
     required FitnessRepository fitnessRepository,
-    required WorkoutInfoX info,
+    required WorkoutInfo info,
   })  : this._fitnessRepository = fitnessRepository,
-        super(WorkoutDetailViewLoading(WorkoutX.fromInfo(info)));
+        super(WorkoutDetailViewLoading(Workout(info: info)));
 
   final FitnessRepository _fitnessRepository;
   @override
@@ -35,7 +35,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
       Workout workout = oldState.workout;
 
       workout = workout.copyWith(
-        info: event.workout.info as WorkoutInfo,
+        info: event.workout.info,
         workoutDays: event.workout.workoutDays,
       );
 
@@ -47,7 +47,7 @@ class WorkoutDetailViewBloc extends Bloc<WorkoutDetailViewEvent, WorkoutDetailVi
     yield WorkoutDetailViewLoading(this.state.workout);
 
     try {
-      final WorkoutInfo info = state.workout.info as WorkoutInfo;
+      final WorkoutInfo info = state.workout.info;
 
       DocumentSnapshot snap = await _fitnessRepository.getWorkoutDaysById(info.id);
 
