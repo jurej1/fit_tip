@@ -1,4 +1,9 @@
+import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../fitness_tracking.dart';
 
 class FitnessWorkoutsView extends StatelessWidget {
   const FitnessWorkoutsView({Key? key}) : super(key: key);
@@ -6,7 +11,17 @@ class FitnessWorkoutsView extends StatelessWidget {
   static MaterialPageRoute route(BuildContext context) {
     return MaterialPageRoute(
       builder: (_) {
-        return FitnessWorkoutsView();
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => WorkoutsListBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              )..add(WorkoutsListLoadRequested()),
+            ),
+          ],
+          child: FitnessWorkoutsView(),
+        );
       },
     );
   }
@@ -17,6 +32,7 @@ class FitnessWorkoutsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Fitness Workouts View'),
       ),
+      body: AllWorkoutsListBuilder(),
     );
   }
 }
