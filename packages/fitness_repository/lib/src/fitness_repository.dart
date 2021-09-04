@@ -125,17 +125,14 @@ class FitnessRepository {
     WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snapshots.last));
 
     ActiveWorkout workout = ActiveWorkout(
-      info: info,
-      activeWorkoutId: '',
-      startDate: DateTime.now(),
-      isActive: true,
+      info: ActiveWorkoutInfo.fromInfo(info),
       workoutDays: days,
     );
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
 
     await _setActiveWorkoutId(userId, id);
-    return workout.copyWith(activeWorkoutId: ref.id);
+    return workout.copyWith(info: workout.info.copyWith(activeWorkoutId: ref.id));
   }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromWorkoutInfo(String userId, WorkoutInfo info) async {
@@ -144,31 +141,25 @@ class FitnessRepository {
     WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snapshot));
 
     ActiveWorkout workout = ActiveWorkout(
-      info: info,
-      activeWorkoutId: '',
-      startDate: DateTime.now(),
-      isActive: true,
+      info: ActiveWorkoutInfo.fromInfo(info),
       workoutDays: days,
     );
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(workout.toEntity().toDocumentSnapshot());
     await _setActiveWorkoutId(userId, info.id);
 
-    return workout.copyWith(activeWorkoutId: ref.id);
+    return workout.copyWith(info: workout.info.copyWith(activeWorkoutId: ref.id));
   }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromWorkout(String userId, Workout workout) async {
     ActiveWorkout activeWorkout = ActiveWorkout(
-      info: workout.info,
-      activeWorkoutId: '',
-      startDate: DateTime.now(),
-      isActive: true,
+      info: ActiveWorkoutInfo.fromInfo(workout.info),
       workoutDays: workout.workoutDays,
     );
 
     DocumentReference ref = await _activeFitnessPlanRef(userId).add(activeWorkout.toEntity().toDocumentSnapshot());
     await _setActiveWorkoutId(userId, workout.info.id);
-    return activeWorkout.copyWith(activeWorkoutId: ref.id);
+    return activeWorkout.copyWith(info: activeWorkout.info.copyWith(activeWorkoutId: ref.id));
   }
 
   Future<DocumentSnapshot> getActiveWorkoutById(String userId, String workoutId) async {

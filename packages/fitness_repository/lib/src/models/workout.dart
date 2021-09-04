@@ -73,7 +73,6 @@ class ActiveWorkout extends WorkoutX {
   ActiveWorkout copyWith({
     WorkoutDays? workoutDays,
     ActiveWorkoutInfo? info,
-    String? activeWorkoutId,
   }) {
     return ActiveWorkout(
       info: info ?? this._info as ActiveWorkoutInfo,

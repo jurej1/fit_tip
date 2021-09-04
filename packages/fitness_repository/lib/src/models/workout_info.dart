@@ -297,4 +297,20 @@ class ActiveWorkoutInfo extends WorkoutInfoX {
       activeWorkoutId: entity.activeWorkoutId,
     );
   }
+
+  factory ActiveWorkoutInfo.fromInfo(WorkoutInfo info, [String? activeWorkoutId]) {
+    return ActiveWorkoutInfo(
+      activeWorkoutId: activeWorkoutId ?? '',
+      startDate: DateTime.now(),
+      id: info.id,
+      uid: info.uid,
+      title: info.title,
+      duration: info.duration,
+      daysPerWeek: info.daysPerWeek,
+      created: info.created,
+      goal: info.goal,
+      note: info.note,
+      type: info.type,
+    );
+  }
 }
