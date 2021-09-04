@@ -12,12 +12,18 @@ import 'models/models.dart';
 class FitnessRepository {
   final FirebaseFirestore _firebaseFirestore;
   final Box<String?> _activeWorkoutIdsBox;
+  final Box<List<String>> _savedWorkoutIdsBox;
+  final Box<List<String>> _likedWorkoutIdsBox;
 
   FitnessRepository({
     FirebaseFirestore? firebaseFirestore,
     required Box<String?> activeWorkoutIdsBox,
+    required Box<List<String>> savedWorkoutIdsBox,
+    required Box<List<String>> likedWorkoutIdsBox,
   })  : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._activeWorkoutIdsBox = activeWorkoutIdsBox;
+        this._likedWorkoutIdsBox = likedWorkoutIdsBox,
+        this._activeWorkoutIdsBox = activeWorkoutIdsBox,
+        this._savedWorkoutIdsBox = savedWorkoutIdsBox;
 
   CollectionReference _activityTrackingRef(String userId) {
     return _firebaseFirestore.collection('users').doc(userId).collection('activity_tracking');
@@ -106,6 +112,26 @@ class FitnessRepository {
 
   //FITNESS WORKOUTS
 ///////////////////////////////////////////////////////////////////
+
+  List<String> getSavedWorkoutIdsList(String userId) {
+    return _savedWorkoutIdsBox.get(userId, defaultValue: [])!;
+  }
+
+  Future<void> _updateSavedWorkoutIdsList(String userId, List<String> workoutIds) {
+    return _savedWorkoutIdsBox.put(userId, workoutIds);
+  }
+
+  Future<void> saveWorkoutIdAdded(String userId, String workoutId) async {
+    List<String> ids = getSavedWorkoutIdsList(userId);
+    ids.add(workoutId);
+    return _updateSavedWorkoutIdsList(userId, ids);
+  }
+
+  Future<void> saveWorkoutIdsRemoved(String userId, String workoutId) async {
+    List<String> ids = getSavedWorkoutIdsList(userId);
+    ids.remove(workoutId);
+    return _updateSavedWorkoutIdsList(userId, ids);
+  }
 
   Future<void> _setActiveWorkoutId(String userId, String workoutId) async {
     return _activeWorkoutIdsBox.put(userId, workoutId);

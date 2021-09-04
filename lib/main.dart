@@ -31,6 +31,8 @@ Future<void> main() async {
   Bloc.observer = FitTipBlocObserver();
 
   Box<String?> activeWorkoutBox = await Hive.openBox<String?>('activeWorkoutsBox');
+  Box<List<String>> likedWorkoutIdsBox = await Hive.openBox<List<String>>('likedWorkoutIdsBox');
+  Box<List<String>> savedWorkoutIdsBox = await Hive.openBox<List<String>>('savedWorkoutIdsBox');
 
   runApp(
     App(
@@ -38,7 +40,11 @@ Future<void> main() async {
       weightRepository: WeightRepository(),
       waterRepository: WaterRepository(),
       foodRepository: FoodRepository(),
-      fitnessRepository: FitnessRepository(activeWorkoutIdsBox: activeWorkoutBox),
+      fitnessRepository: FitnessRepository(
+        activeWorkoutIdsBox: activeWorkoutBox,
+        likedWorkoutIdsBox: likedWorkoutIdsBox,
+        savedWorkoutIdsBox: savedWorkoutIdsBox,
+      ),
       blogRepository: BlogRepository(),
     ),
   );
