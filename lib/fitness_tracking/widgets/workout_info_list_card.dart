@@ -99,27 +99,25 @@ class _OptionsButton extends StatelessWidget {
           );
         }
 
-        return PopupMenuButton<WorkoutsListCardOptions>(
+        return PopupMenuButton<WorkoutsListCardOption>(
           icon: const Icon(Icons.more_vert),
           iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
           itemBuilder: (context) {
-            return WorkoutsListCardOptions.values.map((e) {
+            return WorkoutsListCardOption.values.map((e) {
               return PopupMenuItem(
-                child: Text(
-                  mapWorkoutsListCardOptionsToString(e),
-                ),
+                child: Text(e.toStringReadable()),
                 value: e,
               );
             }).toList();
           },
           onSelected: (option) {
-            if (option == WorkoutsListCardOptions.delete) {
+            if (option == WorkoutsListCardOption.delete) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardDeleteRequested());
-            } else if (option == WorkoutsListCardOptions.edit) {
+            } else if (option == WorkoutsListCardOption.edit) {
               if (state.info.isWorkoutInfo) {
                 Navigator.of(context).push(AddWorkoutView.route(context, workout: Workout(info: state.info as WorkoutInfo)));
               }
-            } else if (option == WorkoutsListCardOptions.setAsActive) {
+            } else if (option == WorkoutsListCardOption.setAsActive) {
               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
             }
           },

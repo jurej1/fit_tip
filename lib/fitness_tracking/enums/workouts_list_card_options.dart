@@ -1,12 +1,18 @@
-enum WorkoutsListCardOptions { delete, edit, setAsActive }
+enum WorkoutsListCardOption { delete, edit, setAsActive }
 
-String mapWorkoutsListCardOptionsToString(WorkoutsListCardOptions option) {
-  if (option == WorkoutsListCardOptions.delete) {
-    return 'Delete';
-  } else if (option == WorkoutsListCardOptions.edit) {
-    return 'Edit';
-  } else if (option == WorkoutsListCardOptions.setAsActive) {
-    return 'Set as active';
+extension WorkoutsListCardOptionX on WorkoutsListCardOption {
+  bool get isDelete => this == WorkoutsListCardOption.delete;
+  bool get isEdit => this == WorkoutsListCardOption.edit;
+  bool get isSetAsActive => this == WorkoutsListCardOption.setAsActive;
+
+  String toStringReadable() {
+    if (isDelete) {
+      return 'Delete';
+    } else if (isEdit) {
+      return 'Edit';
+    } else if (isSetAsActive) {
+      return 'Set as active';
+    }
+    return '';
   }
-  return '';
 }

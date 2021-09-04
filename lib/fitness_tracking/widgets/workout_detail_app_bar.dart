@@ -36,24 +36,24 @@ class WorkoutDetailAppBar extends StatelessWidget {
           ),
           expandedHeight: 200,
           actions: [
-            PopupMenuButton<WorkoutsListCardOptions>(
+            PopupMenuButton<WorkoutsListCardOption>(
               icon: const Icon(Icons.more_vert),
               itemBuilder: (context) {
-                return WorkoutsListCardOptions.values.map((e) {
+                return WorkoutsListCardOption.values.map((e) {
                   return PopupMenuItem(
                     child: Text(
-                      mapWorkoutsListCardOptionsToString(e),
+                      e.toStringReadable(),
                     ),
                     value: e,
                   );
                 }).toList();
               },
               onSelected: (option) {
-                if (option == WorkoutsListCardOptions.delete) {
+                if (option == WorkoutsListCardOption.delete) {
                   // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
-                } else if (option == WorkoutsListCardOptions.setAsActive) {
+                } else if (option == WorkoutsListCardOption.setAsActive) {
                   // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
-                } else if (option == WorkoutsListCardOptions.edit) {
+                } else if (option == WorkoutsListCardOption.edit) {
                   Navigator.of(context).push(AddWorkoutView.routeFromWorkoutDetailView(context, workout: state.workout));
                 }
               },
