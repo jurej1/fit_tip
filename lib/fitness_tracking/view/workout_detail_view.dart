@@ -39,7 +39,7 @@ class WorkoutDetailView extends StatelessWidget {
         if (state is WorkoutDetailViewDeleteSuccess) {
           BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.workout.info));
         } else if (state is WorkoutDetailViewSetAsActiveSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemSetAsActive(state.workout.info));
+          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout.info));
         }
       },
       buildWhen: (p, c) => false,

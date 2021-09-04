@@ -35,11 +35,3 @@ class WorkoutsListItemUpdated extends WorkoutsListEvent {
   @override
   List<Object> get props => [info];
 }
-
-class WorkoutsListItemSetAsActive extends WorkoutsListEvent {
-  final WorkoutInfo info;
-
-  const WorkoutsListItemSetAsActive(this.info);
-  @override
-  List<Object> get props => [info];
-}

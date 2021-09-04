@@ -35,8 +35,6 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       yield* _mapItemRemovedToState(event);
     } else if (event is WorkoutsListItemUpdated) {
       yield* _mapItemUpdatedToState(event);
-    } else if (event is WorkoutsListItemSetAsActive) {
-      yield* _mapItemSetAsActive(event);
     } else if (event is WorkoutsListLoadMoreRequested) {
       yield* _mapLoadMoreRequested();
     }
@@ -103,23 +101,6 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
 
       yield WorkoutsListLoadSuccess(workouts, currentState.hasReachedMax);
     }
-  }
-
-  Stream<WorkoutsListState> _mapItemSetAsActive(WorkoutsListItemSetAsActive event) async* {
-    //TODO
-    // if (state is WorkoutsListLoadSuccess) {
-    //   final currentState = state as WorkoutsListLoadSuccess;
-
-    //   List<Workout> workouts = List.from(currentState.workouts);
-
-    //   workouts = workouts.map((e) {
-    //     if (e.info.id == event.workout.info.id) return event.workout;
-    //     if (e.isActive) return e.copyWith(isActive: false);
-    //     return e;
-    //   }).toList();
-
-    //   yield WorkoutsListLoadSuccess(workouts);
-    // }
   }
 
   Stream<WorkoutsListState> _mapLoadMoreRequested() async* {
