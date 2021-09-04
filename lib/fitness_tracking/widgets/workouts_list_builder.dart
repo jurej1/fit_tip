@@ -43,7 +43,7 @@ class AllWorkoutsListBuilder extends StatelessWidget {
             child: Text('Sorry there was an error'),
           );
         } else if (state is WorkoutsListLoadSuccess) {
-          return WorkoutsList<WorkoutInfo>(
+          return WorkoutsList(
             hasReachedMax: state.hasReachedMax,
             workouts: state.workoutInfos,
             isOnBottom: () {},

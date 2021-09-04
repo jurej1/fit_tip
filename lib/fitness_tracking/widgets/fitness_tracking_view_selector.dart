@@ -20,6 +20,10 @@ class FitnessTrackingViewSelector extends StatelessWidget {
               icon: const Icon(Icons.list),
               label: 'All',
             ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.history),
+              label: 'Active History',
+            ),
           ],
           onTap: (index) {
             BlocProvider.of<FitnessTrackingViewCubit>(context).viewUpdated(index);

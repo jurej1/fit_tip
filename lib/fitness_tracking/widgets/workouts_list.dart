@@ -1,8 +1,9 @@
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_tracking.dart';
 
-class WorkoutsList<T> extends StatefulWidget {
+class WorkoutsList extends StatefulWidget {
   WorkoutsList({
     Key? key,
     required this.hasReachedMax,
@@ -11,7 +12,7 @@ class WorkoutsList<T> extends StatefulWidget {
   }) : super(key: key);
 
   final bool hasReachedMax;
-  final List<T> workouts;
+  final List<WorkoutInfoX> workouts;
   final VoidCallback isOnBottom;
 
   @override
@@ -51,8 +52,8 @@ class _WorkoutsListState extends State<WorkoutsList> {
             ),
           );
         }
-        final item = widget.workouts[index];
-        return WorkoutsListCard.route(context, item.info); //TODO workout
+        final item = widget.workouts[index] as WorkoutInfoX;
+        return WorkoutsListCard.route(context, item); //TODO workout
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
