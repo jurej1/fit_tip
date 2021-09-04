@@ -8,12 +8,12 @@ class WorkoutsList extends StatefulWidget {
     Key? key,
     required this.hasReachedMax,
     required this.workouts,
-    required this.isOnBottom,
+    required this.onBottom,
   }) : super(key: key);
 
   final bool hasReachedMax;
   final List<WorkoutInfoRaw> workouts;
-  final VoidCallback isOnBottom;
+  final VoidCallback onBottom;
 
   @override
   _WorkoutsListState createState() => _WorkoutsListState();
@@ -62,8 +62,8 @@ class _WorkoutsListState extends State<WorkoutsList> {
   }
 
   void _listener() {
-    if (_isBottom) {
-      widget.isOnBottom();
+    if (_isBottom && !widget.hasReachedMax) {
+      widget.onBottom();
     }
   }
 

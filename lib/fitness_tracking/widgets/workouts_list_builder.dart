@@ -1,6 +1,5 @@
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,29 +8,6 @@ class AllWorkoutsListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Fitness tracking'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(AddWorkoutView.route(context));
-            },
-          ),
-        ],
-      ),
-      body: _bodyBuilder(),
-      bottomNavigationBar: FitnessTrackingViewSelector(),
-    );
-  }
-
-  Widget _bodyBuilder() {
     return BlocBuilder<WorkoutsListBloc, WorkoutsListState>(
       builder: (context, state) {
         if (state is WorkoutsListLoading) {
@@ -46,7 +22,9 @@ class AllWorkoutsListBuilder extends StatelessWidget {
           return WorkoutsList(
             hasReachedMax: state.hasReachedMax,
             workouts: state.workoutInfos,
-            isOnBottom: () {},
+            onBottom: () {
+              BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListLoadMoreRequested());
+            },
           );
         }
 
