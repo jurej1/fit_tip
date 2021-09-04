@@ -3,15 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 abstract class WorkoutX extends Equatable {
-  final WorkoutInfoX info;
+  final WorkoutInfoX _info;
   final WorkoutDays? workoutDays;
 
   WorkoutX({
-    required this.info,
+    required WorkoutInfoX info,
     this.workoutDays,
-  });
+  }) : _info = info;
 
-  List<Object?> get props => [info, workoutDays];
+  List<Object?> get props => [_info, workoutDays];
 
   static String dateTimeToWorkoutLogId(DateTime dateTime) {
     return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
@@ -35,7 +35,9 @@ class Workout extends WorkoutX {
           workoutDays: workoutDays,
         );
 
-  List<Object?> get props => [info, workoutDays];
+  WorkoutInfo get info => this._info as WorkoutInfo;
+
+  List<Object?> get props => [_info, workoutDays];
 
   factory Workout.pure() {
     return Workout(
@@ -54,7 +56,7 @@ class Workout extends WorkoutX {
     WorkoutDays? workoutDays,
   }) {
     return Workout(
-      info: info ?? this.info as WorkoutInfo,
+      info: info ?? this._info as WorkoutInfo,
       workoutDays: workoutDays,
     );
   }
@@ -66,20 +68,22 @@ class ActiveWorkout extends WorkoutX {
     WorkoutDays? workoutDays,
   }) : super(info: info, workoutDays: workoutDays);
 
+  ActiveWorkoutInfo get info => this._info as ActiveWorkoutInfo;
+
   ActiveWorkout copyWith({
     WorkoutDays? workoutDays,
     ActiveWorkoutInfo? info,
     String? activeWorkoutId,
   }) {
     return ActiveWorkout(
-      info: info ?? this.info as ActiveWorkoutInfo,
+      info: info ?? this._info as ActiveWorkoutInfo,
       workoutDays: workoutDays ?? this.workoutDays,
     );
   }
 
   ActiveWorkoutEntity toEntity() {
     return ActiveWorkoutEntity(
-      (this.info as ActiveWorkoutInfo).toEntity(),
+      (this._info as ActiveWorkoutInfo).toEntity(),
       workoutDaysEntity: this.workoutDays?.toEntity(),
     );
   }
@@ -92,7 +96,7 @@ class ActiveWorkout extends WorkoutX {
   }
 
   DateTime get lastDate {
-    return (this.info as ActiveWorkoutInfo).startDate.add(Duration(days: this.info.duration * 7));
+    return (this._info as ActiveWorkoutInfo).startDate.add(Duration(days: this._info.duration * 7));
   }
 
   static List<ActiveWorkout> fromQuerySnapshot(QuerySnapshot querySnapshot) {
