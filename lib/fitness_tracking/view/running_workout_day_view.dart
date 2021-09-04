@@ -132,30 +132,83 @@ class RunningWorkoutDayView extends StatelessWidget {
   }
 }
 
-class _SelectedPageDisplayer extends HookWidget {
+class _SelectedPageDisplayer extends StatefulWidget {
   const _SelectedPageDisplayer({Key? key}) : super(key: key);
 
   @override
+  __SelectedPageDisplayerState createState() => __SelectedPageDisplayerState();
+}
+
+class __SelectedPageDisplayerState extends State<_SelectedPageDisplayer> {
+  late final ScrollController _scrollController;
+  final double dotSize = 10;
+  final double spaceWidth = 8;
+  final double boxWidt = 50;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _controller = useAnimationController(
-      initialValue: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewIndex.toDouble(),
-      upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
-      duration: const Duration(milliseconds: 300),
-    );
+    // final _controller = useAnimationController(
+    //   initialValue: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewIndex.toDouble(),
+    //   upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
+    //   duration: const Duration(milliseconds: 300),
+    // );
     return BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       listener: (context, state) {
-        _controller.animateTo(state.pageViewIndex.toDouble());
+        _scrollController.animateTo(
+          _mapPageIndexToOffset(state.pageViewIndex),
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeIn,
+        );
       },
       builder: (context, state) {
-        return SelectedViewDisplayer(
-          dotSize: 10,
-          length: state.pageViewLength,
-          controller: _controller,
-          width: 40,
-          selectedColor: Colors.blue,
+        // return SelectedViewDisplayer(
+        //   dotSize: 10,
+        //   length: state.pageViewLength,
+        //   controller: _controller,
+        //   width: 40,
+        //   selectedColor: Colors.blue,
+        // );
+        return SizedBox(
+          width: boxWidt,
+          child: ListView.separated(
+            controller: _scrollController,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: boxWidt * 0.5),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.pageViewLength,
+            itemBuilder: (context, index) {
+              return Container(
+                height: dotSize,
+                width: dotSize,
+                decoration: BoxDecoration(
+                  color: state.pageViewIndex == index ? Colors.white : Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(width: spaceWidth);
+            },
+          ),
         );
       },
     );
+  }
+
+  double _mapPageIndexToOffset(int index) {
+    return (index * dotSize) + ((index - 1) * spaceWidth) + boxWidt * 0.25;
   }
 }
 
