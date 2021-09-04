@@ -17,11 +17,15 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         super(WorkoutsListLoading());
+
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
 
   final int _limit = 12;
   late DocumentSnapshot _lastFetchedDoc;
+
+  bool get _isAuth => _authenticationBloc.state.isAuthenticated;
+  String? get _userId => _authenticationBloc.state.user?.uid;
 
   @override
   Stream<WorkoutsListState> mapEventToState(
@@ -41,8 +45,6 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
   }
 
   Stream<WorkoutsListState> _mapLoadRequestToState() async* {
-    if (!(state is WorkoutsListLoading)) return;
-
     yield WorkoutsListLoading();
 
     try {
@@ -53,7 +55,8 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       } else {
         _lastFetchedDoc = querySnapshot.docs.last;
 
-        List<WorkoutInfo> infos = WorkoutInfo.fromQuerySnapshot(querySnapshot);
+        late List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
+
         yield WorkoutsListLoadSuccess(
           infos,
           querySnapshot.docs.length < _limit,
@@ -116,7 +119,7 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
         if (querySnapshot.docs.isEmpty) {
           yield WorkoutsListLoadSuccess(oldState.workoutInfos, true);
         } else {
-          List<WorkoutInfo> infos = WorkoutInfo.fromQuerySnapshot(querySnapshot);
+          List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
 
           yield WorkoutsListLoadSuccess(
             oldState.workoutInfos + infos,
@@ -126,6 +129,19 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
       } catch (error) {
         yield WorkoutsListFail();
       }
+    }
+  }
+
+  List<WorkoutInfo> _mapQuerySnapshotToList(QuerySnapshot snapshot) {
+    if (_isAuth) {
+      return WorkoutInfo.fromQuerySnapshot(
+        snapshot,
+        activeWorkoutId: _fitnessRepository.getActiveWorkoutId(_userId!),
+        likedWorkoutids: _fitnessRepository.getLikedWorkoutIds(_userId!),
+        savedWorkoutIds: _fitnessRepository.getSavedWorkoutIds(_userId!),
+      );
+    } else {
+      return WorkoutInfo.fromQuerySnapshot(snapshot);
     }
   }
 }

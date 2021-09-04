@@ -159,8 +159,9 @@ class WorkoutInfo extends WorkoutInfoRaw {
   static List<WorkoutInfo> fromQuerySnapshot(
     QuerySnapshot snapshot, {
     String? activeWorkoutId,
+    List<String> savedWorkoutIds = const [],
+    List<String> likedWorkoutids = const [],
   }) {
-    //TODO, likes and it is saved,
     return snapshot.docs.map((e) {
       WorkoutInfo info = WorkoutInfo.fromEntiy(
         WorkoutInfoEntity.fromDocumentSnapshot(e),
@@ -168,6 +169,8 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
       info = info.copyWith(
         isActive: activeWorkoutId == info.id,
+        isLiked: likedWorkoutids.contains(info.id),
+        isSaved: savedWorkoutIds.contains(info.id),
       );
 
       return info;
