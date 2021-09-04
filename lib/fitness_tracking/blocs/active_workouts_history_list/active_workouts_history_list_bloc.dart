@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,6 +66,7 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
         );
       }
     } catch (error) {
+      log(error.toString());
       yield ActiveWorkoutsHistoryListFail();
     }
   }

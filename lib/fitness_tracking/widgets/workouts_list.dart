@@ -52,7 +52,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
             ),
           );
         }
-        final item = widget.workouts[index] as WorkoutInfoRaw;
+        final item = widget.workouts[index];
         return WorkoutsListCard.route(context, item); //TODO workout
       },
       separatorBuilder: (context, index) {
