@@ -24,6 +24,8 @@ class WorkoutInfo extends Equatable {
   final DateTime created;
 
   final bool isActive;
+  final bool isSaved;
+  final bool isLiked;
 
   WorkoutInfo({
     required this.id,
@@ -38,24 +40,13 @@ class WorkoutInfo extends Equatable {
     this.likes = 0,
     DateTime? created,
     this.isActive = false,
+    this.isLiked = false,
+    this.isSaved = false,
   }) : this.created = created ?? DateTime.now();
 
   @override
   List<Object?> get props {
-    return [
-      id,
-      uid,
-      title,
-      goal,
-      type,
-      duration,
-      daysPerWeek,
-      note,
-      isPublic,
-      likes,
-      created,
-      isActive,
-    ];
+    return [id, uid, title, goal, type, duration, daysPerWeek, note, isPublic, likes, created, isActive, isSaved, isLiked];
   }
 
   WorkoutInfo copyWith({
@@ -71,6 +62,8 @@ class WorkoutInfo extends Equatable {
     int? likes,
     DateTime? created,
     bool? isActive,
+    bool? isSaved,
+    bool? isLiked,
   }) {
     return WorkoutInfo(
       id: id ?? this.id,
@@ -85,6 +78,8 @@ class WorkoutInfo extends Equatable {
       likes: likes ?? this.likes,
       created: created ?? this.created,
       isActive: isActive ?? this.isActive,
+      isSaved: isSaved ?? this.isSaved,
+      isLiked: isLiked ?? this.isLiked,
     );
   }
 
