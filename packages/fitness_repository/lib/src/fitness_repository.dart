@@ -121,16 +121,36 @@ class FitnessRepository {
     return _savedWorkoutIdsBox.put(userId, workoutIds);
   }
 
-  Future<void> saveWorkoutIdAdded(String userId, String workoutId) async {
+  Future<void> addSavedWorkoutId(String userId, String workoutId) async {
     List<String> ids = getSavedWorkoutIdsList(userId);
     ids.add(workoutId);
     return _updateSavedWorkoutIdsList(userId, ids);
   }
 
-  Future<void> saveWorkoutIdsRemoved(String userId, String workoutId) async {
+  Future<void> removeSavedWorkoutId(String userId, String workoutId) async {
     List<String> ids = getSavedWorkoutIdsList(userId);
     ids.remove(workoutId);
     return _updateSavedWorkoutIdsList(userId, ids);
+  }
+
+  List<String> getLikedWorkoutIds(String userId) {
+    return _likedWorkoutIdsBox.get(userId, defaultValue: [])!;
+  }
+
+  Future<void> _updateLikedWorkoutIdsList(String userId, List<String> values) {
+    return _likedWorkoutIdsBox.put(userId, values);
+  }
+
+  Future<void> addLikedWorkoutId(String userId, String workoutId) async {
+    List<String> ids = getLikedWorkoutIds(userId);
+    ids.add(workoutId);
+    return _updateLikedWorkoutIdsList(userId, ids);
+  }
+
+  Future<void> removedLikedWorkoutId(String userId, String workoutId) {
+    List<String> ids = getLikedWorkoutIds(userId);
+    ids.remove(workoutId);
+    return _updateLikedWorkoutIdsList(userId, ids);
   }
 
   Future<void> _setActiveWorkoutId(String userId, String workoutId) async {
