@@ -7,7 +7,7 @@ abstract class WorkoutsListCardState extends Equatable {
   final bool isExpanded;
 
   Color get backgroundColor {
-    // if (workout.isActive) return Colors.lightBlueAccent.shade100;
+    if (info.isWorkoutInfo && (info as WorkoutInfo).isActive) return Colors.lightBlueAccent.shade100;
     return Colors.blue.shade100;
   }
 

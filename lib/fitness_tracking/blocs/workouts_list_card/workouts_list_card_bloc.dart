@@ -35,12 +35,11 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
   }
 
   Stream<WorkoutsListCardState> _mapDeleteRequestedToState(WorkoutsListCardDeleteRequested event) async* {
-    if (_authenticationBloc.state.isAuthenticated) {
+    if (_authenticationBloc.state.isAuthenticated && state.info.isWorkoutInfo) {
       yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
       try {
         await _fitnessRepository.deleteWorkoutById(state.info.id);
-
         yield WorkoutsListCardDeleteSuccess(state.info, state.isExpanded);
       } catch (e) {
         yield WorkoutsListCardFail(state.info, state.isExpanded);
@@ -53,17 +52,18 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
   }
 
   Stream<WorkoutsListCardState> _mapSetAsActiveRequested() async* {
-    //TODO set workout as active
-    // if (_authenticationBloc.state.isAuthenticated) {
-    //   yield WorkoutsListCardLoading(state.info, state.isExpanded);
+    if (_authenticationBloc.state.isAuthenticated && state.info.isWorkoutInfo) {
+      yield WorkoutsListCardLoading(state.info, state.isExpanded);
 
-    //   try {
-    //     await _fitnessRepository.setActiveWorkoutStatus(_authenticationBloc.state.user!.uid!, state.info.id);
+      WorkoutInfo info = state.info as WorkoutInfo;
 
-    //     yield WorkoutsListCardSetAsActiveSuccess(state.info.copyWith(isActive: true), state.isExpanded);
-    //   } catch (e) {
-    //     yield WorkoutsListCardFail(state.info, state.isExpanded);
-    //   }
-    // }
+      try {
+        await _fitnessRepository.setWorkoutAsActiveFromWorkoutInfo(_authenticationBloc.state.user!.uid!, info);
+
+        yield WorkoutsListCardSetAsActiveSuccess(info.copyWith(isActive: true), state.isExpanded);
+      } catch (e) {
+        yield WorkoutsListCardFail(state.info, state.isExpanded);
+      }
+    }
   }
 }

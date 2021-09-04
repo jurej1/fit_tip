@@ -64,6 +64,11 @@ abstract class WorkoutInfoX extends Equatable {
   }
 }
 
+extension WorkoutInfoXX on WorkoutInfoX {
+  bool get isActiveWorkoutInfo => this is ActiveWorkoutInfo;
+  bool get isWorkoutInfo => this is WorkoutInfo;
+}
+
 class WorkoutInfo extends WorkoutInfoX {
   final bool isPublic;
   final int likes;
