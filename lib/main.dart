@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
@@ -20,7 +21,7 @@ Future<void> main() async {
 
   Directory docDirectory = await path.getApplicationDocumentsDirectory();
 
-  Hive.init(docDirectory.path);
+  Hive.initFlutter();
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: docDirectory,
