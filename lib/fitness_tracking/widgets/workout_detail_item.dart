@@ -36,17 +36,20 @@ class WorkoutDetailItem extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 10),
               color: Colors.black26,
             ),
-            ...workout.muscles!
-                .map(
-                  (e) => Chip(
-                    label: Text(
-                      mapMuscleGroupToString(e),
-                      style: TextStyle(color: Colors.grey.shade100),
+            Wrap(
+              spacing: 8,
+              children: workout.muscles!
+                  .map(
+                    (e) => Chip(
+                      label: Text(
+                        mapMuscleGroupToString(e),
+                        style: TextStyle(color: Colors.grey.shade100),
+                      ),
+                      backgroundColor: Colors.blueAccent.shade100,
                     ),
-                    backgroundColor: Colors.blueAccent.shade100,
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           },
           if (workout.excercises!.isNotEmpty) ...{
             Row(
