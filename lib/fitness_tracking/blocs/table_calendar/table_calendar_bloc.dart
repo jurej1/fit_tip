@@ -25,19 +25,16 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         final current = state as TableCalendarLoadSuccess;
 
         yield current.copyWith(
-          //TODO
-          firstDay: event.value.info.created,
+          firstDay: event.value.info.startDate,
           lastDay: event.value.lastDate,
-          workouts: event.value.workoutDays!.workoutDays, //TODO
+          workouts: event.value.workoutDays!.workoutDays,
         );
       }
       yield TableCalendarLoadSuccess(
-        //TODO
         focusedDay: DateTime.now(),
-        firstDay: event.value.info.created,
-        // lastDay: event.value.lastDay,
+        firstDay: event.value.info.startDate,
         workouts: event.value.workoutDays!.workoutDays,
-        lastDay: event.value.info.created.add(Duration(days: 50)), // TODO
+        lastDay: event.value.lastDate,
       );
     }
   }
