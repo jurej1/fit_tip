@@ -53,6 +53,8 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       yield* _mapFormSubmitToState();
     } else if (event is AddWorkoutFormTitleUpdated) {
       yield* _mapTitleUpdatedToState(event);
+    } else if (event is AddWorkoutFormPublicUpdated) {
+      yield* _mapPublicUpdatedToState(event);
     }
   }
 
@@ -72,6 +74,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.workoutDays,
           state.note,
           state.title,
+          state.public,
         ]),
       );
     }
@@ -93,6 +96,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.workoutDays,
           state.note,
           state.title,
+          state.public,
         ]),
       );
     }
@@ -112,6 +116,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.workoutDays,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -142,6 +147,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
           state.type,
           state.note,
           state.title,
+          state.public,
         ]),
       );
     } else if (eventAmount > oldAmount) {
@@ -175,6 +181,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -194,6 +201,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.workoutDays,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -215,6 +223,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
             state.workoutDays,
             state.note,
             state.title,
+            state.public,
           ],
         ),
       );
@@ -239,6 +248,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -272,6 +282,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -291,10 +302,6 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       workoutsPerWeekend: state.daysPerWeek.getIntValue(),
     );
 
-    // for (WorkoutDay day in workoutDays.value) {
-    //   log(day.toString());
-    // }
-
     yield state.copyWith(
       workoutDays: workoutDays,
       status: Formz.validate([
@@ -307,6 +314,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.note,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -326,6 +334,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
         state.type,
         state.workoutDays,
         state.title,
+        state.public,
       ]),
     );
   }
@@ -340,6 +349,7 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
     final workoutDays = WorkoutDaysList.dirty(value: state.workoutDays.value, workoutsPerWeekend: daysPerWeek.getIntValue());
     final note = WorkoutNote.dirty(state.note.value);
     final title = WorkoutTitle.dirty(state.title.value);
+    final public = WorkoutPublicFormz.dirty(state.public.value);
 
     yield state.copyWith(
       workoutDays: workoutDays,
@@ -351,7 +361,8 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       daysPerWeek: daysPerWeek,
       timePerWorkout: timePerWorkout,
       startDate: startDate,
-      status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate, workoutDays, note, title]),
+      public: public,
+      status: Formz.validate([goal, type, duration, daysPerWeek, timePerWorkout, startDate, workoutDays, note, title, public]),
     );
 
     if (state.status.isValidated && _authenticationBloc.state.isAuthenticated) {
@@ -389,6 +400,27 @@ class AddWorkoutFormBloc extends Bloc<AddWorkoutFormEvent, AddWorkoutFormState> 
       title: title,
       status: Formz.validate([
         title,
+        state.daysPerWeek,
+        state.duration,
+        state.goal,
+        state.note,
+        state.startDate,
+        state.timePerWorkout,
+        state.type,
+        state.workoutDays,
+        state.public,
+      ]),
+    );
+  }
+
+  Stream<AddWorkoutFormState> _mapPublicUpdatedToState(AddWorkoutFormPublicUpdated event) async* {
+    final public = WorkoutPublicFormz.dirty(event.value);
+
+    yield state.copyWith(
+      public: public,
+      status: Formz.validate([
+        public,
+        state.title,
         state.daysPerWeek,
         state.duration,
         state.goal,

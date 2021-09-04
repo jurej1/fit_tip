@@ -19,7 +19,7 @@ class AddWorkoutFormState {
     required this.formMode,
     this.title = const WorkoutTitle.pure(),
     this.isActive = false,
-    this.isPublic = true, // TODO: this needs events ans bloc functions
+    this.public = const WorkoutPublicFormz.pure(), // TODO: this needs events ans bloc functions
   });
 
   final String? id;
@@ -37,7 +37,7 @@ class AddWorkoutFormState {
   final FormMode formMode;
   final WorkoutTitle title;
   final bool isActive;
-  final bool isPublic;
+  final WorkoutPublicFormz public;
 
   factory AddWorkoutFormState.initial(
     Workout? workout,
@@ -73,6 +73,7 @@ class AddWorkoutFormState {
 
   AddWorkoutFormState copyWith({
     String? id,
+    String? uid,
     WorkoutNote? note,
     FormzStatus? status,
     WorkoutGoalFormz? goal,
@@ -86,9 +87,11 @@ class AddWorkoutFormState {
     FormMode? formMode,
     WorkoutTitle? title,
     bool? isActive,
+    WorkoutPublicFormz? public,
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
+      uid: uid ?? this.uid,
       note: note ?? this.note,
       status: status ?? this.status,
       goal: goal ?? this.goal,
@@ -102,6 +105,7 @@ class AddWorkoutFormState {
       formMode: formMode ?? this.formMode,
       title: title ?? this.title,
       isActive: isActive ?? this.isActive,
+      public: public ?? this.public,
     );
   }
 
@@ -115,7 +119,7 @@ class AddWorkoutFormState {
         created: DateTime.now(),
         duration: this.duration.getIntValue(),
         goal: this.goal.value,
-        isPublic: this.isPublic,
+        isPublic: this.public.value,
         note: this.note.value,
         type: this.type.value,
       ),
