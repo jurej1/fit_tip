@@ -11,14 +11,13 @@ class AddWorkoutFormState {
     this.type = const WorkoutTypeFormz.pure(),
     this.duration = const WorkoutIntFormz.pure(),
     this.daysPerWeek = const WorkoutIntFormz.pure(),
-    this.timePerWorkout = const WorkoutIntFormz.pure(),
     this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
     required this.created,
     required this.formMode,
     this.title = const WorkoutTitle.pure(),
     this.isActive = false,
-    this.public = const WorkoutPublicFormz.pure(), // TODO: this needs events ans bloc functions
+    this.public = const WorkoutPublicFormz.pure(),
   });
 
   final String? id;
@@ -29,7 +28,6 @@ class AddWorkoutFormState {
   final WorkoutTypeFormz type;
   final WorkoutIntFormz duration;
   final WorkoutIntFormz daysPerWeek;
-  final WorkoutIntFormz timePerWorkout; // TODO this field should be deleted
   final WorkoutDaysList workoutDays;
   final DateTime created;
   final FormMode formMode;
@@ -59,7 +57,6 @@ class AddWorkoutFormState {
       goal: WorkoutGoalFormz.pure(workout.info.goal),
       id: workout.info.id,
       note: WorkoutNote.pure(workout.info.note),
-      timePerWorkout: WorkoutIntFormz.pure('null'), // TODO this field should be
       type: WorkoutTypeFormz.pure(workout.info.type),
       workoutDays: WorkoutDaysList.dirty(value: workout.workoutDays?.workoutDays ?? [], workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
@@ -76,8 +73,6 @@ class AddWorkoutFormState {
     WorkoutTypeFormz? type,
     WorkoutIntFormz? duration,
     WorkoutIntFormz? daysPerWeek,
-    WorkoutIntFormz? timePerWorkout,
-    WorkoutDateFormz? startDate,
     WorkoutDaysList? workoutDays,
     DateTime? created,
     FormMode? formMode,
@@ -94,7 +89,6 @@ class AddWorkoutFormState {
       type: type ?? this.type,
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
-      timePerWorkout: timePerWorkout ?? this.timePerWorkout,
       workoutDays: workoutDays ?? this.workoutDays,
       created: created ?? this.created,
       formMode: formMode ?? this.formMode,
