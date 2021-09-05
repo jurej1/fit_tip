@@ -73,7 +73,7 @@ class DurationSelectorState extends Equatable {
     if (status == DurationSelectorStatus.scrolling) {
       return Duration(milliseconds: 150);
     } else {
-      return Duration(milliseconds: 300);
+      return Duration(milliseconds: 200);
     }
   }
 

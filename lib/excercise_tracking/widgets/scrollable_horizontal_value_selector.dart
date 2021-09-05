@@ -78,10 +78,9 @@ class __BodyState extends State<_Body> {
         if (state.status == DurationSelectorStatus.scrollEnded) {
           await _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
-            duration: state.animationDuration,
+            duration: const Duration(milliseconds: 150),
             curve: Curves.fastOutSlowIn,
           );
-
           widget.onValueUpdated(state.focusedIndex);
         }
       },

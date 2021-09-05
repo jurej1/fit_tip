@@ -63,6 +63,7 @@ class RunningWorkoutDayView extends StatelessWidget {
           ],
         ),
         body: BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+          buildWhen: (p, c) => p != c,
           listener: (contex, state) {
             if (state.pageViewIndex == 1) {
               BlocProvider.of<TimerBloc>(context).add(TimerStart());
