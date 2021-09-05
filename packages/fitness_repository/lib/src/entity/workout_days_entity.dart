@@ -58,8 +58,7 @@ class WorkoutDaysEntity extends Equatable {
   static WorkoutDaysEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final String workoutId = data[WorkoutDaysDocKeys.workoutId];
-    log('snapshotId: ${snapshot.id}, workoutID: $workoutId');
-
+    log('snapshotId: ${snapshot.id}, ');
     return WorkoutDaysEntity(
       workoutId: workoutId,
       workoutDays: (data[WorkoutDaysDocKeys.workoutDays] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
