@@ -76,7 +76,7 @@ class __BodyState extends State<_Body> {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) async {
         if (state.status == DurationSelectorStatus.scrollEnded) {
-          await _scrollController.animateTo(
+          _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
             duration: const Duration(milliseconds: 150),
             curve: Curves.fastOutSlowIn,

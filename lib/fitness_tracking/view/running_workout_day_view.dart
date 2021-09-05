@@ -18,6 +18,7 @@ class RunningWorkoutDayView extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => RunningWorkoutDayBloc(
+                timerBloc: BlocProvider.of<TimerBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
                 workoutDay: workoutDay,
@@ -226,10 +227,7 @@ class _TimerBuilder extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TimerBloc, TimerState>(
-      listener: (context, state) {
-        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutDurationUpdated(state.duration));
-      },
+    return BlocBuilder<TimerBloc, TimerState>(
       builder: (context, state) {
         if (state.hours != 0) {
           return Text(

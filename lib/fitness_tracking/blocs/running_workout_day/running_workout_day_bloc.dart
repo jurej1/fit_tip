@@ -8,6 +8,8 @@ import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../blocs.dart';
+
 part 'running_workout_day_event.dart';
 part 'running_workout_day_state.dart';
 
@@ -17,8 +19,10 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     required AuthenticationBloc authenticationBloc,
     required FitnessRepository fitnessRepository,
     required DateTime date,
+    required TimerBloc timerBloc,
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
+        _timerBloc = timerBloc,
         super(
           RunningWorkoutDayInitial(
             WorkoutDayLog(
@@ -34,6 +38,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         );
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
+  final TimerBloc _timerBloc;
 
   bool get _isAuth => _authenticationBloc.state.isAuthenticated;
   String? get _userId => _authenticationBloc.state.user?.uid;
@@ -48,8 +53,6 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
       yield* _mapExcerciseUpdatetToState(event);
     } else if (event is RunningWorkoutDayWorkoutExcerciseSubmit) {
       yield* _mapExcerciseSubmitToState(event);
-    } else if (event is RunningWorkoutDayWorkoutDurationUpdated) {
-      yield* _mapDurationUpdatedToState(event);
     }
   }
 
@@ -81,7 +84,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           now.minute,
           now.second,
         );
-        final workoutLog = state.log.copyWith(created: dateCreated);
+        final workoutLog = state.log.copyWith(created: dateCreated, duration: _timerBloc.state.duration);
         yield RunningWorkoutDayLoading(
           workoutLog,
           state.pageViewIndex,
@@ -101,9 +104,5 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
         state.pageViewIndex,
       );
     }
-  }
-
-  Stream<RunningWorkoutDayState> _mapDurationUpdatedToState(RunningWorkoutDayWorkoutDurationUpdated event) async* {
-    yield RunningWorkoutDayInitial(state.log.copyWith(duration: event.duration), state.pageViewIndex);
   }
 }
