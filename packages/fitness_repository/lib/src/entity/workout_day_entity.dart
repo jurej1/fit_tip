@@ -128,9 +128,11 @@ class WorkoutDayEntity extends WorkoutDayRawEntity {
     );
   }
 
-  static WorkoutDayEntity fromMap(Map<String, dynamic> data) {
+  static WorkoutDayEntity fromMap(
+    Map<String, dynamic> data,
+  ) {
     return WorkoutDayEntity(
-      workoutId: data[WorkoutDayRawDocKeys.workoutId],
+      workoutId: '',
       id: data[WorkoutDayRawDocKeys.id],
       note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
       weekday: data[WorkoutDayDocKeys.weekday],

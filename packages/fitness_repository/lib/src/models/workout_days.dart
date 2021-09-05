@@ -7,9 +7,10 @@ class WorkoutDays extends Equatable {
   final String workoutId;
 
   WorkoutDays({
-    this.workoutDays = const [],
+    List<WorkoutDay> workoutDays = const [],
     required this.workoutId,
-  });
+  }) : this.workoutDays = workoutDays.map((e) => e.copyWith(workoutId: workoutId)).toList();
+
   @override
   List<Object> get props => [workoutDays, workoutId];
 
