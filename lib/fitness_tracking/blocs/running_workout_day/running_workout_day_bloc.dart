@@ -63,6 +63,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   Stream<RunningWorkoutDayState> _mapExcerciseSubmitToState(RunningWorkoutDayWorkoutExcerciseSubmit event) async* {
     if (_isAuth) {
       try {
+        log('Duration: ${_timerBloc.state.duration}');
         final workoutLog = state.log.copyWith(duration: _timerBloc.state.duration);
         yield RunningWorkoutDayLoading(
           workoutLog,
