@@ -11,17 +11,14 @@ class SetDisplayer extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static Widget provider(Key key, int setIndex, WorkoutExcercise excercise) {
+  static Widget provider(int setIndex, WorkoutExcercise excercise) {
     return BlocProvider(
-      key: key,
       create: (context) => SetDisplayerCubit(
         setIndex: setIndex,
         repAmount: excercise.repCount?[setIndex] ?? 10,
         weightAmount: excercise.weightCount?[setIndex] ?? 20,
       ),
-      child: SetDisplayer(
-        key: key,
-      ),
+      child: SetDisplayer(),
     );
   }
 

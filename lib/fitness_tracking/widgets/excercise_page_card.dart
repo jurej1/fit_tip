@@ -63,7 +63,7 @@ class ExcercisePageCard extends StatelessWidget {
                       '  Set ${index + 1}',
                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    SetDisplayer.provider(ValueKey(index), index, state.excercise),
+                    SetDisplayer.provider(index, state.excercise),
                     const SizedBox(height: 10),
                   ],
                 ),
