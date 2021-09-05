@@ -50,6 +50,7 @@ class SetDisplayer extends StatelessWidget {
                 const SizedBox(height: 8),
                 Expanded(
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
+                    buildWhen: (p, c) => p.repAmount != c.repAmount,
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
                         key: UniqueKey(),
@@ -83,6 +84,7 @@ class SetDisplayer extends StatelessWidget {
                 const SizedBox(height: 8),
                 Expanded(
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
+                    buildWhen: (p, c) => p.weightAmount != c.weightAmount,
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
                         key: UniqueKey(),

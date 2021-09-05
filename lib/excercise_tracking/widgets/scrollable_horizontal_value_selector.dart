@@ -82,6 +82,7 @@ class __BodyState extends State<_Body> {
           BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
         }
 
+        //TODO this is causing problems
         // if (state.status == DurationSelectorStatus.snapped) {
         //   widget.onValueUpdated(state.focusedIndex);
         // }
