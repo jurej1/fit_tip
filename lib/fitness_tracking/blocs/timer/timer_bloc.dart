@@ -37,14 +37,14 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerUpdatedToState() async* {
-    if (_timer.isActive) {
-      yield state.copyWith(
-        duration: Duration(
-          milliseconds: state.duration.inMilliseconds + _milliseconds,
-        ),
-        isInit: true,
-      );
-    }
+    // if (_timer.isActive) {
+    //   yield state.copyWith(
+    //     duration: Duration(
+    //       milliseconds: state.duration.inMilliseconds + _milliseconds,
+    //     ),
+    //     isInit: true,
+    //   );
+    // }
   }
 
   Stream<TimerState> _mapTimerStopToState() async* {

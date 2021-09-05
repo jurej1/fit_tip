@@ -80,8 +80,11 @@ class __BodyState extends State<_Body> {
             curve: Curves.fastOutSlowIn,
           );
           BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
-          widget.onValueUpdated(state.focusedIndex);
         }
+
+        // if (state.status == DurationSelectorStatus.snapped) {
+        //   widget.onValueUpdated(state.focusedIndex);
+        // }
       },
       builder: (context, state) {
         return Container(
