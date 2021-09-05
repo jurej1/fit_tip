@@ -13,7 +13,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
         );
 
   final int _milliseconds = 1000;
-  late final Timer _timer;
+  Timer? _timer;
 
   @override
   Stream<TimerState> mapEventToState(
@@ -29,15 +29,15 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStartToState() async* {
-    if (!_timer.isActive) {
-      _timer = Timer.periodic(Duration(milliseconds: _milliseconds), (timer) {
-        add(_TimerUpdated());
-      });
-    }
+    if (_timer?.isActive == true) return;
+
+    _timer = Timer.periodic(Duration(milliseconds: _milliseconds), (timer) {
+      add(_TimerUpdated());
+    });
   }
 
   Stream<TimerState> _mapTimerUpdatedToState() async* {
-    if (_timer.isActive) {
+    if (_timer?.isActive == true) {
       yield state.copyWith(
         duration: Duration(
           milliseconds: state.duration.inMilliseconds + _milliseconds,
@@ -48,8 +48,6 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStopToState() async* {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
+    _timer?.cancel();
   }
 }
