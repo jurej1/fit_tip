@@ -149,6 +149,10 @@ class FitnessRepository {
     return _likedWorkoutIdsBox.put(userId, values);
   }
 
+  Future<void> likeWorkout(String workoutId, [bool isDownvote = false]) async {
+    return _fitnessTrackingPlanRef().doc(workoutId).update({WorkoutInfoDocKeys.likes: FieldValue.increment(isDownvote ? -1 : 1)});
+  }
+
   Future<void> addLikedWorkoutId(String userId, String workoutId) async {
     List<String> ids = getLikedWorkoutIds(userId);
     ids.add(workoutId);
