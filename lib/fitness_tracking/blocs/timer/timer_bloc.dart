@@ -29,11 +29,11 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStartToState() async* {
-    if (!state.isInit) {
-      _timer = Timer.periodic(Duration(milliseconds: _milliseconds), (timer) {
-        add(_TimerUpdated());
-      });
-    }
+    // if (!_timer.isActive) {
+    //   _timer = Timer.periodic(Duration(milliseconds: _milliseconds), (timer) {
+    //     add(_TimerUpdated());
+    //   });
+    // }
   }
 
   Stream<TimerState> _mapTimerUpdatedToState() async* {
@@ -48,8 +48,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   }
 
   Stream<TimerState> _mapTimerStopToState() async* {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
+    // if (_timer.isActive) {
+    //   _timer.cancel();
+    // }
   }
 }

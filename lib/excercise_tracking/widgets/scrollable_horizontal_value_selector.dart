@@ -83,9 +83,9 @@ class __BodyState extends State<_Body> {
         }
 
         //TODO this is causing problems
-        // if (state.status == DurationSelectorStatus.snapped) {
-        //   widget.onValueUpdated(state.focusedIndex);
-        // }
+        if (state.status == DurationSelectorStatus.snapped) {
+          widget.onValueUpdated(state.focusedIndex);
+        }
       },
       builder: (context, state) {
         return Container(

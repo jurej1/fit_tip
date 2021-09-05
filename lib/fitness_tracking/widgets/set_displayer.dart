@@ -13,6 +13,7 @@ class SetDisplayer extends StatelessWidget {
 
   static Widget provider(int setIndex, WorkoutExcercise excercise) {
     return BlocProvider(
+      key: ValueKey(setIndex),
       create: (context) => SetDisplayerCubit(
         setIndex: setIndex,
         repAmount: excercise.repCount?[setIndex] ?? 10,
@@ -27,13 +28,25 @@ class SetDisplayer extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final double containerSize = 120;
 
-    return BlocListener<SetDisplayerCubit, SetDisplayerState>(
-      listener: (context, state) {
-        log('reps: ${state.repAmount} weight: ${state.weightAmount}');
-        BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
-        BlocProvider.of<ExcercisePageCardBloc>(context)
-            .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SetDisplayerCubit, SetDisplayerState>(
+          listenWhen: (p, c) => p.weightAmount != c.weightAmount,
+          listener: (context, state) {
+            log('reps: ${state.repAmount} weight: ${state.weightAmount}');
+            BlocProvider.of<ExcercisePageCardBloc>(context)
+                .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
+          },
+        ),
+        BlocListener<SetDisplayerCubit, SetDisplayerState>(
+          listenWhen: (p, c) => p.repAmount != c.repAmount,
+          listener: (context, state) {
+            log('reps: ${state.repAmount} weight: ${state.weightAmount}');
+            BlocProvider.of<ExcercisePageCardBloc>(context)
+                .add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
+          },
+        ),
+      ],
       child: Row(
         children: [
           Container(
