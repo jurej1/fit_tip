@@ -25,7 +25,6 @@ class AllWorkoutsListBuilder extends StatelessWidget {
             hasReachedMax: state.hasReachedMax,
             workouts: state.workoutInfos,
             onBottom: () {
-              log('onBottom');
               BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListLoadMoreRequested());
             },
           );
