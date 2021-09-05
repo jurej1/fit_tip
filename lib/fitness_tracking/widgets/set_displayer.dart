@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -27,6 +29,7 @@ class SetDisplayer extends StatelessWidget {
 
     return BlocListener<SetDisplayerCubit, SetDisplayerState>(
       listener: (context, state) {
+        log('reps: ${state.repAmount} weight: ${state.weightAmount}');
         BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
         BlocProvider.of<ExcercisePageCardBloc>(context)
             .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
@@ -49,10 +52,8 @@ class SetDisplayer extends StatelessWidget {
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        onValueUpdated: (value, status) async {
-                          if (status == DurationSelectorStatus.snapped) {
-                            BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
-                          }
+                        onValueUpdated: (value) {
+                          BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                         },
                         width: size.width * 0.5,
                         initialIndex: state.repAmount,
@@ -82,10 +83,8 @@ class SetDisplayer extends StatelessWidget {
                 Expanded(child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                   builder: (context, state) {
                     return ScrollableHorizontalValueSelector(
-                      onValueUpdated: (value, status) {
-                        if (status == DurationSelectorStatus.snapped) {
-                          BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
-                        }
+                      onValueUpdated: (value) {
+                        BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
                       },
                       width: size.width * 0.5,
                       initialIndex: state.weightAmount.toInt(),

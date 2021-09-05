@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +24,7 @@ class ExcercisePageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ExcercisePageCardBloc, ExcercisePageCardState>(
       listener: (context, state) {
+        log(state.excercise.toString());
         BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseUpdated(state.getNewWorkoutExcercise()));
       },
       builder: (context, state) {
