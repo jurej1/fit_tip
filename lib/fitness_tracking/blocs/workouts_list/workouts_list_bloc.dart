@@ -178,7 +178,11 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
 
       List<WorkoutInfo> workoutInfos = List.from(oldState.workoutInfos);
 
-      workoutInfos = workoutInfos.map((e) => e.copyWith(like: event.ids.contains(e.id) ? Like.up : Like.none)).toList();
+      workoutInfos = workoutInfos
+          .map(
+            (e) => e.copyWith(like: event.ids.contains(e.id) ? Like.up : Like.none),
+          )
+          .toList();
 
       yield WorkoutsListLoadSuccess(workoutInfos, oldState.hasReachedMax);
     }

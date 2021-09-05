@@ -162,6 +162,8 @@ class FitnessRepository {
   Future<void> removedLikedWorkoutId(String userId, String workoutId) {
     List<String> ids = getLikedWorkoutIds(userId);
     ids.remove(workoutId);
+
+    log('removed ids: $ids');
     return _updateLikedWorkoutIdsList(userId, ids);
   }
 

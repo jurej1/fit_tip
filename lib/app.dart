@@ -4,6 +4,7 @@ import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_repository/food_repository.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:water_repository/water_repository.dart';
 import 'package:weight_repository/weight_repository.dart';
 
@@ -12,7 +13,7 @@ import 'birthday/birthday.dart';
 import 'home/home.dart';
 import 'settings/settings.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final AuthenticationRepository _authenticationRepository;
   final WeightRepository _weightRepository;
   final WaterRepository _waterRepository;
@@ -36,18 +37,29 @@ class App extends StatelessWidget {
         _blogRepository = blogRepository,
         super(key: key);
 
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   final _navigatorState = GlobalKey<NavigatorState>();
+
+  @override
+  Future<void> dispose() async {
+    await Hive.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider.value(value: _authenticationRepository),
-        RepositoryProvider.value(value: _weightRepository),
-        RepositoryProvider.value(value: _waterRepository),
-        RepositoryProvider.value(value: _foodRepository),
-        RepositoryProvider.value(value: _fitnessRepository),
-        RepositoryProvider.value(value: _blogRepository),
+        RepositoryProvider.value(value: widget._authenticationRepository),
+        RepositoryProvider.value(value: widget._weightRepository),
+        RepositoryProvider.value(value: widget._waterRepository),
+        RepositoryProvider.value(value: widget._foodRepository),
+        RepositoryProvider.value(value: widget._fitnessRepository),
+        RepositoryProvider.value(value: widget._blogRepository),
       ],
       child: MultiBlocProvider(
         providers: [

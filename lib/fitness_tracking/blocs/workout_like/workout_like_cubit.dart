@@ -28,7 +28,12 @@ class WorkoutLikeCubit extends Cubit<WorkoutLikeState> {
 
       try {
         await _fitnessRepository.likeWorkout(_workoutId, newValue);
-        await _fitnessRepository.addLikedWorkoutId(_authenticationBloc.state.user!.uid!, _workoutId);
+        if (newValue.isUp) {
+          _fitnessRepository.addLikedWorkoutId(_authenticationBloc.state.user!.uid!, _workoutId);
+        } else {
+          _fitnessRepository.removedLikedWorkoutId(_authenticationBloc.state.user!.uid!, _workoutId);
+        }
+
         emit(WorkoutLikeSuccess(newValue));
       } catch (error) {
         emit(WorkoutLikeFail(newValue.opposite));

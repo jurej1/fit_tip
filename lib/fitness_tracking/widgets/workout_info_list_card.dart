@@ -23,6 +23,15 @@ class WorkoutInfoListCard extends StatelessWidget {
             info: item,
           ),
         ),
+        if (item is WorkoutInfo)
+          BlocProvider(
+            create: (context) => WorkoutLikeCubit(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              workoutId: item.id,
+              like: item.like,
+            ),
+          )
       ],
       child: WorkoutInfoListCard(
         key: ValueKey(item),
@@ -75,22 +84,31 @@ class WorkoutInfoListCard extends StatelessWidget {
                         ],
                       ),
                       const _DataContainer(),
-                      Container(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkResponse(
-                              radius: 20,
-                              onTap: () {},
-                              child: Icon(Icons.favorite),
-                            ),
-                            InkResponse(
-                              radius: 20,
-                              onTap: () {},
-                              child: Icon(Icons.bookmark),
-                            ),
-                          ],
+                      Visibility(
+                        visible: state.info is WorkoutInfo,
+                        child: Container(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              BlocBuilder<WorkoutLikeCubit, WorkoutLikeState>(
+                                builder: (context, state) {
+                                  return InkResponse(
+                                    radius: 20,
+                                    onTap: () {
+                                      BlocProvider.of<WorkoutLikeCubit>(context).like();
+                                    },
+                                    child: Icon(state.like.isUp ? Icons.favorite : Icons.favorite_outline),
+                                  );
+                                },
+                              ),
+                              InkResponse(
+                                radius: 20,
+                                onTap: () {},
+                                child: Icon(Icons.bookmark),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
