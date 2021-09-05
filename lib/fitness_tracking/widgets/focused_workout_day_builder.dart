@@ -44,13 +44,16 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
                 const SizedBox(height: 10),
                 ...state.workoutDayLog.map(
                   (e) {
-                    return ListView.builder(
+                    return ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: e.excercises!.length,
                       itemBuilder: (context, index) {
                         final item = e.excercises![index];
                         return WorkoutExcerciseCard.provider(item);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 10);
                       },
                     );
                   },

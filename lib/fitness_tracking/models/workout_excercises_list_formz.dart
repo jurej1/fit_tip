@@ -3,9 +3,9 @@ import 'package:formz/formz.dart';
 
 enum WorkoutExcercisesListValidationError { invalid }
 
-class WorkoutExcercisesList extends FormzInput<List<WorkoutExcercise>, WorkoutExcercisesListValidationError> {
-  const WorkoutExcercisesList.dirty([List<WorkoutExcercise> value = const []]) : super.dirty(value);
-  const WorkoutExcercisesList.pure([List<WorkoutExcercise> value = const []]) : super.pure(value);
+class WorkoutExcercisesListFormz extends FormzInput<List<WorkoutExcercise>, WorkoutExcercisesListValidationError> {
+  const WorkoutExcercisesListFormz.dirty([List<WorkoutExcercise> value = const []]) : super.dirty(value);
+  const WorkoutExcercisesListFormz.pure([List<WorkoutExcercise> value = const []]) : super.pure(value);
 
   @override
   WorkoutExcercisesListValidationError? validator(List<WorkoutExcercise>? value) {
