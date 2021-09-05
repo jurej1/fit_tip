@@ -8,3 +8,4 @@ export 'workout_gender.dart';
 export 'intensity.dart';
 export 'impact.dart';
 export 'workout_type.dart';
+export 'like.dart';
