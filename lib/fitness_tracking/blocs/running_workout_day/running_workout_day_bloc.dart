@@ -84,6 +84,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           now.minute,
           now.second,
         );
+
+        log('Date Created' + dateCreated.toString());
         final workoutLog = state.log.copyWith(created: dateCreated, duration: _timerBloc.state.duration);
         yield RunningWorkoutDayLoading(
           workoutLog,
