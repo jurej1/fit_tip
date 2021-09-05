@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class AllWorkoutsListBuilder extends StatelessWidget {
             hasReachedMax: state.hasReachedMax,
             workouts: state.workoutInfos,
             onBottom: () {
+              log('onBottom');
               BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListLoadMoreRequested());
             },
           );

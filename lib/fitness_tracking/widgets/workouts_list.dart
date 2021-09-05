@@ -40,6 +40,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      controller: _scrollController,
       padding: const EdgeInsets.all(10),
       itemCount: widget.hasReachedMax ? widget.workouts.length : widget.workouts.length + 1,
       physics: const ClampingScrollPhysics(),
@@ -62,7 +63,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
   }
 
   void _listener() {
-    if (_isBottom && !widget.hasReachedMax) {
+    if (_isBottom) {
       widget.onBottom();
     }
   }

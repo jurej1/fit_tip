@@ -135,24 +135,26 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
     if (state is WorkoutsListLoadSuccess) {
       final oldState = state as WorkoutsListLoadSuccess;
 
-      try {
-        QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutInfosByCreated(
-          limit: _limit,
-          startAfterDocument: _lastFetchedDoc,
-        );
-
-        if (querySnapshot.docs.isEmpty) {
-          yield WorkoutsListLoadSuccess(oldState.workoutInfos, true);
-        } else {
-          List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
-
-          yield WorkoutsListLoadSuccess(
-            oldState.workoutInfos + infos,
-            querySnapshot.docs.length < _limit,
+      if (oldState.hasReachedMax == false) {
+        try {
+          QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutInfosByCreated(
+            limit: _limit,
+            startAfterDocument: _lastFetchedDoc,
           );
+
+          if (querySnapshot.docs.isEmpty) {
+            yield WorkoutsListLoadSuccess(oldState.workoutInfos, true);
+          } else {
+            List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
+
+            yield WorkoutsListLoadSuccess(
+              oldState.workoutInfos + infos,
+              querySnapshot.docs.length < _limit,
+            );
+          }
+        } catch (error) {
+          yield WorkoutsListFail();
         }
-      } catch (error) {
-        yield WorkoutsListFail();
       }
     }
   }
