@@ -21,6 +21,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      key: key,
       create: (context) => DurationSelectorBloc(
         initialIndex: initialIndex,
         itemsLength: itemsLength,
