@@ -85,7 +85,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
           state.pageViewIndex,
         );
 
-        log(workoutLog.workoutId);
+        log('submit' + workoutLog.workoutId);
 
         DocumentReference ref = await _fitnessRepository.addWorkoutDayLog(state.log);
         yield RunningWorkoutDayLoadSuccess(state.log.copyWith(id: ref.id), state.pageViewIndex);

@@ -1,6 +1,10 @@
 part of 'duration_selector_bloc.dart';
 
-enum DurationSelectorStatus { initial, scrolling, scrollEnded, snapped }
+enum DurationSelectorStatus {
+  initial,
+  scrolling,
+  scrollEnded,
+}
 
 class DurationSelectorState extends Equatable {
   const DurationSelectorState({

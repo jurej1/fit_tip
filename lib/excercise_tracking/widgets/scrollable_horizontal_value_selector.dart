@@ -21,6 +21,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      key: UniqueKey(),
       create: (context) => DurationSelectorBloc(
         initialIndex: initialIndex,
         itemsLength: itemsLength,
@@ -61,6 +62,7 @@ class __BodyState extends State<_Body> {
     super.initState();
     _scrollController = ScrollController(
       initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth),
+      debugLabel: widget.key.toString(),
     );
   }
 
@@ -79,11 +81,7 @@ class __BodyState extends State<_Body> {
             duration: state.animationDuration,
             curve: Curves.fastOutSlowIn,
           );
-          BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
-        }
 
-        //TODO this is causing problems
-        if (state.status == DurationSelectorStatus.snapped) {
           widget.onValueUpdated(state.focusedIndex);
         }
       },
