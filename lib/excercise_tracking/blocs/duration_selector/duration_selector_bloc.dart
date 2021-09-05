@@ -42,6 +42,7 @@ class DurationSelectorBloc extends Bloc<DurationSelectorEvent, DurationSelectorS
 
     yield state.copyWith(
       focusedIndex: focusedIndex.isNegative ? 0 : focusedIndex,
+      offset: offset,
     );
   }
 }

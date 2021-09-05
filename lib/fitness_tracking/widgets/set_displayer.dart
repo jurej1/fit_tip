@@ -55,7 +55,7 @@ class SetDisplayer extends StatelessWidget {
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        key: ValueKey('repSelector'),
+                        key: UniqueKey(),
                         onValueUpdated: (value) {
                           BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                         },
@@ -88,7 +88,7 @@ class SetDisplayer extends StatelessWidget {
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        key: ValueKey('Weight selector'),
+                        key: UniqueKey(),
                         onValueUpdated: (value) {
                           BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
                         },

@@ -27,6 +27,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
         itemsLength: itemsLength,
       ),
       child: _Body(
+        key: key,
         width: width,
         onValueUpdated: onValueUpdated,
         textBuilder: textBuilder,
