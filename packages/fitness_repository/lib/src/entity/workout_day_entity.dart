@@ -194,7 +194,7 @@ class WorkoutDayLogEntity extends WorkoutDayRawEntity {
   Map<String, dynamic> toDocumentSnapshot() {
     return {
       WorkoutDayLogDocKeys.created: Timestamp.fromDate(this.created),
-      WorkoutDayLogDocKeys.duration: this.duration.inMilliseconds,
+      WorkoutDayLogDocKeys.duration: this.duration.inSeconds,
       WorkoutDayLogDocKeys.userId: this.userId,
       if (this.excercises != null) WorkoutDayRawDocKeys.excercises: this.excercises!.map((e) => e.toMap()).toList(),
       if (this.muscles != null) WorkoutDayRawDocKeys.muscles: this.muscles!.map((e) => describeEnum(e)).toList(),
@@ -212,7 +212,7 @@ class WorkoutDayLogEntity extends WorkoutDayRawEntity {
       created: timestamp.toDate(),
       id: snapshot.id,
       userId: data[WorkoutDayLogDocKeys.userId],
-      duration: Duration(milliseconds: data[WorkoutDayLogDocKeys.duration]),
+      duration: Duration(seconds: data[WorkoutDayLogDocKeys.duration]),
       note: data.containsKey(WorkoutDayRawDocKeys.note) ? data[WorkoutDayRawDocKeys.note] : null,
       excercises: data.containsKey(WorkoutDayRawDocKeys.excercises)
           ? (data[WorkoutDayRawDocKeys.excercises] as List<dynamic>).map((e) => WorkoutExcerciseEntity.fromMap(e)).toList()
