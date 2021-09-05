@@ -57,6 +57,7 @@ class ExcercisePageCard extends StatelessWidget {
               ),
             ),
             BlocBuilder<ExcercisePageCardBloc, ExcercisePageCardState>(
+              buildWhen: (p, c) => false,
               builder: (context, state) {
                 return Column(
                   children: List.generate(
