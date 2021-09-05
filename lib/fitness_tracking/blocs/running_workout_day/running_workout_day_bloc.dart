@@ -57,6 +57,8 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
     WorkoutDayLog workoutLog = this.state.log;
     List<WorkoutExcercise> excercises = workoutLog.excercises ?? []; //TODO
 
+    log('event excercise ${event.excercise}');
+
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) {
         return event.excercise;
