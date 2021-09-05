@@ -13,6 +13,23 @@ abstract class RunningWorkoutDayState extends Equatable {
 
   @override
   List<Object> get props => [log, pageViewIndex];
+
+  factory RunningWorkoutDayState.initial(DateTime focusedDate, WorkoutDay workoutDay, AuthenticationBloc authenticationBloc) {
+    final now = DateTime.now();
+    DateTime created = DateTime(focusedDate.year, focusedDate.month, focusedDate.day, now.hour, now.minute, now.second);
+
+    return RunningWorkoutDayInitial(
+      WorkoutDayLog(
+        duration: Duration.zero,
+        created: created,
+        id: UniqueKey().toString(),
+        workoutId: workoutDay.workoutId,
+        excercises: workoutDay.excercises,
+        userId: authenticationBloc.state.user!.uid!,
+      ),
+      0,
+    );
+  }
 }
 
 class RunningWorkoutDayInitial extends RunningWorkoutDayState {

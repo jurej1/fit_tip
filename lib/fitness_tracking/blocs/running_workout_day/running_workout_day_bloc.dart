@@ -23,19 +23,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
   })  : _fitnessRepository = fitnessRepository,
         _authenticationBloc = authenticationBloc,
         _timerBloc = timerBloc,
-        super(
-          RunningWorkoutDayInitial(
-            WorkoutDayLog(
-              created: date,
-              workoutId: workoutDay.workoutId,
-              excercises: workoutDay.excercises,
-              id: UniqueKey().toString(),
-              duration: Duration.zero,
-              userId: authenticationBloc.state.user?.uid ?? '',
-            ),
-            0,
-          ),
-        );
+        super(RunningWorkoutDayState.initial(date, workoutDay, authenticationBloc));
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
   final TimerBloc _timerBloc;
