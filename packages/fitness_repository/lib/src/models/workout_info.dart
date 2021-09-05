@@ -75,12 +75,12 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
   final bool isActive;
   final bool isSaved;
-  final bool isLiked;
+  final Like like;
 
   WorkoutInfo({
     this.isPublic = false,
     this.isActive = false,
-    this.isLiked = false,
+    this.like = Like.none,
     this.isSaved = false,
     this.likes = 0,
     required String id,
@@ -109,7 +109,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
         isPublic,
         likes,
         isSaved,
-        isLiked,
+        like,
         isActive,
         daysPerWeek,
         duration,
@@ -127,7 +127,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
     int? likes,
     bool? isActive,
     bool? isSaved,
-    bool? isLiked,
+    Like? like,
     int? daysPerWeek,
     int? duration,
     String? id,
@@ -143,7 +143,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
       likes: likes ?? this.likes,
       isActive: isActive ?? this.isActive,
       isSaved: isSaved ?? this.isSaved,
-      isLiked: isLiked ?? this.isLiked,
+      like: like ?? this.like,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
       duration: duration ?? this.duration,
       id: id ?? this.id,
@@ -169,7 +169,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
       info = info.copyWith(
         isActive: activeWorkoutId == info.id,
-        isLiked: likedWorkoutids.contains(info.id),
+        like: likedWorkoutids.contains(info.id) ? Like.up : Like.none,
         isSaved: savedWorkoutIds.contains(info.id),
       );
 
