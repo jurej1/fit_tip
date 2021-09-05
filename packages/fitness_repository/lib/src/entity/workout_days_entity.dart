@@ -35,7 +35,7 @@ class WorkoutDaysEntity extends Equatable {
   Map<String, dynamic> toDocumentSnapshot() {
     return {
       if (this.workoutDays != null) WorkoutDaysDocKeys.workoutDays: workoutDays!.map((e) => e.toDocumentSnapshot()).toList(),
-      WorkoutDaysDocKeys.workoutId: this.workoutId,
+      // WorkoutDaysDocKeys.workoutId: this.workoutId,
     };
   }
 
@@ -58,9 +58,9 @@ class WorkoutDaysEntity extends Equatable {
   static WorkoutDaysEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
     final String workoutId = data[WorkoutDaysDocKeys.workoutId];
-    log('snapshotId: ${snapshot.id}, ');
+    log('snapshotId: ${snapshot.reference.parent.parent!.id}, ');
     return WorkoutDaysEntity(
-      workoutId: workoutId,
+      workoutId: snapshot.reference.parent.parent!.id,
       workoutDays: (data[WorkoutDaysDocKeys.workoutDays] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
     );
   }
