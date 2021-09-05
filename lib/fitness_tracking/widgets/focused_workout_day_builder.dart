@@ -93,17 +93,20 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [Text('Muscles targeted', style: _titleStyle), Text('${workoutDay.numberOfMusclesTargeted}', style: _titleStyle)],
         ),
-        ...workoutDay.muscles!
-            .map(
-              (e) => Chip(
-                backgroundColor: Colors.blue.shade300,
-                label: Text(mapMuscleGroupToString(e)),
-                labelStyle: TextStyle(
-                  fontSize: 12,
+        Wrap(
+          spacing: 10,
+          children: workoutDay.muscles!
+              .map(
+                (e) => Chip(
+                  backgroundColor: Colors.blue.shade300,
+                  label: Text(mapMuscleGroupToString(e)),
+                  labelStyle: TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+        ),
         SizedBox(height: 10),
       ],
     );

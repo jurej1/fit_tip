@@ -175,6 +175,12 @@ class WorkoutDayLog extends WorkoutDayRaw {
     ];
   }
 
+  @override
+  @override
+  String toString() {
+    return 'WorkoutDayLog { userId: $userId, created: $created, duration: $duration, id: $id, workoutId: $workoutId, note: $note, muscles: $muscles, excercises: $excercises,}';
+  }
+
   WorkoutDayLog copyWith({
     String? userId,
     DateTime? created,

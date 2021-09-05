@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +63,9 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
         QuerySnapshot snapshot = await _fitnessRepository.getWorkoutDayLogByDate(_authenticationBloc.state.user!.uid!, event.value);
 
         List<WorkoutDayLog> logs = snapshot.docs.map((e) => WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(e))).toList();
-
+        for (var docLog in logs) {
+          log(docLog.workoutId.toString());
+        }
         yield FocusedWorkoutDayLoadSuccess(
           date: event.value,
           workoutDay: workoutDay,
