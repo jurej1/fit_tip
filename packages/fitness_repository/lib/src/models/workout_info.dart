@@ -76,12 +76,14 @@ class WorkoutInfo extends WorkoutInfoRaw {
   final bool isActive;
   final bool isSaved;
   final Like like;
+  final bool isOwner;
 
   WorkoutInfo({
     this.isPublic = false,
     this.isActive = false,
     this.like = Like.none,
     this.isSaved = false,
+    this.isOwner = false,
     this.likes = 0,
     required String id,
     required String uid,
@@ -120,6 +122,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
         goal,
         note,
         type,
+        isOwner,
       ];
 
   WorkoutInfo copyWith({
@@ -137,6 +140,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
     WorkoutGoal? goal,
     String? note,
     WorkoutType? type,
+    bool? isOwner,
   }) {
     return WorkoutInfo(
       isPublic: isPublic ?? this.isPublic,
@@ -153,11 +157,13 @@ class WorkoutInfo extends WorkoutInfoRaw {
       goal: goal ?? this.goal,
       note: note ?? this.note,
       type: type ?? this.type,
+      isOwner: isOwner ?? this.isOwner,
     );
   }
 
   static List<WorkoutInfo> fromQuerySnapshot(
     QuerySnapshot snapshot, {
+    String? authUserId,
     String? activeWorkoutId,
     List<String> savedWorkoutIds = const [],
     List<String> likedWorkoutids = const [],
@@ -171,6 +177,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
         isActive: activeWorkoutId == info.id,
         like: likedWorkoutids.contains(info.id) ? Like.up : Like.none,
         isSaved: savedWorkoutIds.contains(info.id),
+        isOwner: authUserId == info.uid,
       );
 
       return info;
