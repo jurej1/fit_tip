@@ -27,3 +27,4 @@ export 'workout_delete/workout_delete_cubit.dart';
 export 'workout_like/workout_like_cubit.dart';
 export 'workout_save/workout_save_cubit.dart';
 export 'workout_infos_base/workout_infos_base_bloc.dart';
+export 'user_workouts_list/user_workouts_list_bloc.dart';

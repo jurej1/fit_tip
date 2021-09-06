@@ -19,6 +19,12 @@ class FitnessWorkoutsView extends StatelessWidget {
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
               )..add(WorkoutsListLoadRequested()),
             ),
+            BlocProvider(
+              create: (context) => UserWorkoutsListBloc(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              ),
+            )
           ],
           child: FitnessWorkoutsView(),
         );
