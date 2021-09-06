@@ -28,3 +28,4 @@ export 'active_workouts_history_builder.dart';
 export 'workouts_list.dart';
 export 'workout_detail_app_bar.dart';
 export 'workout_excercises_list.dart';
+export 'fitness_workouts_view_selector.dart';

@@ -14,6 +14,9 @@ class FitnessWorkoutsView extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
+              create: (context) => FitnessWorkoutsViewSelectorCubit(),
+            ),
+            BlocProvider(
               create: (context) => WorkoutsListBloc(
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
@@ -24,7 +27,7 @@ class FitnessWorkoutsView extends StatelessWidget {
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
               ),
-            )
+            ),
           ],
           child: FitnessWorkoutsView(),
         );
@@ -47,6 +50,7 @@ class FitnessWorkoutsView extends StatelessWidget {
         ],
       ),
       body: AllWorkoutsListBuilder(),
+      bottomNavigationBar: FitnessWorkoutsViewSelector(),
     );
   }
 }
