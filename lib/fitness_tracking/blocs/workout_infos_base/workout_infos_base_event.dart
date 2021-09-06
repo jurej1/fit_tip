@@ -28,3 +28,15 @@ class WorkoutInfosItemUpdated extends WorkoutInfosBaseEvent {
 
   const WorkoutInfosItemUpdated(this.value);
 }
+
+class _WorkoutInfosSavedIdsUpdated extends WorkoutInfosBaseEvent {
+  final List<String> value;
+
+  const _WorkoutInfosSavedIdsUpdated(this.value);
+}
+
+class _WorkoutInfosLikedIdsUpdated extends WorkoutInfosBaseEvent {
+  final List<String> value;
+
+  const _WorkoutInfosLikedIdsUpdated(this.value);
+}

@@ -9,7 +9,11 @@ class UserWorkoutsListBloc extends WorkoutInfosBaseBloc {
     required FitnessRepository fitnessRepository,
   })  : _authenticationBloc = authenticationBloc,
         _fitnessRepository = fitnessRepository,
-        super(initialState: WorkoutInfosLoading());
+        super(
+          initialState: WorkoutInfosLoading(),
+          fitnessRepository: fitnessRepository,
+          authenticationBloc: authenticationBloc,
+        );
 
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
