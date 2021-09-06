@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../fitness_tracking.dart';
 
-class WorkoutsList extends StatefulWidget {
-  WorkoutsList({
+class WorkoutInfosList extends StatefulWidget {
+  WorkoutInfosList({
     Key? key,
     required this.hasReachedMax,
     required this.workouts,
@@ -16,10 +16,10 @@ class WorkoutsList extends StatefulWidget {
   final VoidCallback onBottom;
 
   @override
-  _WorkoutsListState createState() => _WorkoutsListState();
+  _WorkoutInfosListState createState() => _WorkoutInfosListState();
 }
 
-class _WorkoutsListState extends State<WorkoutsList> {
+class _WorkoutInfosListState extends State<WorkoutInfosList> {
   late final ScrollController _scrollController;
   final int _loaderSpace = 200;
 
