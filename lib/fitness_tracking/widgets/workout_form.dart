@@ -132,7 +132,7 @@ class _WorkoutGoalInput extends HookWidget {
               items: WorkoutGoal.values
                   .map(
                     (e) => DropdownMenuItem(
-                      child: Text(mapWorkoutGoalToText(e)),
+                      child: Text(e.toStringReadable()),
                       value: e,
                     ),
                   )
@@ -176,9 +176,7 @@ class _WorkoutTypeInput extends HookWidget {
                     .map(
                       (e) => DropdownMenuItem(
                         value: e,
-                        child: Text(
-                          mapWorkoutTypeToString(e),
-                        ),
+                        child: Text(e.toStringReadable()),
                       ),
                     )
                     .toList(),

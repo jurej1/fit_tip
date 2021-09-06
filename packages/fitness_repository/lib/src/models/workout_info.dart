@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:intl/intl.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 
 import '../../fitness_repository.dart';
 

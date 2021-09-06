@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +49,7 @@ class WorkoutInfoListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
-      listener: (context, state) {},
+    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
       builder: (context, state) {
         return ClipRRect(
           borderRadius: state.borderRadius,
@@ -81,44 +79,12 @@ class WorkoutInfoListCard extends StatelessWidget {
                               overflow: TextOverflow.fade,
                             ),
                           ),
-                          const _ExpandableIconButton(),
                           const _OptionsButton(),
+                          const _ExpandableIconButton(),
                         ],
                       ),
                       const _DataContainer(),
-                      Visibility(
-                        visible: state.info is WorkoutInfo,
-                        child: Container(
-                          height: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              BlocBuilder<WorkoutLikeCubit, WorkoutLikeState>(
-                                builder: (context, state) {
-                                  return InkResponse(
-                                    radius: 20,
-                                    onTap: () {
-                                      BlocProvider.of<WorkoutLikeCubit>(context).like();
-                                    },
-                                    child: Icon(state.like.isUp ? Icons.favorite : Icons.favorite_outline),
-                                  );
-                                },
-                              ),
-                              BlocBuilder<WorkoutSaveCubit, WorkoutSaveState>(
-                                builder: (context, state) {
-                                  return InkResponse(
-                                    radius: 20,
-                                    onTap: () {
-                                      BlocProvider.of<WorkoutSaveCubit>(context).save();
-                                    },
-                                    child: Icon(state.isSaved ? Icons.bookmark : Icons.bookmark_outline),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      const _BottomActions(),
                     ],
                   ),
                 ),
@@ -224,9 +190,55 @@ class _DataContainer extends StatelessWidget {
             physics: const ClampingScrollPhysics(),
             children: [
               Text(state.info.mapDaysPerWeekToText),
-              Text('Goal: ${mapWorkoutGoalToText(state.info.goal)}'),
-              // Text('Start date ${state.workout.mapStartDateToText}'), // TODO start date
+              if (state.info.goal != null) Text('Goal: ${state.info.goal!.toStringReadable()}'),
+              if (state.info.type != null) Text('Type: ${state.info.type!.toStringReadable()}'),
+              Text(state.info.mapDaysPerWeekToText),
             ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _BottomActions extends StatelessWidget {
+  const _BottomActions({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state.info is WorkoutInfo,
+          child: Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                BlocBuilder<WorkoutLikeCubit, WorkoutLikeState>(
+                  builder: (context, state) {
+                    return InkResponse(
+                      radius: 20,
+                      onTap: () {
+                        BlocProvider.of<WorkoutLikeCubit>(context).like();
+                      },
+                      child: Icon(state.like.isUp ? Icons.favorite : Icons.favorite_outline),
+                    );
+                  },
+                ),
+                BlocBuilder<WorkoutSaveCubit, WorkoutSaveState>(
+                  builder: (context, state) {
+                    return InkResponse(
+                      radius: 20,
+                      onTap: () {
+                        BlocProvider.of<WorkoutSaveCubit>(context).save();
+                      },
+                      child: Icon(state.isSaved ? Icons.bookmark : Icons.bookmark_outline),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

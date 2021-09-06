@@ -1,16 +1,20 @@
+import 'dart:isolate';
+
 enum WorkoutGoal {
   buildMuscle,
   loseFat,
-  inscreaseStrength,
 }
 
-String mapWorkoutGoalToText(WorkoutGoal? goal) {
-  if (goal == WorkoutGoal.buildMuscle) {
-    return 'Build muscle';
-  } else if (goal == WorkoutGoal.inscreaseStrength) {
-    return 'Increase strength';
-  } else if (goal == WorkoutGoal.loseFat) {
-    return 'Lose fat';
+extension WorkoutGoalX on WorkoutGoal {
+  bool get isBuildMuscle => this == WorkoutGoal.buildMuscle;
+  bool get isLoseFat => this == WorkoutGoal.loseFat;
+
+  String toStringReadable() {
+    if (isBuildMuscle) {
+      return 'Build muscle';
+    } else if (isLoseFat) {
+      return 'Lose fat';
+    }
+    return '';
   }
-  return '';
 }
