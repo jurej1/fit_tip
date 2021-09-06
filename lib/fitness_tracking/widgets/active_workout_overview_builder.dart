@@ -19,7 +19,7 @@ class ActiveWorkoutOverviewBuilder extends StatelessWidget {
               WorkoutInfoRow(
                 created: state.workout.info.mapCreatedToText,
                 daysPerWeek: state.workout.info.daysPerWeek.toStringAsFixed(0),
-                goal: mapWorkoutGoalToText(state.workout.info.goal),
+                goal: state.workout.info.goal != null ? state.workout.info.goal!.toStringReadable() : '',
               ),
               if (state.workout.info.note != null) ...{
                 Text(
