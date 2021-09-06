@@ -25,3 +25,4 @@ export 'active_workout_id/active_workout_id_bloc.dart';
 export 'active_workouts_history_list/active_workouts_history_list_bloc.dart';
 export 'workout_delete/workout_delete_cubit.dart';
 export 'workout_like/workout_like_cubit.dart';
+export 'workout_save/workout_save_cubit.dart';

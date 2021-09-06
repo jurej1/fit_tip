@@ -49,13 +49,14 @@ class WorkoutDetailAppBar extends StatelessWidget {
                 }).toList();
               },
               onSelected: (option) {
-                if (option == WorkoutsListCardOption.delete) {
-                  // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
-                } else if (option == WorkoutsListCardOption.setAsActive) {
-                  // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
-                } else if (option == WorkoutsListCardOption.edit) {
-                  Navigator.of(context).push(AddWorkoutView.routeFromWorkoutDetailView(context, workout: state.workout));
-                }
+                //TODO
+                // if (option == WorkoutsListCardOption.delete) {
+                //   // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
+                // } else if (option == WorkoutsListCardOption.setAsActive) {
+                //   // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewSetAsActiveRequested());
+                // } else if (option == WorkoutsListCardOption.edit) {
+                //   Navigator.of(context).push(AddWorkoutView.routeFromWorkoutDetailView(context, workout: state.workout));
+                // }
               },
             ),
           ],

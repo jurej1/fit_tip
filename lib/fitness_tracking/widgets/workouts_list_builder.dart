@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:flutter/material.dart';

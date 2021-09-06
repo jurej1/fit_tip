@@ -25,25 +25,10 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
   Stream<WorkoutsListCardState> mapEventToState(
     WorkoutsListCardEvent event,
   ) async* {
-    if (event is WorkoutsListCardDeleteRequested) {
-      yield* _mapDeleteRequestedToState(event);
-    } else if (event is WorkoutsListCardExpandedButtonPressed) {
+    if (event is WorkoutsListCardExpandedButtonPressed) {
       yield* _mapExpandedButtonPressedToState();
     } else if (event is WorkoutsListCardSetAsActiveRequested) {
       yield* _mapSetAsActiveRequested();
-    }
-  }
-
-  Stream<WorkoutsListCardState> _mapDeleteRequestedToState(WorkoutsListCardDeleteRequested event) async* {
-    if (_authenticationBloc.state.isAuthenticated && state.info.isWorkoutInfo) {
-      yield WorkoutsListCardLoading(state.info, state.isExpanded);
-
-      try {
-        await _fitnessRepository.deleteWorkoutById(state.info.id);
-        yield WorkoutsListCardDeleteSuccess(state.info, state.isExpanded);
-      } catch (e) {
-        yield WorkoutsListCardFail(state.info, state.isExpanded);
-      }
     }
   }
 

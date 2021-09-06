@@ -31,6 +31,15 @@ class WorkoutInfoListCard extends StatelessWidget {
               workoutId: item.id,
               like: item.like,
             ),
+          ),
+        if (item is WorkoutInfo)
+          BlocProvider(
+            create: (context) => WorkoutSaveCubit(
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+              fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+              isSaved: item.isSaved,
+              workoutId: item.id,
+            ),
           )
       ],
       child: WorkoutInfoListCard(
@@ -42,15 +51,7 @@ class WorkoutInfoListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WorkoutsListCardBloc, WorkoutsListCardState>(
-      listener: (context, state) {
-        if (state is WorkoutsListCardDeleteSuccess) {
-          // BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemRemoved(state.info));
-        }
-        if (state is WorkoutsListCardSetAsActiveSuccess) {
-          //TODO
-          // BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.info));
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return ClipRRect(
           borderRadius: state.borderRadius,
@@ -81,6 +82,7 @@ class WorkoutInfoListCard extends StatelessWidget {
                             ),
                           ),
                           const _ExpandableIconButton(),
+                          const _OptionsButton(),
                         ],
                       ),
                       const _DataContainer(),
@@ -102,10 +104,16 @@ class WorkoutInfoListCard extends StatelessWidget {
                                   );
                                 },
                               ),
-                              InkResponse(
-                                radius: 20,
-                                onTap: () {},
-                                child: Icon(Icons.bookmark),
+                              BlocBuilder<WorkoutSaveCubit, WorkoutSaveState>(
+                                builder: (context, state) {
+                                  return InkResponse(
+                                    radius: 20,
+                                    onTap: () {
+                                      BlocProvider.of<WorkoutSaveCubit>(context).save();
+                                    },
+                                    child: Icon(state.isSaved ? Icons.bookmark : Icons.bookmark_outline),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -123,48 +131,42 @@ class WorkoutInfoListCard extends StatelessWidget {
   }
 }
 
-// class _OptionsButton extends StatelessWidget {
-//   const _OptionsButton({Key? key}) : super(key: key);
+class _OptionsButton extends StatelessWidget {
+  const _OptionsButton({Key? key}) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
-//       builder: (context, state) {
-//         if (state is WorkoutsListCardLoading) {
-//           return const SizedBox(
-//             height: 30,
-//             width: 30,
-//             child: const CircularProgressIndicator(),
-//           );
-//         }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WorkoutsListCardBloc, WorkoutsListCardState>(
+      builder: (context, state) {
+        if (state is WorkoutsListCardLoading) {
+          return const SizedBox(
+            height: 30,
+            width: 30,
+            child: const CircularProgressIndicator(),
+          );
+        }
 
-//         return PopupMenuButton<WorkoutsListCardOption>(
-//           icon: const Icon(Icons.more_vert),
-//           iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
-//           itemBuilder: (context) {
-//             return WorkoutsListCardOption.values.map((e) {
-//               return PopupMenuItem(
-//                 child: Text(e.toStringReadable()),
-//                 value: e,
-//               );
-//             }).toList();
-//           },
-//           onSelected: (option) {
-//             if (option == WorkoutsListCardOption.delete) {
-//               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardDeleteRequested());
-//             } else if (option == WorkoutsListCardOption.edit) {
-//               if (state.info.isWorkoutInfo) {
-//                 Navigator.of(context).push(AddWorkoutView.route(context, workout: Workout(info: state.info as WorkoutInfo)));
-//               }
-//             } else if (option == WorkoutsListCardOption.setAsActive) {
-//               BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
-//             }
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
+        return PopupMenuButton<WorkoutsListCardOption>(
+          icon: const Icon(Icons.more_vert),
+          iconSize: BlocProvider.of<WorkoutsListCardBloc>(context).state.iconSize,
+          itemBuilder: (context) {
+            return WorkoutsListCardOption.values.map((e) {
+              return PopupMenuItem(
+                child: Text(e.toStringReadable()),
+                value: e,
+              );
+            }).toList();
+          },
+          onSelected: (option) {
+            if (option.isSetAsActive) {
+              BlocProvider.of<WorkoutsListCardBloc>(context).add(WorkoutsListCardSetAsActiveRequested());
+            }
+          },
+        );
+      },
+    );
+  }
+}
 
 class _ExpandableIconButton extends HookWidget {
   const _ExpandableIconButton({Key? key}) : super(key: key);
