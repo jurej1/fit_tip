@@ -164,7 +164,6 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
   static List<WorkoutInfo> fromQuerySnapshot(
     QuerySnapshot snapshot, {
-    String? authUserId,
     String? activeWorkoutId,
     List<String> savedWorkoutIds = const [],
     List<String> likedWorkoutids = const [],
@@ -178,7 +177,6 @@ class WorkoutInfo extends WorkoutInfoRaw {
         isActive: activeWorkoutId == info.id,
         like: likedWorkoutids.contains(info.id) ? Like.up : Like.none,
         isSaved: savedWorkoutIds.contains(info.id),
-        isOwner: authUserId == info.uid,
       );
 
       return info;

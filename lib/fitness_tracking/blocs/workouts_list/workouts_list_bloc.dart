@@ -74,13 +74,14 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
 
     try {
       QuerySnapshot querySnapshot = await _fitnessRepository.getWorkoutInfosByCreated(limit: _limit);
+      log(querySnapshot.docs.length.toString());
 
       if (querySnapshot.docs.isEmpty) {
         yield WorkoutsListLoadSuccess([], true);
       } else {
         _lastFetchedDoc = querySnapshot.docs.last;
 
-        late List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
+        List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
 
         yield WorkoutsListLoadSuccess(
           infos,
@@ -166,7 +167,6 @@ class WorkoutsListBloc extends Bloc<WorkoutsListEvent, WorkoutsListState> {
         activeWorkoutId: _fitnessRepository.getActiveWorkoutId(_userId!),
         likedWorkoutids: _fitnessRepository.getLikedWorkoutIds(_userId!),
         savedWorkoutIds: _fitnessRepository.getSavedWorkoutIds(_userId!),
-        authUserId: _userId,
       );
     } else {
       return WorkoutInfo.fromQuerySnapshot(snapshot);
