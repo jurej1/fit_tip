@@ -192,7 +192,6 @@ class _DataContainer extends StatelessWidget {
               Text(state.info.mapDaysPerWeekToText),
               if (state.info.goal != null) Text('Goal: ${state.info.goal!.toStringReadable()}'),
               if (state.info.type != null) Text('Type: ${state.info.type!.toStringReadable()}'),
-              Text(state.info.mapDaysPerWeekToText),
             ],
           ),
         );
