@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/src/entity/workout_info_entity.dart';
@@ -164,19 +166,21 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
   static List<WorkoutInfo> fromQuerySnapshot(
     QuerySnapshot snapshot, {
+    String? authUserId,
     String? activeWorkoutId,
     List<String> savedWorkoutIds = const [],
     List<String> likedWorkoutids = const [],
   }) {
     return snapshot.docs.map((e) {
-      WorkoutInfo info = WorkoutInfo.fromEntiy(
-        WorkoutInfoEntity.fromDocumentSnapshot(e),
-      );
+      WorkoutInfo info = WorkoutInfo.fromEntiy(WorkoutInfoEntity.fromDocumentSnapshot(e));
+
+      log(info.toString());
 
       info = info.copyWith(
         isActive: activeWorkoutId == info.id,
         like: likedWorkoutids.contains(info.id) ? Like.up : Like.none,
         isSaved: savedWorkoutIds.contains(info.id),
+        isOwner: authUserId == info.id,
       );
 
       return info;
