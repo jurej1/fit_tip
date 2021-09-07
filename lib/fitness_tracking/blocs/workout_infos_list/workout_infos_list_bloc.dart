@@ -20,7 +20,7 @@ class WorkoutInfosListBloc extends WorkoutInfosBaseBloc {
   final int _limit = 12;
 
   @override
-  Stream<WorkoutInfosBaseState> mapLoadMoreRequestedToState(WorkoutInfosLoadMoreRequested event) async* {
+  Stream<WorkoutInfosBaseState> mapLoadRequestedToState(WorkoutInfosLoadRequested event) async* {
     yield WorkoutInfosLoading();
 
     try {
@@ -41,7 +41,7 @@ class WorkoutInfosListBloc extends WorkoutInfosBaseBloc {
   }
 
   @override
-  Stream<WorkoutInfosBaseState> mapLoadRequestedToState(WorkoutInfosLoadRequested event) async* {
+  Stream<WorkoutInfosBaseState> mapLoadMoreRequestedToState(WorkoutInfosLoadMoreRequested event) async* {
     if (state is WorkoutInfosLoadSuccess) {
       final oldState = state as WorkoutInfosLoadSuccess;
 
