@@ -16,12 +16,8 @@ part 'blog_posts_saved_list_state.dart';
 class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSavedListState> {
   BlogPostsSavedListBloc({
     required BlogRepository blogRepository,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
     required AuthenticationBloc authenticationBloc,
   })  : _blogRepository = blogRepository,
-        _savedBlogPostsBloc = savedBlogPostsBloc,
-        _likedBlogPostsBloc = likedBlogPostsBloc,
         _authenticationBloc = authenticationBloc,
         super(BlogPostsSavedListLoading());
 
@@ -29,8 +25,6 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
   final int _limit = 12;
   late DocumentSnapshot _lastFetchedDocumentSnapshot;
 
-  final SavedBlogPostsBloc _savedBlogPostsBloc;
-  final LikedBlogPostsBloc _likedBlogPostsBloc;
   final AuthenticationBloc _authenticationBloc;
 
   @override
@@ -103,8 +97,13 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
   }
 
   Stream<BlogPostsSavedListState> _mapLoadRequestedToState() async* {
+    if (_authenticationBloc.state.isAuthenticated == false) {
+      yield BlogPostsSavedListFailure();
+      return;
+    }
+
     List<BlogPost> blogs = const [];
-    List<String> savedBlogIds = List<String>.from(_savedBlogPostsBloc.state);
+    List<String> savedBlogIds = List<String>.from(_blogRepository.getSavedBlogIds(_authenticationBloc.state.user!.uid!));
 
     if (state is BlogPostsListLoadSuccess) {
       final oldState = state as BlogPostsListLoadSuccess;
@@ -135,7 +134,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
               querySnapshot,
               userId: _authenticationBloc.state.user?.uid,
               saveBlogIds: savedBlogIds,
-              likedBlogIds: _likedBlogPostsBloc.state,
+              likedBlogIds: _blogRepository.getLikedBlogIds(_authenticationBloc.state.user!.uid!),
             );
 
         yield BlogPostsSavedListLoadSuccess(
