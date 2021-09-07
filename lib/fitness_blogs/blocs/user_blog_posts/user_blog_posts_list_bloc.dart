@@ -15,22 +15,16 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
   UserBlogPostsListBloc({
     required BlogRepository blogRepository,
     required AuthenticationBloc authenticationBloc,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
   })  : _blogRepository = blogRepository,
         _authenticationBloc = authenticationBloc,
-        _likedBlogPostsBloc = likedBlogPostsBloc,
-        _savedBlogPostsBloc = savedBlogPostsBloc,
         super(UserBlogPostsListLoading());
 
   final BlogRepository _blogRepository;
   final AuthenticationBloc _authenticationBloc;
-  final SavedBlogPostsBloc _savedBlogPostsBloc;
-  final LikedBlogPostsBloc _likedBlogPostsBloc;
 
   final int _limit = 12;
 
-  late DocumentSnapshot _lastFetchedDoc;
+  DocumentSnapshot? _lastFetchedDoc;
 
   @override
   Stream<UserBlogPostsListState> mapEventToState(
@@ -50,7 +44,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
   }
 
   Stream<UserBlogPostsListState> _mapLoadRequestToState(UserBlogPostsListLoadRequested event) async* {
-    if (_authenticationBloc.state.user?.uid == null) {
+    if (_authenticationBloc.state.isAuthenticated == false) {
       yield UserBlogPostsListFail();
       return;
     }
@@ -67,8 +61,8 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
         List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
           snapshot,
           userId: _authenticationBloc.state.user!.uid,
-          likedBlogIds: _likedBlogPostsBloc.state,
-          saveBlogIds: _savedBlogPostsBloc.state,
+          likedBlogIds: _blogRepository.getLikedBlogIds(_authenticationBloc.state.user!.uid!),
+          saveBlogIds: _blogRepository.getSavedBlogIds(_authenticationBloc.state.user!.uid!),
         );
         yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
       }
@@ -81,7 +75,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
     if (state is UserBlogPostsListLoadSuccess) {
       final oldState = state as UserBlogPostsListLoadSuccess;
       List<BlogPost> oldBlogs = oldState.blogs;
-      if (_authenticationBloc.state.user?.uid == null) {
+      if (_authenticationBloc.state.isAuthenticated == false) {
         yield UserBlogPostsListFail();
         return;
       }
@@ -97,12 +91,10 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
         } else {
           _lastFetchedDoc = snapshot.docs.last;
           List<BlogPost> blogs = oldBlogs +
-              BlogPost.mapQuerySnapshotToBlogPosts(
-                snapshot,
-                userId: _authenticationBloc.state.user!.uid!,
-                likedBlogIds: _likedBlogPostsBloc.state,
-                saveBlogIds: _savedBlogPostsBloc.state,
-              );
+              BlogPost.mapQuerySnapshotToBlogPosts(snapshot,
+                  userId: _authenticationBloc.state.user!.uid!,
+                  likedBlogIds: _blogRepository.getLikedBlogIds(_authenticationBloc.state.user!.uid!),
+                  saveBlogIds: _blogRepository.getSavedBlogIds(_authenticationBloc.state.user!.uid!));
           yield UserBlogPostsListLoadSuccess(blogs: blogs, hasReachedMax: snapshot.size < _limit);
         }
       } catch (error) {
