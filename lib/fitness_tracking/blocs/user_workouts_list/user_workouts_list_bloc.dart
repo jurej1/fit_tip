@@ -38,7 +38,7 @@ class UserWorkoutsListBloc extends WorkoutInfosBaseBloc {
         } else {
           _lastFetchDocument = querySnapshot.docs.last;
 
-          List<WorkoutInfo> infos = _mapQuerySnapshotToList(querySnapshot);
+          List<WorkoutInfo> infos = mapQuerySnapshotToList(querySnapshot);
 
           yield WorkoutInfosLoadSuccess(infos, querySnapshot.docs.length < _limit);
         }
@@ -68,27 +68,12 @@ class UserWorkoutsListBloc extends WorkoutInfosBaseBloc {
         } else {
           _lastFetchDocument = querySnapshot.docs.last;
 
-          List<WorkoutInfo> newInfos = _mapQuerySnapshotToList(querySnapshot);
+          List<WorkoutInfo> newInfos = mapQuerySnapshotToList(querySnapshot);
           yield WorkoutInfosLoadSuccess(oldState.infos + newInfos, querySnapshot.docs.length < _limit);
         }
       } catch (error) {
         yield WorkoutInfosFail();
       }
     }
-  }
-
-  List<WorkoutInfo> _mapQuerySnapshotToList(QuerySnapshot querySnapshot) {
-    if (_authenticationBloc.state.isAuthenticated) {
-      final String uid = _authenticationBloc.state.user!.uid!;
-      return WorkoutInfo.fromQuerySnapshot(
-        querySnapshot,
-        activeWorkoutId: _fitnessRepository.getActiveWorkoutId(uid),
-        authUserId: uid,
-        likedWorkoutids: _fitnessRepository.getLikedWorkoutIds(uid),
-        savedWorkoutIds: _fitnessRepository.getSavedWorkoutIds(uid),
-      );
-    }
-
-    return WorkoutInfo.fromQuerySnapshot(querySnapshot);
   }
 }

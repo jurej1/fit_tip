@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -13,7 +14,9 @@ abstract class WorkoutInfosBaseBloc extends Bloc<WorkoutInfosBaseEvent, WorkoutI
     required WorkoutInfosBaseState initialState,
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
-  }) : super(initialState) {
+  })  : _authenticationBloc = authenticationBloc,
+        _fitnessRepository = fitnessRepository,
+        super(initialState) {
     if (authenticationBloc.state.isAuthenticated) {
       String uid = authenticationBloc.state.user!.uid!;
       _likedWorkoutsSubscription = fitnessRepository.likedWorkoutIdsStream(uid).listen((event) {
@@ -25,6 +28,9 @@ abstract class WorkoutInfosBaseBloc extends Bloc<WorkoutInfosBaseEvent, WorkoutI
       });
     }
   }
+
+  final FitnessRepository _fitnessRepository;
+  final AuthenticationBloc _authenticationBloc;
 
   StreamSubscription? _likedWorkoutsSubscription;
   StreamSubscription? _savedWorkoutsSubscription;
@@ -120,5 +126,22 @@ abstract class WorkoutInfosBaseBloc extends Bloc<WorkoutInfosBaseEvent, WorkoutI
       infos = infos.map((e) => e.copyWith(isSaved: event.value.contains(e.id))).toList();
       yield WorkoutInfosLoadSuccess(infos, oldState.hasReachedMax);
     }
+  }
+
+  List<WorkoutInfo> mapQuerySnapshotToList(
+    QuerySnapshot querySnapshot,
+  ) {
+    if (_authenticationBloc.state.isAuthenticated) {
+      final String uid = _authenticationBloc.state.user!.uid!;
+      return WorkoutInfo.fromQuerySnapshot(
+        querySnapshot,
+        activeWorkoutId: _fitnessRepository.getActiveWorkoutId(uid),
+        authUserId: uid,
+        likedWorkoutids: _fitnessRepository.getLikedWorkoutIds(uid),
+        savedWorkoutIds: _fitnessRepository.getSavedWorkoutIds(uid),
+      );
+    }
+
+    return WorkoutInfo.fromQuerySnapshot(querySnapshot);
   }
 }
