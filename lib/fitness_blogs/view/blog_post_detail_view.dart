@@ -12,8 +12,6 @@ class BlogPostDetailView extends StatelessWidget {
     BuildContext context,
     BlogPost blogPost,
   ) {
-    final savedBlogPostsBloc = BlocProvider.of<SavedBlogPostsBloc>(context);
-    final likedBlogPostsBloc = BlocProvider.of<LikedBlogPostsBloc>(context);
     final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedListBloc>(context);
     final blogPostsListBloc = BlocProvider.of<BlogPostsListBloc>(context);
     final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
@@ -21,9 +19,6 @@ class BlogPostDetailView extends StatelessWidget {
       builder: (_) {
         return MultiBlocProvider(
           providers: [
-            //Hydrated blocs
-            BlocProvider.value(value: savedBlogPostsBloc),
-            BlocProvider.value(value: likedBlogPostsBloc),
             //Blogs with blogPosts
             BlocProvider.value(value: blogPostsSavedListBloc),
             BlocProvider.value(value: blogPostsListBloc),
@@ -31,6 +26,9 @@ class BlogPostDetailView extends StatelessWidget {
             //Save, like and delete feature blocs
             BlocProvider(
               create: (context) => BlogPostSaveCubit(
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+                blogId: blogPost.id,
+                blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 initialValue: blogPost.isSaved,
               ),
             ),
@@ -77,12 +75,10 @@ class BlogPostDetailView extends StatelessWidget {
           listenWhen: (p, c) => p.blogPost.isSaved != c.blogPost.isSaved,
           listener: (context, state) {
             if (state.blogPost.isSaved) {
-              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemAdded(state.blogPost.id));
               BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemAdded(state.blogPost));
             }
 
             if (!state.blogPost.isSaved) {
-              BlocProvider.of<SavedBlogPostsBloc>(context).add(SavedBlogPostsItemRemoved(state.blogPost.id));
               BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemRemoved(state.blogPost));
             }
           },
@@ -90,12 +86,8 @@ class BlogPostDetailView extends StatelessWidget {
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listenWhen: (p, c) => p.blogPost.like != c.blogPost.like,
           listener: (context, state) {
-            if (state.blogPost.like.isYes) {
-              BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemAdded(state.blogPost.id));
-            }
-            if (state.blogPost.like.isNo) {
-              BlocProvider.of<LikedBlogPostsBloc>(context).add(LikedBlogPostsItemRemoved(state.blogPost.id));
-            }
+            if (state.blogPost.like.isYes) {}
+            if (state.blogPost.like.isNo) {}
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
