@@ -5,18 +5,25 @@ import 'package:blog_repository/src/entity/blog_post_entity.dart';
 import 'package:blog_repository/src/enums/blog_comment_order_by.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hive/hive.dart';
 
 import 'entity/entity.dart';
 
 class BlogRepository {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseStorage _firebaseStorage;
+  final Box<List<String>> _likedBlogIdsBox;
+  final Box<List<String>> _savedBlogIdsBox;
 
   BlogRepository({
     FirebaseFirestore? firebaseFirestore,
     FirebaseStorage? firebaseStorage,
+    required Box<List<String>> likedBlogIdsBox,
+    required Box<List<String>> savedBlogIdsBox,
   })  : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
+        this._firebaseStorage = firebaseStorage ?? FirebaseStorage.instance,
+        this._likedBlogIdsBox = likedBlogIdsBox,
+        this._savedBlogIdsBox = savedBlogIdsBox;
 
   CollectionReference _blogsReference() {
     return _firebaseFirestore.collection('blogs');
@@ -183,6 +190,61 @@ class BlogRepository {
     return _usersReference().doc(userId).get();
   }
 
+  Stream<BoxEvent> getSavedBlogIdsStream(String userId) {
+    return _savedBlogIdsBox.watch(key: userId);
+  }
+
+  List<String> getSavedBlogIds(String userId) {
+    return _savedBlogIdsBox.get(userId, defaultValue: [])!;
+  }
+
+  Future<void> addSavedBlogId(String userId, String blogId) async {
+    List<String> values = getSavedBlogIds(userId);
+    if (!values.contains(blogId)) {
+      values.add(blogId);
+      return _updateSavedBlogIds(userId, values);
+    }
+  }
+
+  Future<void> removedSavedBlogId(String userId, String blogId) {
+    List<String> values = getSavedBlogIds(userId);
+    values.remove(blogId);
+    return _updateSavedBlogIds(userId, values);
+  }
+
+  Future<void> _updateSavedBlogIds(String userId, List<String> values) {
+    return _savedBlogIdsBox.put(userId, values);
+  }
+
+  Stream<BoxEvent> getLikedBlogIdsStream(String userId) {
+    return _likedBlogIdsBox.watch(key: userId);
+  }
+
+  Future<void> _updateLikedBlogIds(String userId, List<String> values) {
+    return _likedBlogIdsBox.put(userId, values);
+  }
+
+  List<String> getLikedBlogIds(String userId) {
+    return _likedBlogIdsBox.get(userId, defaultValue: [])!;
+  }
+
+  Future<void> addLikedBlogId(String userId, String blogId) async {
+    List<String> values = getLikedBlogIds(userId);
+    if (!values.contains(blogId)) {
+      values.add(blogId);
+
+      return _updateLikedBlogIds(userId, values);
+    }
+  }
+
+  Future<void> removeLikedBlogId(String userId, String blogId) {
+    List<String> values = getLikedBlogIds(userId);
+
+    values.remove(blogId);
+    return _updateLikedBlogIds(userId, values);
+  }
+
+//// BLOG COMMENTS
 ///////////////////////////////////////
   Future<DocumentReference> addBlogComment(BlogComment comment) async {
     return _commentsReference().add(comment.toEntity().toDocumentSnapshot());
