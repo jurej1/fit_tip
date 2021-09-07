@@ -14,23 +14,19 @@ part 'blog_posts_list_state.dart';
 class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   BlogPostsListBloc({
     required BlogRepository blogRepository,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
     required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
     required AuthenticationBloc authenticationBloc,
   })  : _blogRepository = blogRepository,
         _searchFilterBloc = blogPostsSearchFilterBloc,
-        _likedBlogPostsBloc = likedBlogPostsBloc,
-        _savedBlogPostsBloc = savedBlogPostsBloc,
         _authenticationBloc = authenticationBloc,
         super(BlogPostsListLoading()) {
-    _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
-      add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
-    });
+    // _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
+    //   add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
+    // });
 
-    _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
-      add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
-    });
+    // _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
+    //   add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
+    // });
 
     _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
       add(BlogPostsListLoadRequested());
@@ -42,8 +38,6 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
   late final StreamSubscription _searchFilterSubscription;
 
   final BlogPostsSearchFilterBloc _searchFilterBloc;
-  final LikedBlogPostsBloc _likedBlogPostsBloc;
-  final SavedBlogPostsBloc _savedBlogPostsBloc;
   final AuthenticationBloc _authenticationBloc;
 
   final BlogRepository _blogRepository;
@@ -89,12 +83,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
       } else {
         _lastFetchedDoc = snapshot.docs.last;
 
-        List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
-          snapshot,
-          likedBlogIds: _likedBlogPostsBloc.state,
-          saveBlogIds: _savedBlogPostsBloc.state,
-          userId: _authenticationBloc.state.user?.uid,
-        );
+        List<BlogPost> blogs = _mapQuerySnapshotToList(snapshot);
 
         yield BlogPostsListLoadSuccess(
           blogs: blogs,
@@ -120,13 +109,7 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
             yield BlogPostsListLoadSuccess(
               hasReachedMax: querySnapshot.size < _limit,
-              blogs: oldState.blogs +
-                  BlogPost.mapQuerySnapshotToBlogPosts(
-                    querySnapshot,
-                    likedBlogIds: _likedBlogPostsBloc.state,
-                    saveBlogIds: _savedBlogPostsBloc.state,
-                    userId: _authenticationBloc.state.user?.uid,
-                  ),
+              blogs: oldState.blogs + _mapQuerySnapshotToList(querySnapshot),
             );
           }
         } catch (error) {
@@ -205,5 +188,18 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
     } else {
       return _blogRepository.getBlogPostsByCreated(limit: _limit, startAfterDoc: lastFetchedDoc);
     }
+  }
+
+  List<BlogPost> _mapQuerySnapshotToList(QuerySnapshot querySnapshot) {
+    if (_authenticationBloc.state.isAuthenticated) {
+      String uid = _authenticationBloc.state.user!.uid!;
+      return BlogPost.mapQuerySnapshotToBlogPosts(
+        querySnapshot,
+        likedBlogIds: _blogRepository.getLikedBlogIds(uid),
+        saveBlogIds: _blogRepository.getSavedBlogIds(uid),
+        userId: uid,
+      );
+    }
+    return BlogPost.mapQuerySnapshotToBlogPosts(querySnapshot);
   }
 }
