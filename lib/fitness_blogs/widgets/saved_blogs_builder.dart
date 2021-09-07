@@ -26,11 +26,7 @@ class SavedBlogsBuilder extends StatelessWidget {
               hasReachedMax: state.hasReachedMax,
               onIsBottom: () {
                 BlocProvider.of<BlogPostsSavedListBloc>(context).add(
-                  BlogPostsSavedListLoadMoreRequested(
-                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context).state,
-                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-                  ),
+                  BlogPostsSavedListLoadMoreRequested(),
                 );
               },
             ),

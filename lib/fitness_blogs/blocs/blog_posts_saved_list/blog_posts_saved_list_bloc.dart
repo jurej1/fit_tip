@@ -149,10 +149,15 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
   }
 
   Stream<BlogPostsSavedListState> _mapLoadMoreRequestedToState(BlogPostsSavedListLoadMoreRequested event) async* {
-    if (state is BlogPostsSavedListLoadSuccess) {
+    if (state is BlogPostsSavedListLoadSuccess && _authenticationBloc.state.isAuthenticated) {
       final oldState = state as BlogPostsSavedListLoadSuccess;
       List<BlogPost> blogPosts = oldState.blogs;
-      List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(event.savedBlogIds, blogPosts);
+      List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(
+        _blogRepository.getSavedBlogIds(
+          _authenticationBloc.state.user!.uid!,
+        ),
+        blogPosts,
+      );
 
       if (_allIds.isEmpty) {
         return;
@@ -170,13 +175,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
         } else {
           _lastFetchedDocumentSnapshot = snapshot.docs.last;
 
-          blogPosts = blogPosts +
-              BlogPost.mapQuerySnapshotToBlogPosts(
-                snapshot,
-                userId: event.userId,
-                likedBlogIds: event.likedBlogIds,
-                saveBlogIds: event.likedBlogIds,
-              );
+          blogPosts = blogPosts + _mapQuerySnapshotToList(snapshot);
           yield BlogPostsSavedListLoadSuccess(
             blogs: blogPosts,
             hasReachedMax: snapshot.size < _limit,
@@ -190,5 +189,18 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
 
   List<String> _mapBlogPostsToNotFetchedBlogIds(List<String> savedBlogIds, List<BlogPost> posts) {
     return List<String>.from(savedBlogIds)..removeWhere((savedId) => posts.any((element) => element.id == savedId));
+  }
+
+  List<BlogPost> _mapQuerySnapshotToList(QuerySnapshot querySnapshot) {
+    if (_authenticationBloc.state.isAuthenticated) {
+      String uid = _authenticationBloc.state.user!.uid!;
+      return BlogPost.mapQuerySnapshotToBlogPosts(
+        querySnapshot,
+        likedBlogIds: _blogRepository.getLikedBlogIds(uid),
+        saveBlogIds: _blogRepository.getSavedBlogIds(uid),
+        userId: uid,
+      );
+    }
+    return BlogPost.mapQuerySnapshotToBlogPosts(querySnapshot);
   }
 }

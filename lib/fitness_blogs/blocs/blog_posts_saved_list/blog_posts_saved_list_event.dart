@@ -15,21 +15,9 @@ class BlogPostsSavedListLoadRequested extends BlogPostsSavedListEvent {
 }
 
 class BlogPostsSavedListLoadMoreRequested extends BlogPostsSavedListEvent {
-  final List<String> savedBlogIds;
-  final String? userId;
-  final List<String> likedBlogIds;
-
-  const BlogPostsSavedListLoadMoreRequested({
-    this.savedBlogIds = const [],
-    this.userId,
-    this.likedBlogIds = const [],
-  });
+  const BlogPostsSavedListLoadMoreRequested();
   @override
-  List<Object?> get props => [
-        userId,
-        savedBlogIds,
-        likedBlogIds,
-      ];
+  List<Object?> get props => [];
 }
 
 class BlogPostsSavedListItemAdded extends BlogPostsSavedListEvent {
