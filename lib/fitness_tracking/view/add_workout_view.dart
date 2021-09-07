@@ -26,7 +26,7 @@ class AddWorkoutView {
       ];
 
   static MaterialPageRoute route(BuildContext context, {Workout? workout}) {
-    final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
+    final workoutsListBloc = BlocProvider.of<WorkoutInfosListBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -41,7 +41,7 @@ class AddWorkoutView {
   }
 
   static MaterialPageRoute routeFromWorkoutDetailView(BuildContext context, {required Workout workout}) {
-    final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
+    final workoutsListBloc = BlocProvider.of<WorkoutInfosListBloc>(context);
     final workoutDetailViewBloc = BlocProvider.of<WorkoutDetailViewBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
@@ -67,12 +67,12 @@ class _FormBuilder extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.add) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Workout added')));
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemAdded(state.workout.info));
+          BlocProvider.of<WorkoutInfosListBloc>(context).add(WorkoutInfosItemAdded(state.workout.info));
           Navigator.of(context).pop();
         }
 
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.edit) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout.info));
+          BlocProvider.of<WorkoutInfosListBloc>(context).add(WorkoutInfosItemUpdated(state.workout.info));
           Navigator.of(context).pop();
         }
       },
@@ -89,7 +89,7 @@ class _FormFromDetailPageBuilder extends StatelessWidget {
     return BlocListener<AddWorkoutFormBloc, AddWorkoutFormState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess && state.formMode == FormMode.edit) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListItemUpdated(state.workout.info));
+          BlocProvider.of<WorkoutInfosListBloc>(context).add(WorkoutInfosItemUpdated(state.workout.info));
           BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewWorkoutUpdated(state.workout));
           Navigator.of(context).pop();
         }

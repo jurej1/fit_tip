@@ -8,22 +8,22 @@ class AllWorkoutsListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WorkoutsListBloc, WorkoutsListState>(
+    return BlocBuilder<WorkoutInfosListBloc, WorkoutInfosBaseState>(
       builder: (context, state) {
-        if (state is WorkoutsListLoading) {
+        if (state is WorkoutInfosLoading) {
           return const Center(
             child: const CircularProgressIndicator(),
           );
-        } else if (state is WorkoutsListFail) {
+        } else if (state is WorkoutInfosFail) {
           return Center(
             child: Text('Sorry there was an error'),
           );
-        } else if (state is WorkoutsListLoadSuccess) {
+        } else if (state is WorkoutInfosLoadSuccess) {
           return WorkoutInfosList(
             hasReachedMax: state.hasReachedMax,
-            workouts: state.workoutInfos,
+            workouts: state.infos,
             onBottom: () {
-              BlocProvider.of<WorkoutsListBloc>(context).add(WorkoutsListLoadMoreRequested());
+              BlocProvider.of<WorkoutInfosListBloc>(context).add(WorkoutInfosLoadMoreRequested());
             },
           );
         }

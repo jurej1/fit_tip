@@ -11,7 +11,7 @@ class WorkoutDetailView extends StatelessWidget {
   const WorkoutDetailView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context, {required WorkoutInfo info}) {
-    final workoutsListBloc = BlocProvider.of<WorkoutsListBloc>(context);
+    final workoutsListBloc = BlocProvider.of<WorkoutInfosListBloc>(context);
 
     return MaterialPageRoute(
       builder: (_) {
@@ -43,8 +43,8 @@ class WorkoutDetailView extends StatelessWidget {
     return BlocListener<WorkoutDeleteCubit, WorkoutDeleteState>(
       listener: (context, state) {
         if (state is WorkoutDeleteLoadSuccess) {
-          BlocProvider.of<WorkoutsListBloc>(context).add(
-            WorkoutsListItemRemoved(
+          BlocProvider.of<WorkoutInfosListBloc>(context).add(
+            WorkoutInfosItemRemoved(
               BlocProvider.of<WorkoutDetailViewBloc>(context).state.workout.info,
             ),
           );
