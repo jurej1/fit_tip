@@ -32,6 +32,8 @@ abstract class WorkoutInfosBaseBloc extends Bloc<WorkoutInfosBaseEvent, WorkoutI
   final FitnessRepository _fitnessRepository;
   final AuthenticationBloc _authenticationBloc;
 
+  String? get _uid => _authenticationBloc.state.user?.uid;
+
   StreamSubscription? _likedWorkoutsSubscription;
   StreamSubscription? _savedWorkoutsSubscription;
 
@@ -73,7 +75,14 @@ abstract class WorkoutInfosBaseBloc extends Bloc<WorkoutInfosBaseEvent, WorkoutI
 
       List<WorkoutInfo> infos = List.from(oldState.infos);
 
-      infos.add(event.value);
+      infos.add(_authenticationBloc.state.isAuthenticated
+          ? event.value.copyWith(
+              isActive: _fitnessRepository.getActiveWorkoutId(_uid!) == event.value.id,
+              isOwner: _uid! == event.value.uid,
+              isSaved: _fitnessRepository.getSavedWorkoutIds(_uid!).contains(event.value.id),
+              like: _fitnessRepository.getLikedWorkoutIds(_uid!).contains(event.value.id) ? Like.up : Like.none,
+            )
+          : event.value);
 
       yield WorkoutInfosLoadSuccess(infos, oldState.hasReachedMax);
     }
