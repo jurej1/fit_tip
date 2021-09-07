@@ -10,17 +10,7 @@ part 'table_calendar_event.dart';
 part 'table_calendar_state.dart';
 
 class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
-  TableCalendarBloc({required ActiveWorkoutBloc activeWorkoutBloc})
-      : super(
-          activeWorkoutBloc.state is ActiveWorkoutLoadSuccess
-              ? TableCalendarLoadSuccess(
-                  focusedDay: DateTime.now(),
-                  firstDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.created,
-                  lastDay: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.lastDay,
-                  workouts: (activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.workouts,
-                )
-              : TableCalendarLoading(),
-        );
+  TableCalendarBloc({required ActiveWorkoutBloc activeWorkoutBloc}) : super(TableCalendarState.initial(activeWorkoutBloc));
 
   @override
   Stream<TableCalendarState> mapEventToState(
@@ -35,16 +25,16 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         final current = state as TableCalendarLoadSuccess;
 
         yield current.copyWith(
-          firstDay: event.value.created,
-          lastDay: event.value.lastDay,
-          workouts: event.value.workouts,
+          firstDay: event.value.info.startDate,
+          lastDay: event.value.lastDate,
+          workouts: event.value.workoutDays!.workoutDays,
         );
       }
       yield TableCalendarLoadSuccess(
         focusedDay: DateTime.now(),
-        firstDay: event.value.created,
-        lastDay: event.value.lastDay,
-        workouts: event.value.workouts,
+        firstDay: event.value.info.startDate,
+        workouts: event.value.workoutDays!.workoutDays,
+        lastDay: event.value.lastDate,
       );
     }
   }

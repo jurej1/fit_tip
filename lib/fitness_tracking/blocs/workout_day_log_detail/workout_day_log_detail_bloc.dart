@@ -14,29 +14,11 @@ class WorkoutDayLogDetailBloc extends Bloc<WorkoutDayLogDetailEvent, WorkoutDayL
     required FitnessRepository fitnessRepository,
     required AuthenticationBloc authenticationBloc,
   })  : this._fitnessRepository = fitnessRepository,
-        super(WorkoutDayLogDetailInitial(dayLog)) {
-    final authState = authenticationBloc.state;
-
-    _isAuth = authState.isAuthenticated;
-    _userId = authState.user?.uid;
-
-    _authSubscription = authenticationBloc.stream.listen((authState) {
-      _isAuth = authState.isAuthenticated;
-      _userId = authState.user?.uid;
-    });
-  }
+        _authenticationBloc = authenticationBloc,
+        super(WorkoutDayLogDetailInitial(dayLog));
 
   final FitnessRepository _fitnessRepository;
-  late StreamSubscription _authSubscription;
-
-  bool _isAuth = false;
-  String? _userId;
-
-  @override
-  Future<void> close() {
-    _authSubscription.cancel();
-    return super.close();
-  }
+  final AuthenticationBloc _authenticationBloc;
 
   @override
   Stream<WorkoutDayLogDetailState> mapEventToState(
@@ -48,11 +30,11 @@ class WorkoutDayLogDetailBloc extends Bloc<WorkoutDayLogDetailEvent, WorkoutDayL
   }
 
   Stream<WorkoutDayLogDetailState> _mapDeleteRequestedToState() async* {
-    if (_isAuth) {
+    if (_authenticationBloc.state.isAuthenticated) {
       yield WorkoutDayLogDetailLoading(state.dayLog);
 
       try {
-        await _fitnessRepository.deleteWorkoutDayLog(_userId!, state.dayLog);
+        await _fitnessRepository.deleteWorkoutDayLog(state.dayLog);
         yield WorkoutDayLogDetailDeleteSuccess(state.dayLog);
       } catch (error) {
         yield WorkoutDayLogDetailFail(state.dayLog);

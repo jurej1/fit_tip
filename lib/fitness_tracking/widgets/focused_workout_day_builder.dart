@@ -38,20 +38,15 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (workoutDay.musclesTargeted != null && workoutDay.musclesTargeted!.isNotEmpty) _buildMuscleTargeted(workoutDay),
+                if (workoutDay.muscles != null && workoutDay.muscles!.isNotEmpty) _buildMuscleTargeted(workoutDay),
                 if (workoutDay.note != null) _buildNote(workoutDay),
                 _buildWorkoutTitle(workoutDay),
                 const SizedBox(height: 10),
                 ...state.workoutDayLog.map(
                   (e) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: e.excercises.length,
-                      itemBuilder: (context, index) {
-                        final item = e.excercises[index];
-                        return WorkoutExcerciseCard.provider(item);
-                      },
+                    return WorkoutExcercisesList(
+                      excercises: e.excercises!,
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
                     );
                   },
                 ).toList(),
@@ -93,17 +88,20 @@ class FocusedWorkoutDayBuilder extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [Text('Muscles targeted', style: _titleStyle), Text('${workoutDay.numberOfMusclesTargeted}', style: _titleStyle)],
         ),
-        ...workoutDay.musclesTargeted!
-            .map(
-              (e) => Chip(
-                backgroundColor: Colors.blue.shade300,
-                label: Text(mapMuscleGroupToString(e)),
-                labelStyle: TextStyle(
-                  fontSize: 12,
+        Wrap(
+          spacing: 10,
+          children: workoutDay.muscles!
+              .map(
+                (e) => Chip(
+                  backgroundColor: Colors.blue.shade300,
+                  label: Text(mapMuscleGroupToString(e)),
+                  labelStyle: TextStyle(
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+        ),
         SizedBox(height: 10),
       ],
     );

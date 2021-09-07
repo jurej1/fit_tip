@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,55 +22,65 @@ class ExcercisePageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ExcercisePageCardBloc, ExcercisePageCardState>(
+    return BlocListener<ExcercisePageCardBloc, ExcercisePageCardState>(
       listener: (context, state) {
+        log('Excercise page ' + state.getNewWorkoutExcercise().toString());
         BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutExcerciseUpdated(state.getNewWorkoutExcercise()));
       },
-      builder: (context, state) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text(
-                      'Goal',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: BlocBuilder<ExcercisePageCardBloc, ExcercisePageCardState>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      Text(
+                        'Goal',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    _GoalRowDisplayer(
-                      title: 'Set goal',
-                      value: '${state.excercise.setsString}x',
-                    ),
-                    _GoalRowDisplayer(
-                      title: 'Rep goal',
-                      value: '${state.excercise.repsString}x',
-                    ),
-                  ],
-                ),
+                      _GoalRowDisplayer(
+                        title: 'Set goal',
+                        value: '${state.excercise.setsString}x',
+                      ),
+                      _GoalRowDisplayer(
+                        title: 'Rep goal',
+                        value: '${state.excercise.repsString}x',
+                      ),
+                    ],
+                  );
+                },
               ),
-              ...List.generate(
-                state.excercise.sets,
-                (index) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text(
-                      '     Set ${index + 1}',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+            ),
+            BlocBuilder<ExcercisePageCardBloc, ExcercisePageCardState>(
+              buildWhen: (p, c) => false,
+              builder: (context, state) {
+                return Column(
+                  children: List.generate(
+                    state.excercise.sets,
+                    (index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                          '  Set ${index + 1}',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                        ),
+                        SetDisplayer.provider(index, state.repsCount[index], state.weightCount[index]),
+                        const SizedBox(height: 10),
+                      ],
                     ),
-                    SetDisplayer.provider(index, state.excercise),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

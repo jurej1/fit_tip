@@ -7,8 +7,6 @@ abstract class WorkoutsListCardEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class WorkoutsListCardDeleteRequested extends WorkoutsListCardEvent {}
-
 class WorkoutsListCardExpandedButtonPressed extends WorkoutsListCardEvent {}
 
 class WorkoutsListCardSetAsActiveRequested extends WorkoutsListCardEvent {}

@@ -29,26 +29,29 @@ class WorkoutDetailItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (workout.musclesTargeted != null) ...{
+          if (workout.muscles != null) ...{
             SizedBox(height: 5),
             Container(
               height: 1.5,
               margin: const EdgeInsets.symmetric(horizontal: 10),
               color: Colors.black26,
             ),
-            ...workout.musclesTargeted!
-                .map(
-                  (e) => Chip(
-                    label: Text(
-                      mapMuscleGroupToString(e),
-                      style: TextStyle(color: Colors.grey.shade100),
+            Wrap(
+              spacing: 8,
+              children: workout.muscles!
+                  .map(
+                    (e) => Chip(
+                      label: Text(
+                        mapMuscleGroupToString(e),
+                        style: TextStyle(color: Colors.grey.shade100),
+                      ),
+                      backgroundColor: Colors.blueAccent.shade100,
                     ),
-                    backgroundColor: Colors.blueAccent.shade100,
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           },
-          if (workout.excercises.isNotEmpty) ...{
+          if (workout.excercises!.isNotEmpty) ...{
             Row(
               children: [
                 WorkoutExcerciseRowData(
@@ -67,7 +70,7 @@ class WorkoutDetailItem extends StatelessWidget {
             ),
             SizedBox(height: 5),
           },
-          ...workout.excercises.map((e) {
+          ...workout.excercises!.map((e) {
             return Row(
               children: [
                 WorkoutExcerciseRowData(text: e.name),

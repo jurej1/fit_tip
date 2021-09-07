@@ -4,15 +4,14 @@ abstract class ActiveWorkoutEvent extends Equatable {
   const ActiveWorkoutEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class _ActiveWorkoutFailureRquested extends ActiveWorkoutEvent {}
+class _ActiveWorkoutLoadRequested extends ActiveWorkoutEvent {
+  final String? id;
 
-class _ActiveWorkoutListUpdated extends ActiveWorkoutEvent {
-  final List<Workout> workouts;
+  const _ActiveWorkoutLoadRequested(this.id);
 
-  const _ActiveWorkoutListUpdated({this.workouts = const []});
   @override
-  List<Object> get props => [workouts];
+  List<Object?> get props => [id];
 }

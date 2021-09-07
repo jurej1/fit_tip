@@ -6,7 +6,7 @@ class AddWorkoutDayFormState {
     required this.day,
     this.note = const WorkoutDayNote.pure(),
     this.muscleGroupList = const WorkoutMuscleGroupList.pure(),
-    this.workoutExcercisesList = const WorkoutExcercisesList.pure(),
+    this.workoutExcercisesList = const WorkoutExcercisesListFormz.pure(),
     this.status = FormzStatus.pure,
   });
 
@@ -14,16 +14,16 @@ class AddWorkoutDayFormState {
   final WorkoutDayDay day;
   final WorkoutDayNote note;
   final WorkoutMuscleGroupList muscleGroupList;
-  final WorkoutExcercisesList workoutExcercisesList;
+  final WorkoutExcercisesListFormz workoutExcercisesList;
   final FormzStatus status;
 
   WorkoutDay get workoutDay {
     return WorkoutDay(
       workoutId: '',
       id: id,
-      day: day.value,
+      weekday: day.value,
       excercises: getExcercisesList(),
-      musclesTargeted: getMuscleGroupList(),
+      muscles: getMuscleGroupList(),
       note: note.value,
     );
   }
@@ -31,10 +31,10 @@ class AddWorkoutDayFormState {
   factory AddWorkoutDayFormState.initial(WorkoutDay workoutDay) {
     return AddWorkoutDayFormState(
       id: workoutDay.id,
-      day: WorkoutDayDay.pure(workoutDay.day),
-      muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.musclesTargeted),
+      day: WorkoutDayDay.pure(workoutDay.weekday),
+      muscleGroupList: WorkoutMuscleGroupList.pure(workoutDay.muscles),
       note: WorkoutDayNote.pure(workoutDay.note),
-      workoutExcercisesList: WorkoutExcercisesList.pure(workoutDay.excercises),
+      workoutExcercisesList: WorkoutExcercisesListFormz.pure(workoutDay.excercises ?? []),
     );
   }
 
@@ -43,7 +43,7 @@ class AddWorkoutDayFormState {
     WorkoutDayDay? day,
     WorkoutDayNote? note,
     WorkoutMuscleGroupList? muscleGroupList,
-    WorkoutExcercisesList? workoutExcercisesList,
+    WorkoutExcercisesListFormz? workoutExcercisesList,
     FormzStatus? status,
   }) {
     return AddWorkoutDayFormState(

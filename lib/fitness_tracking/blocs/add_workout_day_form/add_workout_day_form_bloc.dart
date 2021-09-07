@@ -116,7 +116,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
 
     excercises.add(event.value);
 
-    final list = WorkoutExcercisesList.dirty(excercises);
+    final list = WorkoutExcercisesListFormz.dirty(excercises);
 
     yield state.copyWith(
       workoutExcercisesList: list,
@@ -134,7 +134,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
 
     excercises.remove(event.value);
 
-    final list = WorkoutExcercisesList.dirty(excercises);
+    final list = WorkoutExcercisesListFormz.dirty(excercises);
 
     yield state.copyWith(
       workoutExcercisesList: list,
@@ -155,7 +155,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
       return e;
     }).toList();
 
-    final list = WorkoutExcercisesList.dirty(excercises);
+    final list = WorkoutExcercisesListFormz.dirty(excercises);
 
     yield state.copyWith(
       workoutExcercisesList: list,
@@ -172,7 +172,7 @@ class AddWorkoutDayFormBloc extends Bloc<AddWorkoutDayFormEvent, AddWorkoutDayFo
     final day = WorkoutDayDay.dirty(state.day.value);
     final note = WorkoutDayNote.dirty(state.note.value);
     final muscleGroupList = WorkoutMuscleGroupList.dirty(state.muscleGroupList.value);
-    final workoutExcerciseList = WorkoutExcercisesList.dirty(state.workoutExcercisesList.value);
+    final workoutExcerciseList = WorkoutExcercisesListFormz.dirty(state.workoutExcercisesList.value);
 
     yield state.copyWith(
       day: day,

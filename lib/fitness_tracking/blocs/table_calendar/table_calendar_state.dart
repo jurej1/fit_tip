@@ -5,6 +5,22 @@ abstract class TableCalendarState extends Equatable {
 
   @override
   List<Object?> get props => [];
+
+  factory TableCalendarState.initial(ActiveWorkoutBloc activeWorkoutBloc) {
+    ActiveWorkoutState activeState = activeWorkoutBloc.state;
+    final isSuccess = activeState is ActiveWorkoutLoadSuccess;
+
+    if (isSuccess) {
+      activeState = activeState as ActiveWorkoutLoadSuccess;
+      return TableCalendarLoadSuccess(
+        focusedDay: DateTime.now(),
+        firstDay: activeState.workout.info.startDate,
+        workouts: activeState.workout.workoutDays!.workoutDays,
+        lastDay: activeState.workout.lastDate,
+      );
+    }
+    return TableCalendarLoading();
+  }
 }
 
 class TableCalendarLoading extends TableCalendarState {}
@@ -45,7 +61,7 @@ class TableCalendarLoadSuccess extends TableCalendarState {
 
   List<int> getEvents(DateTime day) {
     final int length = this.workouts.fold<int>(0, (previousValue, element) {
-      if (element.day == day.weekday) {
+      if (element.weekday == day.weekday) {
         return previousValue + 1;
       }
       return previousValue;

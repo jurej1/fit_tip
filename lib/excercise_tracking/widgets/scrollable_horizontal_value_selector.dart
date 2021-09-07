@@ -13,7 +13,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
   }) : super(key: key);
 
   final int? initialIndex;
-  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final void Function(int value) onValueUpdated;
   final double width;
   final int itemsLength;
   final Widget Function(int value) textBuilder;
@@ -21,6 +21,7 @@ class ScrollableHorizontalValueSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      key: UniqueKey(),
       create: (context) => DurationSelectorBloc(
         initialIndex: initialIndex,
         itemsLength: itemsLength,
@@ -41,7 +42,7 @@ class _Body extends StatefulWidget {
     required this.width,
     required this.textBuilder,
   }) : super(key: key);
-  final void Function(int value, DurationSelectorStatus status) onValueUpdated;
+  final void Function(int value) onValueUpdated;
   final Widget Function(int value) textBuilder;
 
   final double width;
@@ -61,6 +62,7 @@ class __BodyState extends State<_Body> {
     super.initState();
     _scrollController = ScrollController(
       initialScrollOffset: BlocProvider.of<DurationSelectorBloc>(context).state.getAnimateToValue(itemWidth),
+      debugLabel: widget.key.toString(),
     );
   }
 
@@ -74,13 +76,12 @@ class __BodyState extends State<_Body> {
     return BlocConsumer<DurationSelectorBloc, DurationSelectorState>(
       listener: (context, state) async {
         if (state.status == DurationSelectorStatus.scrollEnded) {
-          await _scrollController.animateTo(
+          _scrollController.animateTo(
             state.getAnimateToValue(itemWidth),
-            duration: state.animationDuration,
+            duration: const Duration(milliseconds: 150),
             curve: Curves.fastOutSlowIn,
           );
-          BlocProvider.of<DurationSelectorBloc>(context).add(DurationSelectorListSnapped());
-          widget.onValueUpdated(state.focusedIndex, state.status);
+          widget.onValueUpdated(state.focusedIndex);
         }
       },
       builder: (context, state) {

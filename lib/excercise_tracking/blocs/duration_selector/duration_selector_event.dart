@@ -23,5 +23,3 @@ class DurationSelectorScrollEnd extends DurationSelectorEvent {
   @override
   List<Object?> get props => [itemWidth, controller];
 }
-
-class DurationSelectorListSnapped extends DurationSelectorEvent {}

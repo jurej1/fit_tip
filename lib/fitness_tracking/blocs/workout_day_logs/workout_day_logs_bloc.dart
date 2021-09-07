@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_tracking/blocs/active_workout_bloc/active_workout_bloc.dart';
@@ -29,7 +30,7 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     WorkoutDayLogsEvent event,
   ) async* {
     if (event is WorkoutDayLogsLoadRequested) {
-      yield* _mapWorkoutUpdatedToState();
+      yield* _mapLoadRequestedToState();
     } else if (event is WorkoutDayLogsLogAdded) {
       yield* _mapLogAddedToState(event);
     } else if (event is WorkoutDayLogsLogRemoved) {
@@ -39,23 +40,27 @@ class WorkoutDayLogsBloc extends Bloc<WorkoutDayLogsEvent, WorkoutDayLogsState> 
     }
   }
 
-  Stream<WorkoutDayLogsState> _mapWorkoutUpdatedToState() async* {
+  Stream<WorkoutDayLogsState> _mapLoadRequestedToState() async* {
     if (state is WorkoutDayLogsLoadSuccess) return;
 
     if (_authenticationBloc.state.isAuthenticated && _activeWorkoutBloc.state is ActiveWorkoutLoadSuccess) {
       yield WorkoutDayLogsLoading();
 
       try {
-        List<WorkoutDayLog>? logs = await _fitnessRepository.getWorkoutDayLogByWorkoutId(
+        QuerySnapshot snapshots = await _fitnessRepository.getWorkoutDayLogByWorkoutId(
           _authenticationBloc.state.user!.uid!,
-          (_activeWorkoutBloc.state as ActiveWorkoutLoadSuccess).workout.id,
+          _fitnessRepository.getActiveWorkoutId(_authenticationBloc.state.user!.uid!)!,
         );
 
-        if (logs != null) {
-          yield WorkoutDayLogsLoadSuccess(logs);
-        } else {
-          yield WorkoutDayLogsLoadSuccess();
-        }
+        List<WorkoutDayLog> logs = snapshots.docs
+            .map(
+              (e) => WorkoutDayLog.fromEntity(
+                WorkoutDayLogEntity.fromDocumentSnapshot(e),
+              ),
+            )
+            .toList();
+
+        yield WorkoutDayLogsLoadSuccess(logs);
       } catch (error) {
         log(error.toString());
         yield WorkoutDayLogsFailure();

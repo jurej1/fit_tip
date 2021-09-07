@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
-import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,12 +10,13 @@ class SetDisplayer extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static Widget provider(int setIndex, WorkoutExcercise excercise) {
+  static Widget provider(int setIndex, int repAmountm, double weightAmount) {
     return BlocProvider(
+      key: ValueKey(setIndex),
       create: (context) => SetDisplayerCubit(
         setIndex: setIndex,
-        repAmount: excercise.repCount?[setIndex] ?? 10,
-        weightAmount: excercise.weightCount?[setIndex] ?? 20,
+        repAmount: repAmountm,
+        weightAmount: weightAmount,
       ),
       child: SetDisplayer(),
     );
@@ -25,12 +27,25 @@ class SetDisplayer extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final double containerSize = 120;
 
-    return BlocListener<SetDisplayerCubit, SetDisplayerState>(
-      listener: (context, state) {
-        BlocProvider.of<ExcercisePageCardBloc>(context).add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
-        BlocProvider.of<ExcercisePageCardBloc>(context)
-            .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SetDisplayerCubit, SetDisplayerState>(
+          listenWhen: (p, c) => p.weightAmount != c.weightAmount,
+          listener: (context, state) {
+            log('reps: ${state.repAmount} weight: ${state.weightAmount}');
+            BlocProvider.of<ExcercisePageCardBloc>(context)
+                .add(ExcercisePageWeightCountUpdated(value: state.weightAmount, setIndex: state.setIndex));
+          },
+        ),
+        BlocListener<SetDisplayerCubit, SetDisplayerState>(
+          listenWhen: (p, c) => p.repAmount != c.repAmount,
+          listener: (context, state) {
+            log('reps: ${state.repAmount} weight: ${state.weightAmount}');
+            BlocProvider.of<ExcercisePageCardBloc>(context)
+                .add(ExcercisePageRepCountUpdated(value: state.repAmount, setIndex: state.setIndex));
+          },
+        ),
+      ],
       child: Row(
         children: [
           Container(
@@ -47,12 +62,12 @@ class SetDisplayer extends StatelessWidget {
                 const SizedBox(height: 8),
                 Expanded(
                   child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
+                    buildWhen: (p, c) => p.repAmount != c.repAmount,
                     builder: (context, state) {
                       return ScrollableHorizontalValueSelector(
-                        onValueUpdated: (value, status) async {
-                          if (status == DurationSelectorStatus.snapped) {
-                            BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
-                          }
+                        key: UniqueKey(),
+                        onValueUpdated: (value) {
+                          BlocProvider.of<SetDisplayerCubit>(context).repAmountUpdated(value);
                         },
                         width: size.width * 0.5,
                         initialIndex: state.repAmount,
@@ -79,23 +94,25 @@ class SetDisplayer extends StatelessWidget {
               children: [
                 const Text('Weight'),
                 const SizedBox(height: 8),
-                Expanded(child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
-                  builder: (context, state) {
-                    return ScrollableHorizontalValueSelector(
-                      onValueUpdated: (value, status) {
-                        if (status == DurationSelectorStatus.snapped) {
+                Expanded(
+                  child: BlocBuilder<SetDisplayerCubit, SetDisplayerState>(
+                    buildWhen: (p, c) => p.weightAmount != c.weightAmount,
+                    builder: (context, state) {
+                      return ScrollableHorizontalValueSelector(
+                        key: UniqueKey(),
+                        onValueUpdated: (value) {
                           BlocProvider.of<SetDisplayerCubit>(context).weightAmountUpdated(value.toDouble());
-                        }
-                      },
-                      width: size.width * 0.5,
-                      initialIndex: state.weightAmount.toInt(),
-                      itemsLength: 300,
-                      textBuilder: (value) {
-                        return Text('$value kg');
-                      },
-                    );
-                  },
-                )),
+                        },
+                        width: size.width * 0.5,
+                        initialIndex: state.weightAmount.toInt(),
+                        itemsLength: 300,
+                        textBuilder: (value) {
+                          return Text('$value kg');
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),

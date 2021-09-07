@@ -10,11 +10,7 @@ part 'blog_post_detail_state.dart';
 class BlogPostDetailBloc extends Bloc<BlogPostDetailEvent, BlogPostDetailState> {
   BlogPostDetailBloc({
     required BlogPost blogPost,
-    required BlogRepository blogRepository,
-  })  : _blogRepository = blogRepository,
-        super(BlogPostDetailInitial(blogPost));
-
-  final BlogRepository _blogRepository;
+  }) : super(BlogPostDetailInitial(blogPost));
 
   @override
   Stream<BlogPostDetailState> mapEventToState(

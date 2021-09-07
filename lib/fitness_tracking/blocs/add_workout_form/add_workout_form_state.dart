@@ -1,114 +1,121 @@
 part of 'add_workout_form_bloc.dart';
 
+//TODO updating the active workout and updating the normal Workout
+
 class AddWorkoutFormState {
   const AddWorkoutFormState({
     this.id,
+    this.uid,
     this.status = FormzStatus.pure,
     this.goal = const WorkoutGoalFormz.pure(),
     this.type = const WorkoutTypeFormz.pure(),
     this.duration = const WorkoutIntFormz.pure(),
     this.daysPerWeek = const WorkoutIntFormz.pure(),
-    this.timePerWorkout = const WorkoutIntFormz.pure(),
-    required this.startDate,
     this.note = const WorkoutNote.pure(),
     this.workoutDays = const WorkoutDaysList.pure(),
     required this.created,
     required this.formMode,
     this.title = const WorkoutTitle.pure(),
     this.isActive = false,
+    this.public = const WorkoutPublicFormz.pure(),
   });
 
   final String? id;
+  final String? uid;
   final WorkoutNote note;
   final FormzStatus status;
   final WorkoutGoalFormz goal;
   final WorkoutTypeFormz type;
   final WorkoutIntFormz duration;
   final WorkoutIntFormz daysPerWeek;
-  final WorkoutIntFormz timePerWorkout;
-  final WorkoutDateFormz startDate;
   final WorkoutDaysList workoutDays;
   final DateTime created;
   final FormMode formMode;
   final WorkoutTitle title;
   final bool isActive;
+  final WorkoutPublicFormz public;
 
-  factory AddWorkoutFormState.initial(Workout? workout) {
+  factory AddWorkoutFormState.initial(
+    Workout? workout,
+    String userId,
+  ) {
     if (workout == null) {
       return AddWorkoutFormState(
-        startDate: WorkoutDateFormz.pure(),
         created: DateTime.now(),
         formMode: FormMode.add,
+        uid: userId,
       );
     }
 
-    final daysPerWeek = WorkoutIntFormz.pure(workout.daysPerWeek.toStringAsFixed(0));
+    final daysPerWeek = WorkoutIntFormz.pure(workout.info.daysPerWeek.toStringAsFixed(0));
 
     return AddWorkoutFormState(
-      startDate: WorkoutDateFormz.pure(workout.startDate),
-      created: workout.created,
+      uid: workout.info.uid,
+      created: workout.info.created,
       daysPerWeek: daysPerWeek,
-      duration: WorkoutIntFormz.pure(workout.duration.toStringAsFixed(0)),
-      goal: WorkoutGoalFormz.pure(workout.goal),
-      id: workout.id,
-      note: WorkoutNote.pure(workout.note),
-      timePerWorkout: WorkoutIntFormz.pure(workout.timePerWorkout.toStringAsFixed(0)),
-      type: WorkoutTypeFormz.pure(workout.type),
-      workoutDays: WorkoutDaysList.dirty(value: workout.workouts, workoutsPerWeekend: daysPerWeek.getIntValue()),
+      duration: WorkoutIntFormz.pure(workout.info.duration.toStringAsFixed(0)),
+      goal: WorkoutGoalFormz.pure(workout.info.goal),
+      id: workout.info.id,
+      note: WorkoutNote.pure(workout.info.note),
+      type: WorkoutTypeFormz.pure(workout.info.type),
+      workoutDays: WorkoutDaysList.dirty(value: workout.workoutDays?.workoutDays ?? [], workoutsPerWeekend: daysPerWeek.getIntValue()),
       formMode: FormMode.edit,
-      title: WorkoutTitle.pure(workout.title),
-      isActive: workout.isActive,
+      title: WorkoutTitle.pure(workout.info.title),
     );
   }
 
   AddWorkoutFormState copyWith({
     String? id,
+    String? uid,
     WorkoutNote? note,
     FormzStatus? status,
     WorkoutGoalFormz? goal,
     WorkoutTypeFormz? type,
     WorkoutIntFormz? duration,
     WorkoutIntFormz? daysPerWeek,
-    WorkoutIntFormz? timePerWorkout,
-    WorkoutDateFormz? startDate,
     WorkoutDaysList? workoutDays,
     DateTime? created,
     FormMode? formMode,
     WorkoutTitle? title,
     bool? isActive,
+    WorkoutPublicFormz? public,
   }) {
     return AddWorkoutFormState(
       id: id ?? this.id,
+      uid: uid ?? this.uid,
       note: note ?? this.note,
       status: status ?? this.status,
       goal: goal ?? this.goal,
       type: type ?? this.type,
       duration: duration ?? this.duration,
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
-      timePerWorkout: timePerWorkout ?? this.timePerWorkout,
-      startDate: startDate ?? this.startDate,
       workoutDays: workoutDays ?? this.workoutDays,
       created: created ?? this.created,
       formMode: formMode ?? this.formMode,
       title: title ?? this.title,
       isActive: isActive ?? this.isActive,
+      public: public ?? this.public,
     );
   }
 
   Workout get workout {
     return Workout(
-      note: this.note.value,
-      id: id ?? UniqueKey().toString(),
-      goal: this.goal.value,
-      type: this.type.value,
-      duration: this.duration.getIntValue(),
-      daysPerWeek: this.daysPerWeek.getIntValue(),
-      timePerWorkout: this.timePerWorkout.getIntValue(),
-      startDate: this.startDate.value,
-      workouts: this.workoutDays.value,
-      created: this.created,
-      title: this.title.value,
-      isActive: this.isActive,
+      info: WorkoutInfo(
+        daysPerWeek: this.daysPerWeek.getIntValue(),
+        id: this.id ?? '',
+        title: this.title.value,
+        uid: this.uid ?? '',
+        created: DateTime.now(),
+        duration: this.duration.getIntValue(),
+        goal: this.goal.value,
+        isPublic: this.public.value,
+        note: this.note.value,
+        type: this.type.value,
+      ),
+      workoutDays: WorkoutDays(
+        workoutId: this.id ?? '',
+        workoutDays: this.workoutDays.value,
+      ),
     );
   }
 

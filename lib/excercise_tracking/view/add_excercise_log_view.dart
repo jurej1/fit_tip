@@ -122,7 +122,7 @@ class _DurationInput extends StatelessWidget {
             ScrollableHorizontalValueSelector(
               width: size.width,
               initialIndex: state.duration.value,
-              onValueUpdated: (minutes, status) {
+              onValueUpdated: (minutes) {
                 BlocProvider.of<AddExcerciseLogBloc>(context).add(AddExcerciseLogDurationUpdated(minutes));
               },
               itemsLength: 3600,

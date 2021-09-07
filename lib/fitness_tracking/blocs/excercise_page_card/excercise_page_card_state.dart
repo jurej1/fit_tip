@@ -23,8 +23,8 @@ class ExcercisePageCardState extends Equatable {
     }
     return ExcercisePageCardState(
       excercise: workoutExcercise,
-      repsCount: List<int>.generate(amountOfSets, (index) => 0),
-      weightCount: List<double>.generate(amountOfSets, (index) => 50.0),
+      repsCount: List<int>.generate(amountOfSets, (index) => workoutExcercise.repCount?[index] ?? 10),
+      weightCount: List<double>.generate(amountOfSets, (index) => workoutExcercise.weightCount?[index] ?? 50),
     );
   }
 

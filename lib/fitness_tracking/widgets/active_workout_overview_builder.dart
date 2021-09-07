@@ -17,11 +17,11 @@ class ActiveWorkoutOverviewBuilder extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             children: [
               WorkoutInfoRow(
-                created: state.workout.mapCreatedToText,
-                daysPerWeek: state.workout.daysPerWeek.toStringAsFixed(0),
-                goal: mapWorkoutGoalToText(state.workout.goal),
+                created: state.workout.info.mapCreatedToText,
+                daysPerWeek: state.workout.info.daysPerWeek.toStringAsFixed(0),
+                goal: state.workout.info.goal != null ? state.workout.info.goal!.toStringReadable() : '',
               ),
-              if (state.workout.note != null) ...{
+              if (state.workout.info.note != null) ...{
                 Text(
                   'Info',
                   style: TextStyle(
@@ -29,10 +29,10 @@ class ActiveWorkoutOverviewBuilder extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
-                Text(state.workout.note!),
+                Text(state.workout.info.note!),
                 const SizedBox(height: 10),
               },
-              ...state.workout.workouts
+              ...state.workout.workoutDays!.workoutDays
                   .map(
                     (e) => Column(
                       children: [

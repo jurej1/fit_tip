@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 
 part 'active_workout_event.dart';
@@ -10,51 +12,44 @@ part 'active_workout_state.dart';
 
 class ActiveWorkoutBloc extends Bloc<ActiveWorkoutEvent, ActiveWorkoutState> {
   ActiveWorkoutBloc({
-    required WorkoutsListBloc workoutsListBloc,
-  }) : super(ActiveWorkoutState.initial(workoutsListBloc)) {
-    _streamSubscription = workoutsListBloc.stream.listen(
-      (listState) {
-        if (listState is WorkoutsListLoadSuccess) {
-          add(_ActiveWorkoutListUpdated(workouts: listState.workouts));
-        } else if (listState is WorkoutsListFail) {
-          add(_ActiveWorkoutFailureRquested());
-        }
-      },
-    );
+    required FitnessRepository fitnessRepository,
+    required AuthenticationBloc authenticationBloc,
+  })  : _fitnessRepository = fitnessRepository,
+        _authenticationBloc = authenticationBloc,
+        super(ActiveWorkoutLoading()) {
+    final String uid = _authenticationBloc.state.user!.uid!;
+    add(_ActiveWorkoutLoadRequested(_fitnessRepository.getActiveWorkoutId(uid)));
   }
 
-  late final StreamSubscription _streamSubscription;
+  final FitnessRepository _fitnessRepository;
+  final AuthenticationBloc _authenticationBloc;
 
+  //TODO when the workout gets updated here should also get updated
   @override
   Stream<ActiveWorkoutState> mapEventToState(
     ActiveWorkoutEvent event,
   ) async* {
-    if (event is _ActiveWorkoutFailureRquested) {
-      yield ActiveWorkoutFail();
-    } else if (event is _ActiveWorkoutListUpdated) {
-      yield* _mapWorkoutsUpdatedToState(event);
+    if (event is _ActiveWorkoutLoadRequested) {
+      yield* _mapLoadRequestedToState(event);
     }
   }
 
-  Stream<ActiveWorkoutState> _mapWorkoutsUpdatedToState(_ActiveWorkoutListUpdated event) async* {
-    if (event.workouts.isEmpty) {
+  Stream<ActiveWorkoutState> _mapLoadRequestedToState(_ActiveWorkoutLoadRequested event) async* {
+    if (event.id == null || !_authenticationBloc.state.isAuthenticated) {
       yield ActiveWorkoutNone();
       return;
     }
 
-    final pureWorkout = Workout.pure();
-    final Workout activeWorkout = event.workouts.firstWhere((element) => element.isActive, orElse: () => pureWorkout);
+    yield ActiveWorkoutLoading();
 
-    if (activeWorkout != pureWorkout) {
-      yield ActiveWorkoutLoadSuccess(activeWorkout);
-    } else {
-      yield ActiveWorkoutNone();
+    try {
+      log(event.id!);
+      DocumentSnapshot documentSnapshot = await _fitnessRepository.getActiveWorkoutById(_authenticationBloc.state.user!.uid!, event.id!);
+      ActiveWorkout active = ActiveWorkout.fromEntity(ActiveWorkoutEntity.fromDocumentSnapshot(documentSnapshot));
+      yield ActiveWorkoutLoadSuccess(active);
+    } catch (e) {
+      log(e.toString());
+      yield ActiveWorkoutFail();
     }
-  }
-
-  @override
-  Future<void> close() {
-    _streamSubscription.cancel();
-    return super.close();
   }
 }

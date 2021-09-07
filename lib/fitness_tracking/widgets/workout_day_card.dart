@@ -26,7 +26,7 @@ class WorkoutDayCard extends StatelessWidget {
               children: [
                 ListTile(
                   dense: true,
-                  title: Text('Day: ${state.workoutDay.day}'),
+                  title: Text('Day: ${state.workoutDay.weekday}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -123,7 +123,7 @@ class _DataList extends StatelessWidget {
                 const SizedBox(height: 3),
                 Wrap(
                   spacing: 8,
-                  children: state.workoutDay.musclesTargeted?.map(
+                  children: state.workoutDay.muscles?.map(
                         (e) {
                           return Chip(
                             label: Text(describeEnum(e)),

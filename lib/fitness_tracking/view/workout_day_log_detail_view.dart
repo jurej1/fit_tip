@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,13 +97,8 @@ class WorkoutDayLogDetailView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.dayLog.excercises.length,
-                    itemBuilder: (context, index) {
-                      final item = state.dayLog.excercises[index];
-                      return WorkoutExcerciseCard.provider(item);
-                    },
+                  WorkoutExcercisesList(
+                    excercises: state.dayLog.excercises!,
                   ),
                 ],
               ),

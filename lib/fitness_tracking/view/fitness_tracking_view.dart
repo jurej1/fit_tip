@@ -1,4 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
+import 'package:fit_tip/fitness_tracking/blocs/active_workouts_history_list/active_workouts_history_list_bloc.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,9 @@ class FitnessTrackingView extends StatelessWidget {
           create: (context) => ActiveWorkoutViewSelectorCubit(),
         ),
         BlocProvider(
-          create: (context) => WorkoutsListBloc(
+          create: (context) => ActiveWorkoutBloc(
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
-          )..add(WorkoutsListLoadRequested()),
-        ),
-        BlocProvider(
-          create: (context) => ActiveWorkoutBloc(
-            workoutsListBloc: BlocProvider.of<WorkoutsListBloc>(context),
           ),
         ),
         BlocProvider(
@@ -41,6 +37,12 @@ class FitnessTrackingView extends StatelessWidget {
             authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
             fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
           )..add(WorkoutDayLogsLoadRequested()),
+        ),
+        BlocProvider(
+          create: (context) => ActiveWorkoutsHistoryListBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
+          )..add(ActiveWorkoutsHistoryListLoadRequested()),
         )
       ],
       child: FitnessTrackingView(),
@@ -57,11 +59,12 @@ class FitnessTrackingView extends StatelessWidget {
   }
 
   Widget _body(FitnessTrackingWorkoutPage page) {
-    if (page == FitnessTrackingWorkoutPage.active) {
+    if (page.isActive) {
       return ActiveWorkoutBuilder.route();
     }
-    if (page == FitnessTrackingWorkoutPage.all) {
-      return WorkoutsListBuilder();
+
+    if (page.isAllActive) {
+      return ActiveWorkoutsHistoryBuilder();
     }
 
     return Container();

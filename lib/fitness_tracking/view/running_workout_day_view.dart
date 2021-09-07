@@ -1,10 +1,8 @@
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
-import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import '../fitness_tracking.dart';
 
 class RunningWorkoutDayView extends StatelessWidget {
@@ -20,6 +18,7 @@ class RunningWorkoutDayView extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => RunningWorkoutDayBloc(
+                timerBloc: BlocProvider.of<TimerBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
                 fitnessRepository: RepositoryProvider.of<FitnessRepository>(context),
                 workoutDay: workoutDay,
@@ -52,7 +51,7 @@ class RunningWorkoutDayView extends StatelessWidget {
             BlocBuilder<RunningWorkoutDayBloc, RunningWorkoutDayState>(
               builder: (context, state) {
                 return Visibility(
-                  visible: state.log.excercises.length != 0,
+                  visible: state.log.excercises?.length != 0,
                   child: Row(
                     children: [
                       const _SelectedPageDisplayer(),
@@ -65,6 +64,7 @@ class RunningWorkoutDayView extends StatelessWidget {
           ],
         ),
         body: BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
+          buildWhen: (p, c) => p != c,
           listener: (contex, state) {
             if (state.pageViewIndex == 1) {
               BlocProvider.of<TimerBloc>(context).add(TimerStart());
@@ -93,7 +93,7 @@ class RunningWorkoutDayView extends StatelessWidget {
                         return ListView(
                           children: [
                             Text(
-                              'Excercises ${state.log.excercises.length}',
+                              'Excercises ${state.log.excercises?.length}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
@@ -115,7 +115,7 @@ class RunningWorkoutDayView extends StatelessWidget {
                         );
                       }
 
-                      final item = state.log.excercises[index - 1];
+                      final item = state.log.excercises![index - 1];
                       return ExcercisePageCard.provider(item);
                     },
                     onPageChanged: (index) {
@@ -132,30 +132,71 @@ class RunningWorkoutDayView extends StatelessWidget {
   }
 }
 
-class _SelectedPageDisplayer extends HookWidget {
+class _SelectedPageDisplayer extends StatefulWidget {
   const _SelectedPageDisplayer({Key? key}) : super(key: key);
 
   @override
+  __SelectedPageDisplayerState createState() => __SelectedPageDisplayerState();
+}
+
+class __SelectedPageDisplayerState extends State<_SelectedPageDisplayer> {
+  late final ScrollController _scrollController;
+  final double dotSize = 10;
+  final double spaceWidth = 8;
+  final double boxWidt = 50;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _controller = useAnimationController(
-      initialValue: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewIndex.toDouble(),
-      upperBound: BlocProvider.of<RunningWorkoutDayBloc>(context).state.pageViewLength.toDouble(),
-      duration: const Duration(milliseconds: 300),
-    );
     return BlocConsumer<RunningWorkoutDayBloc, RunningWorkoutDayState>(
       listener: (context, state) {
-        _controller.animateTo(state.pageViewIndex.toDouble());
+        _scrollController.animateTo(
+          _mapPageIndexToOffset(state.pageViewIndex),
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeIn,
+        );
       },
       builder: (context, state) {
-        return SelectedViewDisplayer(
-          dotSize: 10,
-          length: state.pageViewLength,
-          controller: _controller,
-          width: 40,
-          selectedColor: Colors.blue,
+        return SizedBox(
+          width: boxWidt,
+          child: ListView.separated(
+            controller: _scrollController,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: boxWidt * 0.5),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.pageViewLength,
+            itemBuilder: (context, index) {
+              return Container(
+                height: dotSize,
+                width: dotSize,
+                decoration: BoxDecoration(
+                  color: state.pageViewIndex == index ? Colors.white : Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(width: spaceWidth);
+            },
+          ),
         );
       },
     );
+  }
+
+  double _mapPageIndexToOffset(int index) {
+    return (index * dotSize) + ((index - 1) * spaceWidth) + boxWidt * 0.25;
   }
 }
 
@@ -170,7 +211,7 @@ class _AppBarTextDisplayer extends StatelessWidget {
         if (state.pageViewIndex == state.pageViewLength - 1) return Text('Submit');
 
         final int index = state.pageViewIndex - 1;
-        final item = state.log.excercises[index];
+        final item = state.log.excercises![index];
         return Text('${index + 1}. ${item.name}');
       },
     );
@@ -186,10 +227,7 @@ class _TimerBuilder extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TimerBloc, TimerState>(
-      listener: (context, state) {
-        BlocProvider.of<RunningWorkoutDayBloc>(context).add(RunningWorkoutDayWorkoutDurationUpdated(state.duration));
-      },
+    return BlocBuilder<TimerBloc, TimerState>(
       builder: (context, state) {
         if (state.hours != 0) {
           return Text(

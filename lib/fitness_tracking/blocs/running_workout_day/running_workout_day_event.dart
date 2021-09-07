@@ -25,13 +25,4 @@ class RunningWorkoutDayWorkoutExcerciseUpdated extends RunningWorkoutDayEvent {
   List<Object> get props => [excercise];
 }
 
-class RunningWorkoutDayWorkoutDurationUpdated extends RunningWorkoutDayEvent {
-  final Duration duration;
-
-  const RunningWorkoutDayWorkoutDurationUpdated(this.duration);
-
-  @override
-  List<Object> get props => [duration];
-}
-
 class RunningWorkoutDayWorkoutExcerciseSubmit extends RunningWorkoutDayEvent {}

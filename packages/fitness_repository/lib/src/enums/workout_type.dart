@@ -3,11 +3,16 @@ enum WorkoutType {
   fullBody,
 }
 
-String mapWorkoutTypeToString(WorkoutType type) {
-  if (type == WorkoutType.split) {
-    return 'Split';
-  } else if (type == WorkoutType.fullBody) {
-    return 'Full body';
+extension WorkoutTypeX on WorkoutType {
+  bool get isSplit => this == WorkoutType.split;
+  bool get isFullBody => this == WorkoutType.fullBody;
+
+  String toStringReadable() {
+    if (isSplit) {
+      return 'Split';
+    } else if (isFullBody) {
+      return 'Full body';
+    }
+    return '';
   }
-  return '';
 }

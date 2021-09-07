@@ -1,201 +1,77 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fitness_repository/fitness_repository.dart';
 import 'package:fitness_repository/src/entity/entity.dart';
-import 'package:fitness_repository/src/enums/enums.dart';
-import 'package:flutter/foundation.dart';
 
-class _DocKeys {
-  static String goal = 'goal';
-  static String type = 'type';
-  static String duration = 'duration';
-  static String daysPerWeek = 'daysPerWeek';
-  static String timePerWorkout = 'timePerWorkout';
-  static String startDate = 'startDate';
-  static String workouts = 'workouts';
-  static String note = 'note';
-  static String isActive = 'isActive';
-  static String created = 'created';
-  static String title = 'title';
-  static String workoutId = 'workoutId';
-  static String excercises = 'excercises';
-  static String excerciseId = 'excerciseId';
-  static String repsCount = 'repsCount';
-  static String weightCount = 'weightCount';
+class WorkoutDocKeys {
+  static String info = 'info';
+  static String workoutDays = 'workoutDays';
 }
 
 class WorkoutEntity extends Equatable {
-  final String id;
-  final WorkoutGoal goal;
-  final WorkoutType type;
-  final int duration;
-  final int daysPerWeek;
-  final int timePerWorkout;
-  final String? note;
-  final DateTime startDate;
-  final List<WorkoutDayEntity> workouts;
   final bool isActive;
-  final DateTime created;
-  final String title;
+  final DateTime? startDate;
+  final WorkoutInfoEntity workoutInfoEntity;
+  final WorkoutDaysEntity? workoutDaysEntity;
 
-  WorkoutEntity({
-    this.note,
-    required this.title,
-    required this.id,
-    required this.goal,
-    required this.type,
-    required this.duration,
-    required this.daysPerWeek,
-    required this.timePerWorkout,
+  const WorkoutEntity(
+    this.workoutInfoEntity, {
+    this.workoutDaysEntity,
     this.isActive = false,
-    required this.startDate,
-    DateTime? created,
-    this.workouts = const [],
-  }) : this.created = created ?? DateTime.now();
+    this.startDate,
+  });
 
   @override
-  List<Object?> get props {
-    return [
-      id,
-      goal,
-      type,
-      duration,
-      daysPerWeek,
-      timePerWorkout,
-      note,
-      startDate,
-      workouts,
-      isActive,
-      created,
-      title,
-    ];
-  }
+  List<Object?> get props => [workoutInfoEntity, workoutDaysEntity, isActive, startDate];
 
   WorkoutEntity copyWith({
-    String? id,
-    WorkoutGoal? goal,
-    WorkoutType? type,
-    int? duration,
-    int? daysPerWeek,
-    int? timePerWorkout,
-    String? note,
-    DateTime? startDate,
-    List<WorkoutDayEntity>? workouts,
+    WorkoutInfoEntity? workoutInfoEntity,
+    WorkoutDaysEntity? workoutDaysEntity,
     bool? isActive,
-    DateTime? created,
-    String? title,
+    DateTime? startDate,
   }) {
     return WorkoutEntity(
-      id: id ?? this.id,
-      goal: goal ?? this.goal,
-      type: type ?? this.type,
-      duration: duration ?? this.duration,
-      daysPerWeek: daysPerWeek ?? this.daysPerWeek,
-      timePerWorkout: timePerWorkout ?? this.timePerWorkout,
-      note: note ?? this.note,
-      startDate: startDate ?? this.startDate,
-      workouts: workouts ?? this.workouts,
+      workoutInfoEntity ?? this.workoutInfoEntity,
+      workoutDaysEntity: workoutDaysEntity ?? this.workoutDaysEntity,
       isActive: isActive ?? this.isActive,
-      created: created ?? this.created,
-      title: title ?? this.title,
+      startDate: startDate ?? this.startDate,
     );
   }
+}
 
-  static WorkoutEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data() as Map<String, dynamic>;
+class ActiveWorkoutDocKeys {
+  static String startDate = 'startDate';
+  static String ctiveWorkoutId = 'ctiveWorkoutId';
+}
 
-    final date = data[_DocKeys.startDate] as Timestamp;
-    final created = data[_DocKeys.created] as Timestamp?;
+class ActiveWorkoutEntity extends Equatable {
+  final ActiveWorkoutInfoEntity activeWorkoutInfoEntity;
+  final WorkoutDaysEntity? workoutDaysEntity;
 
-    return WorkoutEntity(
-      note: data[_DocKeys.note],
-      id: snapshot.id,
-      goal: WorkoutGoal.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.goal]),
-      type: WorkoutType.values.firstWhere((e) => describeEnum(e) == data[_DocKeys.type]),
-      duration: data[_DocKeys.duration],
-      daysPerWeek: data[_DocKeys.daysPerWeek],
-      timePerWorkout: data[_DocKeys.timePerWorkout],
-      startDate: date.toDate(),
-      workouts: (data[_DocKeys.workouts] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e, snapshot.id)).toList(),
-      isActive: data[_DocKeys.isActive] ?? false,
-      created: created?.toDate() ?? DateTime.now(),
-      title: data.containsKey(_DocKeys.title) ? data[_DocKeys.title] : 'Test title',
-    );
-  }
+  ActiveWorkoutEntity(
+    this.activeWorkoutInfoEntity, {
+    this.workoutDaysEntity,
+  });
+
+  @override
+  List<Object?> get props => [activeWorkoutInfoEntity, workoutDaysEntity];
 
   Map<String, dynamic> toDocumentSnapshot() {
     return {
-      _DocKeys.note: note,
-      _DocKeys.daysPerWeek: daysPerWeek,
-      _DocKeys.duration: duration,
-      _DocKeys.goal: describeEnum(goal),
-      _DocKeys.startDate: Timestamp.fromDate(startDate),
-      _DocKeys.timePerWorkout: timePerWorkout,
-      _DocKeys.type: describeEnum(type),
-      _DocKeys.workouts: workouts.map((e) => e.toDocumentSnapshot()).toList(),
-      _DocKeys.isActive: this.isActive,
-      _DocKeys.created: Timestamp.fromDate(this.created),
-      _DocKeys.title: this.title,
+      WorkoutDocKeys.info: this.activeWorkoutInfoEntity.toActiveMap(),
+      if (this.workoutDaysEntity != null) WorkoutDocKeys.workoutDays: this.workoutDaysEntity!.toMap(),
     };
   }
 
-  Map<String, dynamic> toWorkoutLogMap(int weekday) {
-    return {
-      _DocKeys.workoutId: this.id,
-      _DocKeys.excercises: this
-          .workouts
-          .firstWhere(
-            (element) => element.day == weekday,
-          )
-          .excercises
-          .map(
-        (e) {
-          return {
-            _DocKeys.excerciseId: e.id,
-            _DocKeys.repsCount: e.repCount,
-            _DocKeys.weightCount: e.weightCount,
-          };
-        },
-      ).toList(),
-    };
-  }
-
-  WorkoutEntity fromWorkoutLogSnapshot(DocumentSnapshot snapshot) {
-    final String id = snapshot.id;
-    final int indexOfFirstLine = id.indexOf('-');
-    final int indexOfLastLine = id.lastIndexOf('-');
-
-    final String day = id.substring(0, indexOfFirstLine - 1);
-    final String month = id.substring(indexOfFirstLine, indexOfLastLine - 1);
-    final String year = id.substring(indexOfLastLine);
-    final date = DateTime(int.parse(year), int.parse(month), int.parse(day));
-
-    int weekday = date.weekday;
+  static ActiveWorkoutEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
+    log(snapshot.data().toString());
 
     final data = snapshot.data() as Map<String, dynamic>;
-    final String workoutId = data[_DocKeys.workoutId];
-
-    WorkoutDayEntity editedWorkout = this.workouts.firstWhere((element) => element.day == weekday && workoutId == element.id);
-
-    List<dynamic> listData = data[_DocKeys.excercises] as List<Map<String, dynamic>>;
-
-    editedWorkout = editedWorkout
-      ..excercises.map((element) {
-        final Map<String, dynamic> idFoundItem = listData.firstWhere((listElement) {
-          final String id = (listElement as Map)[_DocKeys.workoutId];
-          return id == element.id;
-        });
-
-        return element.copyWith(
-          repCount: idFoundItem[_DocKeys.repsCount],
-          weightCount: idFoundItem[_DocKeys.weightCount],
-        );
-      }).toList();
-
-    return this.copyWith(
-      workouts: this.workouts.map((e) {
-        if (e.id == editedWorkout.id) return editedWorkout;
-        return e;
-      }).toList(),
+    return ActiveWorkoutEntity(
+      ActiveWorkoutInfoEntity.fromActiveMap(data[WorkoutDocKeys.info], snapshot.id),
+      workoutDaysEntity: WorkoutDaysEntity.fromMap(data[WorkoutDocKeys.workoutDays]),
     );
   }
 }

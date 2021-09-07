@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -51,14 +53,19 @@ class FocusedWorkoutDayBloc extends Bloc<FocusedWorkoutDayEvent, FocusedWorkoutD
     if (_activeWorkoutBloc.state is ActiveWorkoutLoadSuccess && _authenticationBloc.state.isAuthenticated) {
       final activeState = _activeWorkoutBloc.state as ActiveWorkoutLoadSuccess;
 
-      if (!activeState.workout.workouts.any((element) => element.day == event.value.weekday)) {
+      if (!activeState.workout.workoutDays!.workoutDays.any((element) => element.weekday == event.value.weekday)) {
         yield FocusedWorkoutDayLoadSuccess(date: event.value);
       } else {
         yield FocusedWorkoutDayLoading();
-        WorkoutDay workoutDay = activeState.workout.workouts.firstWhere((element) => element.day == event.value.weekday);
+        WorkoutDay workoutDay =
+            activeState.workout.workoutDays!.workoutDays.firstWhere((element) => element.weekday == event.value.weekday);
 
-        List<WorkoutDayLog> logs = await _fitnessRepository.getWorkoutDayLogByDate(_authenticationBloc.state.user!.uid!, event.value);
+        QuerySnapshot snapshot = await _fitnessRepository.getWorkoutDayLogByDate(_authenticationBloc.state.user!.uid!, event.value);
 
+        List<WorkoutDayLog> logs = snapshot.docs.map((e) => WorkoutDayLog.fromEntity(WorkoutDayLogEntity.fromDocumentSnapshot(e))).toList();
+        for (var docLog in logs) {
+          log(docLog.workoutId.toString());
+        }
         yield FocusedWorkoutDayLoadSuccess(
           date: event.value,
           workoutDay: workoutDay,
