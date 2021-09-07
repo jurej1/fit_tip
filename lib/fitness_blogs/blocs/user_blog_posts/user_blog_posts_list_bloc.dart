@@ -6,7 +6,6 @@ import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 
 part 'user_blog_posts_list_event.dart';
 part 'user_blog_posts_list_state.dart';
@@ -135,7 +134,7 @@ class UserBlogPostsListBloc extends Bloc<UserBlogPostsListEvent, UserBlogPostsLi
   }
 
   Stream<UserBlogPostsListState> _mapItemUpdatedToState(UserBlogPostsListItemUpdated event) async* {
-    if (state is UserBlogPostsListLoadSuccess && event.blog.authorId == event.userId) {
+    if (state is UserBlogPostsListLoadSuccess && event.blog.authorId == _authenticationBloc.state.user?.uid) {
       final oldState = state as UserBlogPostsListLoadSuccess;
 
       List<BlogPost> blogs = oldState.blogs;

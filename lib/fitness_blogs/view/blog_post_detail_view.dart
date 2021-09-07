@@ -38,6 +38,7 @@ class BlogPostDetailView extends StatelessWidget {
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 initialValue: blogPost.like,
                 likesAmount: blogPost.likes,
+                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
               ),
             ),
             BlocProvider(
@@ -84,13 +85,6 @@ class BlogPostDetailView extends StatelessWidget {
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
-          listenWhen: (p, c) => p.blogPost.like != c.blogPost.like,
-          listener: (context, state) {
-            if (state.blogPost.like.isYes) {}
-            if (state.blogPost.like.isNo) {}
-          },
-        ),
-        BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listenWhen: (p, c) => p.blogPost.isSaved == c.blogPost.isSaved,
           listener: (context, state) {
             BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state.blogPost));
@@ -103,7 +97,6 @@ class BlogPostDetailView extends StatelessWidget {
             BlocProvider.of<UserBlogPostsListBloc>(context).add(
               UserBlogPostsListItemUpdated(
                 state.blogPost,
-                BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
               ),
             );
           },

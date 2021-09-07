@@ -36,9 +36,8 @@ class UserBlogPostsListItemAdded extends UserBlogPostsListEvent {
 
 class UserBlogPostsListItemUpdated extends UserBlogPostsListEvent {
   final BlogPost blog;
-  final String? userId;
 
-  const UserBlogPostsListItemUpdated(this.blog, this.userId);
+  const UserBlogPostsListItemUpdated(this.blog);
 
   @override
   List<Object?> get props => [blog];
