@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../fitness_blogs.dart';
 
-class BlogPostTile extends StatelessWidget {
-  BlogPostTile({
+class BlogPostCard extends StatelessWidget {
+  BlogPostCard({
     Key? key,
     required this.item,
   }) : super(key: key);

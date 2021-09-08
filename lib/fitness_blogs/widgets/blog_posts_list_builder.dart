@@ -1,5 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
-import 'package:fit_tip/fitness_blogs/widgets/blog_post_tile.dart';
+import 'package:fit_tip/fitness_blogs/widgets/blog_post_card.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_blogs.dart';
@@ -48,7 +48,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
       padding: const EdgeInsets.all(10),
       itemCount: length,
       itemBuilder: (context, index) {
-        return index >= widget.blogs.length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
+        return index >= widget.blogs.length ? BottomLoader() : BlogPostCard(item: widget.blogs[index]);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
