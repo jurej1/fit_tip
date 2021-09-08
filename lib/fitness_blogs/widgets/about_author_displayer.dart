@@ -1,4 +1,5 @@
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
+import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +25,7 @@ class AboutAuthorDisplayer extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                //TODO
+                Navigator.of(context).push(UserBlogPostsView.route(context, user));
               },
               child: Padding(
                 padding: const EdgeInsets.all(12),
