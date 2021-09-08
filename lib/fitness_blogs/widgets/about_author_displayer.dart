@@ -25,7 +25,7 @@ class AboutAuthorDisplayer extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
-                Navigator.of(context).push(UserBlogPostsView.route(context, user));
+                Navigator.of(context).pushReplacement(UserBlogPostsView.route(context, user));
               },
               child: Padding(
                 padding: const EdgeInsets.all(12),
