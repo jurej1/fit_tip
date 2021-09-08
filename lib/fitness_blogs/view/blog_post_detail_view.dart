@@ -129,7 +129,12 @@ class BlogPostDetailView extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(height: 10),
-                Text(state.blogPost.title),
+                Text(
+                  state.blogPost.title,
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Text(state.blogPost.content),
                 const SizedBox(height: 10),
                 const BlogPostTagsDisplayer(),
                 const SizedBox(height: 10),
