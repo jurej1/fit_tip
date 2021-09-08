@@ -27,7 +27,7 @@ class BlogPostCard extends StatelessWidget {
     return BlocBuilder<BlogPostCardBloc, BlogPost>(
       builder: (context, state) {
         return SizedBox(
-          height: state.bannerUrl != null ? 300 : 100,
+          height: state.bannerUrl != null ? 270 : 110,
           child: ClipRRect(
             borderRadius: _borderRadius,
             child: Material(
@@ -48,24 +48,26 @@ class BlogPostCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _ImageBuilder(size: size),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      BlocBuilder<BlogPostCardBloc, BlogPost>(
-                                        buildWhen: (p, c) => p.title != c.title,
-                                        builder: (context, item) {
-                                          return Text(
-                                            item.title,
-                                            maxLines: 3,
-                                            overflow: TextOverflow.fade,
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      _ActionsRowBuilder(size: size),
-                                    ],
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        BlocBuilder<BlogPostCardBloc, BlogPost>(
+                                          buildWhen: (p, c) => p.title != c.title,
+                                          builder: (context, item) {
+                                            return Text(
+                                              item.title,
+                                              maxLines: 3,
+                                              overflow: TextOverflow.fade,
+                                            );
+                                          },
+                                        ),
+                                        _ActionsRowBuilder(size: size),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -100,7 +102,7 @@ class _ImageBuilder extends StatelessWidget {
       builder: (context, item) {
         if (item.bannerUrl != null) {
           return SizedBox(
-            height: size.maxHeight * 0.7,
+            height: size.maxHeight * 0.6,
             width: size.maxWidth,
             child: item.bannerUrl != null
                 ? Image.network(
@@ -185,6 +187,7 @@ class _ActionIcon extends StatelessWidget {
           radius: 20,
           child: Icon(icon),
         ),
+        if (this.text != null) const SizedBox(width: 4),
         if (this.text != null)
           Text(
             text!,
