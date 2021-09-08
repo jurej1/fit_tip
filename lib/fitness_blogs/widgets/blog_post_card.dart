@@ -1,4 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,23 @@ class BlogPostCard extends StatelessWidget {
         BlocProvider(
           create: (context) => BlogPostCardBloc(blogPost: post),
         ),
+        BlocProvider(
+          create: (context) => BlogPostSaveCubit(
+            blogId: post.id,
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            blogRepository: RepositoryProvider.of<BlogRepository>(context),
+            initialValue: post.isSaved,
+          ),
+        ),
+        BlocProvider(
+          create: (context) => BlogPostLikeCubit(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            blogId: post.id,
+            blogRepository: RepositoryProvider.of<BlogRepository>(context),
+            initialValue: post.like,
+            likesAmount: post.likes,
+          ),
+        )
       ],
       child: BlogPostCard._(),
     );
