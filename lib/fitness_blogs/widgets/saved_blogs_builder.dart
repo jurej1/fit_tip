@@ -24,7 +24,7 @@ class SavedBlogsBuilder extends StatelessWidget {
             child: BlogPostsListBuilder(
               blogs: state.blogs,
               hasReachedMax: state.hasReachedMax,
-              onIsBottom: () {
+              onBottom: () {
                 BlocProvider.of<BlogPostsSavedListBloc>(context).add(
                   BlogPostsSavedListLoadMoreRequested(),
                 );

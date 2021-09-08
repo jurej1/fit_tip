@@ -57,10 +57,14 @@ class BlogRepository {
     required int limit,
     DocumentSnapshot? startAfterDoc,
   }) {
-    final query = _blogsReference().where(BlogPostDocKeys.authorId, isEqualTo: uid).orderBy(BlogPostDocKeys.created).limit(limit);
+    Query query = _blogsReference()
+        .where(BlogPostDocKeys.authorId, isEqualTo: uid)
+        .where(BlogPostDocKeys.isPublic, isEqualTo: true)
+        .orderBy(BlogPostDocKeys.created)
+        .limit(limit);
 
     if (startAfterDoc != null) {
-      return query.startAfterDocument(startAfterDoc).get();
+      query = query.startAfterDocument(startAfterDoc);
     }
 
     return query.get();

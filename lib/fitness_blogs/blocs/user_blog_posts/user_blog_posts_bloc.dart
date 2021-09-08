@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -43,6 +45,7 @@ class UserBlogPostsBloc extends BlogPostsBaseBloc {
         yield BlogPostsLoadSuccess(blogPosts, querySnapshot.docs.length < _limit);
       }
     } catch (error) {
+      log(error.toString());
       yield BlogPostsFail();
     }
   }

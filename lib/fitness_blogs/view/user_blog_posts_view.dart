@@ -34,6 +34,29 @@ class UserBlogPostsView extends StatelessWidget {
       appBar: AppBar(
         title: Text('User blog posts view'),
       ),
+      body: BlocBuilder<UserBlogPostsBloc, BlogPostsBaseState>(
+        builder: (context, state) {
+          if (state is BlogPostsLoading) {
+            return const Center(
+              child: const CircularProgressIndicator(),
+            );
+          } else if (state is BlogPostsLoadSuccess) {
+            return BlogPostsListBuilder(
+              blogs: state.blogPosts,
+              hasReachedMax: state.hasReachedMax,
+              onBottom: () {
+                BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsLoadMoreRequested());
+              },
+            );
+          } else if (state is BlogPostsFail) {
+            return Center(
+              child: Text('Sorry but there was an error'),
+            );
+          }
+
+          return Container();
+        },
+      ),
     );
   }
 }

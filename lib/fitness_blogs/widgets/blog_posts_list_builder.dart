@@ -9,12 +9,12 @@ class BlogPostsListBuilder extends StatefulWidget {
     Key? key,
     required this.blogs,
     required this.hasReachedMax,
-    required this.onIsBottom,
+    required this.onBottom,
   }) : super(key: key);
 
   final List<BlogPost> blogs;
   final bool hasReachedMax;
-  final VoidCallback onIsBottom;
+  final VoidCallback onBottom;
 
   @override
   _BlogPostsListBuilderState createState() => _BlogPostsListBuilderState();
@@ -57,7 +57,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
 
   void _onScroll() {
     if (_isBottom) {
-      widget.onIsBottom();
+      widget.onBottom();
     }
   }
 

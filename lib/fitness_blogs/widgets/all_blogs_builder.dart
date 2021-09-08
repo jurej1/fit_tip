@@ -23,7 +23,7 @@ class AllBlogsBuilder extends StatelessWidget {
             child: BlogPostsListBuilder(
               blogs: state.blogs,
               hasReachedMax: state.hasReachedMax,
-              onIsBottom: () {
+              onBottom: () {
                 BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListLoadMore());
               },
             ),
