@@ -20,21 +20,24 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         _searchFilterBloc = blogPostsSearchFilterBloc,
         _authenticationBloc = authenticationBloc,
         super(BlogPostsListLoading()) {
-    // _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
-    //   add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
-    // });
+    if (_authenticationBloc.state.isAuthenticated) {
+      String uid = _authenticationBloc.state.user!.uid!;
+      _savedBlogsSubscription = _blogRepository.getSavedBlogIdsStream(uid).listen((event) {
+        add(_BlogPostsListSavedBlogsUpdated(event.value));
+      });
 
-    // _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
-    //   add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
-    // });
+      _likedBlogPostsSubscription = _blogRepository.getLikedBlogIdsStream(uid).listen((event) {
+        add(_BlogPostsListLikedBlogsUpdated(event.value));
+      });
+    }
 
     _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
       add(BlogPostsListLoadRequested());
     });
   }
 
-  late final StreamSubscription _savedBlogsSubscription;
-  late final StreamSubscription _likedBlogPostsSubscription;
+  late final StreamSubscription? _savedBlogsSubscription;
+  late final StreamSubscription? _likedBlogPostsSubscription;
   late final StreamSubscription _searchFilterSubscription;
 
   final BlogPostsSearchFilterBloc _searchFilterBloc;
@@ -46,8 +49,8 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
 
   @override
   Future<void> close() {
-    _likedBlogPostsSubscription.cancel();
-    _savedBlogsSubscription.cancel();
+    _likedBlogPostsSubscription?.cancel();
+    _savedBlogsSubscription?.cancel();
     _searchFilterSubscription.cancel();
     return super.close();
   }
