@@ -45,6 +45,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
     return ListView.separated(
       physics: const ClampingScrollPhysics(),
       controller: _scrollController,
+      padding: const EdgeInsets.all(10),
       itemCount: length,
       itemBuilder: (context, index) {
         return index >= widget.blogs.length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
