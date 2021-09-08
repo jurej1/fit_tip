@@ -14,3 +14,4 @@ export 'filtered_blog_search_history/filtered_blog_search_history_bloc.dart';
 export 'blog_posts_search_filter/blog_posts_search_filter_bloc.dart';
 export 'blog_posts_base/blog_posts_base_bloc.dart';
 export 'user_blog_posts/user_blog_posts_bloc.dart';
+export 'blog_post_card/blog_post_card_bloc.dart';
