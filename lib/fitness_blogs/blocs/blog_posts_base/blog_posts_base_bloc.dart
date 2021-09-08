@@ -2,13 +2,24 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fit_tip/authentication/authentication.dart';
 
 part 'blog_posts_base_event.dart';
 part 'blog_posts_base_state.dart';
 
 abstract class BlogPostsBaseBloc extends Bloc<BlogPostsBaseEvent, BlogPostsBaseState> {
-  BlogPostsBaseBloc() : super(BlogPostsLoading());
+  BlogPostsBaseBloc(
+    BlogPostsBaseState initialState, {
+    required AuthenticationBloc authenticationBloc,
+    required BlogRepository blogRepository,
+  })  : _authenticationBloc = authenticationBloc,
+        _blogRepository = blogRepository,
+        super(initialState);
+
+  final AuthenticationBloc _authenticationBloc;
+  final BlogRepository _blogRepository;
 
   @override
   Stream<BlogPostsBaseState> mapEventToState(
@@ -68,5 +79,20 @@ abstract class BlogPostsBaseBloc extends Bloc<BlogPostsBaseEvent, BlogPostsBaseS
 
       yield BlogPostsLoadSuccess(blogs, oldState.hasReachedMax);
     }
+  }
+
+  List<BlogPost> mapQuerySnapshotToList(QuerySnapshot querySnapshot) {
+    if (_authenticationBloc.state.isAuthenticated) {
+      String uid = _authenticationBloc.state.user!.uid!;
+
+      return BlogPost.mapQuerySnapshotToBlogPosts(
+        querySnapshot,
+        likedBlogIds: _blogRepository.getLikedBlogIds(uid),
+        saveBlogIds: _blogRepository.getSavedBlogIds(uid),
+        userId: uid,
+      );
+    }
+
+    return BlogPost.mapQuerySnapshotToBlogPosts(querySnapshot);
   }
 }
