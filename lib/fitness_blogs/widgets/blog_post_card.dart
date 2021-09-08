@@ -42,7 +42,10 @@ class BlogPostCard extends StatelessWidget {
   final BorderRadius _borderRadius = BorderRadius.circular(13);
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlogPostCardBloc, BlogPost>(
+    return BlocConsumer<BlogPostCardBloc, BlogPost>(
+      listener: (context, state) {
+        BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state));
+      },
       builder: (context, state) {
         return SizedBox(
           height: state.bannerUrl != null ? 270 : 110,
@@ -156,30 +159,50 @@ class _ActionsRowBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlogPostCardBloc, BlogPost>(
-      builder: (context, item) {
-        return Material(
-          color: Colors.transparent,
-          child: SizedBox(
-            height: 40,
-            width: size.maxWidth,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _ActionIcon(
-                  icon: item.like.isYes ? Icons.favorite : Icons.favorite_outline,
-                  text: item.likes.toString(),
-                  onTap: () {},
-                ),
-                _ActionIcon(
-                  icon: item.isSaved ? Icons.bookmark : Icons.bookmark_outline,
-                  onTap: () {},
-                ),
-              ],
+    return Material(
+      color: Colors.transparent,
+      child: SizedBox(
+        height: 40,
+        width: size.maxWidth,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BlocConsumer<BlogPostLikeCubit, BlogPostLikeState>(
+              listener: (context, state) {
+                if (state is BlogPostLikeSuccess) {
+                  BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardLiked(state.like));
+                }
+              },
+              buildWhen: (p, c) => p.like != c.like || p.likesAmount != c.likesAmount,
+              builder: (context, state) {
+                return _ActionIcon(
+                  icon: state.like.isYes ? Icons.favorite : Icons.favorite_outline,
+                  text: state.likesAmount.toString(),
+                  onTap: () {
+                    BlocProvider.of<BlogPostLikeCubit>(context).buttonPressed();
+                  },
+                );
+              },
             ),
-          ),
-        );
-      },
+            BlocConsumer<BlogPostSaveCubit, BlogPostSaveState>(
+              buildWhen: (p, c) => p.isSaved != c.isSaved,
+              listener: (context, state) {
+                if (state is BlogPostSaveLoadSuccess) {
+                  BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardSaved(state.isSaved));
+                }
+              },
+              builder: (context, state) {
+                return _ActionIcon(
+                  icon: state.isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                  onTap: () {
+                    BlocProvider.of<BlogPostSaveCubit>(context).buttonPressed();
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
