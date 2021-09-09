@@ -59,10 +59,16 @@ class ActiveWorkoutBuilder extends StatelessWidget {
         appBar: AppBar(
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Fitness tracking'),
-              _AppBarPageDisplayer(),
+              Container(
+                height: 40,
+                width: 80,
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: _AppBarPageDisplayer(),
+              ),
             ],
           ),
           // actions: [

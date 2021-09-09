@@ -28,16 +28,16 @@ class SelectedViewPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double totalWidth = (_dotDiameter * length) + (spacing * (length - 1));
 
-    final Offset startPoint = Offset(0, 0);
+    final Offset startPoint = size.center(Offset.zero);
 
-    _drawDots(canvas, startPoint);
-    _drawIndicator(canvas, startPoint, totalWidth);
+    _drawDots(canvas, startPoint, totalWidth);
+    _drawIndicator(canvas, totalWidth);
   }
 
-  void _drawIndicator(Canvas canvas, Offset startPoint, double totalWidth) {
+  void _drawIndicator(Canvas canvas, double totalWidth) {
     final int leftPageIndex = scrollPosition.floor();
 
-    final double leftDotX = startPoint.dx + (leftPageIndex * (_dotDiameter + spacing));
+    final double leftDotX = (-(totalWidth * 0.5)) + (leftPageIndex * (_dotDiameter + spacing));
     final double rightDotX = leftDotX + _dotDiameter;
 
     final double transitionPercentage = scrollPosition - leftPageIndex;
@@ -62,8 +62,8 @@ class SelectedViewPainter extends CustomPainter {
     );
   }
 
-  void _drawDots(Canvas canvas, Offset startingPoint) {
-    Offset dotCenter = startingPoint.translate(radius, 0);
+  void _drawDots(Canvas canvas, Offset startingPoint, double totalWidth) {
+    Offset dotCenter = startingPoint.translate(-(totalWidth * 0.5) + radius, 0);
 
     for (int i = 0; i < length; i++) {
       _drawDot(canvas, dotCenter);
