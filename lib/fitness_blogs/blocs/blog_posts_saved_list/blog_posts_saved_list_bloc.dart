@@ -105,9 +105,9 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
     List<BlogPost> blogs = const [];
     List<String> savedBlogIds = List<String>.from(_blogRepository.getSavedBlogIds(_authenticationBloc.state.user!.uid!));
 
-    if (state is BlogPostsListLoadSuccess) {
-      final oldState = state as BlogPostsListLoadSuccess;
-      blogs = oldState.blogs;
+    if (state is BlogPostsLoadSuccess) {
+      final oldState = state as BlogPostsLoadSuccess;
+      blogs = oldState.blogPosts;
       savedBlogIds = _mapBlogPostsToNotFetchedBlogIds(savedBlogIds, blogs);
     }
 

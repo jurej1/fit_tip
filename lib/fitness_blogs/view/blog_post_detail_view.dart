@@ -92,7 +92,7 @@ class BlogPostDetailView extends StatelessWidget {
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listener: (context, state) {
-            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state.blogPost));
+            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
 
             BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
           },

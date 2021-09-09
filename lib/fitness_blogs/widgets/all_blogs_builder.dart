@@ -10,25 +10,25 @@ class AllBlogsBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocBuilder<BlogPostsListBloc, BlogPostsListState>(
+    return BlocBuilder<BlogPostsListBloc, BlogPostsBaseState>(
       builder: (context, state) {
-        if (state is BlogPostsListLoading) {
+        if (state is BlogPostsLoading) {
           return Center(
             child: const CircularProgressIndicator(),
           );
-        } else if (state is BlogPostsListLoadSuccess) {
+        } else if (state is BlogPostsLoadSuccess) {
           return SizedBox(
             height: size.height,
             width: size.width,
             child: BlogPostsListBuilder(
-              blogs: state.blogs,
+              blogs: state.blogPosts,
               hasReachedMax: state.hasReachedMax,
               onBottom: () {
-                BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListLoadMore());
+                BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsLoadMoreRequested());
               },
             ),
           );
-        } else if (state is BlogPostsListFail) {
+        } else if (state is BlogPostsFail) {
           return Center(
             child: const Text('Sorry. There was an error.'),
           );
