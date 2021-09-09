@@ -45,10 +45,28 @@ class BlogPostCard extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         BlocListener<BlogPostCardBloc, BlogPost>(
+          listenWhen: (p, c) => p.isSaved != c.isSaved,
           listener: (context, state) {
-            // TODO: implement listener
+            if (state.isSaved) {
+              BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemAdded(state));
+            }
+
+            if (!state.isSaved) {
+              BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemRemoved(state));
+            }
           },
-        )
+        ),
+        BlocListener<BlogPostCardBloc, BlogPost>(
+          listenWhen: (p, c) => p.isSaved == c.isSaved,
+          listener: (context, state) {
+            BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemUpdated(state));
+          },
+        ),
+        BlocListener<BlogPostCardBloc, BlogPost>(
+          listener: (context, state) {
+            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsItemUpdated(state));
+          },
+        ),
       ],
       child: BlocBuilder<BlogPostCardBloc, BlogPost>(
         builder: (context, state) {
