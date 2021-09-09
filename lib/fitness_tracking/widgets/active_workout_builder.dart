@@ -1,5 +1,6 @@
+import 'dart:developer';
+
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class ActiveWorkoutBuilder extends StatelessWidget {
   static Widget route() {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => PageControllerCubit(),
+        ),
         BlocProvider(
           create: (context) => TableCalendarBloc(
             activeWorkoutBloc: BlocProvider.of<ActiveWorkoutBloc>(context),
@@ -54,34 +58,35 @@ class ActiveWorkoutBuilder extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Fitness tracking'),
               _AppBarPageDisplayer(),
             ],
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).push(AddWorkoutView.route(context));
-              },
-            ),
-            BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
-              builder: (context, state) {
-                if (state is ActiveWorkoutLoadSuccess) {
-                  return IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      //TODO editing active workout
-                      // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     icon: Icon(Icons.add),
+          //     onPressed: () {
+          //       Navigator.of(context).push(AddWorkoutView.route(context));
+          //     },
+          //   ),
+          //   BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
+          //     builder: (context, state) {
+          //       if (state is ActiveWorkoutLoadSuccess) {
+          //         return IconButton(
+          //           icon: const Icon(Icons.edit),
+          //           onPressed: () {
+          //             //TODO editing active workout
+          //             // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
+          //           },
+          //         );
+          //       }
+          //       return Container();
+          //     },
+          //   ),
+          // ],
         ),
         body: _bodyBuilder(),
         bottomNavigationBar: FitnessTrackingViewSelector(),
@@ -129,17 +134,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             child: const CircularProgressIndicator(),
           );
         } else if (state is ActiveWorkoutLoadSuccess) {
-          return PageView(
-            physics: const ClampingScrollPhysics(),
-            children: [
-              const ActiveWorkoutOverviewBuilder(),
-              const CalanderAndWokroutDayBuilder(),
-              const WorkoutDayLogsBuilder(),
-            ],
-            onPageChanged: (index) {
-              BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
-            },
-          );
+          return _PageViewBuilder();
         } else if (state is ActiveWorkoutNone) {
           return Center(
             child: Text('You don not have any active workout'),
@@ -152,28 +147,139 @@ class ActiveWorkoutBuilder extends StatelessWidget {
   }
 }
 
+class _PageViewBuilder extends HookWidget {
+  const _PageViewBuilder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageController = usePageController();
+    _pageController.addListener(() {
+      BlocProvider.of<PageControllerCubit>(context).scrollUpdated(_pageController.page ?? 0.0);
+    });
+
+    return PageView(
+      controller: _pageController,
+      physics: const BouncingScrollPhysics(),
+      children: [
+        const ActiveWorkoutOverviewBuilder(),
+        const CalanderAndWokroutDayBuilder(),
+        const WorkoutDayLogsBuilder(),
+      ],
+      onPageChanged: (index) {
+        BlocProvider.of<ActiveWorkoutViewSelectorCubit>(context).viewUpdatedIndex(index);
+      },
+    );
+  }
+}
+
 class _AppBarPageDisplayer extends HookWidget {
   const _AppBarPageDisplayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _controller = useAnimationController(
-      duration: const Duration(milliseconds: 300),
-      lowerBound: 0,
-      upperBound: ActiveWorkoutView.values.length.toDouble(),
-    );
-    return BlocListener<ActiveWorkoutViewSelectorCubit, ActiveWorkoutView>(
-      listener: (context, state) {
-        _controller.animateTo(ActiveWorkoutView.values.indexOf(state).toDouble());
+    return BlocBuilder<PageControllerCubit, double>(
+      builder: (context, state) {
+        return CustomPaint(
+          painter: SelectedViewPainter(
+            scrollPosition: state,
+            dotBackgroundColor: Colors.grey.shade200,
+            length: ActiveWorkoutView.values.length,
+            radius: 10,
+            spacing: 20,
+            dotBorderColor: Colors.grey,
+            dotBorderThicknes: 1,
+            indicatorColor: Colors.blue,
+          ),
+        );
       },
-      child: SelectedViewDisplayer(
-        unselectedColor: Colors.grey,
-        width: 40,
-        dotSize: 10,
-        length: ActiveWorkoutView.values.length,
-        controller: _controller,
-        selectedColor: Colors.white,
-      ),
     );
+  }
+}
+
+class SelectedViewPainter extends CustomPainter {
+  final int length;
+  final Paint _dotPaint;
+  final double radius;
+  final double spacing;
+  final int dotBorderThicknes;
+  final Color dotBorderColor;
+  final Paint _indicatorPaint;
+  final double scrollPosition;
+
+  SelectedViewPainter({
+    required this.length,
+    required this.dotBorderThicknes,
+    required this.dotBorderColor,
+    required this.radius,
+    required this.spacing,
+    required this.scrollPosition,
+    required Color dotBackgroundColor,
+    required Color indicatorColor,
+  })  : this._dotPaint = Paint()..color = dotBackgroundColor,
+        _indicatorPaint = Paint()..color = indicatorColor;
+
+  double get _dotDiameter => radius * 2;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double totalWidth = (_dotDiameter * length) + (spacing * (length - 1));
+
+    final Offset startPoint = Offset(0, 0);
+
+    _drawDots(canvas, startPoint);
+    _drawIndicator(canvas, startPoint, totalWidth);
+  }
+
+  void _drawIndicator(Canvas canvas, Offset startPoint, double totalWidth) {
+    final int leftPageIndex = scrollPosition.floor();
+
+    final double leftDotX = startPoint.dx + (leftPageIndex * (_dotDiameter + spacing));
+    final double rightDotX = leftDotX + _dotDiameter;
+
+    final double transitionPercentage = scrollPosition - leftPageIndex;
+
+    final double laggingLeftSide = (transitionPercentage - 0.3).clamp(0, 1) / 0.7;
+    final double leftIndicatorX = leftDotX + (laggingLeftSide * (_dotDiameter + spacing));
+
+    final double acceleratedRightSide = (transitionPercentage / 0.5).clamp(0, 1);
+    final double rightIndicatorX = rightDotX + (acceleratedRightSide * (_dotDiameter + spacing));
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTRB(
+          leftIndicatorX,
+          -radius,
+          rightIndicatorX,
+          radius,
+        ),
+        Radius.circular(radius),
+      ),
+      _indicatorPaint,
+    );
+  }
+
+  void _drawDots(Canvas canvas, Offset startingPoint) {
+    Offset dotCenter = startingPoint.translate(radius, 0);
+
+    for (int i = 0; i < length; i++) {
+      _drawDot(canvas, dotCenter);
+      dotCenter = dotCenter.translate((_dotDiameter + spacing), 0);
+    }
+  }
+
+  void _drawDot(Canvas canvas, Offset dotCenter) {
+    canvas.drawCircle(dotCenter, radius, _dotPaint);
+
+    Path path = Path()
+      ..addOval(Rect.fromCircle(center: dotCenter, radius: radius))
+      ..addOval(Rect.fromCircle(center: dotCenter, radius: radius - dotBorderThicknes))
+      ..fillType = PathFillType.evenOdd;
+
+    canvas.drawPath(path, Paint()..color = dotBorderColor);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

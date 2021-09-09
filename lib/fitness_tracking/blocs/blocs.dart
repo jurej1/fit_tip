@@ -29,3 +29,4 @@ export 'workout_infos_base/workout_infos_base_bloc.dart';
 export 'user_workouts_list/user_workouts_list_bloc.dart';
 export 'fitness_workouts_view_selector/fitness_workouts_view_selector_cubit.dart';
 export 'workout_infos_list/workout_infos_list_bloc.dart';
+export 'page_controller_cubit/page_controller_cubit.dart';
