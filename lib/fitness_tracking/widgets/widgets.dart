@@ -28,4 +28,4 @@ export 'workout_infos_list.dart';
 export 'workout_detail_app_bar.dart';
 export 'workout_excercises_list.dart';
 export 'fitness_workouts_view_selector.dart';
-export 'selected_view_painter.dart';
+export '../../shared/widgets/selected_view_painter.dart';
