@@ -36,6 +36,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return MultiBlocListener(
       listeners: [
         BlocListener<ActiveWorkoutBloc, ActiveWorkoutState>(
@@ -55,36 +56,17 @@ class ActiveWorkoutBuilder extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Fitness tracking'),
-              _AppBarPageDisplayer(),
-            ],
+          title: Container(
+            width: size.width * 0.7,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Fitness tracking'),
+                _AppBarPageDisplayer(),
+              ],
+            ),
           ),
-          // actions: [
-          //   IconButton(
-          //     icon: Icon(Icons.add),
-          //     onPressed: () {
-          //       Navigator.of(context).push(AddWorkoutView.route(context));
-          //     },
-          //   ),
-          //   BlocBuilder<ActiveWorkoutBloc, ActiveWorkoutState>(
-          //     builder: (context, state) {
-          //       if (state is ActiveWorkoutLoadSuccess) {
-          //         return IconButton(
-          //           icon: const Icon(Icons.edit),
-          //           onPressed: () {
-          //             //TODO editing active workout
-          //             // Navigator.of(context).push(AddWorkoutView.route(context, workout: state.workout));
-          //           },
-          //         );
-          //       }
-          //       return Container();
-          //     },
-          //   ),
-          // ],
         ),
         body: _bodyBuilder(),
         bottomNavigationBar: FitnessTrackingViewSelector(),
