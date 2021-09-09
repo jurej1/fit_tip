@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/settings/settings.dart';
@@ -14,7 +12,6 @@ class BlogPostCard extends StatelessWidget {
   }) : super(key: key);
 
   static Widget provider(BlogPost post) {
-    log('post ${post.isSaved}');
     return MultiBlocProvider(
       key: ValueKey(post),
       providers: [

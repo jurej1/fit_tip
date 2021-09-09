@@ -51,7 +51,6 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
       itemCount: length,
       itemBuilder: (context, index) {
         final item = widget.blogs[index];
-        log('running list ${item.isSaved}');
         return index >= widget.blogs.length ? BottomLoader() : BlogPostCard.provider(item);
       },
       separatorBuilder: (context, index) {
