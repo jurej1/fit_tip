@@ -36,7 +36,9 @@ class BlogPostCard extends StatelessWidget {
           ),
         )
       ],
-      child: BlogPostCard._(),
+      child: BlogPostCard._(
+        key: ValueKey(post),
+      ),
     );
   }
 
