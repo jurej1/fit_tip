@@ -30,10 +30,10 @@ class BlogPostsView extends StatelessWidget {
               )..add(BlogPostsLoadRequested()),
             ),
             BlocProvider(
-              create: (context) => BlogPostsSavedListBloc(
+              create: (context) => BlogPostsSavedBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              )..add(BlogPostsSavedListLoadRequested()),
+              )..add(BlogPostsLoadRequested()),
             ),
             BlocProvider(
               create: (context) => UserBlogPostsBloc(

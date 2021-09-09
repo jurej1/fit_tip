@@ -12,7 +12,7 @@ class BlogPostDetailView extends StatelessWidget {
     BuildContext context,
     BlogPost blogPost,
   ) {
-    final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedListBloc>(context);
+    final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedBloc>(context);
     final blogPostsListBloc = BlocProvider.of<BlogPostsListBloc>(context);
     final userBlogPostsBloc = BlocProvider.of<UserBlogPostsBloc>(context);
     return MaterialPageRoute(
@@ -76,18 +76,18 @@ class BlogPostDetailView extends StatelessWidget {
           listenWhen: (p, c) => p.blogPost.isSaved != c.blogPost.isSaved,
           listener: (context, state) {
             if (state.blogPost.isSaved) {
-              BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemAdded(state.blogPost));
+              BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemAdded(state.blogPost));
             }
 
             if (!state.blogPost.isSaved) {
-              BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemRemoved(state.blogPost));
+              BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemRemoved(state.blogPost));
             }
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listenWhen: (p, c) => p.blogPost.isSaved == c.blogPost.isSaved,
           listener: (context, state) {
-            BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state.blogPost));
+            BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
           },
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(

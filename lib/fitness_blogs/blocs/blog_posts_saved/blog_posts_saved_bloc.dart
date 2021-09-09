@@ -23,9 +23,9 @@ class BlogPostsSavedBloc extends BlogPostsBaseBloc {
 
   @override
   Stream<BlogPostsBaseState> mapLoadMoreRequestedToState(BlogPostsLoadMoreRequested event) async* {
-    if (state is BlogPostsSavedListLoadSuccess && _authenticationBloc.state.isAuthenticated) {
-      final oldState = state as BlogPostsSavedListLoadSuccess;
-      List<BlogPost> blogPosts = oldState.blogs;
+    if (state is BlogPostsLoadSuccess && _authenticationBloc.state.isAuthenticated) {
+      final oldState = state as BlogPostsLoadSuccess;
+      List<BlogPost> blogPosts = oldState.blogPosts;
       List<String> _allIds = _mapBlogPostsToNotFetchedBlogIds(
         _blogRepository.getSavedBlogIds(
           _authenticationBloc.state.user!.uid!,
