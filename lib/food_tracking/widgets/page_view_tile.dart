@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CarouselTile extends StatelessWidget {
-  const CarouselTile({
+class PageViewTile extends StatelessWidget {
+  const PageViewTile({
     Key? key,
     required this.amount,
     required this.goal,

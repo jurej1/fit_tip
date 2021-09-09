@@ -79,25 +79,25 @@ class _Carousel extends StatelessWidget {
                 },
                 child: CarouselSlider(
                   items: [
-                    CarouselTile(
+                    PageViewTile(
                       key: ValueKey('calories'),
                       title: 'Calories',
                       amount: state.calorieConsume.toStringAsFixed(0) + 'cal',
                       goal: state.calorieGoal.toStringAsFixed(0) + 'cal',
                     ),
-                    CarouselTile(
+                    PageViewTile(
                       key: ValueKey('proteins'),
                       title: 'Proteins',
                       amount: state.proteinConsumed.toString() + 'g',
                       goal: state.proteinGoal.toString() + 'g',
                     ),
-                    CarouselTile(
+                    PageViewTile(
                       key: ValueKey('Carbs'),
                       title: 'Carbs',
                       amount: state.carbsConsumed.toString() + 'g',
                       goal: state.carbsGoal.toString() + 'g',
                     ),
-                    CarouselTile(
+                    PageViewTile(
                       key: ValueKey('Fats'),
                       title: 'Fats',
                       amount: state.fatsConsumed.toString() + 'g',
