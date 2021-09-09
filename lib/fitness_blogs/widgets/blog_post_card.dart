@@ -45,6 +45,7 @@ class BlogPostCard extends StatelessWidget {
     return BlocConsumer<BlogPostCardBloc, BlogPost>(
       listener: (context, state) {
         BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state));
+        BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state));
       },
       builder: (context, state) {
         return SizedBox(
