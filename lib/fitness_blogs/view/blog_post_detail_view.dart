@@ -14,7 +14,7 @@ class BlogPostDetailView extends StatelessWidget {
   ) {
     final blogPostsSavedListBloc = BlocProvider.of<BlogPostsSavedListBloc>(context);
     final blogPostsListBloc = BlocProvider.of<BlogPostsListBloc>(context);
-    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
+    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsBloc>(context);
     return MaterialPageRoute(
       builder: (_) {
         return MultiBlocProvider(
@@ -94,11 +94,7 @@ class BlogPostDetailView extends StatelessWidget {
           listener: (context, state) {
             BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state.blogPost));
 
-            BlocProvider.of<UserBlogPostsListBloc>(context).add(
-              UserBlogPostsListItemUpdated(
-                state.blogPost,
-              ),
-            );
+            BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
           },
         ),
       ],

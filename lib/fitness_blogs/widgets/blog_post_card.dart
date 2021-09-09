@@ -44,15 +44,7 @@ class BlogPostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<BlogPostCardBloc, BlogPost>(
-          listener: (context, state) {
-            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state));
-          },
-        ),
-        BlocListener<BlogPostCardBloc, BlogPost>(
-          listenWhen: (p, c) => p.isSaved != c.isSaved,
-          listener: (context, state) {},
-        )
+        //TODO setup listeners
       ],
       child: BlocBuilder<BlogPostCardBloc, BlogPost>(
         builder: (context, state) {
