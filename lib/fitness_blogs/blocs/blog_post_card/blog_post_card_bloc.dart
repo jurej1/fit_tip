@@ -16,7 +16,7 @@ class BlogPostCardBloc extends Bloc<BlogPostCardEvent, BlogPost> {
     if (event is BlogPostCardItemUpdated) {
       yield event.blogPost;
     } else if (event is BlogPostCardLiked) {
-      yield state.copyWith(like: event.like);
+      yield state.copyWith(like: event.like, likes: event.likesAmount);
     } else if (event is BlogPostCardSaved) {
       yield state.copyWith(isSaved: event.isSaved);
     }

@@ -44,8 +44,7 @@ class BlogPostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<BlogPostCardBloc, BlogPost>(
       listener: (context, state) {
-        BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state));
-        BlocProvider.of<BlogPostsSavedListBloc>(context).add(BlogPostsSavedListItemUpdated(state));
+        //TODO setup proper bloc listeners
       },
       builder: (context, state) {
         return SizedBox(
@@ -171,7 +170,7 @@ class _ActionsRowBuilder extends StatelessWidget {
             BlocConsumer<BlogPostLikeCubit, BlogPostLikeState>(
               listener: (context, state) {
                 if (state is BlogPostLikeSuccess) {
-                  BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardLiked(state.like));
+                  BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardLiked(state.like, state.likesAmount));
                 }
               },
               builder: (context, state) {

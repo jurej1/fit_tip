@@ -27,9 +27,10 @@ class BlogPostCardSaved extends BlogPostCardEvent {
 
 class BlogPostCardLiked extends BlogPostCardEvent {
   final Like like;
+  final int likesAmount;
 
-  const BlogPostCardLiked(this.like);
+  const BlogPostCardLiked(this.like, this.likesAmount);
 
   @override
-  List<Object> get props => [this.like];
+  List<Object> get props => [this.like, this.likesAmount];
 }
