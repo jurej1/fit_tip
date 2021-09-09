@@ -50,20 +50,20 @@ class BlogPostsListBloc extends BlogPostsBaseBloc {
 
   @override
   Stream<BlogPostsBaseState> mapLoadMoreRequestedToState(BlogPostsLoadMoreRequested event) async* {
-    if (this.state is BlogPostsListLoadSuccess) {
-      final oldState = state as BlogPostsListLoadSuccess;
+    if (this.state is BlogPostsLoadSuccess) {
+      final oldState = state as BlogPostsLoadSuccess;
 
       if (!oldState.hasReachedMax) {
         try {
           QuerySnapshot querySnapshot = await _mapSearchFilterToQuerySnapshot(lastFetchedDoc: _lastFetchedDocument);
           if (querySnapshot.docs.isEmpty) {
-            yield BlogPostsLoadSuccess(oldState.blogs, true);
+            yield BlogPostsLoadSuccess(oldState.blogPosts, true);
           } else {
             _lastFetchedDocument = querySnapshot.docs.last;
 
             List<BlogPost> blogs = mapQuerySnapshotToList(querySnapshot);
 
-            yield BlogPostsLoadSuccess(oldState.blogs + blogs, querySnapshot.docs.length < _limit);
+            yield BlogPostsLoadSuccess(oldState.blogPosts + blogs, querySnapshot.docs.length < _limit);
           }
         } catch (error) {
           yield BlogPostsFail();
