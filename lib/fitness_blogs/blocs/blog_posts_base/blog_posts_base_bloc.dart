@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
@@ -71,6 +72,7 @@ abstract class BlogPostsBaseBloc extends Bloc<BlogPostsBaseEvent, BlogPostsBaseS
 
       blogs = blogs.map((e) {
         if (e.id == event.value.id) {
+          log(event.value.isSaved.toString());
           return event.value;
         }
 
