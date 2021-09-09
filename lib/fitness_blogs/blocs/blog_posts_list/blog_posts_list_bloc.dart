@@ -21,14 +21,14 @@ class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
         _authenticationBloc = authenticationBloc,
         super(BlogPostsListLoading()) {
     if (_authenticationBloc.state.isAuthenticated) {
-      String uid = _authenticationBloc.state.user!.uid!;
-      _savedBlogsSubscription = _blogRepository.getSavedBlogIdsStream(uid).listen((event) {
-        add(_BlogPostsListSavedBlogsUpdated(event.value));
-      });
+      // String uid = _authenticationBloc.state.user!.uid!;
+      // _savedBlogsSubscription = _blogRepository.getSavedBlogIdsStream(uid).listen((event) {
+      //   add(_BlogPostsListSavedBlogsUpdated(event.value));
+      // });
 
-      _likedBlogPostsSubscription = _blogRepository.getLikedBlogIdsStream(uid).listen((event) {
-        add(_BlogPostsListLikedBlogsUpdated(event.value));
-      });
+      // _likedBlogPostsSubscription = _blogRepository.getLikedBlogIdsStream(uid).listen((event) {
+      //   add(_BlogPostsListLikedBlogsUpdated(event.value));
+      // });
     }
 
     _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
