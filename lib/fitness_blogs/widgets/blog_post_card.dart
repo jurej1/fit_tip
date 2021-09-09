@@ -173,19 +173,19 @@ class _ActionsRowBuilder extends StatelessWidget {
                   BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardLiked(state.like));
                 }
               },
-              buildWhen: (p, c) => p.like != c.like || p.likesAmount != c.likesAmount,
               builder: (context, state) {
                 return _ActionIcon(
                   icon: state.like.isYes ? Icons.favorite : Icons.favorite_outline,
                   text: state.likesAmount.toString(),
                   onTap: () {
-                    BlocProvider.of<BlogPostLikeCubit>(context).buttonPressed();
+                    if (state is! BlogPostLikeLoading) {
+                      BlocProvider.of<BlogPostLikeCubit>(context).buttonPressed();
+                    }
                   },
                 );
               },
             ),
             BlocConsumer<BlogPostSaveCubit, BlogPostSaveState>(
-              buildWhen: (p, c) => p.isSaved != c.isSaved,
               listener: (context, state) {
                 if (state is BlogPostSaveLoadSuccess) {
                   BlocProvider.of<BlogPostCardBloc>(context).add(BlogPostCardSaved(state.isSaved));
@@ -195,7 +195,9 @@ class _ActionsRowBuilder extends StatelessWidget {
                 return _ActionIcon(
                   icon: state.isSaved ? Icons.bookmark : Icons.bookmark_outline,
                   onTap: () {
-                    BlocProvider.of<BlogPostSaveCubit>(context).buttonPressed();
+                    if (state is! BlogPostSaveLoading) {
+                      BlocProvider.of<BlogPostSaveCubit>(context).buttonPressed();
+                    }
                   },
                 );
               },
