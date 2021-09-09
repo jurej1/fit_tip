@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
@@ -55,9 +57,7 @@ class BlogPostDetailView extends StatelessWidget {
               )..add(AboutAuthorLoadRequested(blogPost.authorId)),
             ), //Detail blog view bloc
             BlocProvider(
-              create: (context) => BlogPostDetailBloc(
-                blogPost: blogPost,
-              ),
+              create: (context) => BlogPostDetailBloc(blogPost: blogPost),
             ),
           ],
           child: const BlogPostDetailView(),
@@ -92,6 +92,7 @@ class BlogPostDetailView extends StatelessWidget {
         ),
         BlocListener<BlogPostDetailBloc, BlogPostDetailState>(
           listener: (context, state) {
+            log('updating ${state.blogPost.isSaved}');
             BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
 
             BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsItemUpdated(state.blogPost));
