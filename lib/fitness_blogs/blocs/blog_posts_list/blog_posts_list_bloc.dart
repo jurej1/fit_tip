@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_tip/authentication/authentication.dart';
@@ -15,13 +17,25 @@ class BlogPostsListBloc extends BlogPostsBaseBloc {
           BlogPostsLoading(),
           authenticationBloc: authenticationBloc,
           blogRepository: blogRepository,
-        );
+        ) {
+    _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
+      add(BlogPostsLoadRequested());
+    });
+  }
 
   final BlogRepository _blogRepository;
   DocumentSnapshot? _lastFetchedDocument;
   final BlogPostsSearchFilterBloc _searchFilterBloc;
 
+  late final StreamSubscription _searchFilterSubscription;
+
   final int _limit = 12;
+
+  @override
+  Future<void> close() {
+    _searchFilterSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<BlogPostsBaseState> mapLoadRequestedToState(BlogPostsLoadRequested event) async* {
