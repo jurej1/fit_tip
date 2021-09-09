@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class SelectedViewPainter extends CustomPainter {
@@ -28,16 +30,16 @@ class SelectedViewPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double totalWidth = (_dotDiameter * length) + (spacing * (length - 1));
 
-    final Offset startPoint = size.center(Offset.zero);
+    Offset center = size.center(Offset.zero);
 
-    _drawDots(canvas, startPoint, totalWidth);
-    _drawIndicator(canvas, totalWidth);
+    _drawDots(canvas, center, totalWidth);
+    _drawIndicator(canvas, center, totalWidth);
   }
 
-  void _drawIndicator(Canvas canvas, double totalWidth) {
+  void _drawIndicator(Canvas canvas, Offset center, double totalWidth) {
     final int leftPageIndex = scrollPosition.floor();
 
-    final double leftDotX = (-(totalWidth * 0.5)) + (leftPageIndex * (_dotDiameter + spacing));
+    final double leftDotX = (-totalWidth * 0.5) + (leftPageIndex * (_dotDiameter + spacing));
     final double rightDotX = leftDotX + _dotDiameter;
 
     final double transitionPercentage = scrollPosition - leftPageIndex;

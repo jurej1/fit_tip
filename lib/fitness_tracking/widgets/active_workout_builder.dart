@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -62,13 +60,7 @@ class ActiveWorkoutBuilder extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Fitness tracking'),
-              Container(
-                height: 40,
-                width: 80,
-                color: Colors.red,
-                alignment: Alignment.center,
-                child: _AppBarPageDisplayer(),
-              ),
+              _AppBarPageDisplayer(),
             ],
           ),
           // actions: [
