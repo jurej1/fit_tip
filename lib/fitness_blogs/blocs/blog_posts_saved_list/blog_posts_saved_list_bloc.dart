@@ -23,7 +23,7 @@ class BlogPostsSavedListBloc extends Bloc<BlogPostsSavedListEvent, BlogPostsSave
 
   final BlogRepository _blogRepository;
   final int _limit = 12;
-  late DocumentSnapshot _lastFetchedDocumentSnapshot;
+  DocumentSnapshot? _lastFetchedDocumentSnapshot;
 
   final AuthenticationBloc _authenticationBloc;
 

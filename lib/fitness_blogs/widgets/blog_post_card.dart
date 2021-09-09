@@ -42,68 +42,78 @@ class BlogPostCard extends StatelessWidget {
   final BorderRadius _borderRadius = BorderRadius.circular(13);
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<BlogPostCardBloc, BlogPost>(
-      listener: (context, state) {
-        //TODO setup proper bloc listeners
-      },
-      builder: (context, state) {
-        return SizedBox(
-          height: state.bannerUrl != null ? 270 : 110,
-          child: ClipRRect(
-            borderRadius: _borderRadius,
-            child: Material(
-              elevation: 3,
-              color: BlocProvider.of<ThemeBloc>(context, listen: true).state.accentColor,
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(BlogPostDetailView.route(context, state));
-                },
-                child: LayoutBuilder(
-                  builder: (context, size) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _ImageBuilder(size: size),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        BlocBuilder<BlogPostCardBloc, BlogPost>(
-                                          buildWhen: (p, c) => p.title != c.title,
-                                          builder: (context, item) {
-                                            return Text(
-                                              item.title,
-                                              maxLines: 3,
-                                              overflow: TextOverflow.fade,
-                                            );
-                                          },
-                                        ),
-                                        _ActionsRowBuilder(size: size),
-                                      ],
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<BlogPostCardBloc, BlogPost>(
+          listener: (context, state) {
+            BlocProvider.of<BlogPostsListBloc>(context).add(BlogPostsListItemUpdated(state));
+          },
+        ),
+        BlocListener<BlogPostCardBloc, BlogPost>(
+          listenWhen: (p, c) => p.isSaved != c.isSaved,
+          listener: (context, state) {},
+        )
+      ],
+      child: BlocBuilder<BlogPostCardBloc, BlogPost>(
+        builder: (context, state) {
+          return SizedBox(
+            height: state.bannerUrl != null ? 270 : 110,
+            child: ClipRRect(
+              borderRadius: _borderRadius,
+              child: Material(
+                elevation: 3,
+                color: BlocProvider.of<ThemeBloc>(context, listen: true).state.accentColor,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(BlogPostDetailView.route(context, state));
+                  },
+                  child: LayoutBuilder(
+                    builder: (context, size) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _ImageBuilder(size: size),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          BlocBuilder<BlogPostCardBloc, BlogPost>(
+                                            buildWhen: (p, c) => p.title != c.title,
+                                            builder: (context, item) {
+                                              return Text(
+                                                item.title,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.fade,
+                                              );
+                                            },
+                                          ),
+                                          _ActionsRowBuilder(size: size),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

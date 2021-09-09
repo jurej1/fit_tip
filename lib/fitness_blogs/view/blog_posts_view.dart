@@ -20,7 +20,6 @@ class BlogPostsView extends StatelessWidget {
             BlocProvider(
               create: (context) => BlogPostsSearchFilterBloc(),
             ),
-            //Hydrated blocs
 
             // Blog lists blocs
             BlocProvider(
