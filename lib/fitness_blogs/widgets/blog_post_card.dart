@@ -14,11 +14,30 @@ class BlogPostCard extends StatelessWidget {
   }) : super(key: key);
 
   static Widget provider(BlogPost post) {
+    log('post ${post.isSaved}');
     return MultiBlocProvider(
+      key: ValueKey(post),
       providers: [
         BlocProvider(
           create: (context) => BlogPostCardBloc(blogPost: post),
         ),
+        BlocProvider(
+          create: (context) => BlogPostSaveCubit(
+            blogId: post.id,
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            blogRepository: RepositoryProvider.of<BlogRepository>(context),
+            initialValue: post.isSaved,
+          ),
+        ),
+        BlocProvider(
+          create: (context) => BlogPostLikeCubit(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            blogId: post.id,
+            blogRepository: RepositoryProvider.of<BlogRepository>(context),
+            initialValue: post.like,
+            likesAmount: post.likes,
+          ),
+        )
       ],
       child: BlogPostCard._(),
     );
@@ -94,7 +113,7 @@ class BlogPostCard extends StatelessWidget {
                                               );
                                             },
                                           ),
-                                          _ActionsRowBuilder.provider(size, state),
+                                          _ActionsRowBuilder(size: size),
                                         ],
                                       ),
                                     ),
@@ -159,37 +178,10 @@ class _ImageBuilder extends StatelessWidget {
 }
 
 class _ActionsRowBuilder extends StatelessWidget {
-  const _ActionsRowBuilder._({
+  const _ActionsRowBuilder({
     Key? key,
     required this.size,
   }) : super(key: key);
-
-  static Widget provider(BoxConstraints size, BlogPost post) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => BlogPostSaveCubit(
-            blogId: post.id,
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            blogRepository: RepositoryProvider.of<BlogRepository>(context),
-            initialValue: post.isSaved,
-          ),
-        ),
-        BlocProvider(
-          create: (context) => BlogPostLikeCubit(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            blogId: post.id,
-            blogRepository: RepositoryProvider.of<BlogRepository>(context),
-            initialValue: post.like,
-            likesAmount: post.likes,
-          ),
-        )
-      ],
-      child: _ActionsRowBuilder._(
-        size: size,
-      ),
-    );
-  }
 
   final BoxConstraints size;
 
