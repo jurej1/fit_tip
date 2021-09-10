@@ -222,6 +222,7 @@ class WorkoutInfo extends WorkoutInfoRaw {
 
 class ActiveWorkoutInfo extends WorkoutInfoRaw {
   final DateTime startDate;
+  final bool isActive;
 
   ActiveWorkoutInfo({
     required this.startDate,
@@ -234,6 +235,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
     required int daysPerWeek,
     String? note,
     DateTime? created,
+    this.isActive = false,
   }) : super(
           daysPerWeek: daysPerWeek,
           duration: duration,
@@ -247,7 +249,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
         );
 
   @override
-  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created];
+  List<Object?> get props => [startDate, id, uid, title, goal, type, duration, daysPerWeek, note, created, isActive];
 
   ActiveWorkoutInfo copyWith({
     DateTime? startDate,
@@ -260,6 +262,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
     WorkoutGoal? goal,
     String? note,
     WorkoutType? type,
+    bool? isActive,
   }) {
     return ActiveWorkoutInfo(
       daysPerWeek: daysPerWeek ?? this.daysPerWeek,
@@ -272,6 +275,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
       note: note ?? this.note,
       type: type ?? this.type,
       startDate: startDate ?? this.startDate,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -317,6 +321,7 @@ class ActiveWorkoutInfo extends WorkoutInfoRaw {
       goal: info.goal,
       note: info.note,
       type: info.type,
+      isActive: false,
     );
   }
 }
