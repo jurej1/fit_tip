@@ -21,7 +21,7 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
   final AuthenticationBloc _authenticationBloc;
   final FitnessRepository _fitnessRepository;
 
-  late DocumentSnapshot _lastFetchedDocument;
+  DocumentSnapshot? _lastFetchedDocument;
   final int _limit = 12;
 
   @override
@@ -59,14 +59,13 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
         yield ActiveWorkoutsHistoryListLoadSuccess(workouts: [], hasReachedMax: true);
       } else {
         _lastFetchedDocument = querySnapshot.docs.last;
-        List<ActiveWorkout> workouts = ActiveWorkout.fromQuerySnapshot(querySnapshot);
+        List<ActiveWorkout> workouts = _mapQuerySnapshotToActiveWorkouts(querySnapshot);
         yield ActiveWorkoutsHistoryListLoadSuccess(
           workouts: workouts,
           hasReachedMax: querySnapshot.docs.length < _limit,
         );
       }
     } catch (error) {
-      log(error.toString());
       yield ActiveWorkoutsHistoryListFail();
     }
   }
@@ -95,7 +94,7 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
 
           yield ActiveWorkoutsHistoryListLoadSuccess(
             hasReachedMax: snapshot.docs.length < _limit,
-            workouts: oldState.workouts + ActiveWorkout.fromQuerySnapshot(snapshot),
+            workouts: oldState.workouts + _mapQuerySnapshotToActiveWorkouts(snapshot),
           );
         }
       } catch (error) {
@@ -148,5 +147,17 @@ class ActiveWorkoutsHistoryListBloc extends Bloc<ActiveWorkoutsHistoryListEvent,
 
       yield ActiveWorkoutsHistoryListLoadSuccess(hasReachedMax: oldState.hasReachedMax, workouts: workouts);
     }
+  }
+
+  List<ActiveWorkout> _mapQuerySnapshotToActiveWorkouts(QuerySnapshot querySnapshot) {
+    if (_authenticationBloc.state.isAuthenticated) {
+      final String uid = _authenticationBloc.state.user!.uid!;
+      return ActiveWorkout.fromQuerySnapshot(
+        querySnapshot,
+        activeWorkoutId: _fitnessRepository.getActiveWorkoutId(uid),
+      );
+    }
+
+    return ActiveWorkout.fromQuerySnapshot(querySnapshot);
   }
 }
