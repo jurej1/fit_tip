@@ -138,7 +138,7 @@ class BlogPost extends Equatable {
 
       blog = blog.copyWith(
         isAuthor: userId == blog.authorId,
-        isSaved: saveBlogIds?.contains(blog.id), // TODO: this may cause issues
+        isSaved: saveBlogIds?.contains(blog.id),
         like: (likedBlogIds?.contains(blog.id) ?? false) ? Like.yes : Like.no,
       );
 
