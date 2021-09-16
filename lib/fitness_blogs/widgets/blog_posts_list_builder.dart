@@ -48,8 +48,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
       padding: const EdgeInsets.all(10),
       itemCount: length,
       itemBuilder: (context, index) {
-        final item = widget.blogs[index];
-        return index >= widget.blogs.length ? BottomLoader() : BlogPostCard.provider(item);
+        return index >= widget.blogs.length ? BottomLoader() : BlogPostCard.provider(widget.blogs[index]);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
