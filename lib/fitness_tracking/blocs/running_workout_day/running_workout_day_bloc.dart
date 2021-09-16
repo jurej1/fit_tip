@@ -46,7 +46,7 @@ class RunningWorkoutDayBloc extends Bloc<RunningWorkoutDayEvent, RunningWorkoutD
 
   Stream<RunningWorkoutDayState> _mapExcerciseUpdatetToState(RunningWorkoutDayWorkoutExcerciseUpdated event) async* {
     WorkoutDayLog workoutLog = this.state.log;
-    List<WorkoutExcercise> excercises = workoutLog.excercises ?? []; //TODO
+    List<WorkoutExcercise> excercises = workoutLog.excercises ?? [];
 
     excercises = excercises.map((e) {
       if (e.id == event.excercise.id) {
