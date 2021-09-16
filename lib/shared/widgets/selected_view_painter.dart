@@ -45,7 +45,7 @@ class SelectedViewPainter extends CustomPainter {
     final double laggingLeftSide = (transitionPercentage - 0.3).clamp(0, 1) / 0.7;
     final double leftIndicatorX = leftDotX + (laggingLeftSide * (_dotDiameter + spacing));
 
-    final double acceleratedRightSide = (transitionPercentage / 0.5).clamp(0, 1);
+    final double acceleratedRightSide = (transitionPercentage / 0.4).clamp(0, 1);
     final double rightIndicatorX = rightDotX + (acceleratedRightSide * (_dotDiameter + spacing));
 
     canvas.drawRRect(
