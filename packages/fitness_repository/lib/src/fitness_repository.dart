@@ -193,7 +193,7 @@ class FitnessRepository {
   }
 
   Future<ActiveWorkout> setWorkoutAsActiveFromWorkoutInfo(String userId, WorkoutInfo info) async {
-    DocumentSnapshot snapshot = await _fitnessTrackingPlanWorkoutDaysRef(info.id).get(GetOptions(source: Source.cache));
+    DocumentSnapshot snapshot = await _fitnessTrackingPlanWorkoutDaysRef(info.id).get();
 
     WorkoutDays days = WorkoutDays.fromEntity(WorkoutDaysEntity.fromDocumentSnapshot(snapshot));
 

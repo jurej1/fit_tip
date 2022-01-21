@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -54,10 +56,14 @@ class WorkoutDaysEntity extends Equatable {
   }
 
   static WorkoutDaysEntity fromDocumentSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data() as Map<String, dynamic>;
-    return WorkoutDaysEntity(
-      workoutId: snapshot.reference.parent.parent!.id,
-      workoutDays: (data[WorkoutDaysDocKeys.workoutDays] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
-    );
+    final data = snapshot.data() as Map<String, dynamic>?;
+
+    if (data == null)
+      return WorkoutDaysEntity(workoutId: snapshot.reference.parent.parent!.id);
+    else
+      return WorkoutDaysEntity(
+        workoutId: snapshot.reference.parent.parent!.id,
+        workoutDays: (data[WorkoutDaysDocKeys.workoutDays] as List<dynamic>).map((e) => WorkoutDayEntity.fromMap(e)).toList(),
+      );
   }
 }
