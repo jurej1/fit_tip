@@ -1,5 +1,4 @@
 import 'package:blog_repository/blog_repository.dart';
-import 'package:blog_repository/src/entity/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
