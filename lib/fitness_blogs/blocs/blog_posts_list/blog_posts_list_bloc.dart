@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 
 class BlogPostsListBloc extends BlogPostsBaseBloc {

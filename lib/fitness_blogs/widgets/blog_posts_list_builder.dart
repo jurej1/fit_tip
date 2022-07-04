@@ -1,5 +1,4 @@
 import 'package:blog_repository/blog_repository.dart';
-import 'package:fit_tip/fitness_blogs/widgets/blog_post_card.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_blogs.dart';

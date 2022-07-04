@@ -1,6 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,5 +1,4 @@
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';

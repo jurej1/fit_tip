@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
-import 'package:fit_tip/fitness_blogs/blocs/blog_search_history/blog_search_history_bloc.dart';
 
 part 'filtered_blog_search_history_event.dart';
 part 'filtered_blog_search_history_state.dart';

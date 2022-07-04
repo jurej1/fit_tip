@@ -1,4 +1,3 @@
-import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
