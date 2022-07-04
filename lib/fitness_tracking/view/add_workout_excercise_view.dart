@@ -1,4 +1,3 @@
-import 'package:fit_tip/fitness_tracking/blocs/blocs.dart';
 import 'package:fit_tip/shared/shared.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';

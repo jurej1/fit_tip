@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 part 'rep_unit_value_selector_event.dart';
