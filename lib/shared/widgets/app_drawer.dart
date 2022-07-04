@@ -39,13 +39,13 @@ class AppDrawer extends StatelessWidget {
             //     Navigator.of(context).push(ExcerciseDailyTrackingView.route(context));
             //   },
             // ),
-            ListTile(
-              title: const Text('Blog'),
-              leading: const Icon(Icons.document_scanner_outlined),
-              onTap: () {
-                Navigator.of(context).push(BlogPostsView.route(context));
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Blog'),
+            //   leading: const Icon(Icons.document_scanner_outlined),
+            //   onTap: () {
+            //     Navigator.of(context).push(BlogPostsView.route(context));
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.sports),
               title: Text('Fitness tracking'),

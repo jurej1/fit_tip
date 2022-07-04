@@ -69,7 +69,7 @@ class DetailBlogPostAppBar extends StatelessWidget with PreferredSizeWidget {
                             if (option.isDelete) {
                               BlocProvider.of<BlogPostDeleteBloc>(context).add(BlogPostDeleteRequested());
                             } else if (option.isEdit) {
-                              //TODO go to delete
+                              //TODO go to edit
                             }
                           },
                           icon: const Icon(Icons.more_vert),

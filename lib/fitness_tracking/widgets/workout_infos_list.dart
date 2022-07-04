@@ -54,7 +54,7 @@ class _WorkoutInfosListState extends State<WorkoutInfosList> {
           );
         }
         final item = widget.workouts[index];
-        return WorkoutInfoListCard.provider(context, item); //TODO workout
+        return WorkoutInfoListCard.provider(context, item);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);

@@ -11,7 +11,7 @@ class AddBlogPostFormView extends StatelessWidget {
   const AddBlogPostFormView({Key? key}) : super(key: key);
 
   static MaterialPageRoute route(BuildContext context, {BlogPost? blog}) {
-    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsListBloc>(context);
+    final userBlogPostsBloc = BlocProvider.of<UserBlogPostsBloc>(context);
 
     return MaterialPageRoute(
       builder: (_) {
@@ -36,12 +36,7 @@ class AddBlogPostFormView extends StatelessWidget {
     return BlocListener<AddBlogPostBloc, AddBlogPostState>(
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
-          BlocProvider.of<UserBlogPostsListBloc>(context).add(
-            UserBlogPostsListItemAdded(
-              state.blogPost!,
-              BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-            ),
-          );
+          BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsItemAdded(state.blogPost!));
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Blog added successfully')));
           Navigator.of(context).pop();
         } else if (state.status.isSubmissionFailure) {

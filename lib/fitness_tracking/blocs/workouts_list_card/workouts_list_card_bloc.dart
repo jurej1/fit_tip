@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -47,6 +48,7 @@ class WorkoutsListCardBloc extends Bloc<WorkoutsListCardEvent, WorkoutsListCardS
 
         yield WorkoutsListCardSetAsActiveSuccess(info.copyWith(isActive: true), state.isExpanded);
       } catch (e) {
+        log(e.toString());
         yield WorkoutsListCardFail(state.info, state.isExpanded);
       }
     }

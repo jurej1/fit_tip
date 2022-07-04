@@ -50,6 +50,7 @@ class WorkoutDetailAppBar extends StatelessWidget {
               },
               onSelected: (option) {
                 //TODO
+
                 // if (option == WorkoutsListCardOption.delete) {
                 //   // BlocProvider.of<WorkoutDetailViewBloc>(context).add(WorkoutDetailViewDeleteRequested());
                 // } else if (option == WorkoutsListCardOption.setAsActive) {

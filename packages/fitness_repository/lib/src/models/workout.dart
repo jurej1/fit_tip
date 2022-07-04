@@ -98,11 +98,16 @@ class ActiveWorkout extends WorkoutRaw {
     return (this._info as ActiveWorkoutInfo).startDate.add(Duration(days: this._info.duration * 7));
   }
 
-  static List<ActiveWorkout> fromQuerySnapshot(QuerySnapshot querySnapshot) {
-    //TODO: isActive
+  static List<ActiveWorkout> fromQuerySnapshot(QuerySnapshot querySnapshot, {String? activeWorkoutId}) {
     return querySnapshot.docs.map((e) {
       ActiveWorkout workout = ActiveWorkout.fromEntity(
         ActiveWorkoutEntity.fromDocumentSnapshot(e),
+      );
+
+      workout = workout.copyWith(
+        info: workout.info.copyWith(
+          isActive: activeWorkoutId == workout.info.id,
+        ),
       );
       return workout;
     }).toList();

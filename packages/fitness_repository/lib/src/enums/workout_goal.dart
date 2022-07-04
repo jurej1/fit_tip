@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 enum WorkoutGoal {
   buildMuscle,
   loseFat,

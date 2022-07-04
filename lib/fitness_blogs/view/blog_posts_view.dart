@@ -20,43 +20,27 @@ class BlogPostsView extends StatelessWidget {
             BlocProvider(
               create: (context) => BlogPostsSearchFilterBloc(),
             ),
-            //Hydrated blocs
-            BlocProvider(
-              create: (context) => SavedBlogPostsBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => LikedBlogPostsBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              ),
-            ),
 
             // Blog lists blocs
             BlocProvider(
               create: (context) => BlogPostsListBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
-                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
-                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
                 blogPostsSearchFilterBloc: BlocProvider.of<BlogPostsSearchFilterBloc>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-              )..add(BlogPostsListLoadRequested()),
+              )..add(BlogPostsLoadRequested()),
             ),
             BlocProvider(
-              create: (context) => BlogPostsSavedListBloc(
+              create: (context) => BlogPostsSavedBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
-                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
-              )..add(BlogPostsSavedListLoadRequested()),
+              )..add(BlogPostsLoadRequested()),
             ),
             BlocProvider(
-              create: (context) => UserBlogPostsListBloc(
+              create: (context) => UserBlogPostsBloc(
                 blogRepository: RepositoryProvider.of<BlogRepository>(context),
                 authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-                likedBlogPostsBloc: BlocProvider.of<LikedBlogPostsBloc>(context),
-                savedBlogPostsBloc: BlocProvider.of<SavedBlogPostsBloc>(context),
-              )..add(UserBlogPostsListLoadRequested()),
+                userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
+              )..add(BlogPostsLoadRequested()),
             ),
           ],
           child: BlogPostsView(),

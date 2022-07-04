@@ -2,30 +2,28 @@ part of 'blog_post_like_cubit.dart';
 
 abstract class BlogPostLikeState extends Equatable {
   final Like like;
-  final String blogId;
   final int likesAmount;
   const BlogPostLikeState(
     this.like,
     this.likesAmount,
-    this.blogId,
   );
 
   @override
-  List<Object?> get props => [like, likesAmount, blogId];
+  List<Object?> get props => [like, likesAmount];
 }
 
 class BlogPostLikeInitial extends BlogPostLikeState {
-  BlogPostLikeInitial(Like like, int likesAmount, String blogId) : super(like, likesAmount, blogId);
+  BlogPostLikeInitial(Like like, int likesAmount) : super(like, likesAmount);
 }
 
 class BlogPostLikeLoading extends BlogPostLikeState {
-  BlogPostLikeLoading(Like like, int likesAmount, String blogId) : super(like, likesAmount, blogId);
+  BlogPostLikeLoading(Like like, int likesAmount) : super(like, likesAmount);
 }
 
 class BlogPostLikeSuccess extends BlogPostLikeState {
-  BlogPostLikeSuccess(Like like, int likesAmount, String blogId) : super(like, likesAmount, blogId);
+  BlogPostLikeSuccess(Like like, int likesAmount) : super(like, likesAmount);
 }
 
 class BlogPostLikeFail extends BlogPostLikeState {
-  BlogPostLikeFail(Like like, int likesAmount, String blogId) : super(like, likesAmount, blogId);
+  BlogPostLikeFail(Like like, int likesAmount) : super(like, likesAmount);
 }

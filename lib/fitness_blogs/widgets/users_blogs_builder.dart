@@ -1,4 +1,3 @@
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,25 +10,25 @@ class UserBlogsBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocBuilder<UserBlogPostsListBloc, UserBlogPostsListState>(
+    return BlocBuilder<UserBlogPostsBloc, BlogPostsBaseState>(
       builder: (context, state) {
-        if (state is UserBlogPostsListLoading) {
+        if (state is BlogPostsLoading) {
           return const Center(
             child: const CircularProgressIndicator(),
           );
-        } else if (state is UserBlogPostsListLoadSuccess) {
+        } else if (state is BlogPostsLoadSuccess) {
           return SizedBox(
             height: size.height,
             width: size.width,
             child: BlogPostsListBuilder(
-              blogs: state.blogs,
+              blogs: state.blogPosts,
               hasReachedMax: state.hasReachedMax,
-              onIsBottom: () {
-                BlocProvider.of<UserBlogPostsListBloc>(context).add(UserBlogPostsListLoadMoreRequested());
+              onBottom: () {
+                BlocProvider.of<UserBlogPostsBloc>(context).add(BlogPostsLoadMoreRequested());
               },
             ),
           );
-        } else if (state is UserBlogPostsListFail) {
+        } else if (state is BlogPostsFail) {
           return Center(
             child: const Text('Sorry. There was an error.'),
           );

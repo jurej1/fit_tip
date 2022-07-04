@@ -1,5 +1,5 @@
 import 'package:blog_repository/blog_repository.dart';
-import 'package:fit_tip/fitness_blogs/widgets/blog_post_tile.dart';
+import 'package:fit_tip/fitness_blogs/widgets/blog_post_card.dart';
 import 'package:flutter/material.dart';
 
 import '../fitness_blogs.dart';
@@ -9,12 +9,12 @@ class BlogPostsListBuilder extends StatefulWidget {
     Key? key,
     required this.blogs,
     required this.hasReachedMax,
-    required this.onIsBottom,
+    required this.onBottom,
   }) : super(key: key);
 
   final List<BlogPost> blogs;
   final bool hasReachedMax;
-  final VoidCallback onIsBottom;
+  final VoidCallback onBottom;
 
   @override
   _BlogPostsListBuilderState createState() => _BlogPostsListBuilderState();
@@ -45,9 +45,10 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
     return ListView.separated(
       physics: const ClampingScrollPhysics(),
       controller: _scrollController,
+      padding: const EdgeInsets.all(10),
       itemCount: length,
       itemBuilder: (context, index) {
-        return index >= widget.blogs.length ? BottomLoader() : BlogPostTile(item: widget.blogs[index]);
+        return index >= widget.blogs.length ? BottomLoader() : BlogPostCard.provider(widget.blogs[index]);
       },
       separatorBuilder: (context, index) {
         return const SizedBox(height: 10);
@@ -57,7 +58,7 @@ class _BlogPostsListBuilderState extends State<BlogPostsListBuilder> {
 
   void _onScroll() {
     if (_isBottom) {
-      widget.onIsBottom();
+      widget.onBottom();
     }
   }
 

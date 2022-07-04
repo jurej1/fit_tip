@@ -1,4 +1,3 @@
-import 'package:fit_tip/authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,31 +10,25 @@ class SavedBlogsBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return BlocBuilder<BlogPostsSavedListBloc, BlogPostsSavedListState>(
+    return BlocBuilder<BlogPostsSavedBloc, BlogPostsBaseState>(
       builder: (context, state) {
-        if (state is BlogPostsSavedListLoading) {
+        if (state is BlogPostsLoading) {
           return const Center(
             child: const CircularProgressIndicator(),
           );
-        } else if (state is BlogPostsSavedListLoadSuccess) {
+        } else if (state is BlogPostsLoadSuccess) {
           return SizedBox(
             height: size.height,
             width: size.width,
             child: BlogPostsListBuilder(
-              blogs: state.blogs,
+              blogs: state.blogPosts,
               hasReachedMax: state.hasReachedMax,
-              onIsBottom: () {
-                BlocProvider.of<BlogPostsSavedListBloc>(context).add(
-                  BlogPostsSavedListLoadMoreRequested(
-                    likedBlogIds: BlocProvider.of<LikedBlogPostsBloc>(context).state,
-                    savedBlogIds: BlocProvider.of<SavedBlogPostsBloc>(context).state,
-                    userId: BlocProvider.of<AuthenticationBloc>(context).state.user?.uid,
-                  ),
-                );
+              onBottom: () {
+                BlocProvider.of<BlogPostsSavedBloc>(context).add(BlogPostsLoadMoreRequested());
               },
             ),
           );
-        } else if (state is BlogPostsSavedListFailure) {
+        } else if (state is BlogPostsFail) {
           return Center(
             child: const Text('Sorry. There was an error.'),
           );

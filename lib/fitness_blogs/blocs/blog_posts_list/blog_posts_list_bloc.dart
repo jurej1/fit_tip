@@ -1,195 +1,88 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/fitness_blogs/blocs/blocs.dart';
 import 'package:fit_tip/fitness_blogs/fitness_blogs.dart';
 
-part 'blog_posts_list_event.dart';
-part 'blog_posts_list_state.dart';
-
-class BlogPostsListBloc extends Bloc<BlogPostsListEvent, BlogPostsListState> {
+class BlogPostsListBloc extends BlogPostsBaseBloc {
   BlogPostsListBloc({
-    required BlogRepository blogRepository,
-    required SavedBlogPostsBloc savedBlogPostsBloc,
-    required LikedBlogPostsBloc likedBlogPostsBloc,
-    required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
     required AuthenticationBloc authenticationBloc,
+    required BlogRepository blogRepository,
+    required BlogPostsSearchFilterBloc blogPostsSearchFilterBloc,
   })  : _blogRepository = blogRepository,
         _searchFilterBloc = blogPostsSearchFilterBloc,
-        _likedBlogPostsBloc = likedBlogPostsBloc,
-        _savedBlogPostsBloc = savedBlogPostsBloc,
-        _authenticationBloc = authenticationBloc,
-        super(BlogPostsListLoading()) {
-    _savedBlogsSubscription = savedBlogPostsBloc.stream.listen((savedBlogsState) {
-      add(_BlogPostsListSavedBlogsUpdated(savedBlogsState));
-    });
-
-    _likedBlogPostsSubscription = likedBlogPostsBloc.stream.listen((likedBlogState) {
-      add(_BlogPostsListLikedBlogsUpdated(likedBlogState));
-    });
-
+        super(
+          BlogPostsLoading(),
+          authenticationBloc: authenticationBloc,
+          blogRepository: blogRepository,
+        ) {
     _searchFilterSubscription = _searchFilterBloc.stream.listen((searchFilterState) {
-      add(BlogPostsListLoadRequested());
+      add(BlogPostsLoadRequested());
     });
   }
 
-  late final StreamSubscription _savedBlogsSubscription;
-  late final StreamSubscription _likedBlogPostsSubscription;
+  final BlogRepository _blogRepository;
+  DocumentSnapshot? _lastFetchedDocument;
+  final BlogPostsSearchFilterBloc _searchFilterBloc;
+
   late final StreamSubscription _searchFilterSubscription;
 
-  final BlogPostsSearchFilterBloc _searchFilterBloc;
-  final LikedBlogPostsBloc _likedBlogPostsBloc;
-  final SavedBlogPostsBloc _savedBlogPostsBloc;
-  final AuthenticationBloc _authenticationBloc;
-
-  final BlogRepository _blogRepository;
-  late DocumentSnapshot _lastFetchedDoc;
   final int _limit = 12;
 
   @override
   Future<void> close() {
-    _likedBlogPostsSubscription.cancel();
-    _savedBlogsSubscription.cancel();
     _searchFilterSubscription.cancel();
     return super.close();
   }
 
   @override
-  Stream<BlogPostsListState> mapEventToState(
-    BlogPostsListEvent event,
-  ) async* {
-    if (event is BlogPostsListLoadRequested) {
-      yield* _mapLoadRequestedToState();
-    } else if (event is BlogPostsListLoadMore) {
-      yield* _mapLoadMoreToState();
-    } else if (event is BlogPostsListItemRemoved) {
-      yield* _mapItemRemovedToState(event);
-    } else if (event is BlogPostsListItemUpdated) {
-      yield* _mapItemUpdatedToState(event);
-    } else if (event is _BlogPostsListSavedBlogsUpdated) {
-      yield* _mapSavedBlogsUpdatedToState(event);
-    } else if (event is _BlogPostsListLikedBlogsUpdated) {
-      yield* _mapLikedBlogsUpdatedToState(event);
-    }
-  }
-
-  Stream<BlogPostsListState> _mapLoadRequestedToState() async* {
-    yield BlogPostsListLoading();
+  Stream<BlogPostsBaseState> mapLoadRequestedToState(BlogPostsLoadRequested event) async* {
+    yield BlogPostsLoading();
 
     try {
       QuerySnapshot snapshot = await _mapSearchFilterToQuerySnapshot();
 
       if (snapshot.size == 0) {
-        yield BlogPostsListLoadSuccess(hasReachedMax: true);
+        yield BlogPostsLoadSuccess([], true);
         return;
       } else {
-        _lastFetchedDoc = snapshot.docs.last;
+        _lastFetchedDocument = snapshot.docs.last;
 
-        List<BlogPost> blogs = BlogPost.mapQuerySnapshotToBlogPosts(
-          snapshot,
-          likedBlogIds: _likedBlogPostsBloc.state,
-          saveBlogIds: _savedBlogPostsBloc.state,
-          userId: _authenticationBloc.state.user?.uid,
-        );
+        List<BlogPost> blogs = mapQuerySnapshotToList(snapshot);
 
-        yield BlogPostsListLoadSuccess(
-          blogs: blogs,
-          hasReachedMax: snapshot.size < _limit,
+        yield BlogPostsLoadSuccess(
+          blogs,
+          snapshot.docs.length < _limit,
         );
       }
     } catch (e) {
-      yield BlogPostsListFail();
+      yield BlogPostsFail();
     }
   }
 
-  Stream<BlogPostsListState> _mapLoadMoreToState() async* {
-    if (this.state is BlogPostsListLoadSuccess) {
-      final oldState = state as BlogPostsListLoadSuccess;
+  @override
+  Stream<BlogPostsBaseState> mapLoadMoreRequestedToState(BlogPostsLoadMoreRequested event) async* {
+    if (this.state is BlogPostsLoadSuccess) {
+      final oldState = state as BlogPostsLoadSuccess;
 
       if (!oldState.hasReachedMax) {
         try {
-          QuerySnapshot querySnapshot = await _mapSearchFilterToQuerySnapshot(lastFetchedDoc: _lastFetchedDoc);
+          QuerySnapshot querySnapshot = await _mapSearchFilterToQuerySnapshot(lastFetchedDoc: _lastFetchedDocument);
           if (querySnapshot.docs.isEmpty) {
-            yield BlogPostsListLoadSuccess(hasReachedMax: querySnapshot.size < _limit, blogs: oldState.blogs);
+            yield BlogPostsLoadSuccess(oldState.blogPosts, true);
           } else {
-            _lastFetchedDoc = querySnapshot.docs.last;
+            _lastFetchedDocument = querySnapshot.docs.last;
 
-            yield BlogPostsListLoadSuccess(
-              hasReachedMax: querySnapshot.size < _limit,
-              blogs: oldState.blogs +
-                  BlogPost.mapQuerySnapshotToBlogPosts(
-                    querySnapshot,
-                    likedBlogIds: _likedBlogPostsBloc.state,
-                    saveBlogIds: _savedBlogPostsBloc.state,
-                    userId: _authenticationBloc.state.user?.uid,
-                  ),
-            );
+            List<BlogPost> blogs = mapQuerySnapshotToList(querySnapshot);
+
+            yield BlogPostsLoadSuccess(oldState.blogPosts + blogs, querySnapshot.docs.length < _limit);
           }
         } catch (error) {
-          yield BlogPostsListFail();
+          yield BlogPostsFail();
         }
       }
-    }
-  }
-
-  Stream<BlogPostsListState> _mapItemRemovedToState(BlogPostsListItemRemoved event) async* {
-    if (state is BlogPostsListLoadSuccess) {
-      final currentState = state as BlogPostsListLoadSuccess;
-
-      List<BlogPost> blogs = currentState.blogs..removeWhere((element) => element.id == event.value.id);
-
-      yield BlogPostsListLoadSuccess(hasReachedMax: currentState.hasReachedMax, blogs: blogs);
-    }
-  }
-
-  Stream<BlogPostsListState> _mapItemUpdatedToState(BlogPostsListItemUpdated event) async* {
-    if (state is BlogPostsListLoadSuccess) {
-      final currentState = state as BlogPostsListLoadSuccess;
-
-      List<BlogPost> blogs = currentState.blogs.map((e) {
-        if (e.id == event.value.id) {
-          return event.value;
-        }
-        return e;
-      }).toList();
-
-      yield BlogPostsListLoadSuccess(hasReachedMax: currentState.hasReachedMax, blogs: blogs);
-    }
-  }
-
-  Stream<BlogPostsListState> _mapSavedBlogsUpdatedToState(_BlogPostsListSavedBlogsUpdated event) async* {
-    if (state is BlogPostsListLoadSuccess) {
-      final oldState = state as BlogPostsListLoadSuccess;
-
-      List<BlogPost> posts = List.from(oldState.blogs);
-
-      posts = posts
-          .map(
-            (e) => e.copyWith(isSaved: event.ids.contains(e.id)),
-          )
-          .toList();
-
-      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
-    }
-  }
-
-  Stream<BlogPostsListState> _mapLikedBlogsUpdatedToState(_BlogPostsListLikedBlogsUpdated event) async* {
-    if (state is BlogPostsListLoadSuccess) {
-      final oldState = state as BlogPostsListLoadSuccess;
-
-      List<BlogPost> posts = List.from(oldState.blogs);
-
-      posts = posts
-          .map(
-            (e) => e.copyWith(like: event.ids.contains(e.id) ? Like.yes : Like.no),
-          )
-          .toList();
-
-      yield BlogPostsListLoadSuccess(hasReachedMax: oldState.hasReachedMax, blogs: posts);
     }
   }
 
