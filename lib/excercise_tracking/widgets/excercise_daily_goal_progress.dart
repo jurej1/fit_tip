@@ -1,5 +1,4 @@
 import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
-import 'package:fit_tip/excercise_tracking/blocs/excercise_daily_progress/excercise_daily_progress_bloc.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';

@@ -1,7 +1,5 @@
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
-import 'package:fit_tip/excercise_tracking/blocs/blocs.dart';
-import 'package:fit_tip/excercise_tracking/view/add_excercise_log_view.dart';
 import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:flutter/material.dart';

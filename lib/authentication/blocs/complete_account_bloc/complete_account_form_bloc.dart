@@ -5,10 +5,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/settings/models/birthday_input.dart';
-import 'package:fit_tip/settings/models/gender_input.dart';
-import 'package:fit_tip/settings/models/height_input.dart';
-import 'package:fit_tip/settings/models/introduction_line_input.dart';
 import 'package:fit_tip/settings/settings.dart';
 import 'package:formz/formz.dart';
 
