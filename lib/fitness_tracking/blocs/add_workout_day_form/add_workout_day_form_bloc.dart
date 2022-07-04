@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/fitness_tracking/fitness_tracking.dart';
-import 'package:fit_tip/fitness_tracking/models/workout_muscle_group_list.dart';
 import 'package:fitness_repository/fitness_repository.dart';
 import 'package:formz/formz.dart';
 

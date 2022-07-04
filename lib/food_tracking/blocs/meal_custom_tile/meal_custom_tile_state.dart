@@ -55,6 +55,8 @@ class MealCustomTileState extends Equatable {
       return calorieDailyGoal?.dinner;
     } else if (type == MealType.snack) {
       return calorieDailyGoal?.snack;
+    } else {
+      return null;
     }
   }
 

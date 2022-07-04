@@ -1,5 +1,4 @@
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/food_tracking/blocs/blocs.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/shared/blocs/day_selector/day_selector_bloc.dart';
 import 'package:flutter/material.dart';

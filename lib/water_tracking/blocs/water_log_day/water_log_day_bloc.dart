@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fit_tip/authentication/blocs/blocs.dart';
-import 'package:water_repository/models/models.dart';
 import 'package:water_repository/water_repository.dart';
 
 part 'water_log_day_event.dart';

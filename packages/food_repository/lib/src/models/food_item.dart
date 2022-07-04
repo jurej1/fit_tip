@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_repository/food_repository.dart';
 import 'package:food_repository/src/entity/entity.dart';
-import 'package:food_repository/src/enums/enums.dart';
 
 class FoodItem extends Equatable {
   final String? id;

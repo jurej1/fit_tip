@@ -5,8 +5,6 @@ import 'package:food_repository/food_repository.dart';
 import 'package:intl/intl.dart';
 
 import 'package:fit_tip/authentication/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/food_tracking/blocs/food_item_detail/food_item_detail_bloc.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 
 class FoodItemDetailView extends StatelessWidget {

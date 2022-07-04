@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:fitness_repository/src/entity/entity.dart';
-import 'package:fitness_repository/src/enums/enums.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../fitness_repository.dart';
-import 'workout_excercise_entity.dart';
 
 class WorkoutDayRawDocKeys {
   static String workoutId = 'workoutId';

@@ -3,7 +3,6 @@ import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:fit_tip/water_tracking/widgets/water_log_grid_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:water_repository/models/models.dart';
 import 'package:water_repository/water_repository.dart';
 
 class WaterLogGrid extends StatelessWidget {

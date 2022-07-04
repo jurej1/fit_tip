@@ -1,5 +1,4 @@
 import 'package:fit_tip/food_tracking/blocs/blocs.dart';
-import 'package:fit_tip/food_tracking/widgets/food_daily_progres.dart';
 import 'package:fit_tip/food_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
-import 'package:fitness_repository/src/entity/workout_days_entity.dart';
 
 class WorkoutDays extends Equatable {
   final List<WorkoutDay> workoutDays;

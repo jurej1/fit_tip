@@ -1,7 +1,6 @@
 import 'package:fit_tip/authentication/authentication.dart';
 import 'package:fit_tip/weight_statistics/view/view.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
-import 'package:fit_tip/weight_tracking/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_repository/weight_repository.dart';

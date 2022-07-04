@@ -1,6 +1,5 @@
 import 'package:fit_tip/authentication/blocs/blocs.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
-import 'package:fit_tip/water_tracking/blocs/add_water_daily_goal/add_water_daily_goal_bloc.dart';
 import 'package:fit_tip/water_tracking/blocs/blocs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

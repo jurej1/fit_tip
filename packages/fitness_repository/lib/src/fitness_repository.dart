@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitness_repository/src/entity/workout_info_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 

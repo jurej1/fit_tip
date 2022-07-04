@@ -1,5 +1,4 @@
 import 'package:fit_tip/authentication/authentication.dart';
-import 'package:fit_tip/settings/view/theme_settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

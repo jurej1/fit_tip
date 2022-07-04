@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:water_repository/entity/entity.dart';
 
-import '../entity/water_log_entity.dart';
 import '../models/models.dart';
 
 class WaterRepository {

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:fitness_repository/fitness_repository.dart';
-import 'package:fitness_repository/src/entity/entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
