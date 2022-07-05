@@ -124,7 +124,7 @@ class HomeView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        drawer: AppDrawer(),
+        // drawer: AppDrawer(), Removed the app drawer so now only the baisc features are going to be in the app
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: BlocBuilder<HomeViewSelectorCubit, HomeViewSelectorState>(
