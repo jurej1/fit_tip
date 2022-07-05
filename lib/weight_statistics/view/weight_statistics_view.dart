@@ -8,26 +8,30 @@ class WeightStatisticsView extends StatelessWidget {
   // static const routeName = 'weight_statistics_view';
 
   static MaterialPageRoute route(BuildContext context) {
-    return MaterialPageRoute(builder: (_) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider<WeightStatisticsBloc>(
-            create: (context) => WeightStatisticsBloc(
-              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
-              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+    final historyBloc = BlocProvider.of<WeightHistoryBloc>(context);
+    final weightGoalBloc = BlocProvider.of<WeightGoalBloc>(context);
+    return MaterialPageRoute(
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<WeightStatisticsBloc>(
+              create: (context) => WeightStatisticsBloc(
+                weightHistoryBloc: historyBloc,
+                weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+              ),
             ),
-          ),
-          BlocProvider<WeightGoalStatisticsBloc>(
-            create: (context) => WeightGoalStatisticsBloc(
-              weightGoalBloc: BlocProvider.of<WeightGoalBloc>(context),
-              weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
-              weightHistoryBloc: BlocProvider.of<WeightHistoryBloc>(context),
+            BlocProvider<WeightGoalStatisticsBloc>(
+              create: (context) => WeightGoalStatisticsBloc(
+                weightGoalBloc: weightGoalBloc,
+                weightRepository: RepositoryProvider.of<weight_rep.WeightRepository>(context),
+                weightHistoryBloc: historyBloc,
+              ),
             ),
-          ),
-        ],
-        child: WeightStatisticsView(),
-      );
-    });
+          ],
+          child: WeightStatisticsView(),
+        );
+      },
+    );
   }
 
   @override

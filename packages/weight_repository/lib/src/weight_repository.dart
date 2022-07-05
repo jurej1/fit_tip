@@ -89,6 +89,8 @@ class WeightRepository {
   }
 
   double totalWeightChange(List<Weight> weights) {
+    if (weights.isEmpty) return 0.0;
+
     final firstWeight = weights.first.weight ?? 0;
     final lastWeight = weights.last.weight ?? 0;
 
