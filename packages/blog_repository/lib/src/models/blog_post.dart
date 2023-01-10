@@ -1,6 +1,7 @@
 import 'package:blog_repository/blog_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 class BlogPost extends Equatable {
   final String id;

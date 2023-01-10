@@ -72,6 +72,9 @@ class _RegisterViewState extends State<RegisterView> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                Image.asset(
+                  'assets/sobota_svica.png',
+                ),
                 SizedBox(height: size.height * 0.3),
                 _EmailInputField(focusNode: emailFocusNode),
                 const SizedBox(height: 25),
@@ -80,7 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
                 _SubmitButton(),
                 const SizedBox(height: 25),
                 SwitchViewButton(
-                  title: 'Have an account? Login',
+                  title: 'Imate Račun? Vpišite se',
                   onPressed: () {
                     if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(LoginView.route(context));
@@ -129,7 +132,7 @@ class _PasswordInputField extends StatelessWidget {
       builder: (context, state) {
         return InputField(
           keyboardType: TextInputType.visiblePassword,
-          hintText: 'Password',
+          hintText: 'Geslo',
           obscure: true,
           onChanged: (val) => BlocProvider.of<RegisterFormBloc>(context).add(RegisterPasswordChanged(val)),
           preffixIcon: Icon(
@@ -150,7 +153,7 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<RegisterFormBloc, RegisterFormState>(
       builder: (context, state) {
         return SubmitButton(
-          title: 'Sign Up',
+          title: 'Prijavite se',
           isLoading: state.status.isSubmissionInProgress,
           onPressed: () {
             if (FocusScope.of(context).hasFocus) FocusScope.of(context).unfocus();

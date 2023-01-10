@@ -4,7 +4,6 @@ import 'package:fit_tip/excercise_tracking/excercise_tracking.dart';
 import 'package:fit_tip/food_tracking/food_tracking.dart';
 import 'package:fit_tip/home/home.dart';
 import 'package:fit_tip/shared/blocs/blocs.dart';
-import 'package:fit_tip/shared/widgets/app_drawer.dart';
 import 'package:fit_tip/water_tracking/water_tracking.dart';
 import 'package:fit_tip/weight_tracking/weight.dart';
 import 'package:fitness_repository/fitness_repository.dart';
@@ -44,7 +43,6 @@ class HomeView extends StatelessWidget {
             ),
 
             //Water
-
             BlocProvider<WaterLogDayBloc>(
               create: (context) => WaterLogDayBloc(
                 waterRepository: RepositoryProvider.of<WaterRepository>(context),
